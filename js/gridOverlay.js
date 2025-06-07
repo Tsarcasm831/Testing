@@ -6,8 +6,15 @@ export function initGridOverlay(map) {
   const gridLabelLayer = L.layerGroup();
   const highlightLayer = L.layerGroup();
   
-  const latStep = 10 / 110.574;
-  const lonStep = latStep;
+  const BASE_STEP = 10 / 110.574; // ~10km in degrees
+  let latStep = BASE_STEP;
+  let lonStep = BASE_STEP;
+
+  function updateStep() {
+    const zoom = map.getZoom();
+    latStep = BASE_STEP * Math.pow(2, 13 - zoom);
+    lonStep = latStep;
+  }
   const LABEL_ZOOM_MIN = 12;
   let gridVisible = false;
   let selectedCellBounds = null;
@@ -15,6 +22,8 @@ export function initGridOverlay(map) {
   function drawGrid() {
     gridLayer.clearLayers();
     gridLabelLayer.clearLayers();
+    updateStep();
+
     const b = map.getBounds();
     const s = b.getSouth(), n = b.getNorth(), w = b.getWest(), e = b.getEast();
     const startLat = Math.floor(s / latStep) * latStep;
@@ -46,6 +55,7 @@ export function initGridOverlay(map) {
   }
 
   function highlightGridCell(e) {
+    updateStep();
     const lat = Math.floor(e.latlng.lat / latStep) * latStep;
     const lng = Math.floor(e.latlng.lng / lonStep) * lonStep;
     selectedCellBounds = [[lat, lng], [lat + latStep, lng + lonStep]];
@@ -64,6 +74,7 @@ export function initGridOverlay(map) {
 
   function doubleClickGridCell(e) {
     if (!gridVisible) return;
+    updateStep();
     const lat = Math.floor(e.latlng.lat / latStep) * latStep + latStep/2;
     const lng = Math.floor(e.latlng.lng / lonStep) * lonStep + lonStep/2;
     const half = (6 / 110.574) / 2;
