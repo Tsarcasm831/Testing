@@ -28,6 +28,8 @@ export function initUI(map) {
     if (tutorialBtn) {
       tutorialBtn.addEventListener('click', startTutorial);
     }
+    // Open the tutorial on initial load so new users see it immediately
+    startTutorial();
     // initPrepareEventModal(); // No longer needed here, self-initializes via import
   } catch (error) {
     console.error("Error initializing UI components:", error);
