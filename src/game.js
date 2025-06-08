@@ -39,15 +39,15 @@ class BackroomsGame {
         
         // Level system
         this.levels = [
-            'backrooms_again.glb',
-            'infinite_corridor.glb',
-            'interior_building_scene.glb',
-            'level.glb',
-            'liminal_space._whats_back_there.glb',
-            'eyes-dream_core.glb',
-            'dreamcore_liminal_space.glb',
-            'back_rooms_walk-thru_virtual_reality.glb',
-            'the_end.glb'
+            'assets/models/backrooms_again.glb',
+            'assets/models/infinite_corridor.glb',
+            'assets/models/interior_building_scene.glb',
+            'assets/models/level.glb',
+            'assets/models/liminal_space._whats_back_there.glb',
+            'assets/models/eyes-dream_core.glb',
+            'assets/models/dreamcore_liminal_space.glb',
+            'assets/models/back_rooms_walk-thru_virtual_reality.glb',
+            'assets/models/the_end.glb'
         ];
         this.currentLevel = 0;
         this.door = null;
@@ -155,14 +155,14 @@ class BackroomsGame {
         this.entityCloseVolume = 1.0;
         
         this.footstepAudio = new THREE.Audio(this.audioListener);
-        audioLoader.load('footsteps.mp3', (buffer) => {
+        audioLoader.load('assets/audio/footsteps.mp3', (buffer) => {
             this.footstepAudio.setBuffer(buffer);
             this.footstepAudio.setVolume(this.footstepVolume);
         });
         
         // Load entity ambient audio
         this.entityAmbientAudio = new THREE.Audio(this.audioListener);
-        audioLoader.load('entity_ambient.mp3', (buffer) => {
+        audioLoader.load('assets/audio/entity_ambient.mp3', (buffer) => {
             this.entityAmbientAudio.setBuffer(buffer);
             this.entityAmbientAudio.setVolume(this.entityAmbientVolume);
             this.entityAmbientAudio.setLoop(true);
@@ -170,7 +170,7 @@ class BackroomsGame {
         
         // Load entity close audio
         this.entityCloseAudio = new THREE.Audio(this.audioListener);
-        audioLoader.load('entity_close.mp3', (buffer) => {
+        audioLoader.load('assets/audio/entity_close.mp3', (buffer) => {
             this.entityCloseAudio.setBuffer(buffer);
             this.entityCloseAudio.setVolume(this.entityCloseVolume);
         });
