@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { getScreenPosition } from './screenUtils.js';
+import { getScreenPosition } from '../utils/screenUtils.js';
 import { NPCRenderer } from './npcRenderer.js';
 import { NPCBehavior } from './npcBehavior.js';
 import { NPCInteraction } from './npcInteraction.js';

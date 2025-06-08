@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { getScreenPosition } from './screenUtils.js';
+import { getScreenPosition } from '../utils/screenUtils.js';
 
 export class GameManager {
   constructor(options) {
