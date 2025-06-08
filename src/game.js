@@ -1,6 +1,29 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import nipplejs from 'nipplejs';
+import { LevelEditor } from './levelEditor.js';
+
+class BasicEnemy {
+    constructor(game, position = new THREE.Vector3()) {
+        this.game = game;
+        const geo = new THREE.SphereGeometry(0.5, 16, 16);
+        const mat = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+        this.mesh = new THREE.Mesh(geo, mat);
+        this.mesh.castShadow = true;
+        this.mesh.position.copy(position);
+        this.game.scene.add(this.mesh);
+    }
+
+    update(delta) {
+        const playerPos = this.game.camera.position;
+        const dir = new THREE.Vector3().subVectors(playerPos, this.mesh.position);
+        const dist = dir.length();
+        if (dist < 10) {
+            dir.normalize();
+            this.mesh.position.addScaledVector(dir, delta * 1.5);
+        }
+    }
+}
 
 class BackroomsGame {
     constructor() {
@@ -47,7 +70,8 @@ class BackroomsGame {
             'assets/models/eyes-dream_core.glb',
             'assets/models/dreamcore_liminal_space.glb',
             'assets/models/back_rooms_walk-thru_virtual_reality.glb',
-            'assets/models/the_end.glb'
+            'assets/models/the_end.glb',
+            'procedural'
         ];
         this.currentLevel = 0;
         this.door = null;
@@ -63,6 +87,23 @@ class BackroomsGame {
         this.isVRMode = false;
         this.deviceOrientation = { alpha: 0, beta: 0, gamma: 0 };
         this.vrButton = null;
+
+        // Gyroscope look
+        this.useGyro = false;
+
+        // Editor and enemy system
+        this.levelEditor = new LevelEditor(this);
+        this.enemies = [];
+
+        // Progression
+        this.progress = { points: 0 };
+
+        // Quality settings
+        this.qualityLevels = ['high', 'medium', 'low'];
+        this.currentQuality = 0;
+
+        // Game mode
+        this.gameMode = 'exploration';
         
         // Chat system
         this.chatMessages = [];
@@ -133,6 +174,7 @@ class BackroomsGame {
         this.setupMobileControls();
         this.setupChat();
         this.setupVoiceChat();
+        this.levelEditor.load();
         this.addEventListeners();
         this.animate();
         
@@ -455,6 +497,13 @@ class BackroomsGame {
         
         const loader = new GLTFLoader();
         const modelPath = this.levels[this.currentLevel];
+        if (modelPath === 'procedural') {
+            this.generateProceduralLevel();
+            this.createDoor();
+            this.updateLevelUI();
+            document.getElementById('loading').style.display = 'none';
+            return;
+        }
         
         document.getElementById('loading').style.display = 'block';
         document.getElementById('loading').innerHTML = `Loading Level ${this.currentLevel + 1}/${this.levels.length}...`;
@@ -493,6 +542,7 @@ class BackroomsGame {
             }, 100);
             
             this.createDoor();
+            this.spawnEnemy();
             this.updateLevelUI();
             document.getElementById('loading').style.display = 'none';
         }, undefined, (error) => {
@@ -538,6 +588,25 @@ class BackroomsGame {
                 this.scene.add(wall);
             }
         });
+    }
+
+    generateProceduralLevel() {
+        this.collidableMeshes = [];
+        const size = 10;
+        const grid = 5;
+        const wallMat = new THREE.MeshStandardMaterial({ map: this.createWallTexture() });
+        const floorMat = new THREE.MeshStandardMaterial({ map: this.createCarpetTexture() });
+        const ceilMat = new THREE.MeshStandardMaterial({ map: this.createCeilingTexture() });
+        for (let i = -grid; i <= grid; i++) {
+            for (let j = -grid; j <= grid; j++) {
+                this.createRoom(i * size, j * size, size, wallMat, floorMat, ceilMat);
+            }
+        }
+    }
+
+    spawnEnemy() {
+        const enemy = new BasicEnemy(this, this.camera.position.clone().add(new THREE.Vector3(5, 0, 5)));
+        this.enemies.push(enemy);
     }
     
     createWallTexture() {
@@ -629,6 +698,15 @@ class BackroomsGame {
     setupFullScreen() {
         this.fsButton = document.getElementById('fsToggle');
         this.fsButton.addEventListener('click', () => this.toggleFullScreen());
+        this.editorButton = document.getElementById('editorToggle');
+        this.editorButton.addEventListener('click', () => this.levelEditor.toggle());
+        this.gyroButton = document.getElementById('gyroToggle');
+        if (this.isMobile) {
+            this.gyroButton.style.display = 'block';
+        }
+        this.gyroButton.addEventListener('click', () => this.toggleGyro());
+        this.qualityButton = document.getElementById('qualityToggle');
+        this.qualityButton.addEventListener('click', () => this.cycleQuality());
         
         // Setup UI toggle
         this.uiToggleButton = document.getElementById('uiToggle');
@@ -765,6 +843,45 @@ class BackroomsGame {
         // Clamp vertical rotation
         this.phi = Math.max(0.1, Math.min(Math.PI - 0.1, this.phi));
     }
+
+    toggleGyro() {
+        this.useGyro = !this.useGyro;
+        if (this.useGyro) {
+            this.boundGyro = (e) => this.onGyroMove(e);
+            window.addEventListener('deviceorientation', this.boundGyro);
+            this.gyroButton.textContent = 'Gyro On';
+        } else {
+            window.removeEventListener('deviceorientation', this.boundGyro);
+            this.gyroButton.textContent = 'Gyro Off';
+        }
+    }
+
+    onGyroMove(event) {
+        if (!this.useGyro || this.isVRMode) return;
+        const beta = event.beta ? THREE.MathUtils.degToRad(event.beta) : 0;
+        const alpha = event.alpha ? THREE.MathUtils.degToRad(event.alpha) : 0;
+        this.theta = alpha;
+        this.phi = Math.PI / 2 + beta;
+    }
+
+    cycleQuality() {
+        this.currentQuality = (this.currentQuality + 1) % this.qualityLevels.length;
+        const level = this.qualityLevels[this.currentQuality];
+        switch (level) {
+            case 'high':
+                this.renderer.setPixelRatio(window.devicePixelRatio);
+                this.qualityButton.textContent = 'High Quality';
+                break;
+            case 'medium':
+                this.renderer.setPixelRatio(window.devicePixelRatio * 0.75);
+                this.qualityButton.textContent = 'Medium Quality';
+                break;
+            case 'low':
+                this.renderer.setPixelRatio(window.devicePixelRatio * 0.5);
+                this.qualityButton.textContent = 'Low Quality';
+                break;
+        }
+    }
     
     addEventListeners() {
         window.addEventListener('resize', () => this.onWindowResize());
@@ -773,9 +890,15 @@ class BackroomsGame {
         document.addEventListener('keydown', (e) => {
             // Don't trigger UI toggle when typing in chat
             if (this.isChatFocused) return;
-            
+
             if (e.key.toLowerCase() === 'u') {
                 this.toggleUI();
+            }
+            if (e.key.toLowerCase() === 'e') {
+                this.levelEditor.toggle();
+            }
+            if (e.key.toLowerCase() === 'p') {
+                this.levelEditor.save();
             }
         });
         
@@ -987,6 +1110,10 @@ class BackroomsGame {
             this.triggerEntitySound();
             this.entityTimer = 0;
         }
+
+        // Update enemies
+        const delta = this.clock.getDelta();
+        this.enemies.forEach(enemy => enemy.update(delta));
         
         // Add subtle light flickering for atmosphere
         this.lights.forEach(light => {
@@ -1042,7 +1169,7 @@ class BackroomsGame {
         const instructions = document.getElementById('instructions');
         const levelInfo = instructions.querySelector('.level-info') || document.createElement('div');
         levelInfo.className = 'level-info';
-        levelInfo.innerHTML = `Level ${this.currentLevel + 1}/${this.levels.length}`;
+        levelInfo.innerHTML = `Level ${this.currentLevel + 1}/${this.levels.length} - Points: ${this.progress.points}`;
         levelInfo.style.color = '#00ff88';
         levelInfo.style.fontSize = '16px';
         levelInfo.style.fontWeight = 'bold';
@@ -1063,6 +1190,7 @@ class BackroomsGame {
     nextLevel() {
         if (this.currentLevel < this.levels.length - 1) {
             this.currentLevel++;
+            this.progress.points += 10;
             const safePosition = this.getSafeSpawnPosition();
             this.camera.position.copy(safePosition);
             this.theta = 0; // Reset rotation
