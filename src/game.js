@@ -48,6 +48,7 @@ class BackroomsGame {
         this.lastFootstepTime = 0;
         this.footstepInterval = 500; // milliseconds between footsteps
         this.isMoving = false;
+        this.prevIsMoving = false;
         this.entityTimer = 0;
         
         // Multiplayer setup
@@ -167,6 +168,7 @@ class BackroomsGame {
         this.setupCamera();
         this.setupLighting();
         this.setupAudio();
+        await this.loadPlayerAssets();
         await this.initializeMultiplayer();
         this.loadBackroomsModel();
         this.setupControls();
@@ -244,6 +246,18 @@ class BackroomsGame {
             this.entityCloseAudio.play();
         }
     }
+
+    async loadPlayerAssets() {
+        const loader = new GLTFLoader();
+        const [idle, walk] = await Promise.all([
+            loader.loadAsync('assets/models/player/Animation_Idle_3_withSkin.glb'),
+            loader.loadAsync('assets/models/player/Animation_Walking_withSkin.glb')
+        ]);
+
+        this.playerModel = idle.scene;
+        this.playerIdleClip = idle.animations[0];
+        this.playerWalkClip = walk.animations[0];
+    }
     
     async initializeMultiplayer() {
         await this.room.initialize();
@@ -256,6 +270,7 @@ class BackroomsGame {
             z: 0,
             rotationY: 0,
             level: this.currentLevel,
+            isMoving: false,
             username: this.room.peers[this.myPlayerId]?.username || 'Anonymous'
         });
         
@@ -323,6 +338,18 @@ class BackroomsGame {
                 mesh.position.set(playerData.x, playerData.y, playerData.z);
                 mesh.rotation.y = playerData.rotationY;
                 mesh.visible = true;
+
+                if (mesh.userData.mixer) {
+                    if (playerData.isMoving && mesh.userData.current !== 'walk') {
+                        mesh.userData.idleAction.stop();
+                        mesh.userData.walkAction.play();
+                        mesh.userData.current = 'walk';
+                    } else if (!playerData.isMoving && mesh.userData.current !== 'idle') {
+                        mesh.userData.walkAction.stop();
+                        mesh.userData.idleAction.play();
+                        mesh.userData.current = 'idle';
+                    }
+                }
             } else if (mesh) {
                 mesh.visible = false; // Hide players on different levels
             }
@@ -332,19 +359,25 @@ class BackroomsGame {
     }
     
     createPlayerMesh(username) {
-        const group = new THREE.Group();
-        
-        // Player body (simple capsule)
-        const bodyGeometry = new THREE.CapsuleGeometry(0.3, 1.4, 8, 16);
-        const bodyMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x4444ff,
-            emissive: 0x001122,
-            emissiveIntensity: 0.3
+        const group = this.playerModel.clone(true);
+        group.scale.set(1, 1, 1);
+        group.traverse((child) => {
+            if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+            }
         });
-        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-        body.position.y = 0.7;
-        group.add(body);
-        
+
+        const mixer = new THREE.AnimationMixer(group);
+        const idleAction = mixer.clipAction(this.playerIdleClip);
+        const walkAction = mixer.clipAction(this.playerWalkClip);
+        idleAction.play();
+
+        group.userData.mixer = mixer;
+        group.userData.idleAction = idleAction;
+        group.userData.walkAction = walkAction;
+        group.userData.current = 'idle';
+
         // Name tag
         const canvas = document.createElement('canvas');
         canvas.width = 256;
@@ -366,7 +399,7 @@ class BackroomsGame {
         const nameTag = new THREE.Mesh(nameGeometry, nameMaterial);
         nameTag.position.y = 2.2;
         group.add(nameTag);
-        
+
         return group;
     }
     
@@ -537,7 +570,8 @@ class BackroomsGame {
                     y: this.camera.position.y,
                     z: this.camera.position.z,
                     rotationY: this.theta,
-                    level: this.currentLevel
+                    level: this.currentLevel,
+                    isMoving: false
                 });
             }, 100);
             
@@ -1000,10 +1034,24 @@ class BackroomsGame {
                     y: this.camera.position.y,
                     z: this.camera.position.z,
                     rotationY: this.theta,
-                    level: this.currentLevel
+                    level: this.currentLevel,
+                    isMoving: true
                 });
             }
         }
+
+        if (!this.isMoving && this.prevIsMoving) {
+            this.room.updatePresence({
+                x: this.camera.position.x,
+                y: this.camera.position.y,
+                z: this.camera.position.z,
+                rotationY: this.theta,
+                level: this.currentLevel,
+                isMoving: false
+            });
+        }
+
+        this.prevIsMoving = this.isMoving;
         
         // Apply walking motion (camera bob and sway)
         this.updateWalkingMotion();
@@ -1101,18 +1149,19 @@ class BackroomsGame {
     
     animate() {
         requestAnimationFrame(() => this.animate());
-        
+
+        const delta = this.clock.getDelta();
+
         this.updateControls();
-        
+
         // Entity sound effects timer
-        this.entityTimer += this.clock.getDelta();
+        this.entityTimer += delta;
         if (this.entityTimer > 15 + Math.random() * 20) { // Random entity sounds every 15-35 seconds
             this.triggerEntitySound();
             this.entityTimer = 0;
         }
 
         // Update enemies
-        const delta = this.clock.getDelta();
         this.enemies.forEach(enemy => enemy.update(delta));
         
         // Add subtle light flickering for atmosphere
@@ -1130,8 +1179,13 @@ class BackroomsGame {
             this.door.rotation.y += 0.005;
         }
         
-        // Update name tag orientations to face camera
+
+        // Update player animations and name tag orientations
         this.playerMeshes.forEach(mesh => {
+            if (mesh.userData.mixer) {
+                mesh.userData.mixer.update(delta);
+            }
+
             const nameTag = mesh.children.find(child => child.material && child.material.map);
             if (nameTag) {
                 nameTag.lookAt(this.camera.position);
