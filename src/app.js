@@ -1,13 +1,13 @@
 import * as THREE from "three";
-import { PlayerControls } from "./controls.js";
-import { createPlayerModel } from "./player.js";
-import { createTrees, createClouds } from "./worldGeneration.js"; 
-import { NPC } from "./npc.js";
-import { NPCManager } from "./NPCManager.js";
-import { UIManager } from "./ui.js";
-import { GameManager } from "./gameManager.js";
-import { CharacterGenerator } from "./characterGenerator.js";
-import { JournalInterface } from "./journal.js";
+import { PlayerControls } from "./player/controls.js";
+import { createPlayerModel } from "./player/player.js";
+import { createTrees, createClouds } from "./world/worldGeneration.js";
+import { NPC } from "./npc/npc.js";
+import { NPCManager } from "./npc/NPCManager.js";
+import { UIManager } from "./ui/ui.js";
+import { GameManager } from "./core/gameManager.js";
+import { CharacterGenerator } from "./ui/characterGenerator.js";
+import { JournalInterface } from "./ui/journal.js";
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 // Simple seeded random number generator
@@ -78,7 +78,7 @@ async function main() {
   // Load the Town model as the new ground and collision
   const loader = new GLTFLoader();
   loader.load(
-    '/Town.glb',
+    'assets/models/Town.glb',
     function (gltf) {
       const townModel = gltf.scene;
 
@@ -185,7 +185,7 @@ async function main() {
   // Load the Estranged model
   // Keeping Estranged model load but placing it high up to avoid interfering with the town
   loader.load(
-    '/the_estranged.glb',
+    'assets/models/the_estranged.glb',
     function (gltf) {
       const model = gltf.scene;
       // Position the model high up to avoid conflicting with the town layout
