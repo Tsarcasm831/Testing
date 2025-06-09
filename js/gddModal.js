@@ -6,7 +6,7 @@ const gameplayFunctionalities = [
     { name: "Road Mapping", description: "Fetches and displays road networks from OpenStreetMap for selected map areas." },
     { name: "Event Generation", description: "Dynamically finds and places interactive events on the map within road networks." },
     { name: "Geolocation & Home Base", description: "Displays user's or a fixed 'Home Base' location on the map." },
-    { name: "POI Placement & Geocoding", description: "Allows users to place Points of Interest (POIs) on the map with reverse geocoded addresses." },
+    { name: "POI Placement & Geocoding", description: "Allows users to place Points of Interest (POIs) on the map with generated fictional location names." },
     { name: "Sidebar Navigation", description: "Right sidebar for accessing various tools and external content via iframes." },
     { name: "Street View Integration", description: "Google Street View display for selected map locations, integrated into a panel." },
     { name: "Terra Incognita Overlay", description: "Dynamic map overlay that blacks out non-US countries, emphasizing the game's focus area." },
