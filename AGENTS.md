@@ -18,4 +18,5 @@ This repository stores a collection of static assets and JavaScript helpers. Fol
 ## Pull Requests
 - Summarize changes clearly in the PR description.
 - Cite modified files and test results when applicable.
+- Update `devlog.md` with a brief note about your changes before submitting a PR.
 
