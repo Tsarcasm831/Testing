@@ -1,4 +1,5 @@
 export function getFictionalLocationName(lat, lng) {
+
   // Pick an orientation label based on hemisphere for extra flavor
   const orientationMap = {
     '++': 'Northeastern',
@@ -35,4 +36,12 @@ export function getFictionalLocationName(lat, lng) {
   const adj = adjectives[Math.floor(rand() * adjectives.length)];
   const terrain = terrains[Math.floor(rand() * terrains.length)];
   return `${orientation} ${adj} ${terrain}`;
+
+  const adjectives = ['Mystic', 'Shadow', 'Crimson', 'Iron', 'Silver', 'Golden', 'Emerald', 'Silent', 'Hidden', 'Radiant'];
+  const nouns = ['Haven', 'Valley', 'Outpost', 'Keep', 'Crossing', 'Bastion', 'Harbor', 'Sanctum', 'Frontier', 'Beacon'];
+  const seed = Math.abs(Math.floor(lat * 1000) + Math.floor(lng * 1000));
+  const adj = adjectives[seed % adjectives.length];
+  const noun = nouns[Math.floor(seed / adjectives.length) % nouns.length];
+  return `${adj} ${noun}`;
+
 }
