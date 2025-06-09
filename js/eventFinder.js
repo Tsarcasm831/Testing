@@ -38,7 +38,7 @@ export function startEvent(eventId, eventTitle, eventAddress, eventLat, eventLng
   console.log(`Starting event: ${eventId} - ${eventTitle} at ${eventAddress}`);
   const latText = eventLat !== undefined ? eventLat.toFixed(6) : 'N/A';
   const lngText = eventLng !== undefined ? eventLng.toFixed(6) : 'N/A';
-  alert(`Launching event: ${eventTitle}\nLocation: ${eventAddress}\nCoordinates: ${latText}, ${lngText}`);
+  alert(`Launching event: ${eventTitle}\nCoordinates: ${latText}, ${lngText}`);
 }
 // Make available globally for any UI callbacks
 window.startEvent = startEvent;
@@ -134,8 +134,8 @@ async function routeToEvent(eventId, eventLat, eventLng) {
     routeDistanceText = `Drawn Route: ${directDistanceKm} km (Direct Line)`;
   }
 
-  if (marker && eventData) { 
-      const popupContent = `<b>${eventData.title}</b><br>Location: ${eventData.address}<br>${routeDistanceText}<br>${airDistanceText}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventData.title.replace(/'/g, "\\'")}', '${eventData.address.replace(/'/g, "\\'")}', ${eventLat}, ${eventLng})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${eventLat}, ${eventLng})">Route to Event</button>`;
+  if (marker && eventData) {
+      const popupContent = `<b>${eventData.title}</b><br>${routeDistanceText}<br>${airDistanceText}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventData.title.replace(/'/g, "\\'")}', '${eventData.address.replace(/'/g, "\\'")}', ${eventLat}, ${eventLng})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${eventLat}, ${eventLng})">Route to Event</button>`;
       marker.setPopupContent(popupContent);
       if (!marker.isPopupOpen()) {
           marker.openPopup();
@@ -251,7 +251,7 @@ export function initEventFinder(map) {
           const eventId = `event-${Date.now()}-${i}`; 
   
           const marker = L.marker(latLng, { icon: eventIcon })
-            .bindPopup(`<b>${eventTitle}</b><br>Location: ${address}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventTitle.replace(/'/g, "\\'")}', '${address.replace(/'/g, "\\'")}', ${latLng[0]}, ${latLng[1]})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${latLng[0]}, ${latLng[1]})">Route to Event</button>`);
+            .bindPopup(`<b>${eventTitle}</b><br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventTitle.replace(/'/g, "\\'")}', '${address.replace(/'/g, "\\'")}', ${latLng[0]}, ${latLng[1]})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${latLng[0]}, ${latLng[1]})">Route to Event</button>`);
           
           marker.eventId = eventId; // Store eventId on the marker
           marker.addTo(eventLayerGroup);
