@@ -7,6 +7,11 @@ import { initScreenRecorder } from "./screenRecorder.js";
 import { initUI } from "./ui.js";
 import { initAuthModal } from "./authModal.js";
 
+// Global development flag
+if (window.DEV_MODE === undefined) {
+  window.DEV_MODE = false;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   // Give React a chance to hydrate the page first
   setTimeout(() => { 

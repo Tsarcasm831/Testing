@@ -1,5 +1,7 @@
 // Handles the "Add Survey Point" Popup Module
 
+import { getFictionalLocationName } from "./fictionalLocation.js";
+
 function hidePopup() {
     const popup = document.getElementById("popup-module");
     if (popup) {
@@ -15,7 +17,8 @@ export function showPopup(lat, lng, address) {
     const pointTypeSelectInSidebar = document.querySelector("#right-sidebar #point-type-select");
 
     if (popupModule && geocodedAddressEl && coordinatesEl) {
-        geocodedAddressEl.textContent = `Location: ${address}`;
+        const displayAddress = window.DEV_MODE ? `Address: ${address}` : `Location: ${getFictionalLocationName(lat, lng)}`;
+        geocodedAddressEl.textContent = displayAddress;
         coordinatesEl.textContent = `Coordinates: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 
         if (pointTypeSelectInPopup && pointTypeSelectInSidebar) {

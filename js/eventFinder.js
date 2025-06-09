@@ -3,6 +3,7 @@ import { lineString } from '@turf/helpers';
 import pointOnFeature from '@turf/point-on-feature';
 import lineSplit from '@turf/line-split';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import { getFictionalLocationName } from './fictionalLocation.js';
 
 const eventTitles = [
   "Straight-Up Skirmish",
@@ -29,10 +30,15 @@ function getRandomEventTitle() {
 }
 
 async function getAddressForLatLng(lat, lng) {
+  if (!window.DEV_MODE) {
+    return getFictionalLocationName(lat, lng);
+  }
   try {
     const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
     const data = await response.json();
-    return data.display_name || "Address not found";
+    const address = data.display_name || 'Address not found';
+    console.log('Event address:', address);
+    return address;
   } catch (error) {
     console.error("Error reverse-geocoding for event:", error);
     return "Address lookup failed";
@@ -44,7 +50,8 @@ export function startEvent(eventId, eventTitle, eventAddress, eventLat, eventLng
   console.log(`Starting event: ${eventId} - ${eventTitle} at ${eventAddress}`);
   const latText = eventLat !== undefined ? eventLat.toFixed(6) : 'N/A';
   const lngText = eventLng !== undefined ? eventLng.toFixed(6) : 'N/A';
-  alert(`Launching event: ${eventTitle}\nAddress: ${eventAddress}\nLocation: ${latText}, ${lngText}`);
+  const label = window.DEV_MODE ? 'Address' : 'Location';
+  alert(`Launching event: ${eventTitle}\n${label}: ${eventAddress}\nLocation: ${latText}, ${lngText}`);
 }
 // Make available globally for any UI callbacks
 window.startEvent = startEvent;
@@ -140,8 +147,9 @@ async function routeToEvent(eventId, eventLat, eventLng) {
     routeDistanceText = `Drawn Route: ${directDistanceKm} km (Direct Line)`;
   }
 
-  if (marker && eventData) { 
-      const popupContent = `<b>${eventData.title}</b><br>Address: ${eventData.address}<br>${routeDistanceText}<br>${airDistanceText}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventData.title.replace(/'/g, "\\'")}', '${eventData.address.replace(/'/g, "\\'")}', ${eventLat}, ${eventLng})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${eventLat}, ${eventLng})">Route to Event</button>`;
+  if (marker && eventData) {
+      const label = window.DEV_MODE ? 'Address' : 'Location';
+      const popupContent = `<b>${eventData.title}</b><br>${label}: ${eventData.address}<br>${routeDistanceText}<br>${airDistanceText}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventData.title.replace(/'/g, "\\'")}', '${eventData.address.replace(/'/g, "\\'")}', ${eventLat}, ${eventLng})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${eventLat}, ${eventLng})">Route to Event</button>`;
       marker.setPopupContent(popupContent);
       if (!marker.isPopupOpen()) {
           marker.openPopup();
@@ -256,8 +264,9 @@ export function initEventFinder(map) {
           const eventTitle = getRandomEventTitle();
           const eventId = `event-${Date.now()}-${i}`; 
   
+          const label = window.DEV_MODE ? 'Address' : 'Location';
           const marker = L.marker(latLng, { icon: eventIcon })
-            .bindPopup(`<b>${eventTitle}</b><br>Address: ${address}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventTitle.replace(/'/g, "\\'")}', '${address.replace(/'/g, "\\'")}', ${latLng[0]}, ${latLng[1]})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${latLng[0]}, ${latLng[1]})">Route to Event</button>`);
+            .bindPopup(`<b>${eventTitle}</b><br>${label}: ${address}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventTitle.replace(/'/g, "\\'")}', '${address.replace(/'/g, "\\'")}', ${latLng[0]}, ${latLng[1]})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${latLng[0]}, ${latLng[1]})">Route to Event</button>`);
           
           marker.eventId = eventId; // Store eventId on the marker
           marker.addTo(eventLayerGroup);
