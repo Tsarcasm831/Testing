@@ -4,6 +4,7 @@ let placingPOI = false;
 let poiLatLng = { lat: null, lng: null };
 let poiAddress = "";
 let mapInstance; // To store the map reference
+import { getFictionalLocationName } from "./fictionalLocation.js";
 
 const flagIcon = L.icon({
     iconUrl: "/icons/flag-cursor.png", 
@@ -37,23 +38,33 @@ function onMapClick(e) {
     const poiTitleInput = document.getElementById("poi-title");
     const poiDescInput = document.getElementById("poi-description");
 
-    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
-        .then(res => res.json())
-        .then(data => {
-            poiAddress = data.display_name || "Address not found";
-            if (poiAddressEl) poiAddressEl.textContent = `Address: ${poiAddress}`;
-            if (poiCoordinatesEl) poiCoordinatesEl.textContent = `Coordinates: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
-            if (poiTitleInput) poiTitleInput.value = "";
-            if (poiDescInput) poiDescInput.value = "";
-            if (poiModal) poiModal.classList.add("active");
-        })
-        .catch(err => {
-            console.error("Error reverse geocoding for POI:", err);
-            poiAddress = "Address lookup failed";
-            if (poiAddressEl) poiAddressEl.textContent = `Address: ${poiAddress}`;
-            if (poiCoordinatesEl) poiCoordinatesEl.textContent = `Coordinates: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
-            if (poiModal) poiModal.classList.add("active");
-        });
+    if (window.DEV_MODE) {
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`)
+            .then(res => res.json())
+            .then(data => {
+                poiAddress = data.display_name || "Address not found";
+                console.log('POI address:', poiAddress);
+                if (poiAddressEl) poiAddressEl.textContent = `Address: ${poiAddress}`;
+                if (poiCoordinatesEl) poiCoordinatesEl.textContent = `Coordinates: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
+                if (poiTitleInput) poiTitleInput.value = "";
+                if (poiDescInput) poiDescInput.value = "";
+                if (poiModal) poiModal.classList.add("active");
+            })
+            .catch(err => {
+                console.error("Error reverse geocoding for POI:", err);
+                poiAddress = "Address lookup failed";
+                if (poiAddressEl) poiAddressEl.textContent = `Address: ${poiAddress}`;
+                if (poiCoordinatesEl) poiCoordinatesEl.textContent = `Coordinates: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
+                if (poiModal) poiModal.classList.add("active");
+            });
+    } else {
+        poiAddress = getFictionalLocationName(e.latlng.lat, e.latlng.lng);
+        if (poiAddressEl) poiAddressEl.textContent = `Location: ${poiAddress}`;
+        if (poiCoordinatesEl) poiCoordinatesEl.textContent = `Coordinates: ${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
+        if (poiTitleInput) poiTitleInput.value = "";
+        if (poiDescInput) poiDescInput.value = "";
+        if (poiModal) poiModal.classList.add("active");
+    }
 }
 
 export function initPoiModal(map) {
