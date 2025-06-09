@@ -3,6 +3,7 @@ import { lineString } from '@turf/helpers';
 import pointOnFeature from '@turf/point-on-feature';
 import lineSplit from '@turf/line-split';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
+import { getFictionalLocationName } from './fictionalLocation.js';
 
 const eventTitles = [
   "Straight-Up Skirmish",
@@ -28,15 +29,8 @@ function getRandomEventTitle() {
   return eventTitles[Math.floor(Math.random() * eventTitles.length)];
 }
 
-async function getAddressForLatLng(lat, lng) {
-  try {
-    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-    const data = await response.json();
-    return data.display_name || "Address not found";
-  } catch (error) {
-    console.error("Error reverse-geocoding for event:", error);
-    return "Address lookup failed";
-  }
+function getAddressForLatLng(lat, lng) {
+  return getFictionalLocationName(lat, lng);
 }
 
 // Start an event after preparation is complete
@@ -44,7 +38,7 @@ export function startEvent(eventId, eventTitle, eventAddress, eventLat, eventLng
   console.log(`Starting event: ${eventId} - ${eventTitle} at ${eventAddress}`);
   const latText = eventLat !== undefined ? eventLat.toFixed(6) : 'N/A';
   const lngText = eventLng !== undefined ? eventLng.toFixed(6) : 'N/A';
-  alert(`Launching event: ${eventTitle}\nAddress: ${eventAddress}\nLocation: ${latText}, ${lngText}`);
+  alert(`Launching event: ${eventTitle}\nLocation: ${eventAddress}\nCoordinates: ${latText}, ${lngText}`);
 }
 // Make available globally for any UI callbacks
 window.startEvent = startEvent;
@@ -141,7 +135,7 @@ async function routeToEvent(eventId, eventLat, eventLng) {
   }
 
   if (marker && eventData) { 
-      const popupContent = `<b>${eventData.title}</b><br>Address: ${eventData.address}<br>${routeDistanceText}<br>${airDistanceText}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventData.title.replace(/'/g, "\\'")}', '${eventData.address.replace(/'/g, "\\'")}', ${eventLat}, ${eventLng})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${eventLat}, ${eventLng})">Route to Event</button>`;
+      const popupContent = `<b>${eventData.title}</b><br>Location: ${eventData.address}<br>${routeDistanceText}<br>${airDistanceText}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventData.title.replace(/'/g, "\\'")}', '${eventData.address.replace(/'/g, "\\'")}', ${eventLat}, ${eventLng})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${eventLat}, ${eventLng})">Route to Event</button>`;
       marker.setPopupContent(popupContent);
       if (!marker.isPopupOpen()) {
           marker.openPopup();
@@ -252,12 +246,12 @@ export function initEventFinder(map) {
         const ptOnLine = pointOnFeature(segment); 
         if (ptOnLine && ptOnLine.geometry && ptOnLine.geometry.coordinates) {
           const latLng = [ptOnLine.geometry.coordinates[1], ptOnLine.geometry.coordinates[0]];
-          const address = await getAddressForLatLng(latLng[0], latLng[1]);
+          const address = getAddressForLatLng(latLng[0], latLng[1]);
           const eventTitle = getRandomEventTitle();
           const eventId = `event-${Date.now()}-${i}`; 
   
           const marker = L.marker(latLng, { icon: eventIcon })
-            .bindPopup(`<b>${eventTitle}</b><br>Address: ${address}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventTitle.replace(/'/g, "\\'")}', '${address.replace(/'/g, "\\'")}', ${latLng[0]}, ${latLng[1]})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${latLng[0]}, ${latLng[1]})">Route to Event</button>`);
+            .bindPopup(`<b>${eventTitle}</b><br>Location: ${address}<br><button class="sidebar-button" onclick="window.openPrepareEventModal('${eventId}', '${eventTitle.replace(/'/g, "\\'")}', '${address.replace(/'/g, "\\'")}', ${latLng[0]}, ${latLng[1]})">Prepare</button><button class="sidebar-button" onclick="routeToEvent('${eventId}', ${latLng[0]}, ${latLng[1]})">Route to Event</button>`);
           
           marker.eventId = eventId; // Store eventId on the marker
           marker.addTo(eventLayerGroup);

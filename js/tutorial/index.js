@@ -1,7 +1,7 @@
 const tutorialSteps = [
   { title: 'Welcome & Home Base', text: 'Click the home marker to open the Home Base Command Center.' },
   { title: 'Toolbar Overview', text: 'Use the toolbar to access factions, rules, grid scanning and more.' },
-  { title: 'Map Interaction', text: 'Double-click anywhere on the map to see coordinates and address.' },
+  { title: 'Map Interaction', text: 'Double-click anywhere on the map to see coordinates and a fictional location name.' },
   { title: 'Grid Toggle', text: 'Press the G key to toggle the map grid overlay.' },
   { title: 'Scanning', text: 'Select a grid cell and click Scan to inspect a 5x5 subgrid.' },
   { title: 'Mapping Roads', text: 'After scanning, click Map to retrieve major roads in the selected area.' },
