@@ -15,7 +15,7 @@ export function showPopup(lat, lng, address) {
     const pointTypeSelectInSidebar = document.querySelector("#right-sidebar #point-type-select");
 
     if (popupModule && geocodedAddressEl && coordinatesEl) {
-        geocodedAddressEl.textContent = `Address: ${address}`;
+        geocodedAddressEl.textContent = `Location: ${address}`;
         coordinatesEl.textContent = `Coordinates: ${lat.toFixed(6)}, ${lng.toFixed(6)}`;
 
         if (pointTypeSelectInPopup && pointTypeSelectInSidebar) {
