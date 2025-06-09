@@ -173,22 +173,20 @@ function updateBriefingTabWithEventDetails() {
     const tabContent = modalElement.querySelector('#tab3-content');
     if(!tabContent) return;
 
-    const { eventId, eventTitle, eventAddress, eventLat, eventLng } = currentEventDetails;
+    const { eventId, eventTitle, eventLat, eventLng } = currentEventDetails;
     
     const briefingEventTitle = tabContent.querySelector('#briefing-event-title');
     const briefingEventIdSpan = tabContent.querySelector('#briefing-eventId');
-    const briefingEventAddressSpan = tabContent.querySelector('#briefing-eventAddress');
     const briefingEventCoordsSpan = tabContent.querySelector('#briefing-eventCoords');
 
     if (briefingEventTitle) briefingEventTitle.textContent = eventTitle;
     if (briefingEventIdSpan) briefingEventIdSpan.textContent = eventId;
-    if (briefingEventAddressSpan) briefingEventAddressSpan.textContent = eventAddress;
     if (briefingEventCoordsSpan) {
         briefingEventCoordsSpan.textContent = (eventLat && eventLng) ? `${eventLat.toFixed(6)}, ${eventLng.toFixed(6)}` : 'N/A';
     }
     
     const briefingTacticalOverview = tabContent.querySelector('#briefing-tactical-overview');
-    if (briefingTacticalOverview) briefingTacticalOverview.textContent = `Investigate disturbance at ${eventAddress}. Potential hostile contact. Proceed with caution.`;
+    if (briefingTacticalOverview) briefingTacticalOverview.textContent = 'Investigate disturbance in the target area. Potential hostile contact. Proceed with caution.';
     
     const briefingPotentialThreats = tabContent.querySelector('#briefing-potential-threats');
     if (briefingPotentialThreats) briefingPotentialThreats.textContent = `Threat level unknown. Primary concern is securing the area and gathering intel. Secondary: Identify hostile forces.`;

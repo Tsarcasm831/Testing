@@ -10,7 +10,6 @@ export async function initBriefingTab(tabElement) {
             <div class="briefing-main-details">
                 <h3>Mission Briefing: <span id="briefing-event-title">N/A</span></h3>
                 <p><strong>Event ID:</strong> <span id="briefing-eventId">N/A</span></p>
-                <p><strong>Location:</strong> <span id="briefing-eventAddress">N/A</span></p>
                 <p><strong>Coordinates:</strong> <span id="briefing-eventCoords">N/A</span></p>
             </div>
     
@@ -64,24 +63,22 @@ export async function initBriefingTab(tabElement) {
 
 // Helper function to update briefing tab content with event details
 function updateBriefingWithEventDetails(tabElement, eventDetails) {
-    const { eventId, eventTitle, eventAddress, eventLat, eventLng } = eventDetails;
+    const { eventId, eventTitle, eventLat, eventLng } = eventDetails;
     
     const briefingEventTitle = tabElement.querySelector('#briefing-event-title');
     const briefingEventIdSpan = tabElement.querySelector('#briefing-eventId');
-    const briefingEventAddressSpan = tabElement.querySelector('#briefing-eventAddress');
     const briefingEventCoordsSpan = tabElement.querySelector('#briefing-eventCoords');
 
     if (briefingEventTitle) briefingEventTitle.textContent = eventTitle;
     if (briefingEventIdSpan) briefingEventIdSpan.textContent = eventId;
-    if (briefingEventAddressSpan) briefingEventAddressSpan.textContent = eventAddress;
     if (briefingEventCoordsSpan) {
-        briefingEventCoordsSpan.textContent = (eventLat && eventLng) ? 
+        briefingEventCoordsSpan.textContent = (eventLat && eventLng) ?
             `${eventLat.toFixed(6)}, ${eventLng.toFixed(6)}` : 'N/A';
     }
 
     const briefingTacticalOverview = tabElement.querySelector('#briefing-tactical-overview');
     if (briefingTacticalOverview) {
-        briefingTacticalOverview.textContent = 
-            `Investigate disturbance at ${eventAddress}. Potential hostile contact. Proceed with caution.`;
+        briefingTacticalOverview.textContent =
+            'Investigate disturbance in the target area. Potential hostile contact. Proceed with caution.';
     }
 }
