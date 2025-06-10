@@ -1,23 +1,23 @@
 /* Team Tab specific styling */
 
-.team-tab-container {
+.team-configuration-container {
     display: flex;
     height: 100%;
 }
 
-.team-slots-section {
-    flex-basis: 60%;
+.active-team-panel {
+    flex-basis: 40%;
     margin-right: 20px;
 }
 
-.unit-slots-grid {
+.team-slots {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     margin-top: 15px;
 }
 
-.unit-slot {
+.team-slot {
     background-color: rgba(60, 60, 60, 0.5);
     border: 2px dashed #555;
     border-radius: 5px;
@@ -32,21 +32,21 @@
     overflow: hidden;
 }
 
-.unit-slot.empty {
+.team-slot.empty {
     cursor: pointer;
 }
 
-.unit-slot.empty:hover {
+.team-slot.empty:hover {
     background-color: rgba(80, 80, 80, 0.5);
     border-color: #777;
 }
 
-.unit-slot.drag-over {
+.team-slot.drag-over {
     background-color: rgba(255, 165, 0, 0.2);
     border-color: orange;
 }
 
-.unit-slot:not(.empty) {
+.team-slot:not(.empty) {
     border-style: solid;
     background-color: rgba(40, 40, 40, 0.8);
 }
@@ -81,7 +81,7 @@
     color: #aaa;
 }
 
-.unit-remove-btn {
+.team-slot-remove-btn {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -99,19 +99,24 @@
     transition: all 0.2s;
 }
 
-.unit-remove-btn:hover {
+.team-slot-remove-btn:hover {
     background-color: rgb(220, 20, 20);
     transform: scale(1.1);
 }
 
-.available-units-section {
-    flex-basis: 40%;
-    padding-left: 15px;
-    border-left: 1px solid #444;
+.available-units-panel {
+    flex-basis: 35%;
+    padding-right: 15px;
+    border-right: 1px solid #444;
 }
 
 .available-units-list {
     margin-top: 10px;
     max-height: calc(100% - 40px);
     overflow-y: auto;
+}
+
+.team-stats-panel {
+    flex-basis: 25%;
+    padding-left: 15px;
 }

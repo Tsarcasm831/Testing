@@ -9,3 +9,4 @@ This log tracks notable repository updates for contributors.
 - 2025-06-10: Added split-lock script to break package-lock.json into smaller files.
 - 2025-06-14: Cleaned package-lock.json after splitting.
 
+- 2025-06-10: Updated team tab CSS to match markup.
