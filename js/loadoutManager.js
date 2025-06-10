@@ -78,15 +78,17 @@ function renderAvailableWeaponsList() {
 
     availableWeapons.forEach(weapon => {
         const weaponItem = document.createElement('div');
-        weaponItem.className = 'weapon-item-draggable';
+        weaponItem.className = 'list-item list-item-grid draggable';
         weaponItem.draggable = true;
         weaponItem.dataset.weaponId = weapon.id;
 
         weaponItem.innerHTML = `
-            <img src="${weapon.imagePath}" alt="${weapon.name}" onerror="this.style.display='none'; this.nextElementSibling.querySelector('strong').textContent += ' (Img Fail)';">
-            <div class="weapon-item-info">
-                <strong>${weapon.name}</strong>
-                <span>Dmg: ${weapon.std_dmg || 'N/A'}, Range: ${weapon.range_yd || weapon.range || 'N/A'}</span>
+            <div class="list-item-icon">
+                <img src="${weapon.imagePath}" alt="${weapon.name}" onerror="this.style.display='none';">
+            </div>
+            <div class="list-item-content">
+                <div class="list-item-title">${weapon.name}</div>
+                <div class="list-item-description">Dmg:${weapon.std_dmg || 'N/A'} Range:${weapon.range_yd || weapon.range || 'N/A'}</div>
             </div>
         `;
         weaponItem.addEventListener('dragstart', (event) => {

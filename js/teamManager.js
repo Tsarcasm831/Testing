@@ -53,14 +53,17 @@ function renderAvailableUnitsList() {
 
     availableUnits.forEach(unit => {
         const unitItem = document.createElement('div');
-        unitItem.className = 'unit-item-draggable';
+        unitItem.className = 'list-item list-item-grid draggable';
         unitItem.draggable = true;
         unitItem.dataset.unitId = unit.id; // Store full ID for getUnitById
         unitItem.innerHTML = `
-            <img src="${unit.imagePath}" alt="${unit.name} ${unit.version}" onerror="this.style.display='none'; this.parentElement.querySelector('strong').textContent += ' (Img Fail)';">
-            <div class="unit-item-info">
-                <strong>${unit.name} (${unit.version})</strong>
-                <span>H:${unit.health} M:${unit.move} R:${unit.range} Hit:${unit.chance_to_hit}%</span>
+            <div class="list-item-icon">
+                <img src="${unit.imagePath}" alt="${unit.name} ${unit.version}" onerror="this.style.display='none';">
+            </div>
+            <div class="list-item-content">
+                <div class="list-item-title">${unit.name}</div>
+                <div class="list-item-subtitle">${unit.version}</div>
+                <div class="list-item-description">H:${unit.health} M:${unit.move}</div>
             </div>
         `;
         unitItem.addEventListener('dragstart', (event) => {

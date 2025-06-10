@@ -114,6 +114,14 @@
     margin-top: 10px;
     max-height: calc(100% - 40px);
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.available-units-list .list-item-icon {
+    width: 60px;
+    height: 60px;
 }
 
 .team-stats-panel {
