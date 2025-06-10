@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint js/**/*.js"
+    "lint": "eslint js/**/*.js",
+    "split-lock": "node scripts/split-lock.js"
   },
   "keywords": [],
   "author": "",
