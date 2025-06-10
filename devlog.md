@@ -6,3 +6,5 @@ This log tracks notable repository updates for contributors.
 - 2025-06-11: Added JSDoc comments for exported functions.
 - 2025-06-12: Added alt attributes to images captured by camera.js.
 - 2025-06-13: Initialized package.json, installed ESLint and added lint script.
+- 2025-06-10: Added split-lock script to break package-lock.json into smaller files.
+- 2025-06-14: Cleaned package-lock.json after splitting.
