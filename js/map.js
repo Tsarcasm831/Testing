@@ -7,6 +7,10 @@ import { initWestOverlay } from "./westOverlay.js";
 import { initEastOverlay } from "./eastOverlay.js";
 import { initDMZOverlay } from "./dmzOverlay.js";
 
+/**
+ * Initialize the main map and all related overlays.
+ * @returns {{map: object, gridSystem: object}} The Leaflet map instance and grid system.
+ */
 function initMap() {
   const map = initMapBase();
   initGeoLocation(map);
