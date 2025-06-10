@@ -10,3 +10,4 @@ This log tracks notable repository updates for contributors.
 - 2025-06-14: Cleaned package-lock.json after splitting.
 
 - 2025-06-10: Updated team tab CSS to match markup.
+- 2025-06-10: Redesigned team and loadout tabs with uniform list items.

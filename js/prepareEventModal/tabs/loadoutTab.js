@@ -11,7 +11,7 @@ export async function initLoadoutTab(tabElement) {
             <div id="selected-soldiers-loadouts" class="selected-soldiers-loadouts"></div>
             <div class="available-equipment-panel">
                 <h3>Available Weapons</h3>
-                <div id="available-weapons-list" class="equipment-list scrollable-list"></div>
+                <div id="available-weapons-list" class="equipment-list scrollable-list available-weapons-list"></div>
                 <h3>Available Armor</h3>
                 <div class="equipment-list"><p>Armor system coming soon.</p></div>
                 <h3>Available Items</h3>

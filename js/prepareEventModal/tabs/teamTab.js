@@ -10,7 +10,7 @@ export async function initTeamTab(tabElement) {
         <div class="team-configuration-container">
             <div class="available-units-panel">
                 <h3>Available Units (FDG)</h3>
-                <div id="available-units-list" class="units-list scrollable-list"></div>
+                <div id="available-units-list" class="units-list scrollable-list available-units-list"></div>
             </div>
             <div class="active-team-panel">
                 <h3>Active Team (Max 3)</h3>
