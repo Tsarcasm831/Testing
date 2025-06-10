@@ -1,3 +1,7 @@
+/**
+ * Set up event listeners for sidebar UI controls.
+ * @returns {void}
+ */
 function initSidebar() {
   const rightSidebar = document.getElementById("right-sidebar");
   document.querySelectorAll("#close-right-sidebar").forEach((btn) => {

@@ -333,6 +333,11 @@ async function captureAndRender3DView(container) {
   }
 }
 
+/**
+ * Initialize the 3D viewer modal and attach event listeners.
+ * @param {object} map - Leaflet map instance used for street view integration.
+ * @returns {void}
+ */
 export function initThreeDModal(map) { // map parameter might not be strictly needed here anymore
   const toggle3DBtn = document.getElementById('toggle-3d-btn');
   const threeDModal = document.getElementById('threeD-modal');

@@ -1,3 +1,9 @@
+/**
+ * Fetch HTML from a URL and insert it into the matched container.
+ * @param {string} selector - CSS selector targeting the container element.
+ * @param {string} url - URL to fetch HTML content from.
+ * @returns {Promise<void>} Resolves when content has been loaded.
+ */
 export async function loadComponent(selector, url) {
   const container = document.querySelector(selector);
   if (!container) return;
@@ -10,6 +16,10 @@ export async function loadComponent(selector, url) {
   }
 }
 
+/**
+ * Load all interface components into their containers.
+ * @returns {void}
+ */
 export function initComponents() {
   loadComponent('#toolbar-container', '/components/toolbar.html');
   loadComponent('#sidebar-container', '/components/sidebar.html');
