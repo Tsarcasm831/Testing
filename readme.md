@@ -1,6 +1,6 @@
 # FarHaven 3D Isometric RPG
 
-A browser-based 3D isometric RPG world built on Three.js you will want to run npx run dev first.
+A browser-based 3D isometric RPG world built on Three.js. Start a local server with `npx farhaven`.
 
 ---
 
@@ -29,7 +29,7 @@ A browser-based 3D isometric RPG world built on Three.js you will want to run np
 - **Assets**  
   - GLB/GLTF under `assets/`  
 - **Lightweight server**  
-  - `static_server.py`
+  - `static_server.py` or run `npx farhaven`
 
 ---
 
