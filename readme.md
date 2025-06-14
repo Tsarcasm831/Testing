@@ -52,3 +52,7 @@ FarHaven/
 ├─ popupUI.js
 ├─ static_server.py
 └─ style.css  (or style.min.css / style[whatever].css)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
