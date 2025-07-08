@@ -145,9 +145,11 @@ import { app } from './app.js';
                 const box = new THREE.Box3().setFromObject(model);
                 const size = box.getSize(new THREE.Vector3()).length();
                 const center = box.getCenter(new THREE.Vector3());
-                model.position.x += (model.position.x - center.x);
-                model.position.y += (model.position.y - center.y);
-                model.position.z += (model.position.z - center.z);
+                if (modelData && modelData.centerBottom) {
+                    model.position.set(-center.x, -box.min.y, -center.z);
+                } else {
+                    model.position.set(-center.x, -center.y, -center.z);
+                }
                 const scale = 2.5 / size;
                 model.scale.set(scale, scale, scale);
                 model.traverse((node) => {
