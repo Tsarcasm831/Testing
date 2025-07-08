@@ -1,0 +1,208 @@
+#profile-header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+    animation: slideInDown 0.8s forwards;
+    animation-delay: 0.2s; /* Delay to allow nav to animate first */
+}
+
+#profile-header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5em;
+    color: #e0e8ff;
+    text-shadow: 0 0 12px var(--glow-color);
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#profile-header > main {
+    text-align: center;
+}
+
+#user-info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 10px;
+}
+
+#paypal-button-container-B438P96RMMT9L {
+    display: inline-block;
+}
+
+#profile-header a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin: 0 auto 20px;
+}
+
+#avatar-container {
+    width: 150px;
+    height: 150px;
+    border: 3px solid var(--primary-color);
+    border-radius: 50%;
+    padding: 5px;
+    box-shadow: 0 0 15px var(--glow-color), inset 0 0 15px var(--glow-color);
+    animation: pulse 3s infinite ease-in-out;
+    background: var(--background-color);
+    position: relative;
+    z-index: 2;
+}
+
+#avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+#avatar-container:hover #avatar {
+    transform: scale(1.05);
+}
+
+#username {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5em;
+    color: #e0e8ff; /* Brighter color for readability */
+    text-shadow: 0 0 12px var(--glow-color); /* Simplified, softer glow */
+    margin: 15px 0 0;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#description {
+    max-width: 600px;
+    margin: 15px auto 0;
+    line-height: 1.6;
+    color: var(--text-color);
+    opacity: 0;
+    animation: textFlicker 3s 1s forwards;
+}
+
+#social-links {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-link {
+    font-family: 'Orbitron', sans-serif;
+    display: inline-block;
+    padding: 8px 15px;
+    border: 1px solid var(--border-color);
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.social-link:hover {
+    background: var(--container-bg);
+    color: white;
+    box-shadow: 0 0 10px var(--glow-color);
+    text-shadow: 0 0 5px white;
+    transform: translateY(-2px);
+}
+
+#gift-link {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    z-index: 3;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--background-color);
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 10px var(--glow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#gift-link img {
+    width: 20px;
+    height: 20px;
+}
+
+#gift-link:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+#gift-tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px); /* Adjusted for arrow */
+    left: 50%;
+    transform: translateX(-50%) translateY(10px); /* Animate from slightly below */
+    width: 250px;
+    background: var(--container-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 20px var(--glow-color);
+    padding: 10px;
+    border-radius: 4px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    z-index: 100;
+}
+
+#gift-link:hover #gift-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0); /* Animate to final position */
+}
+
+#gift-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -6px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: var(--border-color) transparent transparent transparent;
+}
+
+.tooltip-image-container {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.tooltip-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: 0;
+}
+
+#gift-link:hover .tooltip-image {
+    animation: glitch-materialize 0.4s 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+#gift-tooltip .tooltip-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9em;
+    color: var(--text-color);
+    text-align: center;
+    margin: 0;
+    min-height: 1.2em; /* Prevent layout jump */
+}
+
+#gift-tooltip .tooltip-text:not(:last-child) {
+    margin-bottom: 5px;
+}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art - Lord Tsarcasm</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/effects.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/loader.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/art.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 1.8em;
+            text-shadow: 0 0 8px var(--glow-color);
+            margin: 20px 0 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+        .art-section {
+            text-align: center;
+            padding: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .datastream-effect {
+            font-size: 1.2em;
+            padding: 30px 0;
+            min-height: 120px;
+        }
+        .final-content .error-message {
+            color: #ff4d4d;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4em;
+            text-shadow: 0 0 10px #ff4d4d;
+            margin-bottom: 1.5em;
+        }
+        .final-content .witticism {
+            font-style: italic;
+            color: var(--secondary-color);
+            line-height: 1.8;
+        }
+        .scramble-char {
+            color: var(--primary-color);
+            text-shadow: 0 0 5px var(--glow-color);
+        }
+        .art-error-container {
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            background: rgba(20, 25, 30, 0.4);
+            animation: cardFadeIn 0.5s 0.2s forwards;
+            opacity: 0;
+        }
+        .art-error-container .error-message {
+            margin-bottom: 20px;
+        }
+        .error-log {
+            font-family: 'Share Tech Mono', monospace;
+            text-align: left;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 77, 77, 0.2);
+            padding: 15px;
+            background: rgba(255, 77, 77, 0.05);
+        }
+        .error-log p {
+            margin: 0 0 8px;
+            line-height: 1.6;
+        }
+        .error-log p:last-child {
+            margin-bottom: 0;
+        }
+        .log-prefix {
+            color: var(--secondary-color);
+            opacity: 0.7;
+            margin-right: 10px;
+        }
+        .log-status-fail {
+            color: #ff4d4d;
+            font-weight: bold;
+            text-shadow: 0 0 5px #ff4d4d;
+        }
+        .art-error-container .witticism {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app-container">
+        <div id="vignette"></div>
+        <div id="scanline"></div>
+        <nav id="main-nav">
+             <button id="hamburger-btn" class="hamburger">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            <div id="nav-links-container">
+                <a href="index.html" class="nav-link">HOME</a>
+                 <div class="nav-item-with-dropdown">
+                    <a href="music.html" class="nav-link">MUSIC</a>
+                    <div class="dropdown-menu">
+                        <a href="https://suno.com/@lordtsarcasm" target="_blank">Suno</a>
+                        <a href="https://open.spotify.com/search/lord%20tsarcasm" target="_blank">Spotify</a>
+                        <a href="https://www.youtube.com/@lordtsarcasm" target="_blank">YouTube</a>
+                        <a href="https://music.youtube.com/channel/UC25n5n3fQ2zuxgAFoK3bE-w" target="_blank">YT Music</a>
+                    </div>
+                </div>
+                <a href="about_me.html" class="nav-link">ABOUT ME</a>
+                <a href="art.html" class="nav-link active">ART</a>
+            </div>
+        </nav>
+        <header id="profile-header">
+            <div id="avatar-wrapper">
+                 <div id="avatar-container">
+                    <a id="profile-link" href="https://websim.com/@lordtsarcasm" target="_blank">
+                        <img id="avatar" src="/assets/ROD.png" alt="User Avatar">
+                    </a>
+                </div>
+                <a href="https://arc.net/gift/6fd9a333" target="_blank" id="gift-link">
+                    <img src="gift-icon.png" alt="Gift Icon">
+                    <div id="gift-tooltip">
+                        <p class="tooltip-text"></p>
+                        <p class="tooltip-text"></p>
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <main id="content">
+            <h1 class="page-header-username" style="font-family: 'Orbitron', sans-serif; font-size: 2.5em; color: #e0e8ff; text-shadow: 0 0 12px var(--glow-color); margin: 0; text-align: center;"></h1>
+            <h2 class="page-title">VISUAL DATA ARCHIVE</h2>
+            <div id="art-content" class="art-section">
+                <div class="datastream-effect">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                </div>
+                <div class="final-content hidden">
+                    <!-- Content will be injected here by JS -->
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <div id="social-links"></div>
+        </footer>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://esm.sh/three@0.166.1",
+            "three/addons/": "https://esm.sh/three@0.166.1/examples/jsm/"
+        }
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

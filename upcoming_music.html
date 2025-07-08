@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Music - Lord Tsarcasm</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/effects.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/loader.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/music.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app-container">
+        <div id="vignette"></div>
+        <div id="scanline"></div>
+        <nav id="main-nav">
+            <a href="index.html" class="nav-link">HOME</a>
+            <a href="upcoming_music.html" class="nav-link active">UPCOMING MUSIC</a>
+            <a href="about_me.html" class="nav-link">ABOUT ME</a>
+            <a href="art.html" class="nav-link">ART</a>
+        </nav>
+        <header id="profile-header">
+            <div id="avatar-wrapper">
+                <div id="avatar-container">
+                    <a id="profile-link" href="#" target="_blank">
+                        <img id="avatar" src="/assets/ROD.png" alt="User Avatar">
+                    </a>
+                </div>
+                <a href="https://arc.net/gift/6fd9a333" target="_blank" id="gift-link">
+                    <img src="gift-icon.png" alt="Gift Icon">
+                    <div id="gift-tooltip">
+                        <p class="tooltip-text">Download Arc, my favorite browser!</p>
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <main id="content">
+            <h2 class="page-title">TRANSMISSIONS - UPCOMING RELEASES</h2>
+            <div class="music-list">
+                <div class="music-item">
+                    <h3><a href="https://suno.com/s/WnEI5hAjPtb7w481" target="_blank">"Owl Mystery"</a></h3>
+                    <p class="release-info"><span>RELEASE:</span> NOW AVAILABLE</p>
+                    <p class="track-description">Baroque, Classical, and Chamber—twisted into modern ritual.</p>
+                </div>
+            </div>
+        </main>
+        
+        <div id="loader" class="hidden">
+            <div class="spinner"></div>
+            <p>ACCESSING DATA NODE...</p>
+        </div>
+
+        <footer>
+            <div id="social-links"></div>
+        </footer>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://esm.sh/three@0.166.1",
+            "three/addons/": "https://esm.sh/three@0.166.1/examples/jsm/"
+        }
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

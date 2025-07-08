@@ -1,57 +1,130 @@
-<html>
+<html lang="en">
 <head>
-    <base href="/home/">
-    <script>console.log('index.html loaded');</script>
-    <title>3D Isometric RPG</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="scripts/ui/compass.css">
-    <link rel="stylesheet" href="scripts/ui/credits.css">
-    <link rel="stylesheet" href="scripts/ui/loadingScreen.css">
-    <link rel="stylesheet" href="scripts/ui/glb_status.css">
-    <link rel="icon" type="image/x-icon" sizes="any" href="https://file.garden/Zy7B0LkdIVpGyzA1/Game/favicon.ico">
-    <!-- Add Open Graph image for thumbnail -->
-    <meta property="og:image" content="https://file.garden/Zy7B0LkdIVpGyzA1/Game/thumbnail.png">
-    <!-- Preload assets -->
-    <link rel="prefetch" href="assets/videos/menu.mp4" as="video" type="video/mp4">
-    <link rel="prefetch" href="assets/sounds/town1.mp3" as="fetch" crossorigin="anonymous">
-    <link rel="prefetch" href="assets/sounds/town2.mp3" as="fetch" crossorigin="anonymous">
-    <!-- Hidden video element that will be used by the loading screen -->
-    <video id="menu-video" style="display:none;" preload="auto" muted playsinline>
-        <source src="assets/videos/menu.mp4" type="video/mp4">
-    </video>
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LordTsarcasm.com Update Version 0.1</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/effects.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/tabs.css">
+    <link rel="stylesheet" href="css/grid.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/loader.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/music.css">
+    <link rel="stylesheet" href="css/model_viewer.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="container">
-      <canvas id="game-canvas"></canvas>
-        <!-- Compass will be appended here by compass.js -->
-        <!-- GLB Status UI will be appended here by glb_status.js -->
-        <!-- Credits UI will be appended here by credits.js -->
+    <div id="app-container">
+        <div id="vignette"></div>
+        <div id="scanline"></div>
+        <nav id="main-nav">
+             <button id="hamburger-btn" class="hamburger">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            <div id="nav-links-container">
+                <a href="/" class="nav-link" data-page="/">HOME</a>
+                <div class="nav-item-with-dropdown">
+                    <a href="/?page=music" class="nav-link" data-page="music">MUSIC</a>
+                    <div class="dropdown-menu">
+                        <a href="https://suno.com/@lordtsarcasm" target="_blank">Suno</a>
+                        <a href="https://open.spotify.com/search/lord%20tsarcasm" target="_blank">Spotify</a>
+                        <a href="https://www.youtube.com/@lordtsarcasm" target="_blank">YouTube</a>
+                        <a href="https://music.youtube.com/channel/UC25n5n3fQ2zuxgAFoK3bE-w" target="_blank">YT Music</a>
+                    </div>
+                </div>
+                <a href="/?page=about" class="nav-link" data-page="about">ABOUT ME</a>
+                <a href="/?page=art" class="nav-link" data-page="art">ART</a>
+            </div>
+        </nav>
+        <header id="profile-header">
+            <div id="avatar-wrapper">
+                <div id="avatar-container">
+                    <a id="profile-link" href="#" target="_blank">
+                        <img id="avatar" src="" alt="User Avatar">
+                    </a>
+                </div>
+                <a href="https://arc.net/gift/6fd9a333" target="_blank" id="gift-link">
+                    <img src="gift-icon.png" alt="Gift Icon">
+                    <div id="gift-tooltip">
+                        <p class="tooltip-text"></p>
+                        <p class="tooltip-text"></p>
+                    </div>
+                </a>
+            </div>
+            <a id="username-link" href="#" target="_blank">
+                <h1 id="username" data-text=""></h1>
+            </a>
+            <p id="description"></p>
+        </header>
+
+        <main class="hidden">
+            <!-- This main block is now empty and hidden, its content was moved to the header for structural correctness -->
+        </main>
+
+        <div id="page-content-container"></div>
+
+        <nav id="tabs">
+            <button class="tab-button active" data-tab="projects">PROJECTS</button>
+            <button class="tab-button" data-tab="likes">LIKES</button>
+            <button class="tab-button" data-tab="models">MODELS</button>
+            <button class="tab-button" data-tab="support">SUPPORT</button>
+            <div id="social-links-tabs"></div>
+        </nav>
+
+        <main id="content-grid">
+            <!-- Projects and Likes will be rendered here -->
+        </main>
+        <div id="loader" class="hidden">
+            <div class="spinner"></div>
+            <p>ACCESSING DATA NODE...</p>
+        </div>
+        <div id="no-content" class="hidden">
+             <p>DATA CORRUPTED OR UNAVAILABLE...</p>
+        </div>
+
+        <footer>
+            <!-- Social links moved to tabs section on the main page -->
+        </footer>
     </div>
-    <!-- Make main.js async to allow modelLoader/town setup to potentially use await -->
-    <script type="module" src="main.js"></script>
-    <!-- Disabled service worker to avoid background tasks -->
-    <!--
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js')
-          .then(reg => console.log('Service Worker registered:', reg))
-          .catch(err => console.warn('SW registration failed:', err));
-      }
+
+    <div id="modal-overlay" class="hidden">
+        <div id="modal-content">
+            <button id="modal-close-button">&times;</button>
+            <div id="modal-body">
+                <div id="modal-viewer-container" class="hidden">
+                     <div id="modal-viewer-loader" class="viewer-loader">
+                        <div class="spinner"></div>
+                        <p>LOADING SPECIMEN...</p>
+                    </div>
+                    <canvas id="modal-model-canvas"></canvas>
+                </div>
+                <img id="modal-image" src="" alt="Project Image">
+                <div id="modal-info">
+                    <h2 id="modal-title"></h2>
+                    <div id="modal-creator-container"></div>
+                    <p id="modal-description"></p>
+                    <div id="modal-stats"></div>
+                    <a id="modal-project-link" href="#" target="_blank" class="modal-button">Visit Project</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://esm.sh/three@0.166.1",
+            "three/addons/": "https://esm.sh/three@0.166.1/examples/jsm/"
+        }
+    }
     </script>
-    -->
-    <!-- Garage and Club iframes are now created dynamically; static iframes removed -->
-    <!-- <iframe id="garageFrame" src="pages/bills_garage/index.html" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;border:none;z-index:100;"></iframe> -->
-    <!-- <iframe id="clubFrame" src="pages/diamonds_club/diamonds.html" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;border:none;z-index:100;"></iframe> -->
-    <!-- Audio element for background music -->
-    <!-- <audio id="bgAudio" preload="auto"></audio> --> <!-- DISABLED: background music audio element -->
-    <div id="ranger-thought" class="thought-bubble"></div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>

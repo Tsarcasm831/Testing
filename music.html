@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music - Lord Tsarcasm</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/effects.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/loader.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/music.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        .nav-item-with-dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            display: none;
+        }
+
+        .nav-item-with-dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+        }
+    </style>
+</head>
+<body>
+    <div id="app-container">
+        <div id="vignette"></div>
+        <div id="scanline"></div>
+        <nav id="main-nav">
+             <button id="hamburger-btn" class="hamburger">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            <div id="nav-links-container">
+                <a href="index.html" class="nav-link">HOME</a>
+                <div class="nav-item-with-dropdown">
+                    <a href="music.html" class="nav-link active">MUSIC</a>
+                    <div class="dropdown-menu">
+                        <a href="https://suno.com/@lordtsarcasm" target="_blank">Suno</a>
+                        <a href="https://open.spotify.com/search/lord%20tsarcasm" target="_blank">Spotify</a>
+                        <a href="https://www.youtube.com/@lordtsarcasm" target="_blank">YouTube</a>
+                        <a href="https://music.youtube.com/channel/UC25n5n3fQ2zuxgAFoK3bE-w" target="_blank">YT Music</a>
+                    </div>
+                </div>
+                <a href="about_me.html" class="nav-link">ABOUT ME</a>
+                <a href="art.html" class="nav-link">ART</a>
+            </div>
+        </nav>
+        <header id="profile-header">
+            <div id="avatar-wrapper">
+                <div id="avatar-container">
+                    <a id="profile-link" href="#" target="_blank">
+                        <img id="avatar" src="/assets/ROD.png" alt="User Avatar">
+                    </a>
+                </div>
+                 <a href="https://arc.net/gift/6fd9a333" target="_blank" id="gift-link">
+                    <img src="gift-icon.png" alt="Gift Icon">
+                    <div id="gift-tooltip">
+                        <p class="tooltip-text"></p>
+                        <p class="tooltip-text"></p>
+                    </div>
+                </a>
+            </div>
+        </header>
+
+        <main id="content">
+            <h1 class="page-header-username" style="font-family: 'Orbitron', sans-serif; font-size: 2.5em; color: #e0e8ff; text-shadow: 0 0 12px var(--glow-color); margin: 0; text-align: center;"></h1>
+            <h2 class="page-title">TRANSMISSIONS - RELEASES</h2>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <a href="/?page=upcoming-music" class="nav-link" data-page="upcoming-music">View Upcoming Releases</a>
+            </div>
+            <div class="music-list">
+                <div class="music-item">
+                    <h3><a href="https://suno.com/s/TRNgJuPBaa7jb60n" target="_blank">"Again"</a></h3>
+                    <p class="release-info"><span>RELEASE:</span> Now available on Suno</p>
+                    <p class="track-description">Epic post-apocalyptic instrumental with cinematic metal and hip-hop fusion.</p>
+                </div>
+                <div class="music-item">
+                    <h3><a href="https://suno.com/s/WnEI5hAjPtb7w481" target="_blank">"Owl Mystery"</a></h3>
+                    <p class="release-info"><span>RELEASE:</span> Now available on Suno</p>
+                    <p class="track-description">Baroque, Classical, and Chamber—twisted into modern ritual.</p>
+                </div>
+            </div>
+
+            <div class="platform-sections">
+                <div class="platform-section">
+                    <h3 class="platform-title">SUNO ARCHIVE</h3>
+                    <p class="platform-description">The origin point for many of my transmissions. A collection of raw ideas, experiments, and full tracks before they are broadcast to the wider network.</p>
+                    <div class="platform-links-container">
+                        <a href="https://suno.com/@lordtsarcasm" target="_blank" class="platform-link">ACCESS SUNO FEED</a>
+                        <a href="https://suno.com/invite/@lordtsarcasm" target="_blank" class="platform-link icon-link">
+                            <img src="gift-icon.png" alt="Suno Invite">
+                            <span>Suno Invite</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="platform-section">
+                    <h3 class="platform-title">YOUTUBE TRANSMISSIONS</h3>
+                    <p class="platform-description">Visual data streams, music videos, and other transmissions. Subscribe to intercept all future signals.</p>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/23EfX7qQnYY?playlist=23EfX7qQnYY&loop=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <div class="platform-links-container">
+                        <a href="https://www.youtube.com/@lordtsarcasm" target="_blank" class="platform-link">Visit YouTube Channel</a>
+                    </div>
+                </div>
+
+                <div class="platform-section">
+                    <h3 class="platform-title">SPOTIFY BROADCAST</h3>
+                    <p class="platform-description">Official releases available on the Spotify network. Follow for updates to your listening device.</p>
+                    <div class="platform-links-container">
+                        <a href="https://open.spotify.com/search/lord%20tsarcasm" target="_blank" class="platform-link">SEARCH ON SPOTIFY</a>
+                    </div>
+                </div>
+
+                <div class="platform-section">
+                    <h3 class="platform-title">YT MUSIC FEED</h3>
+                    <p class="platform-description">Curated playlists and official releases, optimized for audio-only consumption on the YouTube Music platform.</p>
+                    <div class="platform-links-container">
+                        <a href="https://music.youtube.com/channel/UC25n5n3fQ2zuxgAFoK3bE-w" target="_blank" class="platform-link">LISTEN ON YT MUSIC</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <div id="loader" class="hidden">
+            <div class="spinner"></div>
+            <p>ACCESSING DATA NODE...</p>
+        </div>
+
+        <footer>
+            <div id="social-links"></div>
+        </footer>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://esm.sh/three@0.166.1",
+            "three/addons/": "https://esm.sh/three@0.166.1/examples/jsm/"
+        }
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

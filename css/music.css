@@ -1,0 +1,179 @@
+.page-title {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 1.8em;
+    text-shadow: 0 0 8px var(--glow-color);
+    margin: 20px 0 40px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+    animation: slideInDown 0.8s forwards;
+}
+
+.music-list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.music-item {
+    background: rgba(20, 25, 30, 0.6);
+    border: 1px solid var(--border-color);
+    padding: 20px 25px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardFadeIn 0.5s forwards;
+}
+
+.music-item:nth-child(1) { animation-delay: 0.2s; }
+.music-item:nth-child(2) { animation-delay: 0.3s; }
+.music-item:nth-child(3) { animation-delay: 0.4s; }
+
+.music-item h3 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--primary-color);
+    margin: 0 0 10px;
+    font-size: 1.4em;
+}
+
+.music-item h3 a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.music-item h3 a:hover {
+    color: white;
+    text-shadow: 0 0 8px var(--glow-color);
+}
+
+.music-item .release-info {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    border-left: 3px solid var(--primary-color);
+    padding-left: 10px;
+    font-size: 0.9em;
+}
+
+.release-info span {
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.music-item .track-description {
+    line-height: 1.6;
+    color: var(--secondary-color);
+    opacity: 0.9;
+}
+
+/* Platform Sections */
+.platform-sections {
+    margin-top: 60px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.platform-section {
+    background: rgba(20, 25, 30, 0.4);
+    border: 1px solid var(--border-color);
+    padding: 25px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardFadeIn 0.5s forwards;
+    display: flex;
+    flex-direction: column;
+}
+
+.platform-sections .platform-section:nth-child(1) { animation-delay: 0.3s; }
+.platform-sections .platform-section:nth-child(2) { animation-delay: 0.4s; }
+.platform-sections .platform-section:nth-child(3) { animation-delay: 0.5s; }
+.platform-sections .platform-section:nth-child(4) { animation-delay: 0.6s; }
+
+.platform-title {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--primary-color);
+    margin: 0 0 15px;
+    font-size: 1.2em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(58, 123, 213, 0.2);
+    padding-bottom: 10px;
+}
+
+.platform-description {
+    line-height: 1.6;
+    color: var(--secondary-color);
+    opacity: 0.9;
+    font-size: 0.95em;
+    flex-grow: 1; 
+    margin-bottom: 20px;
+}
+
+.platform-links-container {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    align-items: stretch;
+    padding-top: 20px;
+}
+
+.platform-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.platform-link:hover {
+    background: var(--primary-color);
+    color: var(--background-color);
+    box-shadow: 0 0 15px var(--glow-color);
+}
+
+.platform-link.full-width {
+    flex-grow: 1;
+}
+
+.platform-link.icon-link {
+    flex-grow: 0;
+    gap: 8px;
+}
+
+.platform-link.icon-link img {
+    height: 20px;
+    width: 20px;
+    filter: brightness(1.5);
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    width: 100%;
+    background: #000;
+    border: 1px solid var(--border-color);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
