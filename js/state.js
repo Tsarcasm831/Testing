@@ -62,7 +62,8 @@ import { app } from './app.js';
                 description: 'An enigmatic visitor from another realm, designed to provoke curiosity and wonder.',
                 imageUrl: 'assets/model_enigmatic_visitor.png',
                 link: 'https://www.meshy.ai/3d-models/Enigmatic-Visitor-v2-01964533-a88e-75a2-b88a-743313a14b76',
-                glbUrl: 'https://file.garden/Zy7B0LkdIVpGyzA1/Public%20Models/Animation_Walking_withSkin.glb'
+                glbUrl: 'https://file.garden/Zy7B0LkdIVpGyzA1/Public%20Models/Animation_Walking_withSkin.glb',
+                centerBottom: true
             },
             {
                 title: 'Skeletal Arctic Fox',
