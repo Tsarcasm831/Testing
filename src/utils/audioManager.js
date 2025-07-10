@@ -1,6 +1,7 @@
 class AudioManager {
   constructor() {
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    this.listener = this.audioContext.listener;
     this.sounds = {};
   }
 
@@ -13,11 +14,17 @@ class AudioManager {
       });
   }
 
-  playSound(name) {
+  playSpatialSound(name, position) {
     const source = this.audioContext.createBufferSource();
     source.buffer = this.sounds[name];
-    source.connect(this.audioContext.destination);
+    const panner = this.audioContext.createPanner();
+    panner.setPosition(position.x, position.y, position.z);
+    source.connect(panner).connect(this.audioContext.destination);
     source.start();
+  }
+
+  updateListener(position) {
+    this.listener.setPosition(position.x, position.y, position.z);
   }
 }
 
