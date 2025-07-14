@@ -51,6 +51,9 @@ export class InputManager {
     // Ensure joystick containers are visible even if CSS classes aren't applied
     moveJoystickContainer.style.display = 'block';
     cameraJoystickContainer.style.display = 'block';
+    // Explicitly disable default touch behavior so joysticks capture swipes
+    moveJoystickContainer.style.touchAction = 'none';
+    cameraJoystickContainer.style.touchAction = 'none';
 
     this.moveJoystick = nipplejs.create({
       zone: moveJoystickContainer,
@@ -124,9 +127,9 @@ export class InputManager {
       }
 
       if (this.keysPressed.has("a") || this.keysPressed.has("arrowleft")) {
-        moveDirection.x = 1;
-      } else if (this.keysPressed.has("d") || this.keysPressed.has("arrowright")) {
         moveDirection.x = -1;
+      } else if (this.keysPressed.has("d") || this.keysPressed.has("arrowright")) {
+        moveDirection.x = 1;
       }
 
        if (moveDirection.length() > 0) {

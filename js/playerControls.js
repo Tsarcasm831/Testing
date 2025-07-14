@@ -175,7 +175,8 @@ export class PlayerControls {
         // For mobile, moveDirection.z is forward/backward from joystick
         // moveDirection.x is left/right from joystick
         movement.addScaledVector(cameraDirection, moveDirection.z);
-        movement.addScaledVector(rightVector, moveDirection.x);
+        // rightVector points left relative to the camera, so invert for correct orientation
+        movement.addScaledVector(rightVector, moveDirection.x * -1);
     } else {
         if (moveDirection.z !== 0) {
             movement.add(cameraDirection.clone().multiplyScalar(moveDirection.z));
