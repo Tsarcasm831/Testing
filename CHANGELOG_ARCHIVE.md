@@ -22,3 +22,7 @@
 - 2110 Fix build tool using undefined material index in object creator
 - 2147 Add HouseBlocks mesh kit
 
+
+- 2221 Document new agents directory and split instructions
+- 2218 Fade chat bubbles before hiding
+- 2214 Show sent chat immediately and keep log of messages
