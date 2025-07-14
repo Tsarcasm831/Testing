@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>3D Overworld Template v1.9.1</title>
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/mobile.css">
+  <link rel="stylesheet" href="styles/overlays.css">
+  <link rel="stylesheet" href="styles/chat.css">
+  <link rel="stylesheet" href="styles/character-creator.css">
+  <link rel="stylesheet" href="styles/build.css">
+  <link rel="stylesheet" href="styles/inventory.css">
+  <link rel="stylesheet" href="styles/ads.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+  <link rel="stylesheet" href="styles/map.css">
+  <link rel="stylesheet" href="styles/changelog.css">
+  <link rel="stylesheet" href="styles/options.css">
+  <link rel="stylesheet" href="styles/interaction.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.10.1/dist/nipplejs.min.js"></script>
+</head>
+<body oncontextmenu="return false;">
+  <div id="joystick-container" class="joystick-container-left"></div>
+  <div id="camera-joystick-container" class="joystick-container-right"></div>
+  <div id="game-container">
+    <div class="crosshair"></div>
+  </div>
+  <script src="js/app.js" type="module"></script>
+</body>
+</html>

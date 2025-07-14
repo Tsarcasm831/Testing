@@ -1,0 +1,94 @@
+.mobile-device #joystick-container {
+  display: block;
+}
+
+.mobile-device #camera-joystick-container {
+  display: block;
+}
+
+.mobile-device #jump-button {
+  display: block;
+}
+
+.mobile-device .instructions {
+  display: none !important;
+  width: 90%;
+  height: 60%;
+}
+
+/* @tweakable Vertical layout for main UI buttons on mobile */
+.mobile-device #options-button {
+    bottom: 180px;
+    right: 20px;
+}
+.mobile-device #map-button {
+    bottom: 250px;
+    right: 20px;
+}
+.mobile-device #inventory-button {
+    bottom: 320px;
+    right: 20px;
+}
+.mobile-device #chat-button {
+    bottom: 390px;
+    right: 20px;
+}
+
+.mobile-device #character-creator-button {
+    /* @tweakable Position of the character creator button on mobile. */
+    top: 20px;
+    left: 20px;
+}
+
+.mobile-device #build-button {
+    /* @tweakable Position of the build button on mobile. */
+    top: 20px;
+    right: 20px;
+}
+
+.mobile-device #build-controls {
+  flex-direction: column;
+  bottom: 80px;
+  right: 20px;
+  left: auto;
+  transform: none;
+}
+
+.mobile-device #height-slider-container {
+  top: auto;
+  bottom: 80px;
+  width: 80%;
+}
+
+.mobile-device #height-slider {
+  width: 150px;
+}
+
+.mobile-device #ai-build-modal {
+  width: 85%;
+}
+
+.mobile-device #object-library {
+  top: auto;
+  bottom: 140px;
+  left: 20px;
+  width: 160px;
+}
+
+.mobile-device #advanced-build-controls {
+  flex-direction: column;
+  bottom: 140px;
+  right: 20px;
+  left: auto;
+  transform: none;
+}
+
+.mobile-device #color-picker {
+  width: 80%;
+  max-width: 280px;
+}
+
+.mobile-device #ad-modal iframe {
+  width: 90%;
+  height: 60%;
+}

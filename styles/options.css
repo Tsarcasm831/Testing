@@ -1,0 +1,193 @@
+#options-button {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  background-color: var(--white-70);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  z-index: 1000;
+  touch-action: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px var(--black-30);
+  transition: background-color 0.3s, transform 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+}
+
+#options-button:hover {
+  background-color: #fff;
+  transform: scale(1.05);
+}
+
+#options-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--black-95);
+  color: #fff;
+  padding: 0;
+  border-radius: 10px;
+  z-index: 2100;
+  width: 90%;
+  max-width: 450px;
+  display: none;
+  box-shadow: 0 0 20px var(--black-50);
+  font-size: 16px;
+  border: 1px solid var(--white-20);
+}
+
+#options-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--white-20);
+}
+
+#options-header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+#close-options {
+  width: 24px;
+  height: 24px;
+  background-color: var(--white-20);
+  border-radius: 50%;
+  text-align: center;
+  line-height: 24px;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#close-options:hover {
+  background-color: var(--white-30);
+}
+
+#download-status {
+  margin-top: 10px;
+  text-align: center;
+  min-height: 20px;
+}
+
+#replace-player-button {
+  display: none;
+  margin-top: 10px;
+}
+
+#options-tabs {
+    display: flex;
+    padding: 0 10px;
+    border-bottom: 1px solid var(--white-20);
+}
+
+.options-tab {
+    flex: 1;
+    padding: 12px 10px;
+    background-color: transparent;
+    border: none;
+    color: var(--white-70);
+    cursor: pointer;
+    font-size: 16px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.options-tab:hover {
+    color: var(--white-full);
+}
+
+.options-tab.active {
+    color: var(--white-full);
+    border-bottom: 2px solid #2196F3;
+    font-weight: bold;
+}
+
+#options-content {
+    padding: 20px;
+    min-height: 250px;
+}
+
+.options-tab-content {
+    display: none;
+}
+
+.options-tab-content.active {
+    display: block;
+}
+
+.options-tab-content h3 {
+    margin-top: 0;
+    color: #4CAF50;
+    border-bottom: 1px solid var(--white-20);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.option-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.option-item label {
+    font-weight: bold;
+}
+
+.option-item select, .option-item input[type="range"] {
+    background-color: var(--white-20);
+    color: white;
+    border: 1px solid var(--white-30);
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.option-item input[type="range"] {
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.option-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    background-color: var(--white-20);
+    color: white;
+    transition: background-color 0.2s;
+}
+.option-button:hover {
+    background-color: var(--white-30);
+}
+
+#download-assets {
+    background-color: #2196F3;
+}
+#respawn-button {
+    background-color: #f44336;
+}
+
+#asset-replacement-buttons {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+#options-tab-about p {
+    margin: 5px 0;
+    line-height: 1.4;
+    color: var(--white-80);
+}

@@ -1,0 +1,44 @@
+/* @tweakable Position and size of the movement joystick on mobile. */
+#joystick-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 150px;
+  height: 150px;
+  z-index: 1000;
+  touch-action: none;
+  background-color: var(--white-20);
+  border-radius: 50%;
+}
+
+/* @tweakable Position and size of the camera joystick on mobile. */
+#camera-joystick-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 150px;
+    height: 150px;
+    z-index: 1000;
+    touch-action: none;
+    background-color: var(--white-20);
+    border-radius: 50%;
+}
+
+/* @tweakable Position and size of the jump button on mobile. */
+#jump-button {
+  position: fixed;
+  bottom: 30px;
+  right: 180px;
+  width: 80px;
+  height: 80px;
+  background-color: var(--white-50);
+  border-radius: 50%;
+  display: none;
+  z-index: 1000;
+  touch-action: none;
+  text-align: center;
+  line-height: 80px;
+  font-weight: bold;
+  color: #333;
+  user-select: none;
+}

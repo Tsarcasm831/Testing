@@ -1,0 +1,125 @@
+{
+  "schema": {
+    "type": "string - category of asset such as image, model, audio or script",
+    "name": "string - human friendly asset name",
+    "url": "string - relative path or remote URL to download the asset"
+  },
+  "assets": [
+    {
+      "type": "image",
+      "name": "Ground texture",
+      "url": "ground_texture.png"
+    },
+    {
+      "type": "script",
+      "name": "App logic",
+      "url": "js/app.js"
+    },
+    {
+      "type": "script",
+      "name": "Input controls",
+      "url": "js/controls.js"
+    }
+    ,
+    {
+      "type": "model",
+      "name": "Player idle animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Z1/player/Animation_Idle_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Player walking animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Z1/player/Animation_Walking_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Player running animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Z1/player/Animation_Running_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Robot walking animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Robot/Animation_Walking_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Robot listening animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Robot/Animation_Listening_Gesture_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Robot idle 2 animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Robot/Animation_Idle_02_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Eyebot model",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Eyebot/Orbital_Eye_Bot_0713172403_texture.glb"
+    },
+    {
+      "type": "model",
+      "name": "Chicken Alert Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Chicken/Animation_Alert_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Chicken Idle Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Chicken/Animation_Idle_02_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Chicken Listening Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Chicken/Animation_Listening_Gesture_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Chicken Walking Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Chicken/Animation_Walking_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Chicken Running Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Chicken/Animation_Running_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Wireframe Listening Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Wireframe/Animation_Listening_Gesture_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Wireframe Idle Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Wireframe/Animation_Idle_4_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Wireframe Walking Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Wireframe/Animation_Walking_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Wireframe Running Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Wireframe/Animation_Running_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Alien Listening Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Alien/Animation_Listening_Gesture_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Alien Walking Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Alien/Animation_Walking_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Alien Running Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Alien/Animation_Running_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Alien Idle Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Alien/Animation_Idle_02_withSkin.glb"
+    }
+  ]
+}
