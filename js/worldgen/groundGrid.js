@@ -78,8 +78,12 @@ export function createGroundGrid(terrain, size, divisions, colorCenterLine, colo
 
     const labelsGroup = new THREE.Group();
     labelsGroup.name = 'grid-labels-group'; // Add name for easy lookup
-    /* @tweakable The number of grid cells to skip between rendering labels. Higher values improve performance. */
-    const labelSkip = 8;
+    /*
+     * @tweakable The number of grid cells to skip between rendering labels.
+     * A value of `1` labels every cell. Higher values improve performance by
+     * reducing the number of generated labels.
+     */
+    const labelSkip = 1;
 
     for (let i = 0; i < divisions; i += labelSkip) {
         for (let j = 0; j < divisions; j += labelSkip) {

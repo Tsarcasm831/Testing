@@ -26,3 +26,6 @@
 - 2221 Document new agents directory and split instructions
 - 2218 Fade chat bubbles before hiding
 - 2214 Show sent chat immediately and keep log of messages
+- 2309 Update remote players to run custom animations each frame
+- 2257 Add animated player replace button and improved options styling
+- 2242 Add options menu with asset downloader and glb analysis scripts
