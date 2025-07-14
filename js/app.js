@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { PlayerControls } from "./playerControls.js";
 import { createPlayerModel } from "./playerModel.js";
-import { ZONE_SIZE, createBarriers, createTrees, createClouds } from "./worldGeneration.js";
+import { ZONE_SIZE, createBarriers, createTrees, createClouds, createGroundGrid } from "./worldGeneration.js";
 import { BuildTool } from "./buildTool.js";
 import { AdvancedBuildTool } from "./advancedBuildTool.js";
 import { UIManager } from './uiManager.js';
@@ -12,12 +12,16 @@ import { InventoryManager } from './inventoryManager.js';
 import { NPCManager } from './npcManager.js';
 import { InteractionManager } from './interaction.js';
 import { AssetReplacementManager } from './assetReplacementManager.js';
+import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import './npc/NPC.js';
 import './npc/ZoneManager.js';
 import './npc/NPCSpawner.js';
 import './previewManager.js'; // Ensure it's part of the context
 import { FORCE_MOBILE_MODE } from './controls/constants.js';
 import { World } from './world.js';
+
+/* @tweakable The maximum distance at which grid labels are visible. Lower values can improve performance. */
+const GRID_LABEL_VISIBILITY_DISTANCE = 60;
 
 // Simple seeded random number generator
 class MathRandom {
@@ -63,8 +67,16 @@ async function main() {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFShadowMap; // PCFSoftShadowMap is more expensive
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap; // PCFSoftShadowMap for softer shadows
   document.getElementById('game-container').appendChild(renderer.domElement);
+  
+  // Setup label renderer
+  const labelRenderer = new CSS2DRenderer();
+  labelRenderer.setSize(window.innerWidth, window.innerHeight);
+  labelRenderer.domElement.style.position = 'absolute';
+  labelRenderer.domElement.style.top = '0px';
+  labelRenderer.domElement.style.pointerEvents = 'none';
+  document.getElementById('label-container').appendChild(labelRenderer.domElement);
   
   // Add mobile mode toggle button
   const isMobileModeForced = localStorage.getItem('forceMobileMode') === 'true';
@@ -104,6 +116,14 @@ async function main() {
     terrain: terrain,
   });
   const camera = playerControls.getCamera();
+  
+  // Re-add event listener for window resize to include label renderer
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+  });
   
   // Initialize build tool
   const buildTool = new BuildTool(scene, camera, playerControls, terrain);
@@ -190,14 +210,18 @@ async function main() {
   /* @tweakable Shadow map resolution. Higher values are more detailed but slower. */
   dirLight.shadow.mapSize.height = 1024;
   /* @tweakable The size of the area around the player that casts shadows. Larger values can reduce shadow quality but extend shadow range. */
-  const shadowFrustumSize = 50;
+  const shadowFrustumSize = 100;
   dirLight.shadow.camera.near = 0.5;
   /* @tweakable The maximum distance for shadows from the light source. Affects shadow precision. */
-  dirLight.shadow.camera.far = 100;
+  dirLight.shadow.camera.far = 500;
   dirLight.shadow.camera.left = -shadowFrustumSize / 2;
   dirLight.shadow.camera.right = shadowFrustumSize / 2;
   dirLight.shadow.camera.top = shadowFrustumSize / 2;
   dirLight.shadow.camera.bottom = -shadowFrustumSize / 2;
+  /* @tweakable Shadow bias to prevent shadow acne. */
+  dirLight.shadow.bias = -0.0001;
+  /* @tweakable Shadow radius for softer shadows (PCFSoftShadowMap). */
+  dirLight.shadow.radius = 1.5;
   scene.add(dirLight);
   scene.add(dirLight.target);
 
@@ -223,7 +247,15 @@ async function main() {
   inventoryManager.init();
   
   // Grid helper for better spatial awareness
-  const gridHelper = new THREE.GridHelper(ZONE_SIZE, ZONE_SIZE);
+  /* @tweakable The total size of the grid (width and depth). */
+  const gridHelperSize = 200;
+  /* @tweakable The number of divisions across the grid. */
+  const gridHelperDivisions = 200;
+  /* @tweakable The color of the lines at the center of the grid. */
+  const gridHelperColorCenterLine = 0xffffff;
+  /* @tweakable The color of the main grid lines. */
+  const gridHelperColorGrid = 0xcccccc;
+  const gridHelper = createGroundGrid(terrain, gridHelperSize, gridHelperDivisions, gridHelperColorCenterLine, gridHelperColorGrid);
   gridHelper.visible = false; // Hidden by default
   scene.add(gridHelper);
   
@@ -235,6 +267,7 @@ async function main() {
     }
     // Toggle grid visibility with 'G' key
     if (event.key.toLowerCase() === 'g' && !advancedBuildTool.enabled) {
+      /* @tweakable Whether the grid helper is visible or not. This is toggled by the 'G' key. */
       gridHelper.visible = !gridHelper.visible;
     }
   });
@@ -249,6 +282,16 @@ async function main() {
     
     if(mapUI) mapUI.update();
 
+    // Dynamically update grid label visibility to improve performance
+    const labelsGroup = gridHelper.getObjectByName('grid-labels-group');
+    if (labelsGroup && gridHelper.visible) {
+        const playerPosition = playerModel.position;
+        labelsGroup.children.forEach(label => {
+            const distance = label.position.distanceTo(playerPosition);
+            label.visible = distance < GRID_LABEL_VISIBILITY_DISTANCE;
+        });
+    }
+
     interactionManager.update();
     npcManager.update();
 
@@ -262,7 +305,7 @@ async function main() {
     // Move shadow camera with player for global shadows
     if (dirLight.castShadow) {
         /* @tweakable The offset of the sun from the player, determining shadow direction. */
-        const lightOffset = new THREE.Vector3(20, 35, 20);
+        const lightOffset = new THREE.Vector3(30, 40, 25);
         dirLight.position.copy(playerModel.position).add(lightOffset);
         dirLight.target.position.copy(playerModel.position);
     }
@@ -290,6 +333,7 @@ async function main() {
     if(uiManager) uiManager.update();
     
     renderer.render(scene, camera);
+    labelRenderer.render(scene, camera);
   }
   
   animate();

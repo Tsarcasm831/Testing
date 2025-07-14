@@ -1,4 +1,5 @@
 import { AssetReplacementManager } from '../js/assetReplacementManager.js';
+import * as THREE from "three";
 
 export class OptionsUI {
     constructor(dependencies) {
@@ -185,18 +186,23 @@ export class OptionsUI {
         switch(quality) {
             case 'high':
                 this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
                 this.dirLight.castShadow = true;
                 this.dirLight.shadow.mapSize.width = 2048;
                 this.dirLight.shadow.mapSize.height = 2048;
+                this.dirLight.shadow.radius = 2.0;
                 break;
             case 'medium':
                 this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
                 this.dirLight.castShadow = true;
                 this.dirLight.shadow.mapSize.width = 1024;
                 this.dirLight.shadow.mapSize.height = 1024;
+                this.dirLight.shadow.radius = 1.5;
                 break;
             case 'low':
                 this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFShadowMap;
                 this.dirLight.castShadow = true;
                 this.dirLight.shadow.mapSize.width = 512;
                 this.dirLight.shadow.mapSize.height = 512;

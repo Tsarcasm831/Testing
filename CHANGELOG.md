@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2025-07-14
+- 1522 Fix HouseBlocks module loading error by merging it into starterHouse.js
 - 1507 Break up worldGeneration.js into modular files
 
 ## 2025-06-28
