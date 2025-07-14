@@ -30,3 +30,6 @@
 - 2309 Update remote players to run custom animations each frame
 - 2257 Add animated player replace button and improved options styling
 - 2242 Add options menu with asset downloader and glb analysis scripts
+
+## 2025-06-27
+- 1623 Fix stylesheet path in index.html
