@@ -3,6 +3,8 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { SPEED, GRAVITY, JUMP_FORCE, MOBILE_SPEED_MULTIPLIER, FORCE_MOBILE_MODE, RUN_SPEED_MULTIPLIER } from "./controls/constants.js";
 import { InputManager } from "./controls/InputManager.js";
 
+/* @tweakable Speed of camera rotation with the joystick on mobile. */
+const mobileCameraRotateSpeed = 0.05;
 /* @tweakable Minimum camera zoom distance on mobile */
 const mobileMinZoom = 2;
 /* @tweakable Maximum camera zoom distance on mobile */
@@ -151,7 +153,6 @@ export class PlayerControls {
     if (this.isMobile && this.inputManager.isJumping() && this.canJump) {
       this.velocity.y = JUMP_FORCE;
       this.canJump = false;
-      this.inputManager.resetJump();
     }
     
     const x = this.playerModel.position.x;
@@ -180,7 +181,7 @@ export class PlayerControls {
             movement.add(cameraDirection.clone().multiplyScalar(moveDirection.z));
         }
         if (moveDirection.x !== 0) {
-            movement.add(rightVector.clone().multiplyScalar(moveDirection.x));
+            movement.add(rightVector.clone().multiplyScalar(moveDirection.x * -1)); // Invert for desktop standard
         }
     }
     
@@ -374,7 +375,7 @@ export class PlayerControls {
     if (this.isMobile) {
       const cameraMove = this.inputManager.getCameraMovement();
       if (cameraMove.x !== 0 || cameraMove.y !== 0) {
-        const rotateSpeed = 0.05;
+        const rotateSpeed = mobileCameraRotateSpeed;
         this.controls.rotateLeft(-cameraMove.x * rotateSpeed);
         this.controls.rotateUp(-cameraMove.y * rotateSpeed);
         this.controls.update();

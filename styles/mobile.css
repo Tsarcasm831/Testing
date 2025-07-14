@@ -7,8 +7,10 @@
   height: 150px;
   z-index: 1000;
   touch-action: none;
-  background-color: var(--white-20);
+  /* @tweakable The background color of the joystick area. */
+  background-color: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
+  display: none;
 }
 
 /* @tweakable Position and size of the camera joystick on mobile. */
@@ -20,6 +22,7 @@
     height: 150px;
     z-index: 1000;
     touch-action: none;
+    /* @tweakable The background color of the camera joystick area. */
     background-color: var(--white-20);
     border-radius: 50%;
 }

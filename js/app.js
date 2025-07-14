@@ -82,14 +82,15 @@ async function main() {
   labelRenderer.domElement.style.pointerEvents = 'none';
   document.getElementById('label-container').appendChild(labelRenderer.domElement);
   
-  // Add mobile mode toggle button
+  // Add dev button to toggle mobile/desktop mode
   const isMobileModeForced = localStorage.getItem('forceMobileMode') === 'true';
-  const mobileToggleButton = document.createElement('button');
-  mobileToggleButton.textContent = isMobileModeForced ? 'View Desktop' : 'View Mobile';
-  mobileToggleButton.id = 'mobile-toggle-button';
-  document.body.appendChild(mobileToggleButton);
+  const devToggleButton = document.createElement('button');
+  devToggleButton.textContent = 'Toggle View';
+  devToggleButton.id = 'dev-toggle-button';
+  devToggleButton.setAttribute('data-tooltip', isMobileModeForced ? 'Switch to Desktop View' : 'Switch to Mobile View');
+  document.body.appendChild(devToggleButton);
 
-  mobileToggleButton.addEventListener('click', () => {
+  devToggleButton.addEventListener('click', () => {
     const currentMode = localStorage.getItem('forceMobileMode') === 'true';
     localStorage.setItem('forceMobileMode', String(!currentMode));
     location.reload();

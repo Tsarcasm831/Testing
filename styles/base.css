@@ -36,6 +36,21 @@ body {
   text-align: center;
 }
 
+#dev-toggle-button {
+  position: fixed;
+  /* @tweakable Position of the dev-mode toggle button. */
+  top: 80px;
+  left: 20px;
+  background-color: var(--black-70);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 1000;
+  font-weight: bold;
+  border: 2px solid var(--white-30);
+}
+
 .crosshair {
   position: fixed;
   top: 50%;
@@ -122,7 +137,7 @@ button:active {
     height: 100%;
 }
 
-.joystick-container-left, .joystick-container-right {
+.joystick-container {
     display: none;
 }
 

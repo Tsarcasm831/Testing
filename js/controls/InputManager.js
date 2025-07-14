@@ -2,9 +2,11 @@ import * as THREE from "three";
 import { SPEED, MOBILE_SPEED_MULTIPLIER } from "./constants.js";
 
 /* @tweakable Multiplier for movement joystick sensitivity on mobile. */
-const MOVE_JOYSTICK_SENSITIVITY = 1.0;
+const MOVE_JOYSTICK_SENSITIVITY = 1.2;
 /* @tweakable Multiplier for camera joystick sensitivity on mobile. */
 const CAMERA_JOYSTICK_SENSITIVITY = 0.8;
+/* @tweakable The exponent for joystick input curve. >1 for slower start, <1 for faster start. */
+const JOYSTICK_INPUT_CURVE = 1.2;
 
 export class InputManager {
   constructor(isMobile) {
@@ -63,10 +65,12 @@ export class InputManager {
     });
 
     this.moveJoystick.on('move', (evt, data) => {
-      const force = Math.min(data.force, 1.0) * MOVE_JOYSTICK_SENSITIVITY;
+      const baseForce = Math.min(data.force, 1.0);
+      /* @tweakable Adjusts the sensitivity curve of the movement joystick. Higher values mean more precision at low intensity. */
+      const force = Math.pow(baseForce, JOYSTICK_INPUT_CURVE) * MOVE_JOYSTICK_SENSITIVITY;
       const angle = data.angle.radian;
       this.moveForward = Math.sin(angle) * force;
-      this.moveRight = Math.cos(angle) * force * -1; // Inverted joystick fix
+      this.moveRight = Math.cos(angle) * force;
     });
 
     this.moveJoystick.on('end', () => {
@@ -75,7 +79,9 @@ export class InputManager {
     });
 
     this.cameraJoystick.on('move', (evt, data) => {
-      const force = Math.min(data.force, 1.0) * CAMERA_JOYSTICK_SENSITIVITY;
+      const baseForce = Math.min(data.force, 1.0);
+      /* @tweakable Adjusts the sensitivity curve of the camera joystick. Higher values mean more precision at low intensity. */
+      const force = Math.pow(baseForce, JOYSTICK_INPUT_CURVE) * CAMERA_JOYSTICK_SENSITIVITY;
       const angle = data.angle.radian;
       this.cameraX = Math.cos(angle) * force;
       this.cameraY = Math.sin(angle) * force;
