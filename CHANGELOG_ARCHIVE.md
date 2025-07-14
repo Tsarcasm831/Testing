@@ -33,3 +33,5 @@
 
 ## 2025-06-27
 - 1623 Fix stylesheet path in index.html
+- 1742 Fix idle animation orientation for animated player model
+- 1815 Hide mobile/desktop toggle and rely on auto-detection
