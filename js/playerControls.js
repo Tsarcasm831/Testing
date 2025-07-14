@@ -370,6 +370,16 @@ export class PlayerControls {
         // Still update controls for camera movement when player movement is disabled
         if (this.controls) this.controls.update();
     }
+
+    if (this.isMobile) {
+      const cameraMove = this.inputManager.getCameraMovement();
+      if (cameraMove.x !== 0 || cameraMove.y !== 0) {
+        const rotateSpeed = 0.05;
+        this.controls.rotateLeft(-cameraMove.x * rotateSpeed);
+        this.controls.rotateUp(-cameraMove.y * rotateSpeed);
+        this.controls.update();
+      }
+    }
     
     // Update animation mixer if it exists
     if (this.playerModel && this.playerModel.userData.mixer) {
