@@ -27,7 +27,6 @@ export function createAmphitheatre(scene, getHeight) {
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = baseHeight + groundHeightOffset;
     ground.receiveShadow = true;
-    ground.userData.isBarrier = true;
     amphitheatreGroup.add(ground);
 
     // Create Stage
@@ -41,6 +40,19 @@ export function createAmphitheatre(scene, getHeight) {
 
     // Set userData for the entire group to help with collision detection
     amphitheatreGroup.userData.isStructure = true;
+    
+    // Set barrier flag on all individual meshes for consistent collision
+    amphitheatreGroup.traverse((child) => {
+        if (child.isMesh) {
+            // Check if isBarrier is already explicitly set to false
+            if (child.userData.isBarrier === false) return;
+            
+            /* @tweakable If true, objects in the amphitheater act as barriers. */
+            child.userData.isBarrier = true;
+            child.castShadow = true;
+            child.receiveShadow = true;
+        }
+    });
 
     function createEntrancePillars(radius, baseY) {
         /* @tweakable The color of the entrance pillars. */
@@ -58,15 +70,9 @@ export function createAmphitheatre(scene, getHeight) {
 
         const pillarLeft = new THREE.Mesh(pillarGeo, pillarMat);
         pillarLeft.position.set(-pillarSpacing / 2, baseY, radius - 2);
-        pillarLeft.castShadow = true;
-        pillarLeft.receiveShadow = true;
-        pillarLeft.userData.isBarrier = true;
 
         const pillarRight = new THREE.Mesh(pillarGeo, pillarMat);
         pillarRight.position.set(pillarSpacing / 2, baseY, radius - 2);
-        pillarRight.castShadow = true;
-        pillarRight.receiveShadow = true;
-        pillarRight.userData.isBarrier = true;
 
         amphitheatreGroup.add(pillarLeft, pillarRight);
     }
@@ -80,22 +86,24 @@ export function createAmphitheatre(scene, getHeight) {
         const stageMat = new THREE.MeshStandardMaterial({ color: stageColor, side: THREE.DoubleSide });
         const stage = new THREE.Mesh(stageGeo, stageMat);
         stage.position.set(0, baseY + stageHeight / 2, 0);
-        stage.castShadow = true;
-        stage.receiveShadow = true;
-        stage.userData.isBarrier = true;
+        
+        /* @tweakable If true, players can jump through the stage from below. If false, it's a solid object. */
+        const isStageAPlatform = false;
+        stage.userData.isPlatform = isStageAPlatform;
+        stage.userData.isBarrier = !isStageAPlatform;
+
         amphitheatreGroup.add(stage);
 
         /* @tweakable The color of the stage's backdrop. */
         const backdropColor = 0x222222;
         /* @tweakable The height of the stage's backdrop. */
         const backdropHeight = 8;
-        const backdrop = new THREE.PlaneGeometry(radius * 2, backdropHeight);
+        /* @tweakable The thickness of the stage backdrop. Must be > 0 for collision. */
+        const backdropThickness = 0.1;
+        const backdrop = new THREE.BoxGeometry(radius * 2, backdropHeight, backdropThickness);
         const backMat = new THREE.MeshStandardMaterial({ color: backdropColor, side: THREE.DoubleSide });
         const screen = new THREE.Mesh(backdrop, backMat);
         screen.position.set(0, baseY + backdropHeight / 2, -radius - 0.5);
-        screen.castShadow = true;
-        screen.receiveShadow = true;
-        screen.userData.isBarrier = true;
         amphitheatreGroup.add(screen);
 
         /* @tweakable The color of the arch over the stage. */
@@ -111,8 +119,11 @@ export function createAmphitheatre(scene, getHeight) {
         const archMat = new THREE.MeshStandardMaterial({ color: archColor, side: THREE.DoubleSide });
         const arch = new THREE.Mesh(archGeo, archMat);
         arch.position.set(0, baseY, -radius - 1);
-        arch.userData.isBarrier = true;
+        /* @tweakable Set to false to disable collision for the decorative stage arch. */
+        arch.userData.isBarrier = false;
         amphitheatreGroup.add(arch);
+
+        createMicrophoneStand(baseY + stageHeight);
     }
 
     function createSeat(x, y, z, rotationY) {
@@ -138,17 +149,6 @@ export function createAmphitheatre(scene, getHeight) {
 
         seatGroup.position.set(x, y, z);
         seatGroup.rotation.y = rotationY;
-
-        // Set isBarrier on the group for collision detection
-        seatGroup.userData.isBarrier = true;
-
-        seatGroup.traverse(child => {
-            if (child.isMesh) {
-                child.castShadow = true;
-                child.receiveShadow = true;
-                child.userData.isBarrier = true;
-            }
-        });
 
         amphitheatreGroup.add(seatGroup);
         return seatGroup;
@@ -186,8 +186,6 @@ export function createAmphitheatre(scene, getHeight) {
             const floorMesh = new THREE.Mesh(floorGeo, floorMat);
             floorMesh.rotation.x = -Math.PI / 2;
             floorMesh.position.y = y - floorThickness / 2;
-            floorMesh.receiveShadow = true;
-            floorMesh.userData.isBarrier = true;
             amphitheatreGroup.add(floorMesh);
 
             for (let i = 0; i < numSeatsPerRow; i++) {
@@ -197,6 +195,54 @@ export function createAmphitheatre(scene, getHeight) {
                 createSeat(x, y, z, -theta);
             }
         }
+    }
+
+    function createMicrophoneStand(stageTopY) {
+        const standGroup = new THREE.Group();
+
+        /* @tweakable The position of the microphone stand on the stage. */
+        const standPosition = new THREE.Vector3(0, stageTopY, 5);
+        standGroup.position.copy(standPosition);
+
+        // Base
+        /* @tweakable The color of the microphone stand. */
+        const standColor = 0x222222;
+        const standMaterial = new THREE.MeshStandardMaterial({ color: standColor, roughness: 0.4, metalness: 0.8 });
+
+        const baseGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.05, 16);
+        const base = new THREE.Mesh(baseGeo, standMaterial);
+        base.position.y = 0.025;
+        standGroup.add(base);
+
+        // Stand pole
+        const poleHeight = 1.2;
+        const poleGeo = new THREE.CylinderGeometry(0.03, 0.03, poleHeight, 8);
+        const pole = new THREE.Mesh(poleGeo, standMaterial);
+        pole.position.y = poleHeight / 2;
+        standGroup.add(pole);
+
+        // Microphone
+        const micGroup = new THREE.Group();
+        micGroup.position.y = poleHeight;
+
+        /* @tweakable The color of the microphone head. */
+        const micHeadColor = 0x555555;
+        const micHeadMaterial = new THREE.MeshStandardMaterial({ color: micHeadColor, roughness: 0.3, metalness: 0.9 });
+        const micHeadGeo = new THREE.SphereGeometry(0.08, 16, 16);
+        const micHead = new THREE.Mesh(micHeadGeo, micHeadMaterial);
+        micGroup.add(micHead);
+
+        /* @tweakable The color of the microphone body. */
+        const micBodyColor = 0x333333;
+        const micBodyMaterial = new THREE.MeshStandardMaterial({ color: micBodyColor, roughness: 0.5, metalness: 0.7 });
+        const micBodyGeo = new THREE.CylinderGeometry(0.05, 0.05, 0.15, 8);
+        const micBody = new THREE.Mesh(micBodyGeo, micBodyMaterial);
+        micBody.position.y = -0.1;
+        micGroup.add(micBody);
+
+        standGroup.add(micGroup);
+        
+        amphitheatreGroup.add(standGroup);
     }
 
     return amphitheatreGroup;

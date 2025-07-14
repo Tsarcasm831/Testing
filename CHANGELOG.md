@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2025-07-15
+- 1215 Add a microphone stand to the amphitheater stage.
 - 1210 Move amphitheatre to CR142.
 - 1205 Add an amphitheater near the spawn area.
 - 1200 Fix shopkeeper not spawning and improve interaction system performance
