@@ -3,6 +3,7 @@
 ## 2025-07-14
 - 1522 Fix HouseBlocks module loading error by merging it into starterHouse.js
 - 1507 Break up worldGeneration.js into modular files
+- 1555 Restrict grid labels to show within 7m radius when grid toggled
 
 ## 2025-06-28
 - 0100 Rig up running animation on Shift key press for animated player model.

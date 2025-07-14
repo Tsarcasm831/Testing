@@ -21,7 +21,7 @@ import { FORCE_MOBILE_MODE } from './controls/constants.js';
 import { World } from './world.js';
 
 /* @tweakable The maximum distance at which grid labels are visible. Lower values can improve performance. */
-const GRID_LABEL_VISIBILITY_DISTANCE = 60;
+const GRID_LABEL_VISIBILITY_DISTANCE = 7;
 
 // Simple seeded random number generator
 class MathRandom {
@@ -257,6 +257,11 @@ async function main() {
   const gridHelperColorGrid = 0xcccccc;
   const gridHelper = createGroundGrid(terrain, gridHelperSize, gridHelperDivisions, gridHelperColorCenterLine, gridHelperColorGrid);
   gridHelper.visible = false; // Hidden by default
+  // Ensure grid labels follow the grid's visibility state
+  const initialLabelsGroup = gridHelper.getObjectByName('grid-labels-group');
+  if (initialLabelsGroup) {
+    initialLabelsGroup.visible = false;
+  }
   scene.add(gridHelper);
   
   // Add a global keydown listener for toggling the grid
@@ -269,6 +274,10 @@ async function main() {
     if (event.key.toLowerCase() === 'g' && !advancedBuildTool.enabled) {
       /* @tweakable Whether the grid helper is visible or not. This is toggled by the 'G' key. */
       gridHelper.visible = !gridHelper.visible;
+      const labelsGroup = gridHelper.getObjectByName('grid-labels-group');
+      if (labelsGroup) {
+        labelsGroup.visible = gridHelper.visible;
+      }
     }
   });
 
@@ -284,12 +293,16 @@ async function main() {
 
     // Dynamically update grid label visibility to improve performance
     const labelsGroup = gridHelper.getObjectByName('grid-labels-group');
-    if (labelsGroup && gridHelper.visible) {
-        const playerPosition = playerModel.position;
-        labelsGroup.children.forEach(label => {
-            const distance = label.position.distanceTo(playerPosition);
-            label.visible = distance < GRID_LABEL_VISIBILITY_DISTANCE;
-        });
+    if (labelsGroup) {
+        if (gridHelper.visible) {
+            const playerPosition = playerModel.position;
+            labelsGroup.children.forEach(label => {
+                const distance = label.position.distanceTo(playerPosition);
+                label.visible = distance < GRID_LABEL_VISIBILITY_DISTANCE;
+            });
+        } else {
+            labelsGroup.children.forEach(label => label.visible = false);
+        }
     }
 
     interactionManager.update();
