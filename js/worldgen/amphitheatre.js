@@ -22,11 +22,12 @@ export function createAmphitheatre(scene, getHeight) {
     const baseHeight = getHeight(amphitheatrePosition.x, amphitheatrePosition.z);
 
     const groundGeo = new THREE.CircleGeometry(groundRadius, 64);
-    const groundMat = new THREE.MeshStandardMaterial({ color: groundColor, roughness: 0.8 });
+    const groundMat = new THREE.MeshStandardMaterial({ color: groundColor, roughness: 0.8, side: THREE.DoubleSide });
     const ground = new THREE.Mesh(groundGeo, groundMat);
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = baseHeight + groundHeightOffset;
     ground.receiveShadow = true;
+    ground.userData.isBarrier = true;
     amphitheatreGroup.add(ground);
 
     // Create Stage
@@ -51,7 +52,7 @@ export function createAmphitheatre(scene, getHeight) {
         /* @tweakable The spacing between the two entrance pillars. */
         const pillarSpacing = 15;
 
-        const pillarMat = new THREE.MeshStandardMaterial({ color: pillarColor, roughness: 0.6 });
+        const pillarMat = new THREE.MeshStandardMaterial({ color: pillarColor, roughness: 0.6, side: THREE.DoubleSide });
         const pillarGeo = new THREE.CylinderGeometry(pillarRadius, pillarRadius, pillarHeight, 16);
         pillarGeo.translate(0, pillarHeight / 2, 0);
 
@@ -76,7 +77,7 @@ export function createAmphitheatre(scene, getHeight) {
         /* @tweakable The height of the stage. A taller stage might require steps. */
         const stageHeight = 1.0;
         const stageGeo = new THREE.CylinderGeometry(radius, radius, stageHeight, 64);
-        const stageMat = new THREE.MeshStandardMaterial({ color: stageColor });
+        const stageMat = new THREE.MeshStandardMaterial({ color: stageColor, side: THREE.DoubleSide });
         const stage = new THREE.Mesh(stageGeo, stageMat);
         stage.position.set(0, baseY + stageHeight / 2, 0);
         stage.castShadow = true;
@@ -107,7 +108,7 @@ export function createAmphitheatre(scene, getHeight) {
         ]);
 
         const archGeo = new THREE.TubeGeometry(archPath, 20, 0.5, 8, false);
-        const archMat = new THREE.MeshStandardMaterial({ color: archColor });
+        const archMat = new THREE.MeshStandardMaterial({ color: archColor, side: THREE.DoubleSide });
         const arch = new THREE.Mesh(archGeo, archMat);
         arch.position.set(0, baseY, -radius - 1);
         arch.userData.isBarrier = true;
@@ -117,7 +118,7 @@ export function createAmphitheatre(scene, getHeight) {
     function createSeat(x, y, z, rotationY) {
         /* @tweakable The color of the seats. */
         const seatColor = 0xaaaaaa;
-        const seatMat = new THREE.MeshStandardMaterial({ color: seatColor, roughness: 0.7 });
+        const seatMat = new THREE.MeshStandardMaterial({ color: seatColor, roughness: 0.7, side: THREE.DoubleSide });
         const seatGroup = new THREE.Group();
 
         /* @tweakable The dimensions of the seat base. */
@@ -145,6 +146,7 @@ export function createAmphitheatre(scene, getHeight) {
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
+                child.userData.isBarrier = true;
             }
         });
 
@@ -170,7 +172,7 @@ export function createAmphitheatre(scene, getHeight) {
         /* @tweakable The thickness of the floor under each row of seats. */
         const floorThickness = 0.1;
 
-        const floorMat = new THREE.MeshStandardMaterial({ color: floorColor, roughness: 0.85 });
+        const floorMat = new THREE.MeshStandardMaterial({ color: floorColor, roughness: 0.85, side: THREE.DoubleSide });
 
         for (let row = 0; row < seatRowCount; row++) {
             const radius = startRadius + row * seatRowSpacing;
@@ -192,7 +194,7 @@ export function createAmphitheatre(scene, getHeight) {
                 const theta = (i / (numSeatsPerRow - 1)) * arc - arc / 2;
                 const x = radius * Math.sin(theta);
                 const z = radius * Math.cos(theta);
-                createSeat(x, y, z, -theta + Math.PI);
+                createSeat(x, y, z, -theta);
             }
         }
     }

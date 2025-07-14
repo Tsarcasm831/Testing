@@ -1,5 +1,10 @@
 # Changelog Archive
 
+## 2025-07-14
+- 1747 Ensure joystick containers display on mobile initialization
+- 1758 Correct A/D key mapping and improve mobile joystick handling
+- 1507 Break up worldGeneration.js into modular files
+
 ## 2025-06-26
 - **7d0177a** Merge: extend MapUI to handle scene objects
 - **d335b69** Use texture sampling for map terrain
