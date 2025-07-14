@@ -48,6 +48,10 @@ export class InputManager {
       return;
     }
 
+    // Ensure joystick containers are visible even if CSS classes aren't applied
+    moveJoystickContainer.style.display = 'block';
+    cameraJoystickContainer.style.display = 'block';
+
     this.moveJoystick = nipplejs.create({
       zone: moveJoystickContainer,
       mode: 'static',
