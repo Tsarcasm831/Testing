@@ -2,6 +2,20 @@ import * as THREE from 'three';
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 /**
+ * Converts a number to a base-26 alphabetical representation (A, B, ..., Z, AA, AB, ...).
+ * @param {number} num - The number to convert (0-indexed).
+ * @returns {string} The alphabetical representation.
+ */
+function toBase26(num) {
+    let result = '';
+    do {
+        result = String.fromCharCode(65 + (num % 26)) + result;
+        num = Math.floor(num / 26) - 1;
+    } while (num >= 0);
+    return result;
+}
+
+/**
  * Creates a grid that conforms to the terrain's elevation, with labels.
  * @param {THREE.Mesh} terrain - The terrain mesh, with a `userData.getHeight` function.
  * @param {number} size - The total width and depth of the grid.
@@ -91,7 +105,7 @@ export function createGroundGrid(terrain, size, divisions, colorCenterLine, colo
             const z = -halfSize + (j + 0.5 * labelSkip) * step;
             const y = terrain.userData.getHeight(x, z) + labelOffsetY;
 
-            const labelText = `${String.fromCharCode(65 + i)}${j + 1}`;
+            const labelText = `${toBase26(i)}${j + 1}`;
             
             const labelDiv = document.createElement('div');
             labelDiv.className = 'grid-label';
@@ -99,6 +113,7 @@ export function createGroundGrid(terrain, size, divisions, colorCenterLine, colo
             
             const label = new CSS2DObject(labelDiv);
             label.position.set(x, y, z);
+            label.userData.gridIndices = { i, j };
             labelsGroup.add(label);
         }
     }

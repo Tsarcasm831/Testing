@@ -20,8 +20,12 @@ import './previewManager.js'; // Ensure it's part of the context
 import { FORCE_MOBILE_MODE } from './controls/constants.js';
 import { World } from './world.js';
 
-/* @tweakable The maximum distance at which grid labels are visible. Lower values can improve performance. */
+/* @tweakable The maximum distance at which grid labels are visible at full density. Lower values can improve performance. */
 const GRID_LABEL_VISIBILITY_DISTANCE = 7;
+/* @tweakable The distance at which to switch to a more sparse set of grid labels to reduce visual clutter and improve performance. */
+const GRID_LABEL_LOD_DISTANCE = 30;
+/* @tweakable The step rate for showing labels at the LOD distance. e.g., a value of 10 shows every 10th label. */
+const GRID_LABEL_LOD_STEP = 10;
 
 // Simple seeded random number generator
 class MathRandom {
@@ -281,6 +285,10 @@ async function main() {
     }
   });
 
+  let labelUpdateCounter = 0;
+  /* @tweakable How frequently to update grid label visibility (in frames). Larger numbers reduce lag. */
+  const labelUpdateInterval = 10;
+
   // Animation loop
   function animate() {
     requestAnimationFrame(animate);
@@ -291,17 +299,29 @@ async function main() {
     
     if(mapUI) mapUI.update();
 
-    // Dynamically update grid label visibility to improve performance
-    const labelsGroup = gridHelper.getObjectByName('grid-labels-group');
-    if (labelsGroup) {
-        if (gridHelper.visible) {
-            const playerPosition = playerModel.position;
-            labelsGroup.children.forEach(label => {
-                const distance = label.position.distanceTo(playerPosition);
-                label.visible = distance < GRID_LABEL_VISIBILITY_DISTANCE;
-            });
-        } else {
-            labelsGroup.children.forEach(label => label.visible = false);
+    labelUpdateCounter++;
+    if (labelUpdateCounter >= labelUpdateInterval) {
+        labelUpdateCounter = 0;
+        // Dynamically update grid label visibility to improve performance
+        const labelsGroup = gridHelper.getObjectByName('grid-labels-group');
+        if (labelsGroup) {
+            if (gridHelper.visible) {
+                const playerPosition = playerModel.position;
+                labelsGroup.children.forEach((label) => {
+                    const distance = label.position.distanceTo(playerPosition);
+                    
+                    if (distance < GRID_LABEL_VISIBILITY_DISTANCE) {
+                        label.visible = true;
+                    } else if (distance < GRID_LABEL_LOD_DISTANCE) {
+                        const { i, j } = label.userData.gridIndices || { i: -1, j: -1 };
+                        label.visible = (i % GRID_LABEL_LOD_STEP === 0) && (j % GRID_LABEL_LOD_STEP === 0);
+                    } else {
+                        label.visible = false;
+                    }
+                });
+            } else {
+                labelsGroup.children.forEach(label => label.visible = false);
+            }
         }
     }
 

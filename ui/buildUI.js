@@ -19,7 +19,9 @@ export class BuildUI {
         buildButton.id = 'build-button';
         buildButton.classList.add('circle-button');
         buildButton.setAttribute('data-tooltip', 'Build Mode');
-        buildButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.95 8.65L17.5 11.1l-6.1-6.1 2.45-2.45a5.5 5.5 0 017.78 7.78zM2.05 15.35A5.5 5.5 0 009.83 23.13l6.1-6.1-7.78-7.78-6.1 6.1z"/></svg>`;
+        /* @tweakable The size of the build mode hammer icon. */
+        const buildIconSize = "28px";
+        buildButton.innerHTML = `<img src="hammer_icon.png" alt="Build" style="width: ${buildIconSize}; height: ${buildIconSize};">`;
         gameContainer.appendChild(buildButton);
         
         const uselessButton = document.createElement('div');

@@ -17,11 +17,9 @@ export class OptionsUI {
         button.id = 'options-button';
         button.classList.add('circle-button');
         button.setAttribute('data-tooltip', 'Options');
-        button.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
-                <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.946 1.55l-.57 2.092a1.75 1.75 0 00-1.212 1.212l-2.092.57c-.887.247-1.55.929-1.55 1.946l.003 2.059a1.75 1.75 0 001.212 1.212l2.092.57c.887.247 1.55.929 1.55 1.946l-.003 2.059c0 .917.663 1.699 1.55 1.946l2.092.57c.75.205 1.212.75 1.212 1.212l.57 2.092A2.25 2.25 0 0015.138 2.25h-4.06zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" clip-rule="evenodd" />
-            </svg>
-        `;
+        /* @tweakable The size of the options gear icon. */
+        const optionsIconSize = "28px";
+        button.innerHTML = `<img src="gear_icon.png" alt="Options" style="width: ${optionsIconSize}; height: ${optionsIconSize};">`;
         container.appendChild(button);
 
         const modal = document.createElement('div');

@@ -95,7 +95,9 @@ export class MapUI {
         mapButton.id = 'map-button';
         mapButton.classList.add('circle-button');
         mapButton.setAttribute('data-tooltip', 'Toggle Map (M)');
-        mapButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8 3v18l-4-4V7l4-4zm8 0l4 4v10l-4 4V3zm-2 2h-4v14h4V5z"/></svg>`;
+        /* @tweakable The size of the map icon. */
+        const mapIconSize = "28px";
+        mapButton.innerHTML = `<img src="map_icon.png" alt="Map" style="width: ${mapIconSize}; height: ${mapIconSize};">`;
         gameContainer.appendChild(mapButton);
 
         gameContainer.appendChild(this.mapContainer);
