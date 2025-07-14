@@ -8,6 +8,8 @@ export class AssetReplacementManager {
         this.downloader = new Downloader();
         this.assets = null;
         this.statusElement = null;
+        // Optional callback for when the player model is replaced
+        this.onPlayerModelReplaced = dependencies.onPlayerModelReplaced || null;
 
         this.modelTypes = {
             'player': {
@@ -189,6 +191,9 @@ export class AssetReplacementManager {
             controls.playerModel = model;
             controls.playerModel.userData.isGLB = true;
             controls.currentAction = 'idle';
+            if (this.onPlayerModelReplaced) {
+                this.onPlayerModelReplaced(model);
+            }
         }
     }
 }

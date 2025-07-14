@@ -168,6 +168,7 @@ async function main() {
   const assetReplacementManager = new AssetReplacementManager({
     playerControls,
     npcManager,
+    onPlayerModelReplaced: (model) => { playerModel = model; }
   });
 
   const characterCreator = new CharacterCreator(
