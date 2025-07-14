@@ -282,6 +282,11 @@ async function main() {
       if (labelsGroup) {
         labelsGroup.visible = gridHelper.visible;
       }
+      if (!gridHelper.visible) {
+        gridHelper.userData.clearLabels();
+      } else {
+        gridHelper.userData.updateLabels(playerModel.position, GRID_LABEL_VISIBILITY_DISTANCE, GRID_LABEL_LOD_DISTANCE, GRID_LABEL_LOD_STEP);
+      }
     }
   });
 
@@ -302,26 +307,13 @@ async function main() {
     labelUpdateCounter++;
     if (labelUpdateCounter >= labelUpdateInterval) {
         labelUpdateCounter = 0;
-        // Dynamically update grid label visibility to improve performance
-        const labelsGroup = gridHelper.getObjectByName('grid-labels-group');
-        if (labelsGroup) {
-            if (gridHelper.visible) {
-                const playerPosition = playerModel.position;
-                labelsGroup.children.forEach((label) => {
-                    const distance = label.position.distanceTo(playerPosition);
-                    
-                    if (distance < GRID_LABEL_VISIBILITY_DISTANCE) {
-                        label.visible = true;
-                    } else if (distance < GRID_LABEL_LOD_DISTANCE) {
-                        const { i, j } = label.userData.gridIndices || { i: -1, j: -1 };
-                        label.visible = (i % GRID_LABEL_LOD_STEP === 0) && (j % GRID_LABEL_LOD_STEP === 0);
-                    } else {
-                        label.visible = false;
-                    }
-                });
-            } else {
-                labelsGroup.children.forEach(label => label.visible = false);
-            }
+        if (gridHelper.visible) {
+            gridHelper.userData.updateLabels(
+                playerModel.position,
+                GRID_LABEL_VISIBILITY_DISTANCE,
+                GRID_LABEL_LOD_DISTANCE,
+                GRID_LABEL_LOD_STEP
+            );
         }
     }
 

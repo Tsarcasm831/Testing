@@ -6,12 +6,12 @@
 - 1555 Restrict grid labels to show within 7m radius when grid toggled
 - 1623 Label every grid cell and keep labels visible only when the grid is toggled
 - 1640 Enable dual joysticks for mobile look and movement
+- 1706 Generate grid labels on demand to eliminate DOM lag
 
 ## 2025-06-28
 - 0100 Rig up running animation on Shift key press for animated player model.
 
 ## 2025-06-27
-- 1623 Fix stylesheet path in index.html
 - 1633 Add circle-button class and apply to UI buttons
 - 1742 Fix idle animation orientation for animated player model
 - 1815 Hide mobile/desktop toggle and rely on auto-detection

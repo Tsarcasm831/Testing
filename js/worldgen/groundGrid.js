@@ -92,33 +92,106 @@ export function createGroundGrid(terrain, size, divisions, colorCenterLine, colo
 
     const labelsGroup = new THREE.Group();
     labelsGroup.name = 'grid-labels-group'; // Add name for easy lookup
-    /*
-     * @tweakable The number of grid cells to skip between rendering labels.
-     * A value of `1` labels every cell. Higher values improve performance by
-     * reducing the number of generated labels.
-     */
-    const labelSkip = 1;
-
-    for (let i = 0; i < divisions; i += labelSkip) {
-        for (let j = 0; j < divisions; j += labelSkip) {
-            const x = -halfSize + (i + 0.5 * labelSkip) * step;
-            const z = -halfSize + (j + 0.5 * labelSkip) * step;
-            const y = terrain.userData.getHeight(x, z) + labelOffsetY;
-
-            const labelText = `${toBase26(i)}${j + 1}`;
-            
-            const labelDiv = document.createElement('div');
-            labelDiv.className = 'grid-label';
-            labelDiv.textContent = labelText;
-            
-            const label = new CSS2DObject(labelDiv);
-            label.position.set(x, y, z);
-            label.userData.gridIndices = { i, j };
-            labelsGroup.add(label);
-        }
-    }
     group.add(labelsGroup);
+
     group.userData.isGridHelper = true;
+
+    // Store data needed for dynamic label generation
+    group.userData.terrain = terrain;
+    group.userData.size = size;
+    group.userData.divisions = divisions;
+    group.userData.step = step;
+    group.userData.halfSize = halfSize;
+    group.userData.labelOffsetY = labelOffsetY;
+    group.userData.labelsGroup = labelsGroup;
+    group.userData.activeLabels = new Map();
+
+    /**
+     * Dynamically update which grid labels are displayed based on the
+     * player's position. Labels are created only when needed and removed
+     * when out of range to avoid excessive DOM nodes.
+     *
+     * @param {THREE.Vector3} playerPosition - The current player position.
+     * @param {number} fullDist - Distance for full label density.
+     * @param {number} lodDist - Distance for level-of-detail label density.
+     * @param {number} lodStep - Step interval used when applying the LOD rule.
+     */
+    group.userData.updateLabels = function(playerPosition, fullDist, lodDist, lodStep) {
+        const step = this.step;
+        const halfSize = this.halfSize;
+        const divisions = this.divisions;
+        const labelOffsetY = this.labelOffsetY;
+        const terrain = this.terrain;
+        const cellRadius = Math.ceil(lodDist / step);
+        const centerI = Math.floor((playerPosition.x + halfSize) / step);
+        const centerJ = Math.floor((playerPosition.z + halfSize) / step);
+        const visibleKeys = new Set();
+
+        for (let i = centerI - cellRadius; i <= centerI + cellRadius; i++) {
+            if (i < 0 || i >= divisions) continue;
+            for (let j = centerJ - cellRadius; j <= centerJ + cellRadius; j++) {
+                if (j < 0 || j >= divisions) continue;
+
+                const x = -halfSize + (i + 0.5) * step;
+                const z = -halfSize + (j + 0.5) * step;
+                const y = terrain.userData.getHeight(x, z) + labelOffsetY;
+
+                const dx = x - playerPosition.x;
+                const dy = y - playerPosition.y;
+                const dz = z - playerPosition.z;
+                const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                let visible = false;
+                if (distance < fullDist) {
+                    visible = true;
+                } else if (distance < lodDist) {
+                    visible = (i % lodStep === 0) && (j % lodStep === 0);
+                }
+
+                if (visible) {
+                    const key = `${i},${j}`;
+                    visibleKeys.add(key);
+                    let label = this.activeLabels.get(key);
+                    if (!label) {
+                        const labelDiv = document.createElement('div');
+                        labelDiv.className = 'grid-label';
+                        labelDiv.textContent = `${toBase26(i)}${j + 1}`;
+
+                        label = new CSS2DObject(labelDiv);
+                        label.userData.gridIndices = { i, j };
+                        this.labelsGroup.add(label);
+                        this.activeLabels.set(key, label);
+                    }
+                    label.position.set(x, y, z);
+                    label.visible = true;
+                }
+            }
+        }
+
+        // Remove labels that are no longer visible
+        for (const [key, label] of this.activeLabels.entries()) {
+            if (!visibleKeys.has(key)) {
+                this.labelsGroup.remove(label);
+                if (label.element && label.element.parentNode) {
+                    label.element.remove();
+                }
+                this.activeLabels.delete(key);
+            }
+        }
+    };
+
+    /**
+     * Remove all active labels and DOM elements.
+     */
+    group.userData.clearLabels = function() {
+        for (const label of this.activeLabels.values()) {
+            this.labelsGroup.remove(label);
+            if (label.element && label.element.parentNode) {
+                label.element.remove();
+            }
+        }
+        this.activeLabels.clear();
+    };
 
     return group;
 }
