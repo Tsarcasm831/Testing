@@ -52,9 +52,7 @@ export class PlayerControls {
     
     // Set initial player model position if it exists
     if (this.playerModel) {
-      const terrainHeight = this.terrain ? this.terrain.userData.getHeight(this.playerX, this.playerZ) : 0;
-      this.playerModel.position.set(this.playerX, terrainHeight + this.playerY, this.playerZ);
-      this.lastPosition.copy(this.playerModel.position);
+      this.setPlayerModel(this.playerModel);
     }
     
     // Set camera to third-person perspective
@@ -91,6 +89,17 @@ export class PlayerControls {
     this.enabled = true; // Add enabled flag for chat input
   }
   
+  setPlayerModel(model) {
+    this.playerModel = model;
+    if (this.terrain) {
+        const terrainHeight = this.terrain.userData.getHeight(this.playerX, this.playerZ);
+        this.playerModel.position.set(this.playerX, terrainHeight + this.playerY, this.playerZ);
+    } else {
+        this.playerModel.position.set(this.playerX, this.playerY, this.playerZ);
+    }
+    this.lastPosition.copy(this.playerModel.position);
+  }
+
   initializeControls() {
     // Use OrbitControls for third-person view on both platforms
     this.controls = new OrbitControls(this.camera, this.domElement);

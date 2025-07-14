@@ -14,7 +14,8 @@ export class NPCManager {
         this.npcs = [];
         this.lastUpdateTime = 0;
         
-        this.npcSpawner = new NPCSpawner(scene, terrain);
+        // Spawner is initialized later, once terrain is available
+        this.npcSpawner = null;
         this.zoneManager = new ZoneManager(
             playerControls,
             (zoneKey) => this.activateZone(zoneKey),
@@ -24,6 +25,16 @@ export class NPCManager {
         this.frustum = new THREE.Frustum();
         this.cameraMatrix = new THREE.Matrix4();
         this.zoneCache = new Map();
+    }
+
+    initializeSpawner(terrain) {
+        this.terrain = terrain;
+        this.npcSpawner = new NPCSpawner(this.scene, this.terrain);
+    }
+
+    addNpc(npc) {
+        this.npcs.push(npc);
+        this.scene.add(npc.model);
     }
 
     useAnimatedRobots(data, replaceExisting = true) {
@@ -62,6 +73,8 @@ export class NPCManager {
     }
 
     activateZone(zoneKey) {
+        if (!this.npcSpawner) return; // Don't spawn if spawner isn't ready
+
         if (this.zoneCache.has(zoneKey)) {
             const cachedNpcs = this.zoneCache.get(zoneKey);
             cachedNpcs.forEach(npc => {

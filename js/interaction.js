@@ -8,6 +8,8 @@ const PROMPT_VERTICAL_OFFSET = 2.5;
 const NPC_NAME_FONT_SIZE = '16px';
 /* @tweakable Font size for the instruction text in the interaction prompt. */
 const INSTRUCTION_FONT_SIZE = '14px';
+/* @tweakable The delay in milliseconds between checks for interactable NPCs. Higher values improve performance but reduce responsiveness. */
+const INTERACTION_CHECK_DELAY = 250; // ms
 
 export class InteractionManager {
     constructor(dependencies) {
@@ -20,6 +22,7 @@ export class InteractionManager {
         this.interactionPrompt = null;
         this.conversationModal = null;
         this.targetNpc = null;
+        this.lastCheckTime = 0;
     }
 
     init() {
@@ -56,13 +59,16 @@ export class InteractionManager {
     }
 
     update() {
-        if (!this.isDesktop || this.conversationModal.style.display === 'flex') {
-            if (this.interactionPrompt.style.display !== 'none') {
+        const now = performance.now();
+        if (!this.isDesktop || this.conversationModal.style.display === 'flex' || (now - this.lastCheckTime < INTERACTION_CHECK_DELAY)) {
+            if (this.conversationModal.style.display === 'flex' && this.interactionPrompt.style.display !== 'none') {
                 this.interactionPrompt.style.display = 'none';
                 this.targetNpc = null;
             }
             return;
         }
+        
+        this.lastCheckTime = now;
 
         const playerPos = this.playerControls.getPlayerModel().position;
         let closestNpc = null;

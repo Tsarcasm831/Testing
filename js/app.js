@@ -59,20 +59,46 @@ async function main() {
   /* @tweakable The color of the sky. */
   scene.background = new THREE.Color(0x87CEEB); // Light sky blue background
   
-  // Create world
-  const world = new World(scene);
-  const terrain = world.generate();
-  
-  // Create barriers, trees, clouds and platforms
-  createBarriers(scene, terrain.userData.getHeight);
-  createTrees(scene, terrain.userData.getHeight);
-  createClouds(scene);
-  
+  // Create renderer before it is used by other components
+  /* @tweakable Enable antialiasing for smoother edges. Can impact performance. */
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // PCFSoftShadowMap for softer shadows
   document.getElementById('game-container').appendChild(renderer.domElement);
+
+  // Create player model with default appearance. It will be passed to controls.
+  let playerModel = createPlayerModel(THREE, playerName);
+  scene.add(playerModel);
+
+  // Create managers and controls. We will set the terrain on them after it's generated.
+  const playerControls = new PlayerControls(scene, room, {
+    renderer: renderer,
+    initialPosition: {
+      x: playerX,
+      y: 0.70,
+      z: playerZ
+    },
+    playerModel: playerModel,
+    terrain: null, // Terrain will be set after generation
+  });
+
+  const npcManager = new NPCManager(scene, null, playerControls);
+  
+  // Create world, which generates the terrain
+  const world = new World(scene, npcManager);
+  const terrain = world.generate();
+  
+  // Now that terrain exists, set it on the managers that need it.
+  playerControls.terrain = terrain;
+  npcManager.terrain = terrain;
+  // Initialize NPC Spawner with terrain
+  npcManager.initializeSpawner(terrain);
+
+  // Create barriers, trees, and clouds which depend on the terrain
+  createBarriers(scene, terrain.userData.getHeight);
+  createTrees(scene, terrain.userData.getHeight);
+  createClouds(scene);
   
   // Setup label renderer
   const labelRenderer = new CSS2DRenderer();
@@ -82,6 +108,9 @@ async function main() {
   labelRenderer.domElement.style.pointerEvents = 'none';
   document.getElementById('label-container').appendChild(labelRenderer.domElement);
   
+  // Get camera after playerControls is fully initialized
+  const camera = playerControls.getCamera();
+
   // Add dev button to toggle mobile/desktop mode
   const isMobileModeForced = localStorage.getItem('forceMobileMode') === 'true';
   const devToggleButton = document.createElement('button');
@@ -105,31 +134,6 @@ async function main() {
     document.body.appendChild(jumpButton);
   }
 
-  // Create player model with default appearance
-  let playerModel = createPlayerModel(THREE, playerName);
-  scene.add(playerModel);
-  
-  // Initialize player controls
-  const playerControls = new PlayerControls(scene, room, {
-    renderer: renderer,
-    initialPosition: {
-      x: playerX,
-      y: 0.70,
-      z: playerZ
-    },
-    playerModel: playerModel,
-    terrain: terrain,
-  });
-  const camera = playerControls.getCamera();
-  
-  // Re-add event listener for window resize to include label renderer
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    labelRenderer.setSize(window.innerWidth, window.innerHeight);
-  });
-  
   // Initialize build tool
   const buildTool = new BuildTool(scene, camera, playerControls, terrain);
   buildTool.setRoom(room); // Pass room to buildTool for multiplayer sync
@@ -162,8 +166,6 @@ async function main() {
     playerControls
   });
   multiplayerManager.init();
-
-  const npcManager = new NPCManager(scene, terrain, playerControls);
 
   const assetReplacementManager = new AssetReplacementManager({
     playerControls,

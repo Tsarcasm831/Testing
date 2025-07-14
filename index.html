@@ -3,6 +3,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>3D Overworld Template v1.9.2</title>
+  <script>
+    // Suppress specific cookie-related console errors and warnings
+    /* @tweakable List of phrases to filter from console error/warning messages. */
+    const consoleFilter = ['Cookie', 'rejected for invalid domain'];
+
+    const originalError = console.error;
+    console.error = (...args) => {
+      if (typeof args[0] === 'string' && consoleFilter.every(phrase => args[0].includes(phrase))) {
+        return;
+      }
+      originalError.apply(console, args);
+    };
+
+    const originalWarn = console.warn;
+    console.warn = (...args) => {
+      if (typeof args[0] === 'string' && consoleFilter.every(phrase => args[0].includes(phrase))) {
+        return;
+      }
+      originalWarn.apply(console, args);
+    };
+  </script>
   <link rel="stylesheet" href="theme.css">
   <link rel="stylesheet" href="styles/base.css">
   <link rel="stylesheet" href="styles/mobile.css">

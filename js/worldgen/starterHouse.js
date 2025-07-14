@@ -97,57 +97,59 @@ export function createStarterHouse(scene, getHeight) {
     scene.add(mesh);
   };
 
+  const houseGroup = new THREE.Group();
+  houseGroup.position.copy(housePosition);
+  scene.add(houseGroup);
+
   const foundation = HouseBlocks.createFoundationSlab(houseWidth, houseDepth, foundationThickness);
-  addPart(foundation);
+  houseGroup.add(foundation);
+  foundation.userData.isBarrier = true;
+  foundation.castShadow = true;
+  foundation.receiveShadow = true;
 
   // The y-position for the center of the walls. They sit on top of the foundation.
   const wallY = foundationThickness / 2 + wallHeight / 2;
 
   const backWall = HouseBlocks.createExteriorWall(houseWidth, wallHeight, wallThickness);
   backWall.position.set(0, wallY, -houseDepth / 2 + wallThickness / 2);
-  addPart(backWall);
+  houseGroup.add(backWall);
 
   const leftWall = HouseBlocks.createExteriorWall(houseDepth, wallHeight, wallThickness);
   leftWall.rotation.y = Math.PI / 2;
   leftWall.position.set(-houseWidth / 2 + wallThickness / 2, wallY, 0);
-  addPart(leftWall);
+  houseGroup.add(leftWall);
 
   const rightWall = HouseBlocks.createExteriorWall(houseDepth, wallHeight, wallThickness);
   rightWall.rotation.y = Math.PI / 2;
   rightWall.position.set(houseWidth / 2 - wallThickness / 2, wallY, 0);
-  addPart(rightWall);
+  houseGroup.add(rightWall);
 
   const sideWallWidth = (houseWidth - doorWidth) / 2;
 
   const frontWallLeft = HouseBlocks.createExteriorWall(sideWallWidth, wallHeight, wallThickness);
   frontWallLeft.position.set(-doorWidth / 2 - sideWallWidth / 2, wallY, houseDepth / 2 - wallThickness / 2);
-  addPart(frontWallLeft);
+  houseGroup.add(frontWallLeft);
 
   const frontWallRight = HouseBlocks.createExteriorWall(sideWallWidth, wallHeight, wallThickness);
   frontWallRight.position.set(doorWidth / 2 + sideWallWidth / 2, wallY, houseDepth / 2 - wallThickness / 2);
-  addPart(frontWallRight);
+  houseGroup.add(frontWallRight);
 
   const lintelHeight = wallHeight - doorHeight;
   const lintel = HouseBlocks.createExteriorWall(doorWidth, lintelHeight, wallThickness);
   lintel.position.set(0, foundationThickness / 2 + doorHeight + lintelHeight / 2, houseDepth / 2 - wallThickness / 2);
-  addPart(lintel);
+  houseGroup.add(lintel);
 
   const roofGroup = HouseBlocks.createRoofGable(houseWidth + 0.5, 1.2, houseDepth + 0.5);
   roofGroup.position.y = wallHeight + foundationThickness / 2;
-  roofGroup.position.add(housePosition);
-  roofGroup.updateWorldMatrix(true, true);
+  houseGroup.add(roofGroup);
 
-  const roofMeshes = [];
-  roofGroup.traverse((child) => {
-    if (child.isMesh) {
-      roofMeshes.push(child);
+  houseGroup.traverse((child) => {
+    if(child.isMesh) {
+        child.userData.isBarrier = true;
+        child.castShadow = true;
+        child.receiveShadow = true;
     }
   });
 
-  roofMeshes.forEach((mesh) => {
-    scene.attach(mesh);
-    mesh.userData.isBarrier = true;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  });
+  return houseGroup;
 }

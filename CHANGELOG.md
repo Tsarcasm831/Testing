@@ -1,5 +1,10 @@
 # Changelog
 
+## 2025-07-15
+- 1210 Move amphitheatre to CR142.
+- 1205 Add an amphitheater near the spawn area.
+- 1200 Fix shopkeeper not spawning and improve interaction system performance
+
 ## 2025-07-14
 - 1818 Fix player asset replacement to avoid duplicate player model
 - 1522 Fix HouseBlocks module loading error by merging it into starterHouse.js

@@ -1,6 +1,6 @@
 /* @tweakable A flag to enable a workaround for a Three.js bug related to frustum culling. Disable this if you upgrade Three.js to a version higher than r160. */
 export const FIX_FRUSTUM_CULLING_BUG = true;
-/* @tweakable Use bounding box for frustum culling on complex models like robots. May improve performance and fix crashes. */
+/* @tweakable Use bounding box for frustum culling on complex models. May improve performance and fix crashes. Set to false for debugging culling issues. */
 export const USE_BOUNDING_BOX_CULLING = true;
 /* @tweakable NPC movement speed. */
 export const NPC_SPEED = 0.03;
