@@ -42,7 +42,7 @@ export class PlayerControls {
     }
 
     // Input manager
-    this.inputManager = new InputManager(this.isMobile);
+    this.inputManager = new InputManager(this.isMobile, this.isMobile ? document.getElementById('right-side-touch-area') : this.domElement);
 
     // Initial player position
     const initialPos = options.initialPosition || {};
@@ -374,12 +374,12 @@ export class PlayerControls {
     }
 
     if (this.isMobile) {
+      this.controls.enabled = !this.inputManager.isCameraMoving();
       const cameraMove = this.inputManager.getCameraMovement();
       if (cameraMove.x !== 0 || cameraMove.y !== 0) {
         const rotateSpeed = mobileCameraRotateSpeed;
         this.controls.rotateLeft(-cameraMove.x * rotateSpeed);
         this.controls.rotateUp(-cameraMove.y * rotateSpeed);
-        this.controls.update();
       }
     }
     

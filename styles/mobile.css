@@ -14,6 +14,17 @@
   display: none;
 }
 
+#right-side-touch-area {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 999;
+  touch-action: none;
+  display: none;
+}
+
 /* @tweakable Position and size of the camera joystick on mobile. */
 #camera-joystick-container {
     position: fixed;

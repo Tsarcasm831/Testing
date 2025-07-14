@@ -3,22 +3,23 @@ import { SPEED, MOBILE_SPEED_MULTIPLIER } from "./constants.js";
 
 /* @tweakable Multiplier for movement joystick sensitivity on mobile. */
 const MOVE_JOYSTICK_SENSITIVITY = 1.2;
-/* @tweakable Multiplier for camera joystick sensitivity on mobile. */
-const CAMERA_JOYSTICK_SENSITIVITY = 0.8;
+/* @tweakable Multiplier for camera touch sensitivity on mobile. */
+const CAMERA_TOUCH_SENSITIVITY = 0.005;
 /* @tweakable The exponent for joystick input curve. >1 for slower start, <1 for faster start. */
 const JOYSTICK_INPUT_CURVE = 1.2;
 
 export class InputManager {
-  constructor(isMobile) {
+  constructor(isMobile, cameraTouchElement) {
     this.isMobile = isMobile;
     this.keysPressed = new Set();
     this.moveJoystick = null;
-    this.cameraJoystick = null;
+    this.cameraTouchElement = cameraTouchElement;
     this.moveForward = 0;
     this.moveRight = 0;
     this.cameraX = 0;
     this.cameraY = 0;
     this.jumpRequested = false;
+    this.cameraMoving = false;
 
     if (this.isMobile) {
       this.initializeMobileInput();
@@ -42,29 +43,13 @@ export class InputManager {
 
   initializeMobileInput() {
     const moveJoystickContainer = document.getElementById('joystick-container');
-    const cameraJoystickContainer = document.getElementById('camera-joystick-container');
-    if (!moveJoystickContainer || !cameraJoystickContainer) {
+    if (!moveJoystickContainer) {
       console.error("Joystick container not found!");
       return;
     }
 
-    // Ensure joystick containers are visible even if CSS classes aren't applied
-    moveJoystickContainer.style.display = 'block';
-    cameraJoystickContainer.style.display = 'block';
-    // Explicitly disable default touch behavior so joysticks capture swipes
-    moveJoystickContainer.style.touchAction = 'none';
-    cameraJoystickContainer.style.touchAction = 'none';
-
     this.moveJoystick = nipplejs.create({
       zone: moveJoystickContainer,
-      mode: 'static',
-      position: { left: '50%', top: '50%' },
-      color: 'rgba(255, 255, 255, 0.5)',
-      size: 120
-    });
-
-    this.cameraJoystick = nipplejs.create({
-      zone: cameraJoystickContainer,
       mode: 'static',
       position: { left: '50%', top: '50%' },
       color: 'rgba(255, 255, 255, 0.5)',
@@ -85,19 +70,34 @@ export class InputManager {
       this.moveRight = 0;
     });
 
-    this.cameraJoystick.on('move', (evt, data) => {
-      const baseForce = Math.min(data.force, 1.0);
-      /* @tweakable Adjusts the sensitivity curve of the camera joystick. Higher values mean more precision at low intensity. */
-      const force = Math.pow(baseForce, JOYSTICK_INPUT_CURVE) * CAMERA_JOYSTICK_SENSITIVITY;
-      const angle = data.angle.radian;
-      this.cameraX = Math.cos(angle) * force;
-      this.cameraY = Math.sin(angle) * force;
-    });
-    
-    this.cameraJoystick.on('end', () => {
-        this.cameraX = 0;
-        this.cameraY = 0;
-    });
+    if (this.cameraTouchElement) {
+        let lastTouchX = 0;
+        let lastTouchY = 0;
+
+        this.cameraTouchElement.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
+                this.cameraMoving = true;
+            }
+        });
+
+        this.cameraTouchElement.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                this.cameraX = (touch.clientX - lastTouchX) * CAMERA_TOUCH_SENSITIVITY;
+                this.cameraY = (touch.clientY - lastTouchY) * CAMERA_TOUCH_SENSITIVITY;
+                lastTouchX = touch.clientX;
+                lastTouchY = touch.clientY;
+            }
+        });
+        
+        this.cameraTouchElement.addEventListener('touchend', () => {
+            this.cameraX = 0;
+            this.cameraY = 0;
+            this.cameraMoving = false;
+        });
+    }
 
     const jumpButton = document.getElementById('jump-button');
     if (jumpButton) {
@@ -141,7 +141,17 @@ export class InputManager {
   }
   
   getCameraMovement() {
-      return { x: this.cameraX, y: this.cameraY };
+      const movement = { x: this.cameraX, y: this.cameraY };
+      if (this.isMobile) {
+          // decay movement for smoother stop
+          this.cameraX *= 0.5;
+          this.cameraY *= 0.5;
+      }
+      return movement;
+  }
+  
+  isCameraMoving() {
+      return this.cameraMoving;
   }
 
   isJumping() {
