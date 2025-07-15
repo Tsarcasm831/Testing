@@ -7,6 +7,54 @@ const stageColor = 0x4a2a0a;
 /* @tweakable Set to false to disable the video backdrop, which may prevent console errors from ad-blockers. */
 const enableVideoBackdrop = true;
 
+function createMicrophoneStand() {
+    const standGroup = new THREE.Group();
+
+    /* @tweakable The color of the microphone stand. */
+    const standColor = 0x333333;
+    /* @tweakable The color of the microphone head. */
+    const micColor = 0x111111;
+
+    const standMaterial = new THREE.MeshStandardMaterial({ color: standColor, roughness: 0.4, metalness: 0.8 });
+    const micMaterial = new THREE.MeshStandardMaterial({ color: micColor, roughness: 0.6, metalness: 0.2 });
+
+    // Base
+    /* @tweakable The radius of the microphone stand base. */
+    const baseRadius = 0.3;
+    /* @tweakable The height of the microphone stand base. */
+    const baseHeight = 0.05;
+    const baseGeometry = new THREE.CylinderGeometry(baseRadius, baseRadius, baseHeight, 16);
+    const base = new THREE.Mesh(baseGeometry, standMaterial);
+    base.position.y = baseHeight / 2;
+    standGroup.add(base);
+
+    // Pole
+    /* @tweakable The height of the microphone stand pole. */
+    const poleHeight = 1.5;
+    /* @tweakable The radius of the microphone stand pole. */
+    const poleRadius = 0.02;
+    const poleGeometry = new THREE.CylinderGeometry(poleRadius, poleRadius, poleHeight, 8);
+    const pole = new THREE.Mesh(poleGeometry, standMaterial);
+    pole.position.y = baseHeight + poleHeight / 2;
+    standGroup.add(pole);
+
+    // Mic head
+    /* @tweakable The size of the microphone head. */
+    const micHeadRadius = 0.08;
+    const micHeadGeometry = new THREE.SphereGeometry(micHeadRadius, 16, 16);
+    const micHead = new THREE.Mesh(micHeadGeometry, micMaterial);
+    micHead.position.y = baseHeight + poleHeight + micHeadRadius * 0.8;
+    standGroup.add(micHead);
+    
+    standGroup.traverse(child => {
+        if (child.isMesh) {
+            child.castShadow = true;
+        }
+    });
+
+    return standGroup;
+}
+
 function createStage(dimensions) {
     const stageGroup = new THREE.Group();
     const stageMaterial = new THREE.MeshStandardMaterial({ color: stageColor, roughness: 0.8, metalness: 0.1 });
@@ -20,7 +68,7 @@ function createStage(dimensions) {
 
     // Add stairs
     /* @tweakable The rotation of the stairs in degrees around the Y axis. */
-    const stairRotationY = 180;
+    const stairRotationY = 0;
     const stairsGroup = new THREE.Group();
     stairsGroup.rotation.y = THREE.MathUtils.degToRad(stairRotationY);
     stageGroup.add(stairsGroup);
@@ -195,6 +243,12 @@ export function createAmphitheatre(scene, getHeight, listener) {
     const stage = createStage(stageDimensions);
     stage.position.z = 10;
     group.add(stage);
+
+    // Add microphone stand to the stage
+    const micStand = createMicrophoneStand();
+    /* @tweakable The position of the microphone stand on the stage. */
+    micStand.position.set(0, stageDimensions.height, 2);
+    stage.add(micStand);
 
     // Seating
     /* @tweakable Number of seating rows. */
