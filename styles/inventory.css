@@ -7,11 +7,13 @@
   color: white;
   padding: 20px;
   border-radius: 10px;
+  /* @tweakable The z-index for the inventory panel. */
   z-index: 2000;
   display: none;
   width: 90%;
   max-width: 500px;
   box-shadow: 0 0 20px var(--black-50);
+  pointer-events: auto;
 }
 
 /* @tweakable Position of the inventory button on the screen. */

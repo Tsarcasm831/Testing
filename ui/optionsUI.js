@@ -12,7 +12,7 @@ export class OptionsUI {
     }
 
     create() {
-        const container = document.getElementById('game-container');
+        const uiContainer = document.getElementById('ui-container');
         const button = document.createElement('div');
         button.id = 'options-button';
         button.classList.add('circle-button');
@@ -20,7 +20,7 @@ export class OptionsUI {
         /* @tweakable The size of the options gear icon. */
         const optionsIconSize = "28px";
         button.innerHTML = `<img src="gear_icon.png" alt="Options" style="width: ${optionsIconSize}; height: ${optionsIconSize};">`;
-        container.appendChild(button);
+        uiContainer.appendChild(button);
 
         const modal = document.createElement('div');
         modal.id = 'options-modal';
@@ -76,7 +76,7 @@ export class OptionsUI {
                 </div>
             </div>
         `;
-        container.appendChild(modal);
+        uiContainer.appendChild(modal);
         
         this.assetReplacementManager.setStatusElement(modal.querySelector('#download-status'));
 

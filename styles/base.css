@@ -13,12 +13,41 @@ body {
   -webkit-touch-callout: none; /* iOS Safari */
 }
 
-#game-container {
+#game-container, #label-container, #css3d-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+#game-container {
+  z-index: 1;
+}
+
+#label-container {
+  pointer-events: none;
+  z-index: 2;
+}
+
+#css3d-container {
+  pointer-events: none;
+  z-index: 3;
+}
+
+#css3d-container iframe {
+    pointer-events: auto;
+}
+
+#ui-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* @tweakable The z-index for the main UI container, ensuring it's on top of other game layers. */
+    z-index: 100;
 }
 
 .instructions {
@@ -125,6 +154,7 @@ button:active {
   color: white !important;
   border: 1px solid var(--white-30);
   transition: background-color 0.2s, transform 0.2s;
+  pointer-events: auto; /* Allow clicks on buttons inside a pointer-events:none container */
 }
 
 .circle-button:hover {

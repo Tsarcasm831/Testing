@@ -1,249 +1,245 @@
 import * as THREE from 'three';
 
-/**
- * Creates an amphitheater with tiered seating and a central stage.
- * @param {THREE.Scene} scene - The main scene to add the amphitheater to.
- * @param {function} getHeight - A function to get the terrain height at a given x, z position.
- * @returns {THREE.Group} A group containing the entire amphitheater structure.
- */
-export function createAmphitheatre(scene, getHeight) {
-    /* @tweakable The position of the amphitheater. */
-    const amphitheatrePosition = new THREE.Vector3(-20.5, 0, 90.5);
+/* @tweakable The color of the stone used for the amphitheater seats and structure. */
+const stoneColor = 0x888888;
+/* @tweakable The color of the stage platform. */
+const stageColor = 0x4a2a0a;
+/* @tweakable Set to false to disable the video backdrop, which may prevent console errors from ad-blockers. */
+const enableVideoBackdrop = true;
 
-    const amphitheatreGroup = new THREE.Group();
-    scene.add(amphitheatreGroup);
-    amphitheatreGroup.position.copy(amphitheatrePosition);
+function createStage(dimensions) {
+    const stageGroup = new THREE.Group();
+    const stageMaterial = new THREE.MeshStandardMaterial({ color: stageColor, roughness: 0.8, metalness: 0.1 });
+    const stageGeometry = new THREE.BoxGeometry(dimensions.width, dimensions.height, dimensions.depth);
+    const stage = new THREE.Mesh(stageGeometry, stageMaterial);
+    stage.position.y = dimensions.height / 2;
+    stage.castShadow = true;
+    stage.receiveShadow = true;
+    stage.userData.isBlock = true;
+    stageGroup.add(stage);
 
-    /* @tweakable The radius of the amphitheatre's flat ground area. */
-    const groundRadius = 35;
-    /* @tweakable The color of the amphitheatre's ground. */
-    const groundColor = 0x5a5a5a;
-    const groundHeightOffset = 0.1; // To prevent z-fighting with terrain
-    const baseHeight = getHeight(amphitheatrePosition.x, amphitheatrePosition.z);
+    // Add stairs
+    /* @tweakable The rotation of the stairs in degrees around the Y axis. */
+    const stairRotationY = 180;
+    const stairsGroup = new THREE.Group();
+    stairsGroup.rotation.y = THREE.MathUtils.degToRad(stairRotationY);
+    stageGroup.add(stairsGroup);
 
-    const groundGeo = new THREE.CircleGeometry(groundRadius, 64);
-    const groundMat = new THREE.MeshStandardMaterial({ color: groundColor, roughness: 0.8, side: THREE.DoubleSide });
-    const ground = new THREE.Mesh(groundGeo, groundMat);
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = baseHeight + groundHeightOffset;
-    ground.receiveShadow = true;
-    amphitheatreGroup.add(ground);
+    /* @tweakable The number of stairs leading to the stage. */
+    const stairCount = 4;
+    const stairHeight = dimensions.height / stairCount;
+    /* @tweakable The depth of each stair step. */
+    const stairDepth = 0.5;
+    /* @tweakable The starting Z position of the stairs relative to the stage's front edge. */
+    const stairStartZ = -dimensions.depth / 2 - stairDepth / 2;
 
-    // Create Stage
-    createStage(10, ground.position.y);
-
-    // Create Seating
-    createAllSeats(12, 15, 2.5, ground.position.y);
-
-    // Create Entrance Pillars
-    createEntrancePillars(groundRadius, ground.position.y);
-
-    // Set userData for the entire group to help with collision detection
-    amphitheatreGroup.userData.isStructure = true;
+    for (let i = 0; i < stairCount; i++) {
+        /* @tweakable The width of the stairs, which get narrower closer to the stage. */
+        const stairWidth = dimensions.width * (0.4 - i * 0.05);
+        const stairGeometry = new THREE.BoxGeometry(stairWidth, stairHeight, stairDepth);
+        const stair = new THREE.Mesh(stairGeometry, stageMaterial);
     
-    // Set barrier flag on all individual meshes for consistent collision
-    amphitheatreGroup.traverse((child) => {
-        if (child.isMesh) {
-            // Check if isBarrier is already explicitly set to false
-            if (child.userData.isBarrier === false) return;
-            
-            /* @tweakable If true, objects in the amphitheater act as barriers. */
-            child.userData.isBarrier = true;
-            child.castShadow = true;
-            child.receiveShadow = true;
+        stair.position.set(
+            0,
+            i * stairHeight + stairHeight / 2,
+            stairStartZ - (stairCount - 1 - i) * stairDepth
+        );
+    
+        stair.castShadow = true;
+        stair.receiveShadow = true;
+        stair.userData.isBlock = true;
+    
+        stairsGroup.add(stair);
+    }
+    return stageGroup;
+}
+
+function createSeatRow(rowIndex, radius, seatCount, rowHeight) {
+    const rowGroup = new THREE.Group();
+    const seatMaterial = new THREE.MeshStandardMaterial({ color: stoneColor, roughness: 0.9, metalness: 0.05 });
+
+    for (let i = 0; i < seatCount; i++) {
+        const angle = Math.PI * (i / (seatCount - 1)); // 180 degree arc
+        const x = radius * Math.cos(angle);
+        const z = radius * Math.sin(angle);
+
+        // Tiered seating
+        const y = rowIndex * rowHeight;
+
+        // Base for the seat row
+        const baseRadius = radius + 0.75;
+        const baseShape = new THREE.Shape();
+        const startAngle = angle - (Math.PI / seatCount) / 2;
+        const endAngle = angle + (Math.PI / seatCount) / 2;
+        baseShape.absarc(0, 0, baseRadius-1.5, startAngle, endAngle, false);
+        baseShape.absarc(0, 0, baseRadius, endAngle, startAngle, true);
+        baseShape.closePath();
+        
+        const extrudeSettings = {
+            steps: 1,
+            depth: rowHeight,
+            bevelEnabled: false,
+        };
+        const geometry = new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
+        const baseMesh = new THREE.Mesh(geometry, seatMaterial);
+        baseMesh.rotation.x = -Math.PI / 2;
+        baseMesh.position.y = y;
+        baseMesh.castShadow = true;
+        baseMesh.receiveShadow = true;
+        baseMesh.userData.isBlock = true;
+
+        rowGroup.add(baseMesh);
+    }
+    
+    return rowGroup;
+}
+
+function createBackdropWall(position, videoSrc, listener) {
+    const wallGroup = new THREE.Group();
+    /* @tweakable Height of the backdrop wall */
+    const wallHeight = 15;
+    /* @tweakable Width of the backdrop wall */
+    const backdropWidth = 40;
+    const wallThickness = 0.5;
+
+    // Right side (YouTube video or static color if disabled)
+    if (enableVideoBackdrop && videoSrc) {
+        const video = document.createElement('video');
+        video.src = videoSrc;
+        video.crossOrigin = 'anonymous'; // Important for textures
+        video.loop = true;
+        video.playsInline = true;
+        
+        if (listener) {
+            video.muted = true; // Mute element so positional audio can control it.
+            const sound = new THREE.PositionalAudio(listener);
+            sound.setMediaElementSource(video);
+            /* @tweakable The reference distance for positional audio rolloff. */
+            sound.setRefDistance(20);
+            /* @tweakable The rolloff factor for positional audio. */
+            sound.setRolloffFactor(1);
+            /* @tweakable The volume of the video on the amphitheater screen. */
+            sound.setVolume(0.5);
+            wallGroup.add(sound);
+        } else {
+            video.muted = true; // Mute if no listener, to prevent global sound
         }
+        
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.warn("Video autoplay was prevented. User interaction needed to start video.", error);
+                document.body.addEventListener('click', () => { if (video.paused) video.play(); }, { once: true });
+            });
+        }
+        
+        const texture = new THREE.VideoTexture(video);
+        const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.FrontSide });
+        const geometry = new THREE.PlaneGeometry(backdropWidth, wallHeight);
+        const videoMesh = new THREE.Mesh(geometry, material);
+        videoMesh.position.set(0, 0, wallThickness / 2 + 0.01); // Place in front of the wall
+        videoMesh.rotation.y = Math.PI; // Face the audience
+        wallGroup.add(videoMesh);
+    }
+    
+    // Add a solid backing wall. This will be visible if the video fails to load or is disabled.
+    const wallMaterial = new THREE.MeshStandardMaterial({
+        color: 0x1a1a1a, // A dark color for the wall itself
+        roughness: 0.7,
+        metalness: 0.2,
     });
+    const wallGeometry = new THREE.BoxGeometry(backdropWidth, wallHeight, wallThickness);
+    const backingWall = new THREE.Mesh(wallGeometry, wallMaterial);
+    backingWall.position.set(0, 0, 0);
+    backingWall.castShadow = true;
+    backingWall.receiveShadow = true;
+    wallGroup.add(backingWall);
 
-    function createEntrancePillars(radius, baseY) {
-        /* @tweakable The color of the entrance pillars. */
-        const pillarColor = 0x999999;
-        /* @tweakable The height of the entrance pillars. */
-        const pillarHeight = 10;
-        /* @tweakable The radius of the entrance pillars. */
-        const pillarRadius = 1;
-        /* @tweakable The spacing between the two entrance pillars. */
-        const pillarSpacing = 15;
+    wallGroup.position.copy(position);
+    return { wall: wallGroup };
+}
 
-        const pillarMat = new THREE.MeshStandardMaterial({ color: pillarColor, roughness: 0.6, side: THREE.DoubleSide });
-        const pillarGeo = new THREE.CylinderGeometry(pillarRadius, pillarRadius, pillarHeight, 16);
-        pillarGeo.translate(0, pillarHeight / 2, 0);
+export function createAmphitheatre(scene, getHeight, listener) {
+    /* @tweakable Position of the amphitheater. */
+    const amphitheatrePosition = new THREE.Vector3(49.5, 0, 16.5);
+    const baseHeight = getHeight(amphitheatrePosition.x, amphitheatrePosition.z);
+    amphitheatrePosition.y = baseHeight;
 
-        const pillarLeft = new THREE.Mesh(pillarGeo, pillarMat);
-        pillarLeft.position.set(-pillarSpacing / 2, baseY, radius - 2);
+    const group = new THREE.Group();
+    group.name = 'amphitheatre';
+    group.position.copy(amphitheatrePosition);
+    scene.add(group);
 
-        const pillarRight = new THREE.Mesh(pillarGeo, pillarMat);
-        pillarRight.position.set(pillarSpacing / 2, baseY, radius - 2);
+    /* @tweakable Whether the amphitheater ground plane is collidable. */
+    const isGroundCollidable = true;
 
-        amphitheatreGroup.add(pillarLeft, pillarRight);
-    }
-
-    function createStage(radius, baseY) {
-        /* @tweakable The color of the stage. */
-        const stageColor = 0x333333;
-        /* @tweakable The height of the stage. A taller stage might require steps. */
-        const stageHeight = 1.0;
-        const stageGeo = new THREE.CylinderGeometry(radius, radius, stageHeight, 64);
-        const stageMat = new THREE.MeshStandardMaterial({ color: stageColor, side: THREE.DoubleSide });
-        const stage = new THREE.Mesh(stageGeo, stageMat);
-        stage.position.set(0, baseY + stageHeight / 2, 0);
-        
-        /* @tweakable If true, players can jump through the stage from below. If false, it's a solid object. */
-        const isStageAPlatform = false;
-        stage.userData.isPlatform = isStageAPlatform;
-        stage.userData.isBarrier = !isStageAPlatform;
-
-        amphitheatreGroup.add(stage);
-
-        /* @tweakable The color of the stage's backdrop. */
-        const backdropColor = 0x222222;
-        /* @tweakable The height of the stage's backdrop. */
-        const backdropHeight = 8;
-        /* @tweakable The thickness of the stage backdrop. Must be > 0 for collision. */
-        const backdropThickness = 0.1;
-        const backdrop = new THREE.BoxGeometry(radius * 2, backdropHeight, backdropThickness);
-        const backMat = new THREE.MeshStandardMaterial({ color: backdropColor, side: THREE.DoubleSide });
-        const screen = new THREE.Mesh(backdrop, backMat);
-        screen.position.set(0, baseY + backdropHeight / 2, -radius - 0.5);
-        amphitheatreGroup.add(screen);
-
-        /* @tweakable The color of the arch over the stage. */
-        const archColor = 0x888888;
-        const archPath = new THREE.CatmullRomCurve3([
-            new THREE.Vector3(-radius * 1.1, 0, 0),
-            new THREE.Vector3(-radius * 0.5, backdropHeight * 1.2, 0),
-            new THREE.Vector3(radius * 0.5, backdropHeight * 1.2, 0),
-            new THREE.Vector3(radius * 1.1, 0, 0)
-        ]);
-
-        const archGeo = new THREE.TubeGeometry(archPath, 20, 0.5, 8, false);
-        const archMat = new THREE.MeshStandardMaterial({ color: archColor, side: THREE.DoubleSide });
-        const arch = new THREE.Mesh(archGeo, archMat);
-        arch.position.set(0, baseY, -radius - 1);
-        /* @tweakable Set to false to disable collision for the decorative stage arch. */
-        arch.userData.isBarrier = false;
-        amphitheatreGroup.add(arch);
-
-        createMicrophoneStand(baseY + stageHeight);
-    }
-
-    function createSeat(x, y, z, rotationY) {
-        /* @tweakable The color of the seats. */
-        const seatColor = 0xaaaaaa;
-        const seatMat = new THREE.MeshStandardMaterial({ color: seatColor, roughness: 0.7, side: THREE.DoubleSide });
-        const seatGroup = new THREE.Group();
-
-        /* @tweakable The dimensions of the seat base. */
-        const seatBaseSize = { width: 1.2, height: 0.1, depth: 0.5 };
-        const baseGeo = new THREE.BoxGeometry(seatBaseSize.width, seatBaseSize.height, seatBaseSize.depth);
-        const base = new THREE.Mesh(baseGeo, seatMat);
-        base.position.y = seatBaseSize.height / 2;
-        seatGroup.add(base);
-
-        /* @tweakable The dimensions of the seat backrest. */
-        const seatBackSize = { width: 1.2, height: 0.6, depth: 0.1 };
-        const backGeo = new THREE.BoxGeometry(seatBackSize.width, seatBackSize.height, seatBackSize.depth);
-        const back = new THREE.Mesh(backGeo, seatMat);
-        back.position.y = seatBaseSize.height + (seatBackSize.height / 2);
-        back.position.z = -seatBaseSize.depth / 2 + seatBackSize.depth / 2;
-        seatGroup.add(back);
-
-        seatGroup.position.set(x, y, z);
-        seatGroup.rotation.y = rotationY;
-
-        amphitheatreGroup.add(seatGroup);
-        return seatGroup;
-    }
-
-    function createAllSeats(rowCount, seatsPerRow, rowSpacing, baseY) {
-        /* @tweakable The number of rows of seats. */
-        const seatRowCount = rowCount;
-        /* @tweakable The number of seats per row. */
-        const numSeatsPerRow = seatsPerRow;
-        /* @tweakable The spacing between rows. */
-        const seatRowSpacing = rowSpacing;
-        /* @tweakable The starting radius for the first row of seats. */
-        const startRadius = 12;
-        /* @tweakable The height increase per row. */
-        const rowHeightStep = 0.6;
-        /* @tweakable The arc of the seating area in degrees. 180 is a semi-circle. */
-        const seatingArcDegrees = 180;
-        /* @tweakable The color of the seating area floor. */
-        const floorColor = 0x6b6b6b;
-        /* @tweakable The thickness of the floor under each row of seats. */
-        const floorThickness = 0.1;
-
-        const floorMat = new THREE.MeshStandardMaterial({ color: floorColor, roughness: 0.85, side: THREE.DoubleSide });
-
-        for (let row = 0; row < seatRowCount; row++) {
-            const radius = startRadius + row * seatRowSpacing;
-            const y = baseY + row * rowHeightStep;
-            const arc = THREE.MathUtils.degToRad(seatingArcDegrees);
-            
-            // Add flooring for the row
-            const floorInnerRadius = radius - seatRowSpacing / 2;
-            const floorOuterRadius = radius + seatRowSpacing / 2;
-            const floorGeo = new THREE.RingGeometry(floorInnerRadius, floorOuterRadius, 64, 1, -arc / 2, arc);
-            const floorMesh = new THREE.Mesh(floorGeo, floorMat);
-            floorMesh.rotation.x = -Math.PI / 2;
-            floorMesh.position.y = y - floorThickness / 2;
-            amphitheatreGroup.add(floorMesh);
-
-            for (let i = 0; i < numSeatsPerRow; i++) {
-                const theta = (i / (numSeatsPerRow - 1)) * arc - arc / 2;
-                const x = radius * Math.sin(theta);
-                const z = radius * Math.cos(theta);
-                createSeat(x, y, z, -theta);
-            }
+    // Ground plane (removed as per user request)
+    /* @tweakable Set to true to re-enable the flat ground plane for the amphitheater. */
+    const enableAmphitheatreGroundPlane = false;
+    if (enableAmphitheatreGroundPlane) {
+        const groundSize = 120;
+        const groundGeometry = new THREE.CircleGeometry(groundSize / 2, 64);
+        const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.9 });
+        const groundPlane = new THREE.Mesh(groundGeometry, groundMaterial);
+        groundPlane.rotation.x = -Math.PI / 2;
+        groundPlane.receiveShadow = true;
+        if (isGroundCollidable) {
+            groundPlane.userData.isBlock = true;
         }
+        group.add(groundPlane);
     }
 
-    function createMicrophoneStand(stageTopY) {
-        const standGroup = new THREE.Group();
+    // Stage
+    /* @tweakable Dimensions of the stage platform. */
+    const stageDimensions = { width: 20, height: 1.5, depth: 15 };
+    const stage = createStage(stageDimensions);
+    stage.position.z = 10;
+    group.add(stage);
 
-        /* @tweakable The position of the microphone stand on the stage. */
-        const standPosition = new THREE.Vector3(0, stageTopY, 5);
-        standGroup.position.copy(standPosition);
+    // Seating
+    /* @tweakable Number of seating rows. */
+    const numRows = 12;
+    /* @tweakable Base radius for the first row of seats. */
+    const startRadius = 25;
+    /* @tweakable Distance between each row of seats. */
+    const rowSpacing = 3.5;
+     /* @tweakable Height difference between each row. */
+    const rowHeightStep = 0.8;
 
-        // Base
-        /* @tweakable The color of the microphone stand. */
-        const standColor = 0x222222;
-        const standMaterial = new THREE.MeshStandardMaterial({ color: standColor, roughness: 0.4, metalness: 0.8 });
-
-        const baseGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.05, 16);
-        const base = new THREE.Mesh(baseGeo, standMaterial);
-        base.position.y = 0.025;
-        standGroup.add(base);
-
-        // Stand pole
-        const poleHeight = 1.2;
-        const poleGeo = new THREE.CylinderGeometry(0.03, 0.03, poleHeight, 8);
-        const pole = new THREE.Mesh(poleGeo, standMaterial);
-        pole.position.y = poleHeight / 2;
-        standGroup.add(pole);
-
-        // Microphone
-        const micGroup = new THREE.Group();
-        micGroup.position.y = poleHeight;
-
-        /* @tweakable The color of the microphone head. */
-        const micHeadColor = 0x555555;
-        const micHeadMaterial = new THREE.MeshStandardMaterial({ color: micHeadColor, roughness: 0.3, metalness: 0.9 });
-        const micHeadGeo = new THREE.SphereGeometry(0.08, 16, 16);
-        const micHead = new THREE.Mesh(micHeadGeo, micHeadMaterial);
-        micGroup.add(micHead);
-
-        /* @tweakable The color of the microphone body. */
-        const micBodyColor = 0x333333;
-        const micBodyMaterial = new THREE.MeshStandardMaterial({ color: micBodyColor, roughness: 0.5, metalness: 0.7 });
-        const micBodyGeo = new THREE.CylinderGeometry(0.05, 0.05, 0.15, 8);
-        const micBody = new THREE.Mesh(micBodyGeo, micBodyMaterial);
-        micBody.position.y = -0.1;
-        micGroup.add(micBody);
-
-        standGroup.add(micGroup);
-        
-        amphitheatreGroup.add(standGroup);
+    for (let i = 0; i < numRows; i++) {
+        const radius = startRadius + i * rowSpacing;
+        const seatCount = Math.floor(radius * 0.8);
+        const seatRow = createSeatRow(i, radius, seatCount, rowHeightStep);
+        group.add(seatRow);
     }
 
-    return amphitheatreGroup;
+    // Backdrop
+    /* @tweakable The URL for the video to be displayed on the amphitheater screen. Must be a direct link to a video file (e.g., .mp4). */
+    const videoSrc = 'https://cdn.pixabay.com/video/2023/07/25/174411-849537965_large.mp4';
+    
+    /* @tweakable The position of the backdrop behind the stage. */
+    const backdropZOffset = 30;
+    const wallHeight = 15; // from createBackdropWall
+    const backdropPosition = new THREE.Vector3(0, stageDimensions.height + wallHeight/2, backdropZOffset);
+    const backdropData = createBackdropWall(backdropPosition, videoSrc, listener);
+    group.add(backdropData.wall);
+
+    // Lighting
+    const spotLight1 = new THREE.SpotLight(0xffffff, 200);
+    spotLight1.position.set(-20, 30, 40);
+    spotLight1.target = stage;
+    spotLight1.angle = Math.PI / 8;
+    spotLight1.penumbra = 0.3;
+    spotLight1.castShadow = true;
+    group.add(spotLight1);
+
+    const spotLight2 = new THREE.SpotLight(0xffffff, 200);
+    spotLight2.position.set(20, 30, 40);
+    spotLight2.target = stage;
+    spotLight2.angle = Math.PI / 8;
+    spotLight2.penumbra = 0.3;
+    spotLight2.castShadow = true;
+    group.add(spotLight2);
+
+    return group;
 }

@@ -22,11 +22,13 @@
   color: white;
   padding: 20px;
   border-radius: 10px;
+  /* @tweakable The z-index for the character creator modal. */
   z-index: 2000;
   display: none;
   width: 90%;
   max-width: 700px;
   box-shadow: 0 0 20px var(--black-50);
+  pointer-events: auto;
 }
 
 #character-creator-modal h2 {

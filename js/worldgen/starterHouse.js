@@ -70,7 +70,7 @@ const HouseBlocks = (() => {
 
 export function createStarterHouse(scene, getHeight) {
   /* @tweakable The position of the starter house. You may need to reload if you move it far. */
-  const housePosition = new THREE.Vector3(68.5, 0, -10.5);
+  const housePosition = new THREE.Vector3(-0.5, 0, 40.5);
   const houseY = getHeight(housePosition.x, housePosition.z);
   housePosition.y = houseY;
 

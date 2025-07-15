@@ -4,14 +4,14 @@ export class CharacterCreatorUI {
     }
 
     create() {
-        const gameContainer = document.getElementById('game-container');
+        const uiContainer = document.getElementById('ui-container');
 
         const characterButton = document.createElement('div');
         characterButton.id = 'character-creator-button';
         characterButton.classList.add('circle-button');
         characterButton.setAttribute('data-tooltip', 'Character Creator');
         characterButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5a5.5 5.5 0 015.5 5.5c0 1.536-.624 2.926-1.64 3.96a7.51 7.51 0 013.64 6.04H4.5a7.51 7.51 0 013.64-6.04A5.488 5.488 0 016.5 8a5.5 5.5 0 015.5-5.5z"/></svg>`;
-        gameContainer.appendChild(characterButton);
+        uiContainer.appendChild(characterButton);
 
         const characterModal = document.createElement('div');
         characterModal.id = 'character-creator-modal';
@@ -42,7 +42,7 @@ export class CharacterCreatorUI {
             <h3>Community Characters</h3>
             <div class="character-gallery" id="character-gallery"></div>
         `;
-        gameContainer.appendChild(characterModal);
+        uiContainer.appendChild(characterModal);
 
         characterButton.addEventListener('click', () => this.characterCreator.open());
         document.getElementById('generate-character-button').addEventListener('click', () => this.characterCreator.generateCharacter());

@@ -12,7 +12,7 @@ export class BuildUI {
     }
 
     createBuildUI() {
-        const gameContainer = document.getElementById('game-container');
+        const uiContainer = document.getElementById('ui-container');
         
         // Create build tool UI
         const buildButton = document.createElement('div');
@@ -22,13 +22,13 @@ export class BuildUI {
         /* @tweakable The size of the build mode hammer icon. */
         const buildIconSize = "28px";
         buildButton.innerHTML = `<img src="hammer_icon.png" alt="Build" style="width: ${buildIconSize}; height: ${buildIconSize};">`;
-        gameContainer.appendChild(buildButton);
+        uiContainer.appendChild(buildButton);
         
         const uselessButton = document.createElement('div');
         uselessButton.id = 'useless-button';
         uselessButton.innerText = 'USELESS';
         uselessButton.style.display = 'none';
-        gameContainer.appendChild(uselessButton);
+        uiContainer.appendChild(uselessButton);
         
         const buildControls = document.createElement('div');
         buildControls.id = 'build-controls';
@@ -44,7 +44,7 @@ export class BuildUI {
             <button id="exit-build-button" data-tooltip="Exit Build Mode">Exit Build Mode</button>
         `;
         buildControls.style.display = 'none';
-        gameContainer.appendChild(buildControls);
+        uiContainer.appendChild(buildControls);
 
         buildButton.addEventListener('click', () => {
             const isBuildEnabled = this.buildTool.toggleBuildMode();
@@ -122,11 +122,18 @@ export class BuildUI {
             alert("This button does absolutely nothing... but you found it!");
         });
 
+        // The height indicator needs to stay in game-container to be behind modals
+        if (!document.getElementById('height-indicator')) {
+             const heightIndicator = document.createElement('div');
+             heightIndicator.id = 'height-indicator';
+             document.getElementById('game-container').appendChild(heightIndicator);
+        }
+
         this.createAIBuildUI();
     }
 
     createAIBuildUI() {
-        const gameContainer = document.getElementById('game-container');
+        const uiContainer = document.getElementById('ui-container');
         const aiBuildModal = document.createElement('div');
         aiBuildModal.id = 'ai-build-modal';
         aiBuildModal.innerHTML = `
@@ -143,7 +150,7 @@ export class BuildUI {
             <div class="ai-example">A cozy cottage with a chimney and windows</div>
             </div>
         `;
-        gameContainer.appendChild(aiBuildModal);
+        uiContainer.appendChild(aiBuildModal);
 
         document.getElementById('ai-build-button').addEventListener('click', () => {
             document.getElementById('ai-build-modal').style.display = 'block';
@@ -168,5 +175,13 @@ export class BuildUI {
                 document.getElementById('ai-build-prompt').value = example.textContent;
             });
         });
+
+        // AI indicator should also be in UI container
+        let indicator = document.getElementById('ai-building-indicator');
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.id = 'ai-building-indicator';
+            uiContainer.appendChild(indicator);
+        }
     }
 }

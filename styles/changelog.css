@@ -7,6 +7,7 @@
   color: white;
   padding: 20px;
   border-radius: 10px;
+  /* @tweakable The z-index for the changelog modal. */
   z-index: 2100;
   width: 90%;
   max-width: 600px;
@@ -14,6 +15,7 @@
   overflow-y: auto;
   display: none;
   box-shadow: 0 0 20px var(--black-50);
+  pointer-events: auto;
 }
 
 #close-changelog {

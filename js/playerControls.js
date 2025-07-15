@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { SPEED, GRAVITY, JUMP_FORCE, MOBILE_SPEED_MULTIPLIER, FORCE_MOBILE_MODE, RUN_SPEED_MULTIPLIER } from "./controls/constants.js";
 import { InputManager } from "./controls/InputManager.js";
+import { CollisionManager } from "./collisionManager.js";
 
 /* @tweakable Speed of camera rotation with the joystick on mobile. */
 const mobileCameraRotateSpeed = 0.05;
@@ -9,12 +10,10 @@ const mobileCameraRotateSpeed = 0.05;
 const mobileMinZoom = 2;
 /* @tweakable Maximum camera zoom distance on mobile */
 const mobileMaxZoom = 10;
-/* @tweakable The radius around the player to check for collisions. Lower values can improve performance. */
-const COLLISION_CHECK_RADIUS = 10;
-/* @tweakable Additional padding around NPCs for collision detection. */
-const NPC_COLLISION_PADDING = 0.2;
-/* @tweakable Maximum vertical distance to snap the player up onto a platform. */
-const STAND_ON_TOP_TOLERANCE = 0.2;
+/* @tweakable The radius of the player's collision shape. */
+const PLAYER_COLLISION_RADIUS = 0.3;
+/* @tweakable The height of the player's collision shape. */
+const PLAYER_COLLISION_HEIGHT = 1.8;
 
 export class PlayerControls {
   constructor(scene, room, options = {}) {
@@ -45,6 +44,7 @@ export class PlayerControls {
 
     // Input manager
     this.inputManager = new InputManager(this.isMobile, this.isMobile ? document.getElementById('right-side-touch-area') : this.domElement);
+    this.collisionManager = new CollisionManager(scene);
 
     // Initial player position
     const initialPos = options.initialPosition || {};
@@ -100,6 +100,27 @@ export class PlayerControls {
         this.playerModel.position.set(this.playerX, this.playerY, this.playerZ);
     }
     this.lastPosition.copy(this.playerModel.position);
+  }
+
+  getGroundHeight(x, z) {
+    if (!this.terrain) return 0;
+
+    const raycaster = new THREE.Raycaster();
+    /* @tweakable The starting height of the raycast used to detect ground collision. Should be higher than the highest point in the world. */
+    const rayOriginHeight = 50;
+    const rayOrigin = new THREE.Vector3(x, rayOriginHeight, z);
+    const rayDirection = new THREE.Vector3(0, -1, 0);
+    raycaster.set(rayOrigin, rayDirection);
+
+    // Only check for intersection with the terrain object
+    const intersects = raycaster.intersectObject(this.terrain);
+
+    if (intersects.length > 0) {
+      return intersects[0].point.y; // Return the precise intersection point's y-coordinate
+    }
+
+    // Fallback to the noise function if raycast fails for some reason
+    return this.terrain.userData.getHeight(x, z);
   }
 
   initializeControls() {
@@ -171,7 +192,7 @@ export class PlayerControls {
     const z = this.playerModel.position.z;
     
     const moveDirection = this.inputManager.getMovementDirection();
-    let isRunning = this.inputManager.isRunning();
+    const isRunning = this.inputManager.isRunning();
     
     const cameraDirection = new THREE.Vector3();
     this.camera.getWorldDirection(cameraDirection);
@@ -211,79 +232,50 @@ export class PlayerControls {
     let newY = y + this.velocity.y;
     let newZ = z + movement.z;
     
-    const blockMeshes = [];
-    const tempVec = new THREE.Vector3();
-    this.scene.traverse((object) => {
-        if (object.userData.isBlock || (object.userData.isBarrier && object.type !== "Group") || object.userData.isNpc) {
-             object.getWorldPosition(tempVec);
-             if(tempVec.distanceTo(this.playerModel.position) < COLLISION_CHECK_RADIUS) {
-                 blockMeshes.push(object);
-             }
-        }
-    });
+    // Use the CollisionManager to check for collisions
+    const { finalPosition, finalVelocity, canJump, standingOnBlock } = this.collisionManager.checkCollisions(
+        this.playerModel.position,
+        new THREE.Vector3(newX, newY, newZ),
+        this.velocity,
+        PLAYER_COLLISION_RADIUS,
+        PLAYER_COLLISION_HEIGHT
+    );
     
-    const playerRadius = 0.3;
-    const playerHeight = 1.8;
+    newX = finalPosition.x;
+    newY = finalPosition.y;
+    newZ = finalPosition.z;
+    this.velocity.copy(finalVelocity);
     
-    let standingOnBlock = false;
-    blockMeshes.forEach(block => {
-      if (block.type === "Group" && block.userData.isTree) {
-        checkCollision.call(this, block, 1.0, 2.0, 1.0); 
-      } else {
-        checkCollision.call(this, block);
-      }
-    });
-    
-    function checkCollision(block, overrideWidth, overrideHeight, overrideDepth) {
-      const boundingBox = new THREE.Box3().setFromObject(block);
-      const blockCenter = new THREE.Vector3();
-      boundingBox.getCenter(blockCenter);
-      
-      const blockSize = new THREE.Vector3();
-      boundingBox.getSize(blockSize);
-      
-      const blockWidth = overrideWidth || blockSize.x;
-      const blockHeight = overrideHeight || blockSize.y;
-      const blockDepth = overrideDepth || blockSize.z;
-      
-      const collisionPadding = block.userData.isNpc ? NPC_COLLISION_PADDING : 0;
-      const effectivePlayerRadius = playerRadius + collisionPadding;
-
-      /* @tweakable Adjust the vertical position where the player stands on top of an object. A higher value makes the player stand higher. */
-      const blockTop = boundingBox.max.y;
-
-      if (
-        !block.userData.isNpc && // Prevent standing on NPCs
-        this.velocity.y <= 0 &&
-        y >= blockTop - STAND_ON_TOP_TOLERANCE &&
-        newY <= (blockTop + STAND_ON_TOP_TOLERANCE) &&
-        Math.abs(newX - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
-        Math.abs(newZ - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius)
-      ) {
-        standingOnBlock = true;
-        newY = blockTop;
-        this.velocity.y = 0;
+    if (canJump) {
         this.canJump = true;
-      } else if (
-        !block.userData.isPlatform && // Allow passing through platforms from below
-        Math.abs(newX - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
-        Math.abs(newZ - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius) &&
-        newY < blockCenter.y + blockHeight / 2 &&
-        newY + playerHeight > blockCenter.y - blockHeight / 2
-      ) {
-        if (Math.abs(movement.x) > 0) newX = x;
-        if (Math.abs(movement.z) > 0) newZ = z;
-      }
     }
     
-    const terrainHeight = this.terrain ? this.terrain.userData.getHeight(newX, newZ) : 0;
-    
+    // Ground collision logic moved here to always check against terrain after object collision
+    const terrainHeight = this.getGroundHeight(newX, newZ);
+    /* @tweakable The vertical offset of the player model from the ground to prevent clipping. */
+    const groundOffset = 0;
+    const groundLevel = terrainHeight + groundOffset;
+
+    // If standing on a block, the newY is already set by the collision manager.
+    // We just need to make sure we don't fall through it to the terrain below.
     if (standingOnBlock) {
-      // Don't apply terrain height if standing on a block
-    } else if (newY <= terrainHeight) {
-      newY = terrainHeight;
-      this.velocity.y = 0;
-      this.canJump = true;
+        if (newY < groundLevel) {
+            // This case is unlikely but handles situations where a block might be slightly below terrain
+            newY = groundLevel;
+            this.velocity.y = 0;
+            this.canJump = true;
+        }
+    } else {
+        // Not standing on a block, so check against terrain.
+        // Apply gravity.
+        this.velocity.y -= GRAVITY;
+        newY = this.playerModel.position.y + this.velocity.y;
+
+        if (newY < groundLevel) {
+            newY = groundLevel;
+            this.velocity.y = 0;
+            this.canJump = true;
+        }
     }
     
     const isMovingNow = movement.length() > 0.001;

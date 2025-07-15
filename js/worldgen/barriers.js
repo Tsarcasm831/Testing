@@ -6,10 +6,23 @@ import {
   CLUSTER_SIZE,
   BARRIERS_PER_ZONE,
   PILLARS_PER_ZONE,
-  SPAWN_SAFE_RADIUS
+  SPAWN_SAFE_RADIUS,
+  AMPHITHEATRE_CLEARING_RADIUS
 } from './constants.js';
+import { createAmphitheatre } from './amphitheatre.js';
+
+let amphitheatrePosition = null;
 
 export function createBarriers(scene, getHeight) {
+  // We get the position from the created amphitheater instance to avoid circular dependency issues
+  // and ensure we're using the same position data.
+  if (!amphitheatrePosition) {
+    const amp = scene.children.find(c => c.name === 'amphitheatre');
+    if (amp) {
+      amphitheatrePosition = amp.position;
+    }
+  }
+
   const barrierSeed = 12345;
   let rng = new MathRandom(barrierSeed);
   const totalZones = ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE * ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE;
@@ -31,8 +44,18 @@ export function createBarriers(scene, getHeight) {
 
     const angle = rng.random() * Math.PI * 2;
     const distance = SPAWN_SAFE_RADIUS + rng.random() * (worldRadius - SPAWN_SAFE_RADIUS);
-    wall.position.x = Math.cos(angle) * distance;
-    wall.position.z = Math.sin(angle) * distance;
+    const x = Math.cos(angle) * distance;
+    const z = Math.sin(angle) * distance;
+
+    if (amphitheatrePosition) {
+      const distToAmphitheatre = Math.sqrt(Math.pow(x - amphitheatrePosition.x, 2) + Math.pow(z - amphitheatrePosition.z, 2));
+      if (distToAmphitheatre < AMPHITHEATRE_CLEARING_RADIUS) {
+          continue;
+      }
+    }
+    
+    wall.position.x = x;
+    wall.position.z = z;
     const terrainHeight = getHeight ? getHeight(wall.position.x, wall.position.z) : 0;
     wall.position.y = terrainHeight + height / 2;
 
@@ -49,6 +72,13 @@ export function createBarriers(scene, getHeight) {
     const distance = SPAWN_SAFE_RADIUS + rng.random() * (worldRadius - SPAWN_SAFE_RADIUS);
     const x = Math.cos(angle) * distance;
     const z = Math.sin(angle) * distance;
+
+    if (amphitheatrePosition) {
+      const distToAmphitheatre = Math.sqrt(Math.pow(x - amphitheatrePosition.x, 2) + Math.pow(z - amphitheatrePosition.z, 2));
+      if (distToAmphitheatre < AMPHITHEATRE_CLEARING_RADIUS) {
+          continue;
+      }
+    }
 
     const pillarHeight = 2 + rng.random() * 15;
     const pillarWidth = 0.8 + rng.random() * 0.6;

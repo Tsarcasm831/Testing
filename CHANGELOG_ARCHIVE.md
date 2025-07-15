@@ -1,10 +1,5 @@
 # Changelog Archive
 
-## 2025-07-14
-- 1747 Ensure joystick containers display on mobile initialization
-- 1758 Correct A/D key mapping and improve mobile joystick handling
-- 1507 Break up worldGeneration.js into modular files
-
 ## 2025-06-26
 - **7d0177a** Merge: extend MapUI to handle scene objects
 - **d335b69** Use texture sampling for map terrain
@@ -40,6 +35,3 @@
 - 1623 Fix stylesheet path in index.html
 - 1742 Fix idle animation orientation for animated player model
 - 1815 Hide mobile/desktop toggle and rely on auto-detection
-
-## 2025-06-28
-- 0100 Rig up running animation on Shift key press for animated player model.

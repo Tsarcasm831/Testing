@@ -6,12 +6,14 @@ export class InventoryUI {
     }
 
     create() {
+        const uiContainer = document.getElementById('ui-container');
+
         const inventoryButton = document.createElement('div');
         inventoryButton.id = 'inventory-button';
         inventoryButton.classList.add('circle-button');
         inventoryButton.setAttribute('data-tooltip', 'Inventory (I)');
         inventoryButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.88 4.02A1.5 1.5 0 0017.5 3h-11a1.5 1.5 0 00-1.38 1.02L2.5 12.19l-1 5A1.5 1.5 0 003 19h18a1.5 1.5 0 001.5-1.81l-1-5-2.62-8.17zM12 11.5a2.5 2.5 0 01-2.5-2.5A2.5 2.5 0 0112 6.5a2.5 2.5 0 012.5 2.5A2.5 2.5 0 0112 11.5z"/></svg>`;
-        document.getElementById('game-container').appendChild(inventoryButton);
+        uiContainer.appendChild(inventoryButton);
 
         const inventoryPanel = document.createElement('div');
         inventoryPanel.id = 'inventory-panel';
@@ -20,7 +22,7 @@ export class InventoryUI {
             <div class="inventory-grid"></div>
             <button id="close-inventory-button" data-tooltip="Close Inventory">Close</button>
         `;
-        document.getElementById('game-container').appendChild(inventoryPanel);
+        uiContainer.appendChild(inventoryPanel);
         this.panel = inventoryPanel;
 
         const objectGrid = this.panel.querySelector('.inventory-grid');

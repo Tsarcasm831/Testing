@@ -22,11 +22,11 @@ export class ChatUI {
     }
 
     create() {
-        const gameContainer = document.getElementById('game-container');
+        const uiContainer = document.getElementById('ui-container');
 
         this.chatContainer = document.createElement('div');
         this.chatContainer.id = 'chat-ui-container';
-        gameContainer.appendChild(this.chatContainer);
+        uiContainer.appendChild(this.chatContainer);
 
         this.chatLog = document.createElement('div');
         this.chatLog.id = 'chat-log';
@@ -49,7 +49,7 @@ export class ChatUI {
         this.chatButton.classList.add('circle-button');
         this.chatButton.setAttribute('data-tooltip', 'Toggle Chat');
         this.chatButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4.929 19.071c-1.243-1.243-1.95-2.925-1.95-4.707C2.979 9.58 7.56 5.02 12.368 5.02c4.787 0 9.39 4.54 9.39 9.344 0 4.804-4.583 9.364-9.39 9.364a13.9 13.9 0 01-3.64-.563L4.929 19.07z"/></svg>`;
-        gameContainer.appendChild(this.chatButton);
+        uiContainer.appendChild(this.chatButton);
 
         this.setupEventListeners();
     }

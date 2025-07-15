@@ -67,7 +67,7 @@ export class MapUI {
     }
 
     create() {
-        const gameContainer = document.getElementById('game-container');
+        const uiContainer = document.getElementById('ui-container');
         this.mapContainer = document.createElement('div');
         this.mapContainer.id = 'map-container';
 
@@ -94,13 +94,12 @@ export class MapUI {
         const mapButton = document.createElement('div');
         mapButton.id = 'map-button';
         mapButton.classList.add('circle-button');
-        mapButton.setAttribute('data-tooltip', 'Toggle Map (M)');
         /* @tweakable The size of the map icon. */
         const mapIconSize = "28px";
         mapButton.innerHTML = `<img src="map_icon.png" alt="Map" style="width: ${mapIconSize}; height: ${mapIconSize};">`;
-        gameContainer.appendChild(mapButton);
+        uiContainer.appendChild(mapButton);
 
-        gameContainer.appendChild(this.mapContainer);
+        uiContainer.appendChild(this.mapContainer);
 
         mapButton.addEventListener('click', () => this.toggle());
         this.mapContainer.querySelector('#close-map').addEventListener('click', () => this.toggle());

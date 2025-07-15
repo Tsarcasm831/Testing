@@ -12,6 +12,7 @@ import { InventoryManager } from './inventoryManager.js';
 import { NPCManager } from './npcManager.js';
 import { InteractionManager } from './interaction.js';
 import { AssetReplacementManager } from './assetReplacementManager.js';
+import { CollisionManager } from './collisionManager.js';
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import './npc/NPC.js';
 import './npc/ZoneManager.js';
@@ -26,6 +27,8 @@ const GRID_LABEL_VISIBILITY_DISTANCE = 7;
 const GRID_LABEL_LOD_DISTANCE = 30;
 /* @tweakable The step rate for showing labels at the LOD distance. e.g., a value of 10 shows every 10th label. */
 const GRID_LABEL_LOD_STEP = 10;
+/* @tweakable How frequently to update grid label visibility (in frames). Larger numbers reduce lag but also decrease label responsiveness. */
+const LABEL_UPDATE_INTERVAL = 10;
 
 // Simple seeded random number generator
 class MathRandom {
@@ -66,7 +69,7 @@ async function main() {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // PCFSoftShadowMap for softer shadows
   document.getElementById('game-container').appendChild(renderer.domElement);
-
+  
   // Create player model with default appearance. It will be passed to controls.
   let playerModel = createPlayerModel(THREE, playerName);
   scene.add(playerModel);
@@ -85,9 +88,14 @@ async function main() {
 
   const npcManager = new NPCManager(scene, null, playerControls);
   
+  // Get camera after playerControls is fully initialized
+  const camera = playerControls.getCamera();
+  const listener = new THREE.AudioListener();
+  camera.add(listener);
+
   // Create world, which generates the terrain
   const world = new World(scene, npcManager);
-  const terrain = world.generate();
+  const terrain = world.generate(listener);
   
   // Now that terrain exists, set it on the managers that need it.
   playerControls.terrain = terrain;
@@ -108,9 +116,6 @@ async function main() {
   labelRenderer.domElement.style.pointerEvents = 'none';
   document.getElementById('label-container').appendChild(labelRenderer.domElement);
   
-  // Get camera after playerControls is fully initialized
-  const camera = playerControls.getCamera();
-
   // Add dev button to toggle mobile/desktop mode
   const isMobileModeForced = localStorage.getItem('forceMobileMode') === 'true';
   const devToggleButton = document.createElement('button');
@@ -295,8 +300,11 @@ async function main() {
   });
 
   let labelUpdateCounter = 0;
-  /* @tweakable How frequently to update grid label visibility (in frames). Larger numbers reduce lag. */
-  const labelUpdateInterval = 10;
+  /* @tweakable How frequently to update grid label visibility (in frames). Larger numbers reduce lag but also decrease label responsiveness. */
+  const labelUpdateInterval = LABEL_UPDATE_INTERVAL;
+
+  // Video screen occlusion logic
+  const raycaster = new THREE.Raycaster();
 
   // Animation loop
   function animate() {
@@ -306,7 +314,8 @@ async function main() {
     
     playerControls.update();
     
-    if(mapUI) mapUI.update();
+    // render uiManager related components
+    if(uiManager) uiManager.update();
 
     labelUpdateCounter++;
     if (labelUpdateCounter >= labelUpdateInterval) {
@@ -357,9 +366,6 @@ async function main() {
     const expirationTime = 50 * 60 * 1000; // 50 minutes in milliseconds
     buildTool.checkExpiredObjects(currentTime, expirationTime);
     advancedBuildTool.checkExpiredObjects(currentTime, expirationTime);
-    
-    // render uiManager related components
-    if(uiManager) uiManager.update();
     
     renderer.render(scene, camera);
     labelRenderer.render(scene, camera);

@@ -7,6 +7,7 @@ import { AdModal } from '../ui/adModal.js';
 import { InventoryUI } from '../ui/inventoryUI.js';
 import { MapUI } from '../ui/mapUI.js';
 import { OptionsUI } from '../ui/optionsUI.js';
+import { CompassUI } from '../ui/compassUI.js';
 
 export class UIManager {
     constructor(dependencies) {
@@ -15,6 +16,7 @@ export class UIManager {
         this.mapUI = null;
         this.optionsUI = null;
         this.chatUI = null;
+        this.compassUI = null;
         this.tooltipElement = null;
     }
 
@@ -38,6 +40,9 @@ export class UIManager {
 
         this.mapUI = new MapUI(this.dependencies);
         this.mapUI.create();
+
+        this.compassUI = new CompassUI(this.dependencies);
+        this.compassUI.create();
 
         this.initTooltip();
 
@@ -96,6 +101,9 @@ export class UIManager {
     update() {
         if (this.chatUI) {
             this.chatUI.update();
+        }
+        if (this.compassUI) {
+            this.compassUI.update();
         }
     }
 }

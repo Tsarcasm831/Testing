@@ -304,32 +304,6 @@ export class BuildTool {
     if (this.enabled) {
       this.previewManager.show();
 
-      // Create height slider and indicator
-      if (!document.getElementById('height-slider-container')) {
-        const sliderContainer = document.createElement('div');
-        sliderContainer.id = 'height-slider-container';
-        const initialHeight = this.previewManager.currentHeight;
-        sliderContainer.innerHTML = `
-          <input type="range" id="height-slider" min="0.5" max="10" step="0.5" value="${initialHeight}">
-          <span id="height-value">${initialHeight}</span>
-        `;
-        document.getElementById('game-container').appendChild(sliderContainer);
-
-        // Add event listener to the slider
-        document.getElementById('height-slider').addEventListener('input', (e) => {
-          const newHeight = parseFloat(e.target.value);
-          this.previewManager.setCurrentHeight(newHeight);
-          document.getElementById('height-value').textContent = newHeight;
-        
-          const heightIndicator = document.getElementById('height-indicator');
-          if (heightIndicator) {
-            heightIndicator.textContent = `Height: ${newHeight.toFixed(1)}`;
-          }
-        });
-      } else {
-        document.getElementById('height-slider-container').style.display = 'flex';
-      }
-
       // Create height indicator
       if (!document.getElementById('height-indicator')) {
         const heightIndicator = document.createElement('div');
@@ -346,9 +320,6 @@ export class BuildTool {
       this.previewManager.hide();
       if (document.getElementById('height-indicator')) {
         document.getElementById('height-indicator').style.display = 'none';
-      }
-      if (document.getElementById('height-slider-container')) {
-        document.getElementById('height-slider-container').style.display = 'none';
       }
 
       // Reset lifespan extender mode when exiting build mode

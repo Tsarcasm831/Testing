@@ -5,10 +5,22 @@ import {
   CHUNKS_PER_CLUSTER_SIDE,
   CLUSTER_SIZE,
   TREES_PER_ZONE,
-  SPAWN_SAFE_RADIUS
+  SPAWN_SAFE_RADIUS,
+  AMPHITHEATRE_CLEARING_RADIUS
 } from './constants.js';
 
+let amphitheatrePosition = null;
+
 export function createTrees(scene, getHeight) {
+  // We get the position from the created amphitheater instance to avoid circular dependency issues
+  // and ensure we're using the same position data.
+  if (!amphitheatrePosition) {
+    const amp = scene.children.find(c => c.name === 'amphitheatre');
+    if (amp) {
+      amphitheatrePosition = amp.position;
+    }
+  }
+
   const treeSeed = 54321;
   let rng = new MathRandom(treeSeed);
   const totalZones = ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE * ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE;
@@ -103,8 +115,18 @@ export function createTrees(scene, getHeight) {
 
     const angle = rng.random() * Math.PI * 2;
     const distance = SPAWN_SAFE_RADIUS + rng.random() * (worldRadius - SPAWN_SAFE_RADIUS);
-    tree.position.x = Math.cos(angle) * distance;
-    tree.position.z = Math.sin(angle) * distance;
+    const x = Math.cos(angle) * distance;
+    const z = Math.sin(angle) * distance;
+
+    if (amphitheatrePosition) {
+      const distToAmphitheatre = Math.sqrt(Math.pow(x - amphitheatrePosition.x, 2) + Math.pow(z - amphitheatrePosition.z, 2));
+      if (distToAmphitheatre < AMPHITHEATRE_CLEARING_RADIUS) {
+          continue;
+      }
+    }
+
+    tree.position.x = x;
+    tree.position.z = z;
     tree.position.y = getHeight ? getHeight(tree.position.x, tree.position.z) : 0;
 
     tree.rotation.y = rng.random() * Math.PI * 2;

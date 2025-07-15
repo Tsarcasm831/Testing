@@ -7,6 +7,8 @@ export class AdvancedBuildUI {
     }
 
     create() {
+        const uiContainer = document.getElementById('ui-container');
+
         const advancedBuildControls = document.createElement('div');
         advancedBuildControls.id = 'advanced-build-controls';
         advancedBuildControls.innerHTML = `
@@ -19,7 +21,7 @@ export class AdvancedBuildUI {
           <button id="delete-button" data-tooltip="Delete Object (Del)">Delete</button>
           <button id="exit-advanced-build-button" data-tooltip="Exit Advanced Mode">Exit</button>
         `;
-        document.getElementById('game-container').appendChild(advancedBuildControls);
+        uiContainer.appendChild(advancedBuildControls);
 
         const objectLibrary = document.createElement('div');
         objectLibrary.id = 'object-library';
@@ -27,14 +29,14 @@ export class AdvancedBuildUI {
           <h3>Object Library</h3>
           <div class="object-grid"></div>
         `;
-        document.getElementById('game-container').appendChild(objectLibrary);
+        uiContainer.appendChild(objectLibrary);
 
         const selectionControls = document.createElement('div');
         selectionControls.id = 'selection-controls';
         selectionControls.innerHTML = `
           <div class="selection-info">Object Selected</div>
         `;
-        document.getElementById('game-container').appendChild(selectionControls);
+        uiContainer.appendChild(selectionControls);
 
         const colorPicker = document.createElement('div');
         colorPicker.id = 'color-picker';
@@ -61,7 +63,7 @@ export class AdvancedBuildUI {
           <button id="close-color-picker">Close</button>
         `;
         colorPicker.style.display = 'none';
-        document.getElementById('game-container').appendChild(colorPicker);
+        uiContainer.appendChild(colorPicker);
 
         const objectGrid = document.querySelector('#object-library .object-grid');
         this.advancedBuildTool.objectCreator.objectLibrary.forEach(obj => {
@@ -116,5 +118,19 @@ export class AdvancedBuildUI {
             document.getElementById('build-controls').style.display = 'flex';
             this.buildTool.previewManager.show();
         });
+
+        // Lifespan notification
+        let notification = document.getElementById('lifespan-notification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'lifespan-notification';
+            uiContainer.appendChild(notification);
+        }
+
+         // color picker message
+        const message = document.createElement('div');
+        message.id = 'color-picker-message';
+        message.style.display = 'none';
+        uiContainer.appendChild(message);
     }
 }
