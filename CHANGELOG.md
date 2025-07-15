@@ -4,9 +4,9 @@
 - 1200 Fix shopkeeper not spawning and improve interaction system performance
 - 1848 Add package.json with Node.js 18 requirement
 - 1851 Add climbable seat rows by treating them as stairs for collision
+- 1917 Make seat rows collidable by marking each row group as a block
 
 ## 2025-07-14
-- 1522 Fix HouseBlocks module loading error by merging it into starterHouse.js
 - 1555 Restrict grid labels to show within 7m radius when grid toggled
 - 1623 Label every grid cell and keep labels visible only when the grid is toggled
 - 1640 Enable dual joysticks for mobile look and movement
