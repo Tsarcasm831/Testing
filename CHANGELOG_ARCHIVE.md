@@ -1,4 +1,3 @@
-# Changelog Archive
 
 ## 2025-06-26
 - **7d0177a** Merge: extend MapUI to handle scene objects
@@ -30,6 +29,12 @@
 - 2309 Update remote players to run custom animations each frame
 - 2257 Add animated player replace button and improved options styling
 - 2242 Add options menu with asset downloader and glb analysis scripts
+
+## 2025-07-14
+- 1818 Fix player asset replacement to avoid duplicate player model.
+
+## 2025-06-28
+- 0100 Rig up running animation on Shift key press for animated player model.
 
 ## 2025-06-27
 - 1623 Fix stylesheet path in index.html
