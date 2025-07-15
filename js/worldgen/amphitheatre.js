@@ -96,6 +96,7 @@ function createStage(dimensions) {
         stair.castShadow = true;
         stair.receiveShadow = true;
         stair.userData.isBlock = true;
+        stair.userData.isStair = true;
     
         stairsGroup.add(stair);
     }
@@ -135,6 +136,7 @@ function createSeatRow(rowIndex, radius, seatCount, rowHeight) {
         baseMesh.castShadow = true;
         baseMesh.receiveShadow = true;
         baseMesh.userData.isBlock = true;
+        baseMesh.userData.isStair = true;
 
         rowGroup.add(baseMesh);
     }

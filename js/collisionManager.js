@@ -2,6 +2,8 @@ import * as THREE from 'three';
 
 /* @tweakable The radius around the player to check for collisions. Lower values can improve performance but may cause missed collisions with distant objects. */
 const COLLISION_CHECK_RADIUS = 10;
+/* @tweakable Maximum height the player can step onto without jumping. */
+const STEP_HEIGHT = 1.0;
 /* @tweakable Additional padding around NPCs for collision detection. */
 const NPC_COLLISION_PADDING = 0.2;
 
@@ -102,7 +104,18 @@ export class CollisionManager {
         ) {
             standingOnBlock = true;
             newY = blockTop; // Player's feet height
-        } 
+        } else if (
+            block.userData.isStair &&
+            velocity.y <= 0 &&
+            currentPosition.y >= blockTop - STEP_HEIGHT &&
+            newPosition.y <= blockTop + 0.2 &&
+            Math.abs(newPosition.x - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
+            Math.abs(newPosition.z - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius)
+        ) {
+            // Allow stepping onto stairs and seat rows without jumping
+            standingOnBlock = true;
+            newY = blockTop;
+        }
         // Check for side collision
         else if (
             Math.abs(newPosition.x - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
