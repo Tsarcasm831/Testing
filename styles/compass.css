@@ -118,6 +118,15 @@
     transition: transform 0.1s linear;
 }
 
+.heading-tick-container {
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .heading-tick {
     position: absolute;
     background-color: white;
@@ -138,15 +147,22 @@
 
 .heading-label {
     position: absolute;
-    bottom: 18px;
+    bottom: 18px; /* @tweakable Vertical position of the compass labels. */
     left: 50%;
     transform: translateX(-50%);
-    font-size: 14px;
     font-weight: bold;
 }
 
+.heading-label.direction {
+    font-size: 16px; /* @tweakable Font size for direction labels (N, S, E, W). */
+}
+
+.heading-label.number {
+    font-size: 12px; /* @tweakable Font size for degree number labels. */
+}
+
 /* @tweakable Color of the 'North' indicator label. */
-.heading-label:first-child {
+.heading-label.north {
     color: #ff4444;
 }
 

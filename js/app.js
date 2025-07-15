@@ -49,13 +49,35 @@ async function main() {
   const room = new WebsimSocket();
   await room.initialize();
   
+  // Get current user for special spawn logic
+  const currentUser = await window.websim.getCurrentUser();
+
   // Generate a player name if not available
   const playerInfo = room.peers[room.clientId] || {};
   const playerName = playerInfo.username || `Player${Math.floor(Math.random() * 1000)}`;
   
+  // --- Special Spawn Logic ---
+  /* @tweakable The target username for the special spawn location. */
+  const targetUsername = "lordtsarcasm";
+  /* @tweakable The special spawn location coordinates. */
+  const specialSpawnLocation = { x: 44.1, y: 13.7, z: 21.4 };
+
+  let initialPosition;
+  if (currentUser && currentUser.username === targetUsername) {
+    initialPosition = specialSpawnLocation;
+  } else {
+    // Default random position
+    initialPosition = {
+      x: (Math.random() * 10) - 5,
+      y: 0.70, // Default Y
+      z: (Math.random() * 10) - 5
+    };
+  }
+  
   // Safe initial position values
-  const playerX = (Math.random() * 10) - 5;
-  const playerZ = (Math.random() * 10) - 5;
+  const playerX = initialPosition.x;
+  const playerY = initialPosition.y;
+  const playerZ = initialPosition.z;
 
   // Setup Three.js scene
   const scene = new THREE.Scene();
@@ -79,7 +101,7 @@ async function main() {
     renderer: renderer,
     initialPosition: {
       x: playerX,
-      y: 0.70,
+      y: playerY,
       z: playerZ
     },
     playerModel: playerModel,

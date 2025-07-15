@@ -6,6 +6,8 @@ const COLLISION_CHECK_RADIUS = 10;
 const STEP_HEIGHT = 1.0;
 /* @tweakable Additional padding around NPCs for collision detection. */
 const NPC_COLLISION_PADDING = 0.2;
+/* @tweakable Additional padding for player collision with amphitheater seats. */
+const SEAT_COLLISION_PADDING = 0.2;
 
 export class CollisionManager {
     constructor(scene) {
@@ -69,6 +71,10 @@ export class CollisionManager {
     }
     
     _checkCollisionWithBlock(currentPosition, newPosition, velocity, playerRadius, playerHeight, block) {
+        if (block.userData.isSeatRow) {
+            return this._checkCollisionWithSeatRow(currentPosition, newPosition, velocity, playerRadius, playerHeight, block);
+        }
+
         const boundingBox = new THREE.Box3().setFromObject(block);
         const blockSize = new THREE.Vector3();
         boundingBox.getSize(blockSize);
@@ -120,12 +126,69 @@ export class CollisionManager {
         else if (
             Math.abs(newPosition.x - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
             Math.abs(newPosition.z - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius) &&
-            newPosition.y < blockCenter.y + blockHeight / 2 && // Bottom of player is below top of block
-            newPosition.y + playerHeight > blockCenter.y - blockHeight / 2 // Top of player is above bottom of block
+            newPosition.y < (blockTop) && // Bottom of player is below top of block
+            newPosition.y + playerHeight > (blockCenter.y - blockHeight / 2) // Top of player is above bottom of block
         ) {
             collided = true;
         }
 
+        return { collided, standingOnBlock, newY };
+    }
+
+    _checkCollisionWithSeatRow(currentPosition, newPosition, velocity, playerRadius, playerHeight, block) {
+        // Get world position of the specific seat segment (the 'block')
+        const blockWorldPosition = new THREE.Vector3();
+        block.getWorldPosition(blockWorldPosition);
+
+        const seatData = block.userData.seatRowData;
+        if (!seatData) return { collided: false, standingOnBlock: false, newY: newPosition.y };
+        
+        // Player position relative to the block's center (on the XZ plane)
+        const playerRelativePos = new THREE.Vector2(newPosition.x - blockWorldPosition.x, newPosition.z - blockWorldPosition.z);
+        
+        // This check is flawed because the block is just a segment.
+        // We need a better way to check if the player is "inside" the arc segment.
+        // Let's use a simpler AABB check on the block itself.
+        const boundingBox = new THREE.Box3().setFromObject(block);
+        const effectivePlayerRadius = playerRadius + SEAT_COLLISION_PADDING;
+
+        const blockTop = boundingBox.max.y;
+        
+        let standingOnBlock = false;
+        let newY = newPosition.y;
+        let collided = false;
+
+        // Broad-phase check using bounding box
+        if (boundingBox.intersectsBox(new THREE.Box3().setFromCenterAndSize(
+            newPosition,
+            new THREE.Vector3(effectivePlayerRadius * 2, playerHeight, effectivePlayerRadius * 2)
+        ))) {
+            // Check if player is landing on top of the seat
+            if (
+                velocity.y <= 0 &&
+                currentPosition.y >= blockTop - 0.2 &&
+                newPosition.y <= (blockTop + 0.2)
+            ) {
+                standingOnBlock = true;
+                newY = blockTop;
+            } else if (
+                // Allow stepping up
+                velocity.y <= 0 &&
+                currentPosition.y >= blockTop - STEP_HEIGHT &&
+                newPosition.y <= (blockTop + 0.2)
+            ) {
+                standingOnBlock = true;
+                newY = blockTop;
+            }
+            // Check for side collision
+            else if (
+                newPosition.y < blockTop &&
+                newPosition.y + playerHeight > boundingBox.min.y
+            ) {
+                collided = true;
+            }
+        }
+        
         return { collided, standingOnBlock, newY };
     }
 }

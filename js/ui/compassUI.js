@@ -51,6 +51,7 @@ export class CompassUI {
         const directions = {
             0: 'N', 45: 'NE', 90: 'E', 135: 'SE', 180: 'S', 225: 'SW', 270: 'W', 315: 'NW'
         };
+        const numberDegrees = [0, 30, 60, 120, 150, 210, 240, 300, 330];
 
         const totalWidth = 360 * this.pixelsPerDegree;
         
@@ -59,22 +60,40 @@ export class CompassUI {
             const cycleOffset = cycle * totalWidth;
 
             for (let i = 0; i < 360; i++) {
+                const tickContainer = document.createElement('div');
+                tickContainer.className = 'heading-tick-container';
+                tickContainer.style.left = `${cycleOffset + i * this.pixelsPerDegree}px`;
+                
+                let tick;
+
                 if (directions[i]) {
-                    const majorTick = document.createElement('div');
-                    majorTick.className = 'heading-tick major';
-                    majorTick.style.left = `${cycleOffset + i * this.pixelsPerDegree}px`;
+                    tick = document.createElement('div');
+                    tick.className = 'heading-tick major';
                     
                     const label = document.createElement('span');
-                    label.className = 'heading-label';
+                    label.className = 'heading-label direction';
                     label.textContent = directions[i];
-                    majorTick.appendChild(label);
-    
-                    this.headingBar.appendChild(majorTick);
-                } else if (i % 10 === 0) { // Ticks every 10 degrees
-                    const tick = document.createElement('div');
+                    if (i === 0) {
+                        label.classList.add('north');
+                    }
+                    tickContainer.appendChild(label);
+                } else if (numberDegrees.includes(i)) {
+                    tick = document.createElement('div');
+                    tick.className = 'heading-tick major';
+
+                    const label = document.createElement('span');
+                    label.className = 'heading-label number';
+                    label.textContent = i;
+                    tickContainer.appendChild(label);
+                }
+                else if (i % 10 === 0) { // Ticks every 10 degrees
+                    tick = document.createElement('div');
                     tick.className = 'heading-tick minor';
-                    tick.style.left = `${cycleOffset + i * this.pixelsPerDegree}px`;
-                    this.headingBar.appendChild(tick);
+                }
+
+                if (tick) {
+                    tickContainer.appendChild(tick);
+                    this.headingBar.appendChild(tickContainer);
                 }
             }
         }

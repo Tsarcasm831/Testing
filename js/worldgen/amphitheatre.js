@@ -106,8 +106,7 @@ function createStage(dimensions) {
 function createSeatRow(rowIndex, radius, seatCount, rowHeight) {
     const rowGroup = new THREE.Group();
     // Mark the entire row as collidable so players can't walk through the seats
-    rowGroup.userData.isBlock = true;
-    rowGroup.userData.isStair = true;
+    // rowGroup.userData.isStair = true; // This was the cause of the large invisible collision.
     const seatMaterial = new THREE.MeshStandardMaterial({ color: stoneColor, roughness: 0.9, metalness: 0.05 });
 
     for (let i = 0; i < seatCount; i++) {
@@ -140,6 +139,13 @@ function createSeatRow(rowIndex, radius, seatCount, rowHeight) {
         baseMesh.receiveShadow = true;
         baseMesh.userData.isBlock = true;
         baseMesh.userData.isStair = true;
+        baseMesh.userData.isSeatRow = true; // Add a flag for custom collision logic
+        baseMesh.userData.seatRowData = {
+            innerRadius: baseRadius - 1.5,
+            outerRadius: baseRadius,
+            height: rowHeight,
+            y,
+        };
 
         rowGroup.add(baseMesh);
     }
@@ -268,8 +274,13 @@ export function createAmphitheatre(scene, getHeight, listener) {
     for (let i = 0; i < numRows; i++) {
         const radius = startRadius + i * rowSpacing;
         const seatCount = Math.floor(radius * 0.8);
-        const seatRow = createSeatRow(i, radius, seatCount, rowHeightStep);
-        group.add(seatRow);
+        const seatRowGroup = createSeatRow(i, radius, seatCount, rowHeightStep);
+        
+        // Add all children of the seat row group directly to the main amphitheater group
+        // to ensure each piece is checked for collision individually.
+        while (seatRowGroup.children.length > 0) {
+            group.add(seatRowGroup.children[0]);
+        }
     }
 
     // Backdrop
