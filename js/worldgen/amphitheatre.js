@@ -105,6 +105,9 @@ function createStage(dimensions) {
 
 function createSeatRow(rowIndex, radius, seatCount, rowHeight) {
     const rowGroup = new THREE.Group();
+    // Mark the entire row as collidable so players can't walk through the seats
+    rowGroup.userData.isBlock = true;
+    rowGroup.userData.isStair = true;
     const seatMaterial = new THREE.MeshStandardMaterial({ color: stoneColor, roughness: 0.9, metalness: 0.05 });
 
     for (let i = 0; i < seatCount; i++) {

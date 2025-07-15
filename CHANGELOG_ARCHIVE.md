@@ -32,6 +32,7 @@
 
 ## 2025-07-14
 - 1818 Fix player asset replacement to avoid duplicate player model.
+- 1522 Fix HouseBlocks module loading error by merging it into starterHouse.js
 
 ## 2025-06-28
 - 0100 Rig up running animation on Shift key press for animated player model.
