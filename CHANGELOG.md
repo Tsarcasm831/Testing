@@ -2,6 +2,7 @@
 
 ## 2025-07-16
 - 1906 Improve compass angle tracking with wrap-around detection
+- 1934 Fix amphitheatre seat collision and update seating rows
 
 ## 2025-07-15
 - 1205 Fix compass not displaying directions and add tweakable offset
@@ -14,8 +15,6 @@
 - 1623 Label every grid cell and keep labels visible only when the grid is toggled
 - 1640 Enable dual joysticks for mobile look and movement
 - 1706 Generate grid labels on demand to eliminate DOM lag
-- 1747 Ensure joystick containers display on mobile initialization
-- 1758 Correct A/D key mapping and improve mobile joystick handling
 
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).
