@@ -6,7 +6,7 @@ const COLLISION_CHECK_RADIUS = 10;
 const STEP_HEIGHT = 1.0;
 /* @tweakable Additional padding around NPCs for collision detection. */
 const NPC_COLLISION_PADDING = 0.2;
-/* @tweakable Additional padding for player collision with amphitheater seats. */
+/* @tweakable Additional padding for player collision with amphitheater seats. A larger value creates a bigger buffer but might feel 'sticky'. */
 const SEAT_COLLISION_PADDING = 0.2;
 
 export class CollisionManager {

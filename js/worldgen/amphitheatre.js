@@ -139,6 +139,7 @@ function createSeatRow(rowIndex, radius, seatCount, rowHeight) {
         baseMesh.receiveShadow = true;
         baseMesh.userData.isBlock = true;
         baseMesh.userData.isStair = true;
+        /* @tweakable Set to false to use a simpler, but possibly less accurate, collision detection method for the amphitheater seats. */
         baseMesh.userData.isSeatRow = true; // Add a flag for custom collision logic
         baseMesh.userData.seatRowData = {
             innerRadius: baseRadius - 1.5,

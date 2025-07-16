@@ -1,0 +1,61 @@
+import * as THREE from 'three';
+
+export class CompassUI {
+    constructor(dependencies) {
+        this.playerControls = dependencies.playerControls;
+        this.container = null;
+        this.headingBar = null;
+        this.coordsDisplay = null;
+        this.lastAngleDeg = 0;
+        this.continuousDegrees = 0;
+
+        /* @tweakable The number of pixels per degree of rotation on the heading bar. Controls scroll speed. */
+    }
+
+    init() {
+        // Initialize with current camera angle
+        if (this.playerControls && this.playerControls.camera) {
+            const cameraDirection = new THREE.Vector3();
+            this.playerControls.camera.getWorldDirection(cameraDirection);
+            const angleRad = Math.atan2(cameraDirection.x, cameraDirection.z);
+            const angleDeg = angleRad * (180 / Math.PI);
+            this.lastAngleDeg = angleDeg;
+            this.continuousDegrees = -angleDeg;
+        }
+    }
+
+    update() {
+        const cameraDirection = new THREE.Vector3();
+        camera.getWorldDirection(cameraDirection);
+
+        // Calculate horizontal angle (azimuth)
+        const angleRad = Math.atan2(cameraDirection.x, cameraDirection.z);
+        const angleDeg = angleRad * (180 / Math.PI);
+
+        // --- New unwrapping logic ---
+        /* @tweakable The threshold for detecting a wrap-around in camera angle, in degrees. A value around 270 is safe for fast camera movements. */
+        const wrapThreshold = 270;
+        let diff = angleDeg - this.lastAngleDeg;
+
+        if (Math.abs(diff) > wrapThreshold) {
+            // We've wrapped around (e.g., from +179 to -179)
+            if (diff > 0) {
+                diff -= 360;
+            } else {
+                diff += 360;
+            }
+        }
+
+        if (isNaN(this.continuousDegrees)) {
+            this.continuousDegrees = -angleDeg;
+        }
+
+        this.continuousDegrees -= diff;
+        this.lastAngleDeg = angleDeg;
+        // --- End new logic ---
+
+        const correctedDegrees = this.continuousDegrees;
+
+        const adjustedDegrees = correctedDegrees + this.rotationOffset;
+    }
+}

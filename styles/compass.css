@@ -79,10 +79,10 @@
 #compass-coords {
     position: fixed;
     /* @tweakable Top offset of the coordinates display. */
-    top: 60px;
+    top: 100px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(0,0,0,0.5);
+    background-color: var(--black-50);
     color: white;
     padding: 3px 8px;
     border-radius: 5px;
@@ -99,9 +99,9 @@
     transform: translateX(-50%);
     width: 300px;
     height: 30px;
-    background-color: rgba(0,0,0,0.5);
+    background-color: var(--black-50);
     border-radius: 5px;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid var(--white-20);
     z-index: 1000;
     color: white;
     pointer-events: none;
@@ -113,6 +113,7 @@
 #heading-bar {
     position: absolute;
     height: 100%;
+    display: flex;
     will-change: transform;
     /* @tweakable The transition effect for the heading bar scrolling. 'none' for instant updates. */
     transition: transform 0.1s linear;
@@ -131,18 +132,17 @@
     position: absolute;
     background-color: white;
     bottom: 0;
+    width: 1px;
 }
 
 .heading-tick.major {
     /* @tweakable Height of the major ticks (N, E, S, W, etc.). */
     height: 15px;
-    width: 2px;
 }
 
 .heading-tick.minor {
     /* @tweakable Height of the minor ticks (every 10 degrees). */
     height: 8px;
-    width: 1px;
 }
 
 .heading-label {

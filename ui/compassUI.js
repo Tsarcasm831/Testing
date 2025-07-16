@@ -43,7 +43,7 @@ export class CompassUI {
             const cameraDirection = new THREE.Vector3();
             this.playerControls.camera.getWorldDirection(cameraDirection);
             this.lastCameraAngle = Math.atan2(cameraDirection.x, cameraDirection.z);
-            this.continuousDegrees = this.lastCameraAngle * (180 / Math.PI);
+            this.continuousDegrees = -this.lastCameraAngle * (180 / Math.PI);
         }
     }
     
@@ -51,30 +51,63 @@ export class CompassUI {
         const directions = {
             0: 'N', 45: 'NE', 90: 'E', 135: 'SE', 180: 'S', 225: 'SW', 270: 'W', 315: 'NW'
         };
+        const numberDegrees = [30, 60, 120, 150, 210, 240, 300, 330];
 
         const totalWidth = 360 * this.pixelsPerDegree;
         
         // We create two copies of the 360-degree ticks to allow for seamless looping
-        for(let cycle = 0; cycle < 2; cycle++) {
+        for(let cycle = -1; cycle <= 1; cycle++) { // Create 3 cycles for smooth wrapping
             const cycleOffset = cycle * totalWidth;
 
-            for (let i = 0; i < 360; i++) {
-                if (directions[i]) {
-                    const majorTick = document.createElement('div');
-                    majorTick.className = 'heading-tick major';
-                    majorTick.style.left = `${cycleOffset + i * this.pixelsPerDegree}px`;
-                    
-                    const label = document.createElement('span');
-                    label.className = 'heading-label';
-                    label.textContent = directions[i];
-                    majorTick.appendChild(label);
-    
-                    this.headingBar.appendChild(majorTick);
-                } else if (i % 10 === 0) { // Ticks every 10 degrees
+            // Add major ticks with direction labels
+            for (const deg in directions) {
+                const tickContainer = document.createElement('div');
+                tickContainer.className = 'heading-tick-container';
+                tickContainer.style.left = `${cycleOffset + parseInt(deg) * this.pixelsPerDegree}px`;
+                
+                const tick = document.createElement('div');
+                tick.className = 'heading-tick major';
+                tickContainer.appendChild(tick);
+
+                const label = document.createElement('span');
+                label.className = 'heading-label direction';
+                label.textContent = directions[deg];
+                if (parseInt(deg) === 0) {
+                    label.classList.add('north');
+                }
+                tickContainer.appendChild(label);
+                
+                this.headingBar.appendChild(tickContainer);
+            }
+
+            // Add major ticks with number labels
+            numberDegrees.forEach(deg => {
+                const tickContainer = document.createElement('div');
+                tickContainer.className = 'heading-tick-container';
+                tickContainer.style.left = `${cycleOffset + deg * this.pixelsPerDegree}px`;
+
+                const tick = document.createElement('div');
+                tick.className = 'heading-tick major';
+                tickContainer.appendChild(tick);
+
+                const label = document.createElement('span');
+                label.className = 'heading-label number';
+                label.textContent = deg;
+                tickContainer.appendChild(label);
+
+                this.headingBar.appendChild(tickContainer);
+            });
+            
+            // Add minor ticks
+            for (let i = 0; i < 360; i += 10) {
+                if (!directions[i] && !numberDegrees.includes(i)) {
+                    const tickContainer = document.createElement('div');
+                    tickContainer.className = 'heading-tick-container';
+                    tickContainer.style.left = `${cycleOffset + i * this.pixelsPerDegree}px`;
                     const tick = document.createElement('div');
                     tick.className = 'heading-tick minor';
-                    tick.style.left = `${cycleOffset + i * this.pixelsPerDegree}px`;
-                    this.headingBar.appendChild(tick);
+                    tickContainer.appendChild(tick);
+                    this.headingBar.appendChild(tickContainer);
                 }
             }
         }
@@ -101,16 +134,27 @@ export class CompassUI {
             diff += 2 * Math.PI;
         }
         this.lastCameraAngle = angleRad;
-        this.continuousDegrees += diff * (180 / Math.PI);
+        this.continuousDegrees -= diff * (180 / Math.PI);
         
-        const adjustedDegrees = this.continuousDegrees - this.rotationOffset;
+        // Correct degrees so North is 0. atan2(x,z) gives 0 for +Z, which we want as North (0 deg)
+        // No correction needed here, but an offset might be desired for calibration.
+        let correctedDegrees = this.continuousDegrees;
+        
+        // Normalize to 0-360 range for display/logic if needed, but use continuous for transform
+        let displayDegrees = (correctedDegrees + 360) % 360;
+        
+        const adjustedDegrees = correctedDegrees + this.rotationOffset;
         
         const barWidth = this.container.offsetWidth;
 
         // Center the current degree in the middle of the container
         const offset = -adjustedDegrees * this.pixelsPerDegree + barWidth / 2;
         
-        this.headingBar.style.transform = `translateX(${offset}px)`;
+        // Use modulo to wrap the offset for seamless scrolling with 3 cycles
+        const totalBarWidth = 360 * this.pixelsPerDegree;
+        const wrappedOffset = offset % totalBarWidth;
+        
+        this.headingBar.style.transform = `translateX(${wrappedOffset}px)`;
 
         const playerModel = this.playerControls.getPlayerModel();
         if (!playerModel) return;

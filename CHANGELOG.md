@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2025-07-15
+- 1205 Fix compass not displaying directions and add tweakable offset
 - 1200 Fix shopkeeper not spawning and improve interaction system performance
 
 ## 2025-07-14
