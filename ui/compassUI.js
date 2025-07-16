@@ -6,7 +6,7 @@ export class CompassUI {
         this.container = null;
         this.headingBar = null;
         this.coordsDisplay = null;
-        this.lastCameraAngle = 0;
+        this.lastAngleDeg = 0;
         this.continuousDegrees = 0;
 
         /* @tweakable The number of pixels per degree of rotation on the heading bar. Controls scroll speed. */
@@ -42,8 +42,10 @@ export class CompassUI {
         if (this.playerControls && this.playerControls.camera) {
             const cameraDirection = new THREE.Vector3();
             this.playerControls.camera.getWorldDirection(cameraDirection);
-            this.lastCameraAngle = Math.atan2(cameraDirection.x, cameraDirection.z);
-            this.continuousDegrees = -this.lastCameraAngle * (180 / Math.PI);
+            const angleRad = Math.atan2(cameraDirection.x, cameraDirection.z);
+            const angleDeg = angleRad * (180 / Math.PI);
+            this.lastAngleDeg = angleDeg;
+            this.continuousDegrees = -angleDeg;
         }
     }
     
@@ -125,23 +127,30 @@ export class CompassUI {
 
         // Calculate horizontal angle (azimuth)
         const angleRad = Math.atan2(cameraDirection.x, cameraDirection.z);
-        
-        // Unwrap the angle to get a continuous value, preventing "jumps" at the 180/-180 degree mark.
-        let diff = angleRad - this.lastCameraAngle;
-        if (diff > Math.PI) {
-            diff -= 2 * Math.PI;
-        } else if (diff < -Math.PI) {
-            diff += 2 * Math.PI;
+        const angleDeg = angleRad * (180 / Math.PI);
+
+        // --- New unwrapping logic ---
+        const wrapThreshold = 270;
+        let diff = angleDeg - this.lastAngleDeg;
+
+        if (Math.abs(diff) > wrapThreshold) {
+            if (diff > 0) {
+                diff -= 360;
+            } else {
+                diff += 360;
+            }
         }
-        this.lastCameraAngle = angleRad;
-        this.continuousDegrees -= diff * (180 / Math.PI);
+
+        if (isNaN(this.continuousDegrees)) {
+            this.continuousDegrees = -angleDeg;
+        }
+
+        this.continuousDegrees -= diff;
+        this.lastAngleDeg = angleDeg;
+        // --- End new logic ---
+
+        const correctedDegrees = this.continuousDegrees;
         
-        // Correct degrees so North is 0. atan2(x,z) gives 0 for +Z, which we want as North (0 deg)
-        // No correction needed here, but an offset might be desired for calibration.
-        let correctedDegrees = this.continuousDegrees;
-        
-        // Normalize to 0-360 range for display/logic if needed, but use continuous for transform
-        let displayDegrees = (correctedDegrees + 360) % 360;
         
         const adjustedDegrees = correctedDegrees + this.rotationOffset;
         
