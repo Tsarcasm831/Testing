@@ -1,11 +1,13 @@
 # Changelog
 
+## 2025-07-16
+- 1906 Improve compass angle tracking with wrap-around detection
+
 ## 2025-07-15
 - 1205 Fix compass not displaying directions and add tweakable offset
 - 1200 Fix shopkeeper not spawning and improve interaction system performance
 
 ## 2025-07-14
-- 1818 Fix player asset replacement to avoid duplicate player model
 - 1522 Fix HouseBlocks module loading error by merging it into starterHouse.js
 - 1507 Break up worldGeneration.js into modular files
 - 1555 Restrict grid labels to show within 7m radius when grid toggled
@@ -15,10 +17,8 @@
 - 1747 Ensure joystick containers display on mobile initialization
 - 1758 Correct A/D key mapping and improve mobile joystick handling
 
-## 2025-06-28
-- 0100 Rig up running animation on Shift key press for animated player model.
-
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).
 - Use a heading for each version or date, followed by brief bullet points.
 - Summaries should be short, highlighting major additions or fixes.
+
