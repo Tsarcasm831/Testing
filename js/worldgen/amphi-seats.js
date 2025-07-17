@@ -33,6 +33,8 @@ export function createSeatRow(rowIndex, radius, seatCount, rowHeight) {
             bevelEnabled: false,
         };
         const geometry = new THREE.ExtrudeGeometry(baseShape, extrudeSettings);
+        geometry.computeBoundingSphere();
+        geometry.computeBoundingBox();
         const baseMesh = new THREE.Mesh(geometry, seatMaterial);
         baseMesh.rotation.x = -Math.PI / 2;
         baseMesh.position.y = y;
