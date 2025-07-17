@@ -2,6 +2,7 @@
 
 ## 2025-07-17
 - 2005 Compute amphitheater seat geometry bounds before adding to scene
+- 2253 Split NPC presets into individual files for easier maintenance
 
 ## 2025-07-15
 - 1210 Fix amphitheater seat collision by correctly positioning the seats and improving collision padding logic.
@@ -9,7 +10,6 @@
 - 1200 Fix shopkeeper not spawning and improve interaction system performance
 
 ## 2025-07-14
-- 1555 Restrict grid labels to show within 7m radius when grid toggled
 - 1623 Label every grid cell and keep labels visible only when the grid is toggled
 - 1640 Enable dual joysticks for mobile look and movement
 - 1706 Generate grid labels on demand to eliminate DOM lag
