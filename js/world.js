@@ -19,4 +19,3 @@ export class World {
         return this.terrain;
     }
 }
-

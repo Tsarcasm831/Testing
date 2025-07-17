@@ -120,6 +120,56 @@
       "type": "model",
       "name": "Alien Idle Animation",
       "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Alien/Animation_Idle_02_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Shopkeeper Sit Cheer Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Sit_Cheer_with_Left_Hand_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Shopkeeper Idle 11 Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Idle_11_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Shopkeeper Walking Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Walking_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Shopkeeper Running Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Running_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Shopkeeper Agree Gesture Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Agree_Gesture_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Shopkeeper Listening Gesture Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Listening_Gesture_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Shopkeeper Dozing Elderly Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Dozing_Elderly_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Shopkeeper Idle 02 Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Idle_02_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Shopkeeper Chair Sit Idle Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Chair_Sit_Idle_M_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Shopkeeper Cheer with Both Hands Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Cheer_with_Both_Hands_withSkin.glb"
     }
   ]
 }

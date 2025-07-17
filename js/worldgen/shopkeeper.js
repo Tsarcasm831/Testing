@@ -11,6 +11,10 @@ import { presetCharacters } from '../characters/presets.js';
  * @param {THREE.Vector3} housePosition The position of the house to place the shopkeeper in.
  */
 export function createShopkeeper(scene, terrain, npcManager, housePosition) {
+    /* @tweakable Set to false to prevent the shopkeeper from spawning. */
+    const shouldSpawnShopkeeper = true;
+    if (!shouldSpawnShopkeeper) return;
+
     /* @tweakable The relative position of the shopkeeper inside the house. Fine-tune to place them correctly. */
     const shopkeeperRelativePos = new THREE.Vector3(0, 0, -3);
     const shopkeeperPosition = new THREE.Vector3().copy(housePosition).add(shopkeeperRelativePos);
@@ -19,9 +23,9 @@ export function createShopkeeper(scene, terrain, npcManager, housePosition) {
     const groundY = terrain.userData.getHeight(shopkeeperPosition.x, shopkeeperPosition.z); 
     shopkeeperPosition.y = groundY + 0.2;
 
-    const preset = presetCharacters.find(p => p.id === 'alien');
+    const preset = presetCharacters.find(p => p.id === 'shopkeeper');
     if (!preset) {
-        console.error("Shopkeeper preset ('alien') not found.");
+        console.error("Shopkeeper preset ('shopkeeper') not found.");
         return;
     }
 

@@ -166,6 +166,35 @@ export function setupAnimatedAlien(model, idleClip, walkClip, runClip, listenCli
     return model;
 }
 
+export function setupAnimatedShopkeeper(model, idleClip, walkClip, listenClip) {
+    idleClip.name = 'idle';
+    walkClip.name = 'walk';
+    listenClip.name = 'listen';
+
+    model.animations = [idleClip, walkClip, listenClip];
+
+    const mixer = new THREE.AnimationMixer(model);
+    const actions = {
+        idle: mixer.clipAction(idleClip),
+        walk: mixer.clipAction(walkClip),
+        listen: mixer.clipAction(listenClip),
+    };
+    
+    /* @tweakable Duration for fading between shopkeeper animations in seconds. */
+    model.userData.animationFadeDuration = 0.4;
+    actions.idle.play();
+
+    /* @tweakable Rotation offset for the animated shopkeeper GLB model in radians. */
+    const rotationOffset = 0;
+    model.userData.rotationOffset = rotationOffset;
+
+    model.userData.mixer = mixer;
+    model.userData.actions = actions;
+    model.userData.isAnimatedGLB = true;
+
+    return model;
+}
+
 export function setupEyebot(model) {
     model.userData.isEyebot = true;
     model.userData.isAnimatedGLB = false; // It is not using baked animations

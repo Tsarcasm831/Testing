@@ -466,6 +466,353 @@ export const presetCharacters = [
       ],
       description: "A cute alien character with stubby legs"
     }
+  },
+  {
+    id: "shopkeeper",
+    name: "Shopkeeper",
+    description: "A friendly shopkeeper.",
+    spec: {
+      customMode: true,
+      features: [
+        // Body
+        {
+          type: "box",
+          color: "#5a4a3a",
+          position: { x: 0, y: 0.7, z: 0 },
+          scale: { x: 0.6, y: 0.8, z: 0.4 },
+        },
+        // Head
+        {
+          type: "sphere",
+          color: "#f2d6b5",
+          position: { x: 0, y: 1.3, z: 0 },
+          scale: { x: 0.4, y: 0.4, z: 0.4 },
+        },
+        // Legs
+        {
+          type: "cylinder",
+          color: "#4a3a2a",
+          position: { x: -0.15, y: 0.3, z: 0 },
+          scale: { x: 0.15, y: 0.6, z: 0.15 },
+          name: "leftLeg"
+        },
+        {
+          type: "cylinder",
+          color: "#4a3a2a",
+          position: { x: 0.15, y: 0.3, z: 0 },
+          scale: { x: 0.15, y: 0.6, z: 0.15 },
+          name: "rightLeg"
+        },
+         // Base for collision
+        {
+          type: "box",
+          color: "#666666",
+          position: { x: 0, y: 0, z: 0 },
+          scale: { x: 0.5, y: 0.1, z: 0.3 },
+          transparent: true,
+          opacity: 0,
+        }
+      ]
+    }
+  },
+  {
+    id: "golem",
+    name: "Stone Golem",
+    description: "A creature of rock and crystal.",
+    spec: {
+      customMode: true,
+      features: [
+        // Body
+        {
+          type: "box",
+          /* @tweakable The main color of the golem's stone body. */
+          color: "#8B8A88",
+          position: { x: 0, y: 0.8, z: 0 },
+          scale: { x: 1, y: 1.2, z: 0.8 },
+          roughness: 0.9,
+          metalness: 0.1
+        },
+        // Head
+        {
+          type: "box",
+          /* @tweakable The color of the golem's head. */
+          color: "#7D7C7A",
+          position: { x: 0, y: 1.7, z: 0 },
+          scale: { x: 0.7, y: 0.7, z: 0.7 },
+          roughness: 0.9,
+          metalness: 0.1
+        },
+        // Legs
+        {
+          type: "box",
+          name: "leftLeg",
+          color: "#7D7C7A",
+          position: { x: -0.3, y: 0, z: 0 },
+          scale: { x: 0.4, y: 0.8, z: 0.4 }
+        },
+        {
+          type: "box",
+          name: "rightLeg",
+          color: "#7D7C7A",
+          position: { x: 0.3, y: 0, z: 0 },
+          scale: { x: 0.4, y: 0.8, z: 0.4 }
+        },
+        // Arms
+        {
+          type: "box",
+          color: "#7D7C7A",
+          position: { x: -0.8, y: 1.0, z: 0 },
+          scale: { x: 0.4, y: 1.0, z: 0.4 },
+          rotation: {x: 0, y: 0, z: 0.2}
+        },
+        {
+          type: "box",
+          color: "#7D7C7A",
+          position: { x: 0.8, y: 1.0, z: 0 },
+          scale: { x: 0.4, y: 1.0, z: 0.4 },
+          rotation: {x: 0, y: 0, z: -0.2}
+        },
+        // Crystal Core
+        {
+          type: "cone",
+          /* @tweakable The glowing color of the golem's crystal core. */
+          color: "#2EFFF7",
+          position: { x: 0, y: 1.2, z: 0.3 },
+          scale: { x: 0.2, y: 0.3, z: 0.2 },
+          roughness: 0.1,
+          metalness: 0.5
+        }
+      ]
+    }
+  },
+  {
+    id: "plant_creature",
+    name: "Forest Sprite",
+    description: "A being of leaf and vine.",
+    spec: {
+      customMode: true,
+      features: [
+        // Body (Vine)
+        {
+          type: "cylinder",
+          /* @tweakable The color of the Forest Sprite's vine body. */
+          color: "#4A3728",
+          position: { x: 0, y: 0.7, z: 0 },
+          scale: { x: 0.2, y: 1.4, z: 0.2 }
+        },
+        // Head
+        {
+          type: "sphere",
+          /* @tweakable The color of the Forest Sprite's head. */
+          color: "#6B8E23",
+          position: { x: 0, y: 1.5, z: 0 },
+          scale: { x: 0.4, y: 0.4, z: 0.4 }
+        },
+        // Flower on head
+        {
+          type: "cone",
+          /* @tweakable The color of the flower on the Forest Sprite's head. */
+          color: "#FFD700",
+          position: { x: 0, y: 1.8, z: 0 },
+          scale: { x: 0.3, y: 0.2, z: 0.3 },
+          rotation: {x: Math.PI, y: 0, z: 0}
+        },
+        // Legs
+        {
+          type: "cylinder",
+          name: "leftLeg",
+          color: "#4A3728",
+          position: { x: -0.1, y: 0, z: 0 },
+          scale: { x: 0.1, y: 0.6, z: 0.1 }
+        },
+        {
+          type: "cylinder",
+          name: "rightLeg",
+          color: "#4A3728",
+          position: { x: 0.1, y: 0, z: 0 },
+          scale: { x: 0.1, y: 0.6, z: 0.1 }
+        },
+        // Leaves
+        {
+          type: "box",
+          color: "#228B22",
+          position: { x: -0.3, y: 1, z: 0 },
+          scale: { x: 0.6, y: 0.1, z: 0.4 },
+          rotation: {x: 0, y: 0.5, z: 0.3}
+        },
+        {
+          type: "box",
+          color: "#228B22",
+          position: { x: 0.3, y: 0.8, z: 0 },
+          scale: { x: 0.6, y: 0.1, z: 0.4 },
+          rotation: {x: 0, y: -0.5, z: -0.3}
+        }
+      ]
+    }
+  },
+  {
+    id: "slime",
+    name: "Jiggly Slime",
+    description: "A wobbly, translucent slime.",
+    spec: {
+      customMode: true,
+      features: [
+        // Main Body
+        {
+          type: "sphere",
+          /* @tweakable The color of the slime. */
+          color: "#87CEEB",
+          position: { x: 0, y: 0.5, z: 0 },
+          scale: { x: 1, y: 1, z: 1 },
+          transparent: true,
+          opacity: 0.6,
+          animation: { type: "jiggly" }
+        },
+        // Eyes
+        {
+          type: "sphere",
+          color: "#000000",
+          position: { x: -0.2, y: 0.7, z: 0.4 },
+          scale: { x: 0.1, y: 0.1, z: 0.1 }
+        },
+        {
+          type: "sphere",
+          color: "#000000",
+          position: { x: 0.2, y: 0.7, z: 0.4 },
+          scale: { x: 0.1, y: 0.1, z: 0.1 }
+        },
+        // Internal Bubble
+        {
+            type: "sphere",
+            color: "#FFFFFF",
+            position: { x: 0, y: 0.4, z: 0 },
+            scale: { x: 0.3, y: 0.3, z: 0.3 },
+            transparent: true,
+            opacity: 0.3,
+            animation: { type: "bobUpDown" }
+        }
+      ]
+    }
+  },
+  {
+    id: "ghost",
+    name: "Wandering Spirit",
+    description: "A spectral apparition.",
+    spec: {
+      customMode: true,
+      features: [
+        // Body
+        {
+          type: "sphere",
+          /* @tweakable The color of the ghost. */
+          color: "#E0FFFF",
+          position: { x: 0, y: 1.2, z: 0 },
+          scale: { x: 0.8, y: 1.5, z: 0.8 },
+          transparent: true,
+          opacity: 0.7,
+          animation: { type: "bobUpDown" }
+        },
+        // Tail
+        {
+          type: "sphere",
+          color: "#E0FFFF",
+          position: { x: 0, y: 0.5, z: 0 },
+          scale: { x: 0.6, y: 0.6, z: 0.6 },
+          transparent: true,
+          opacity: 0.5,
+        },
+        // Eyes
+        {
+          type: "sphere",
+          color: "#000000",
+          position: { x: -0.2, y: 1.5, z: 0.35 },
+          scale: { x: 0.1, y: 0.1, z: 0.05 },
+          transparent: true,
+          opacity: 0.8,
+        },
+        {
+          type: "sphere",
+          color: "#000000",
+          position: { x: 0.2, y: 1.5, z: 0.35 },
+          scale: { x: 0.1, y: 0.1, z: 0.05 },
+          transparent: true,
+          opacity: 0.8,
+        }
+      ]
+    }
+  },
+  {
+    id: "knight",
+    name: "Armored Knight",
+    description: "A knight in shining armor.",
+    spec: {
+      customMode: true,
+      features: [
+        // Torso
+        {
+          type: "box",
+          /* @tweakable The color of the knight's armor. */
+          color: "#C0C0C0",
+          position: { x: 0, y: 0.8, z: 0 },
+          scale: { x: 0.7, y: 1.0, z: 0.5 },
+          roughness: 0.2,
+          metalness: 0.9
+        },
+        // Helmet
+        {
+          type: "sphere",
+          color: "#C0C0C0",
+          position: { x: 0, y: 1.5, z: 0 },
+          scale: { x: 0.5, y: 0.5, z: 0.5 },
+          roughness: 0.2,
+          metalness: 0.9
+        },
+        // Helmet Plume
+        {
+            type: "cone",
+            /* @tweakable The color of the knight's helmet plume. */
+            color: "#FF0000",
+            position: { x: 0, y: 1.8, z: 0 },
+            scale: { x: 0.1, y: 0.4, z: 0.1 },
+        },
+        // Legs
+        {
+          type: "cylinder",
+          name: "leftLeg",
+          color: "#A9A9A9",
+          position: { x: -0.2, y: 0, z: 0 },
+          scale: { x: 0.2, y: 0.8, z: 0.2 },
+          roughness: 0.3,
+          metalness: 0.8
+        },
+        {
+          type: "cylinder",
+          name: "rightLeg",
+          color: "#A9A9A9",
+          position: { x: 0.2, y: 0, z: 0 },
+          scale: { x: 0.2, y: 0.8, z: 0.2 },
+          roughness: 0.3,
+          metalness: 0.8
+        },
+        // Arms
+        {
+          type: "cylinder",
+          color: "#A9A9A9",
+          position: { x: -0.5, y: 1.0, z: 0 },
+          scale: { x: 0.15, y: 0.9, z: 0.15 },
+          roughness: 0.3,
+          metalness: 0.8
+        },
+        {
+          type: "cylinder",
+          color: "#A9A9A9",
+          position: { x: 0.5, y: 1.0, z: 0 },
+          scale: { x: 0.15, y: 0.9, z: 0.15 },
+          roughness: 0.3,
+          metalness: 0.8
+        }
+      ]
+    }
   }
 ];
 

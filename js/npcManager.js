@@ -67,6 +67,13 @@ export class NPCManager {
         }
     }
 
+    useAnimatedShopkeepers(data, replaceExisting = true) {
+        this.npcSpawner.setAnimatedData('shopkeeper', data);
+        if (replaceExisting) {
+            this.npcSpawner.replaceNpcModels('shopkeeper');
+        }
+    }
+
     useAnimatedChickens(data, replaceExisting = true) {
         this.npcSpawner.setAnimatedData('chicken', data);
         if (replaceExisting) {

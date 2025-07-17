@@ -66,6 +66,7 @@ export class OptionsUI {
                         <button class="option-button" id="replace-chickens-button" data-tooltip="Replace chicken NPCs with animated models">Use Animated Chickens</button>
                         <button class="option-button" id="replace-wireframes-button" data-tooltip="Replace wireframe NPCs with animated models">Use Animated Wireframes</button>
                         <button class="option-button" id="replace-aliens-button" data-tooltip="Replace alien NPCs with animated models">Use Animated Aliens</button>
+                        <button class="option-button" id="replace-shopkeeper-button" data-tooltip="Replace shopkeeper NPC with an animated model">Use Animated Shopkeeper</button>
                     </div>
                 </div>
                 <div id="options-tab-about" class="options-tab-content">
@@ -135,7 +136,7 @@ export class OptionsUI {
         
         const replaceButtons = [
             'use-all-assets-button', 'replace-player-button', 'replace-robots-button', 'replace-eyebots-button',
-            'replace-chickens-button', 'replace-wireframes-button', 'replace-aliens-button'
+            'replace-chickens-button', 'replace-wireframes-button', 'replace-aliens-button', 'replace-shopkeeper-button'
         ];
 
         const toggleReplaceButtons = (show) => {
@@ -175,6 +176,9 @@ export class OptionsUI {
         });
         modal.querySelector('#replace-aliens-button').addEventListener('click', () => {
             this.assetReplacementManager.replaceModel('alien');
+        });
+        modal.querySelector('#replace-shopkeeper-button').addEventListener('click', () => {
+            this.assetReplacementManager.replaceModel('shopkeeper');
         });
     }
 

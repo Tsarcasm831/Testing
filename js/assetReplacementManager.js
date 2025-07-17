@@ -1,6 +1,6 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Downloader } from './downloader.js';
-import { setupAnimatedPlayer, setupAnimatedRobot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupEyebot } from './animationSetup.js';
+import { setupAnimatedPlayer, setupAnimatedRobot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupEyebot, setupAnimatedShopkeeper } from './animationSetup.js';
 
 export class AssetReplacementManager {
     constructor(dependencies) {
@@ -47,6 +47,12 @@ export class AssetReplacementManager {
                 clipNames: ['idle', 'walk', 'run', 'listen'],
                 setupFn: setupAnimatedAlien,
                 applyFn: (modelData) => this.dependencies.npcManager.useAnimatedAliens(modelData)
+            },
+            'shopkeeper': {
+                assetNames: ['Shopkeeper Idle 02 Animation', 'Shopkeeper Walking Animation', 'Shopkeeper Listening Gesture Animation'],
+                clipNames: ['idle', 'walk', 'listen'],
+                setupFn: setupAnimatedShopkeeper,
+                applyFn: (modelData) => this.dependencies.npcManager.useAnimatedShopkeepers(modelData)
             }
         };
     }

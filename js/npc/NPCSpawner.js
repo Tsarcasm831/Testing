@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { createPlayerModel } from '../playerModel.js';
-import { setupAnimatedRobot, setupEyebot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien } from '../animationSetup.js';
+import { setupAnimatedRobot, setupEyebot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupAnimatedShopkeeper } from '../animationSetup.js';
 import { presetCharacters } from '../characters/presets.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { NPC } from './NPC.js';
@@ -15,6 +15,7 @@ import {
     CHICKEN_NPC_SCALE,
     WIREFRAME_NPC_SCALE,
     ALIEN_NPC_SCALE,
+    SHOPKEEPER_NPC_SCALE,
     EYEBOT_NPC_SCALE,
     EYEBOT_FLY_HEIGHT,
     FIX_FRUSTUM_CULLING_BUG
@@ -110,7 +111,7 @@ export class NPCSpawner {
                 if (this.animatedData.robot) {
                     availablePresets = availablePresets.filter(p => p.id !== 'robots');
                 }
-                 if (this.animatedData.chicken) {
+                if (this.animatedData.chicken) {
                     availablePresets = availablePresets.filter(p => p.id !== 'chicken');
                 }
                 if (this.animatedData.wireframe) {
@@ -122,6 +123,9 @@ export class NPCSpawner {
                 if (this.animatedData.eyebot) {
                     availablePresets = availablePresets.filter(p => p.id !== 'eyebot');
                 }
+                
+                // Exclude the unique shopkeeper from random spawning
+                availablePresets = availablePresets.filter(p => p.id !== 'shopkeeper');
 
                 if(availablePresets.length === 0) {
                      availablePresets = presetCharacters; // Fallback to all presets if filtering results in an empty list
@@ -195,6 +199,10 @@ export class NPCSpawner {
                 shouldReplace = true;
             }
 
+            if (npc.presetId === 'shopkeeper') {
+                shouldReplace = (npcType === 'shopkeeper');
+            }
+
             if (!shouldReplace) return;
 
             this.scene.remove(npc.model);
@@ -219,6 +227,8 @@ export class NPCSpawner {
                     setupAnimatedWireframe(newModel, this.animatedData.wireframe.idleClip, this.animatedData.wireframe.walkClip, this.animatedData.wireframe.runClip, this.animatedData.wireframe.listenClip);
                 } else if (npcType === 'alien') {
                     setupAnimatedAlien(newModel, this.animatedData.alien.idleClip, this.animatedData.alien.walkClip, this.animatedData.alien.runClip, this.animatedData.alien.listenClip);
+                } else if (npcType === 'shopkeeper') {
+                    setupAnimatedShopkeeper(newModel, this.animatedData.shopkeeper.idleClip, this.animatedData.shopkeeper.walkClip, this.animatedData.shopkeeper.listenClip);
                 }
             }
             
@@ -231,6 +241,7 @@ export class NPCSpawner {
                 case 'chicken': newModel.name = `${adjective} Chicken`; scale = CHICKEN_NPC_SCALE; break;
                 case 'wireframe': newModel.name = `${adjective} Wireframe`; scale = WIREFRAME_NPC_SCALE; break;
                 case 'alien': newModel.name = `${adjective} Alien`; scale = ALIEN_NPC_SCALE; break;
+                case 'shopkeeper': newModel.name = `Shopkeeper`; scale = SHOPKEEPER_NPC_SCALE; break;
             }
 
             newModel.traverse(c => { c.castShadow = true; });
