@@ -27,6 +27,7 @@ export class NPCSpawner {
         this.scene = scene;
         this.terrain = terrain;
         this.animatedData = {};
+        this.npcManager = null;
     }
     
     setAnimatedData(type, data) {
@@ -38,7 +39,7 @@ export class NPCSpawner {
             });
         }
         
-        if (data.model && type === 'robot' && USE_BOUNDING_BOX_CULLING) {
+        if (data.model && (type === 'robot' || type === 'eyebot') && USE_BOUNDING_BOX_CULLING) {
             data.model.userData.boundingBox = new THREE.Box3().setFromObject(data.model);
         }
         
@@ -56,7 +57,7 @@ export class NPCSpawner {
             let preset;
             let isEyebot = false;
 
-            if (this.animatedData.eyebot && Math.random() < EYEBOT_SPAWN_CHANCE) {
+            if (this.animatedData.eyebot && this.animatedData.eyebot.model && Math.random() < EYEBOT_SPAWN_CHANCE) {
                 const eyebotData = this.animatedData.eyebot;
                 npcModel = eyebotData.model.clone();
                 isEyebot = true;
@@ -66,7 +67,7 @@ export class NPCSpawner {
                 npcModel.scale.set(EYEBOT_NPC_SCALE, EYEBOT_NPC_SCALE, EYEBOT_NPC_SCALE);
                 preset = { id: 'eyebot' };
             }
-            else if (this.animatedData.robot && Math.random() < ROBOT_SPAWN_CHANCE) {
+            else if (this.animatedData.robot && this.animatedData.robot.model && Math.random() < ROBOT_SPAWN_CHANCE) {
                 preset = presetCharacters.find(p => p.id === 'robots');
                 const robotData = this.animatedData.robot;
                 npcModel = SkeletonUtils.clone(robotData.model);
@@ -79,7 +80,7 @@ export class NPCSpawner {
                 npcModel.name = `${adjective} Robot`;
                 npcModel.traverse(c => { c.castShadow = true; });
                 npcModel.scale.set(ROBOT_NPC_SCALE, ROBOT_NPC_SCALE, ROBOT_NPC_SCALE);
-            } else if (this.animatedData.wireframe && Math.random() < ROBOT_SPAWN_CHANCE) {
+            } else if (this.animatedData.wireframe && this.animatedData.wireframe.model && Math.random() < ROBOT_SPAWN_CHANCE) {
                 preset = presetCharacters.find(p => p.id === 'wireframe');
                 const wireframeData = this.animatedData.wireframe;
                 npcModel = SkeletonUtils.clone(wireframeData.model);
@@ -87,7 +88,7 @@ export class NPCSpawner {
                 npcModel.name = `${adjective} Wireframe`;
                 npcModel.traverse(c => { c.castShadow = true; });
                 npcModel.scale.set(WIREFRAME_NPC_SCALE, WIREFRAME_NPC_SCALE, WIREFRAME_NPC_SCALE);
-            } else if (this.animatedData.alien && Math.random() < ROBOT_SPAWN_CHANCE) {
+            } else if (this.animatedData.alien && this.animatedData.alien.model && Math.random() < ROBOT_SPAWN_CHANCE) {
                 preset = presetCharacters.find(p => p.id === 'alien');
                 const alienData = this.animatedData.alien;
                 npcModel = SkeletonUtils.clone(alienData.model);
@@ -95,7 +96,7 @@ export class NPCSpawner {
                 npcModel.name = `${adjective} Alien`;
                 npcModel.traverse(c => { c.castShadow = true; });
                 npcModel.scale.set(ALIEN_NPC_SCALE, ALIEN_NPC_SCALE, ALIEN_NPC_SCALE);
-            } else if (this.animatedData.chicken && Math.random() < ROBOT_SPAWN_CHANCE) {
+            } else if (this.animatedData.chicken && this.animatedData.chicken.model && Math.random() < ROBOT_SPAWN_CHANCE) {
                 preset = presetCharacters.find(p => p.id === 'chicken');
                 const chickenData = this.animatedData.chicken;
                 npcModel = SkeletonUtils.clone(chickenData.model);
@@ -118,12 +119,27 @@ export class NPCSpawner {
                 if (this.animatedData.alien) {
                     availablePresets = availablePresets.filter(p => p.id !== 'alien');
                 }
-                if(availablePresets.length === 0) availablePresets = presetCharacters; // Fallback
+                if (this.animatedData.eyebot) {
+                    availablePresets = availablePresets.filter(p => p.id !== 'eyebot');
+                }
+
+                if(availablePresets.length === 0) {
+                     availablePresets = presetCharacters; // Fallback to all presets if filtering results in an empty list
+                }
                 
                 preset = availablePresets[Math.floor(Math.random() * availablePresets.length)];
+                if (!preset) { // Add a guard in case preset is still undefined
+                    console.warn("Could not find a suitable NPC preset. Skipping NPC spawn.");
+                    continue; 
+                }
                 const uniqueId = `${preset.name}_${zoneKey}_${i}`;
                 npcModel = createPlayerModel(THREE, uniqueId, preset.spec);
                 npcModel.name = `${adjective} ${preset.name}`;
+            }
+
+            if (!npcModel || !preset) {
+                console.warn("Failed to create NPC model or find preset, skipping spawn.", { npcModel, preset });
+                continue;
             }
 
             npcModel.userData.isNpc = true;
@@ -162,18 +178,33 @@ export class NPCSpawner {
     }
 
     replaceNpcModels(npcType) {
-        if (!this.animatedData[npcType]) return;
+        if (!this.animatedData[npcType] || !this.npcManager) return;
 
-        const allNpcData = [...this.scene.children.filter(c => c.userData.isNpcInstance)];
+        const allNpcData = this.npcManager.npcs;
         
         allNpcData.forEach(npc => {
-            if (npc.presetId !== npcType) return;
+            const isEyebotPreset = npc.presetId === 'eyebot';
+            const isTargetType = npc.presetId === npcType;
+            /* @tweakable If true, replacing eyebots will also replace NPCs of other types. Set to false to only replace existing eyebots. */
+            const shouldReplaceOtherTypesForEyebot = true;
+
+            // Determine if this NPC should be replaced
+            let shouldReplace = isTargetType;
+            if (npcType === 'eyebot' && shouldReplaceOtherTypesForEyebot && !isEyebotPreset) {
+                // When replacing with eyebots, replace other types too if configured
+                shouldReplace = true;
+            }
+
+            if (!shouldReplace) return;
 
             this.scene.remove(npc.model);
 
             let newModel;
             if (npcType === 'eyebot') {
                 newModel = this.animatedData.eyebot.model.clone();
+                if (USE_BOUNDING_BOX_CULLING && this.animatedData.eyebot.model.userData.boundingBox) {
+                    newModel.userData.boundingBox = new THREE.Box3().setFromObject(newModel);
+                }
                 setupEyebot(newModel);
             } else {
                 newModel = SkeletonUtils.clone(this.animatedData[npcType].model);

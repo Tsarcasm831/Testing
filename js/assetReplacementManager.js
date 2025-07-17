@@ -55,9 +55,18 @@ export class AssetReplacementManager {
         this.statusElement = element;
     }
 
-    updateStatus(message) {
+    updateStatus(message, progress = null) {
         if (this.statusElement) {
-            this.statusElement.textContent = message;
+            if (progress !== null) {
+                 this.statusElement.innerHTML = `
+                    <div style="margin-bottom: 5px;">${message}</div>
+                    <div class="options-progress-bar-container">
+                        <div class="options-progress-bar" style="width: ${progress * 100}%"></div>
+                    </div>
+                `;
+            } else {
+                this.statusElement.innerHTML = message;
+            }
         }
     }
 
@@ -67,9 +76,16 @@ export class AssetReplacementManager {
             const response = await fetch('assets.json');
             const data = await response.json();
             const external = data.assets.filter(a => /^https?:/.test(a.url));
-            this.assets = await this.downloader.preloadAssets(external, (asset, p) => {
-                this.updateStatus(`Downloading ${asset.name} ${(p * 100).toFixed(0)}%`);
-            });
+            this.assets = await this.downloader.preloadAssets(external, 
+                (asset, p) => {
+                    // Per-asset progress callback (optional, currently unused to avoid spam)
+                },
+                (overallProgress) => {
+                    // Overall progress callback
+                    const percent = (overallProgress * 100).toFixed(0);
+                    this.updateStatus(`Downloading assets... ${percent}%`, overallProgress);
+                }
+            );
             this.updateStatus('All assets downloaded.');
             return true;
         } catch (e) {
@@ -92,11 +108,15 @@ export class AssetReplacementManager {
 
         for (const type in this.modelTypes) {
             if (type === 'player') continue;
-            const modelInfo = this.modelTypes[type];
-            if(this.dependencies.npcManager[`useAnimated${type.charAt(0).toUpperCase() + type.slice(1)}s`]){
-                 this.dependencies.npcManager[`useAnimated${type.charAt(0).toUpperCase() + type.slice(1)}s`]({}, false); // Clear existing
-            } else if(this.dependencies.npcManager[`use${type.charAt(0).toUpperCase() + type.slice(1)}Models`]) {
-                this.dependencies.npcManager[`use${type.charAt(0).toUpperCase() + type.slice(1)}Models`]({}, false); // Clear existing
+
+            const capitalizedType = type.charAt(0).toUpperCase() + type.slice(1);
+            const useAnimatedFnName = `useAnimated${capitalizedType}s`;
+            const useModelsFnName = `use${capitalizedType}Models`;
+            
+            if(this.dependencies.npcManager[useAnimatedFnName]){
+                 this.dependencies.npcManager[useAnimatedFnName]({}, false); // Clear existing
+            } else if(this.dependencies.npcManager[useModelsFnName]) {
+                this.dependencies.npcManager[useModelsFnName]({}, false); // Clear existing
             }
         }
 

@@ -6,8 +6,10 @@ const COLLISION_CHECK_RADIUS = 10;
 const STEP_HEIGHT = 1.0;
 /* @tweakable Additional padding around NPCs for collision detection. */
 const NPC_COLLISION_PADDING = 0.2;
-/* @tweakable Additional padding for player collision with amphitheater seats. A larger value creates a bigger buffer but might feel 'sticky'. */
-const SEAT_COLLISION_PADDING = 0.2;
+/* @tweakable Padding for player collision with the inside radius of amphitheater seats. */
+const SEAT_INNER_RADIUS_PADDING = 0.3;
+/* @tweakable Padding for player collision with the outside radius of amphitheater seats. */
+const SEAT_OUTER_RADIUS_PADDING = 0.3;
 
 export class CollisionManager {
     constructor(scene) {
@@ -53,17 +55,38 @@ export class CollisionManager {
         const movementVector = new THREE.Vector3().subVectors(proposedPosition, currentPosition);
 
         blockMeshes.forEach(block => {
-            const result = this._checkCollisionWithBlock(currentPosition, finalPosition, finalVelocity, playerRadius, playerHeight, block);
-            if(result.standingOnBlock) {
-                standingOnBlock = true;
-                finalPosition.y = result.newY;
-                finalVelocity.y = 0;
-                canJump = true;
-            } else if (result.collided) {
-                // If a side collision is detected, revert movement on that axis.
-                // This is a simplified resolution and could be improved.
-                if (Math.abs(movementVector.x) > 0) finalPosition.x = currentPosition.x;
-                if (Math.abs(movementVector.z) > 0) finalPosition.z = currentPosition.z;
+            if (block.userData.isSeatRow) {
+                // Use specialized collision for seats
+                const result = this._checkCollisionWithSeatRow(currentPosition, finalPosition, velocity, playerRadius, playerHeight, block);
+                if(result.collided) {
+                     if (result.standingOnBlock) {
+                        standingOnBlock = true;
+                        finalPosition.y = result.newY;
+                        finalVelocity.y = 0;
+                        canJump = true;
+                    } else {
+                        // Horizontal collision
+                        const backStep = new THREE.Vector3().subVectors(finalPosition, currentPosition).normalize().multiplyScalar(0.01);
+                        finalPosition.sub(backStep); // Move back slightly to prevent getting stuck
+                        if (Math.abs(movementVector.x) > Math.abs(movementVector.z)) {
+                             finalPosition.x = currentPosition.x;
+                        } else {
+                             finalPosition.z = currentPosition.z;
+                        }
+                    }
+                }
+            } else {
+                // Use standard AABB collision for other blocks
+                const result = this._checkCollisionWithBlock(currentPosition, finalPosition, finalVelocity, playerRadius, playerHeight, block);
+                if(result.standingOnBlock) {
+                    standingOnBlock = true;
+                    finalPosition.y = result.newY;
+                    finalVelocity.y = 0;
+                    canJump = true;
+                } else if (result.collided) {
+                    if (Math.abs(movementVector.x) > 0) finalPosition.x = currentPosition.x;
+                    if (Math.abs(movementVector.z) > 0) finalPosition.z = currentPosition.z;
+                }
             }
         });
 
@@ -72,7 +95,7 @@ export class CollisionManager {
     
     _checkCollisionWithBlock(currentPosition, newPosition, velocity, playerRadius, playerHeight, block) {
         if (block.userData.isSeatRow) {
-            return this._checkCollisionWithSeatRow(currentPosition, newPosition, velocity, playerRadius, playerHeight, block);
+            return { collided: false, standingOnBlock: false, newY: newPosition.y };
         }
 
         const boundingBox = new THREE.Box3().setFromObject(block);
@@ -136,59 +159,72 @@ export class CollisionManager {
     }
 
     _checkCollisionWithSeatRow(currentPosition, newPosition, velocity, playerRadius, playerHeight, block) {
-        // Get world position of the specific seat segment (the 'block')
-        const blockWorldPosition = new THREE.Vector3();
-        block.getWorldPosition(blockWorldPosition);
-
         const seatData = block.userData.seatRowData;
-        if (!seatData) return { collided: false, standingOnBlock: false, newY: newPosition.y };
-        
-        // Player position relative to the block's center (on the XZ plane)
-        const playerRelativePos = new THREE.Vector2(newPosition.x - blockWorldPosition.x, newPosition.z - blockWorldPosition.z);
-        
-        // This check is flawed because the block is just a segment.
-        // We need a better way to check if the player is "inside" the arc segment.
-        // Let's use a simpler AABB check on the block itself.
-        const boundingBox = new THREE.Box3().setFromObject(block);
-        const effectivePlayerRadius = playerRadius + SEAT_COLLISION_PADDING;
+        if (!seatData || !block.parent || seatData.startAngle === undefined || seatData.endAngle === undefined) {
+            return { collided: false, standingOnBlock: false, newY: newPosition.y };
+        }
 
-        const blockTop = boundingBox.max.y;
+        const amphitheatreCenter = block.parent.position;
+        const seatBaseY = amphitheatreCenter.y + seatData.y;
+        const seatTopY = seatBaseY + seatData.height;
+
+        const playerToAmphiCenter = new THREE.Vector2(newPosition.x - amphitheatreCenter.x, newPosition.z - amphitheatreCenter.z);
+        const distSq = playerToAmphiCenter.lengthSq();
+
+        // Use a simple bounding box for the whole amphitheater as a broad phase check
+        const amphitheaterRadius = 60;
+        if (distSq > amphitheaterRadius * amphitheaterRadius) {
+            return { collided: false };
+        }
+
+        // More accurate radial check
+        const innerRadius = seatData.innerRadius - playerRadius;
+        const outerRadius = seatData.outerRadius + playerRadius;
+        if (distSq < innerRadius * innerRadius || distSq > outerRadius * outerRadius) {
+            return { collided: false };
+        }
         
+        // Angular check
+        let playerAngle = Math.atan2(playerToAmphiCenter.y, playerToAmphiCenter.x);
+        if (playerAngle < 0) playerAngle += 2 * Math.PI;
+
+        const startAngle = seatData.startAngle;
+        const endAngle = seatData.endAngle;
+
+        let inAngle = false;
+        if (startAngle < endAngle) {
+            inAngle = playerAngle >= startAngle && playerAngle <= endAngle;
+        } else { // Handles wrap around from PI to -PI (e.g. crossing the -X axis)
+            inAngle = playerAngle >= startAngle || playerAngle <= endAngle;
+        }
+
+        if (!inAngle) {
+            return { collided: false };
+        }
+        
+        // Vertical collision check
         let standingOnBlock = false;
         let newY = newPosition.y;
         let collided = false;
 
-        // Broad-phase check using bounding box
-        if (boundingBox.intersectsBox(new THREE.Box3().setFromCenterAndSize(
-            newPosition,
-            new THREE.Vector3(effectivePlayerRadius * 2, playerHeight, effectivePlayerRadius * 2)
-        ))) {
-            // Check if player is landing on top of the seat
-            if (
-                velocity.y <= 0 &&
-                currentPosition.y >= blockTop - 0.2 &&
-                newPosition.y <= (blockTop + 0.2)
-            ) {
-                standingOnBlock = true;
-                newY = blockTop;
-            } else if (
-                // Allow stepping up
-                velocity.y <= 0 &&
-                currentPosition.y >= blockTop - STEP_HEIGHT &&
-                newPosition.y <= (blockTop + 0.2)
-            ) {
-                standingOnBlock = true;
-                newY = blockTop;
-            }
-            // Check for side collision
-            else if (
-                newPosition.y < blockTop &&
-                newPosition.y + playerHeight > boundingBox.min.y
-            ) {
-                collided = true;
-            }
+        // Check for landing on top
+        if (
+            velocity.y <= 0 &&
+            currentPosition.y >= seatTopY - STEP_HEIGHT && // Can step up
+            newPosition.y <= seatTopY + 0.1 // Feet are at or below the top
+        ) {
+            standingOnBlock = true;
+            collided = true;
+            newY = seatTopY;
+        } 
+        // Check for side collision
+        else if (
+            newPosition.y < seatTopY &&
+            newPosition.y + playerHeight > seatBaseY
+        ) {
+            collided = true;
         }
-        
+
         return { collided, standingOnBlock, newY };
     }
 }

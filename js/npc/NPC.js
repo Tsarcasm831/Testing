@@ -22,6 +22,7 @@ export class NPC {
         this.targetPosition = null;
         this.idleTimer = 0;
         this.velocity = new THREE.Vector3();
+        this.npcManager = null; // Will be set by NPCManager
 
         if (isEyebot) {
             this.model.userData.baseY = startPosition.y;
@@ -123,6 +124,16 @@ export class NPC {
                     collision = true;
                 }
             }
+
+            // NPC-NPC collision check
+            const otherNpcs = this.getOtherNpcs(); // Assumes a method to get other NPCs
+            for (const otherNpc of otherNpcs) {
+                const distanceToOther = newPos.distanceTo(otherNpc.model.position);
+                if (distanceToOther < 1.0) { // Simple radius check
+                    collision = true;
+                    break;
+                }
+            }
             
             if (collision) {
                 isMoving = false; // NPC stops moving
@@ -200,5 +211,10 @@ export class NPC {
             this.model.userData.mixer.update(delta);
             this.model.userData.lastMixerUpdate = performance.now();
         }
+    }
+
+    getOtherNpcs() {
+        if (!this.npcManager) return [];
+        return this.npcManager.npcs.filter(npc => npc !== this);
     }
 }

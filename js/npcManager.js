@@ -14,8 +14,9 @@ export class NPCManager {
         this.npcs = [];
         this.lastUpdateTime = 0;
         
-        // Spawner is initialized later, once terrain is available
-        this.npcSpawner = null;
+        // Spawner is initialized once, and terrain is added later.
+        this.npcSpawner = new NPCSpawner(scene, null);
+        this.npcSpawner.npcManager = this;
         this.zoneManager = new ZoneManager(
             playerControls,
             (zoneKey) => this.activateZone(zoneKey),
@@ -29,10 +30,11 @@ export class NPCManager {
 
     initializeSpawner(terrain) {
         this.terrain = terrain;
-        this.npcSpawner = new NPCSpawner(this.scene, this.terrain);
+        this.npcSpawner.terrain = terrain;
     }
 
     addNpc(npc) {
+        npc.npcManager = this; // Provide reference to manager
         this.npcs.push(npc);
         this.scene.add(npc.model);
     }
@@ -47,7 +49,7 @@ export class NPCManager {
     useEyebotModels(data, replaceExisting = true) {
         this.npcSpawner.setAnimatedData('eyebot', data);
         if (replaceExisting) {
-            this.npcSpawner.replaceNpcModels('eyebot');
+            this.npcSpawner.replaceNpcModels('eyebot', true);
         }
     }
 
@@ -130,6 +132,13 @@ export class NPCManager {
             const model = npc.model;
 
             if (USE_BOUNDING_BOX_CULLING && model.userData.boundingBox) {
+                /* @tweakable A flag to enable a workaround for a Three.js bug where bounding boxes are not cloned correctly. Set to false if you notice performance issues or upgrade Three.js. */
+                const CLONE_BOUNDING_BOX_FIX = true;
+                if (CLONE_BOUNDING_BOX_FIX && typeof model.userData.boundingBox.clone !== 'function') {
+                     // Bounding box might not be a Box3 instance, recreate it.
+                    model.userData.boundingBox = new THREE.Box3().setFromObject(model);
+                }
+
                 const tempBox = model.userData.boundingBox.clone();
                 tempBox.applyMatrix4(model.matrixWorld);
                 isVisible = this.frustum.intersectsBox(tempBox);

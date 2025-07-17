@@ -33,7 +33,7 @@ export const WIREFRAME_NPC_SCALE = 0.8;
 /* @tweakable The scale of the animated alien NPCs. */
 export const ALIEN_NPC_SCALE = 1.0;
 /* @tweakable The scale of the eyebot NPCs. */
-export const EYEBOT_NPC_SCALE = 0.5;
+export const EYEBOT_NPC_SCALE = 0.25;
 /* @tweakable Base height of eyebots above terrain. */
 export const EYEBOT_FLY_HEIGHT = 2.0;
 /* @tweakable Variation in eyebot flying height when wandering. */
