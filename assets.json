@@ -170,6 +170,26 @@
       "type": "model",
       "name": "Shopkeeper Cheer with Both Hands Animation",
       "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Shopkeeper/Animation_Cheer_with_Both_Hands_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Ogre Idle Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Ogre/Animation_Idle_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Ogre Walking Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Ogre/Animation_Walking_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Ogre Running Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Ogre/Animation_Running_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Ogre Listening Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Ogre/Animation_Listening_Gesture_withSkin.glb"
     }
   ]
 }

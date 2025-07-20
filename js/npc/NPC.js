@@ -9,6 +9,11 @@ import {
     MIN_FLY_HEIGHT
 } from './constants.js';
 
+/* @tweakable The radius of the NPC's collision shape. */
+const NPC_COLLISION_RADIUS = 0.3;
+/* @tweakable The height of the NPC's collision shape. */
+const NPC_COLLISION_HEIGHT = 1.8;
+
 export class NPC {
     constructor(model, presetId, zoneKey, isEyebot, startPosition, terrain) {
         this.model = model;
@@ -23,6 +28,10 @@ export class NPC {
         this.idleTimer = 0;
         this.velocity = new THREE.Vector3();
         this.npcManager = null; // Will be set by NPCManager
+        this.avoidTimer = 0;
+        this.avoidDirection = new THREE.Vector3();
+        /* @tweakable The radius of an eyebot's collision sphere. */
+        this.eyebotCollisionRadius = 1.0;
 
         if (isEyebot) {
             this.model.userData.baseY = startPosition.y;
@@ -69,6 +78,36 @@ export class NPC {
         this.state = 'wandering';
     }
 
+    _checkEyebotCollisions(proposedPosition) {
+        if (!this.npcManager || !this.npcManager.collisionManager) return null;
+
+        const collidables = [];
+        this.npcManager.scene.traverse(child => {
+            if (child.userData.isBarrier || child.userData.isTree) {
+                collidables.push(child);
+            }
+        });
+
+        // Check against other NPCs
+        this.getOtherNpcs().forEach(npc => collidables.push(npc.model));
+        // Check against player
+        if (this.npcManager.playerControls) {
+            collidables.push(this.npcManager.playerControls.getPlayerModel());
+        }
+
+        const eyebotBoundingSphere = new THREE.Sphere(proposedPosition, this.eyebotCollisionRadius);
+
+        for (const collidable of collidables) {
+            const collidableBox = new THREE.Box3().setFromObject(collidable);
+            if (collidableBox.intersectsSphere(eyebotBoundingSphere)) {
+                const collisionNormal = new THREE.Vector3().subVectors(proposedPosition, collidable.position).normalize();
+                return collisionNormal;
+            }
+        }
+
+        return null;
+    }
+
     update(delta, isVisible, playerModel) {
         if (!isVisible) return;
 
@@ -77,6 +116,13 @@ export class NPC {
         if (this.state === 'interacting') {
             this.updateAnimation(false, true, isVisible);
             return;
+        }
+
+        if (this.state === 'avoiding') {
+            this.avoidTimer -= delta;
+            if (this.avoidTimer <= 0) {
+                this.setIdle(0); // Go to idle and immediately decide next action
+            }
         }
 
         if (this.state === 'idle') {
@@ -94,63 +140,117 @@ export class NPC {
 
             const direction = this.targetPosition.clone().sub(this.model.position);
 
-            if (!this.isEyebot) {
-                direction.y = 0;
-            }
+            if (this.isEyebot) {
+                const step = direction.clone().normalize().multiplyScalar(NPC_SPEED);
+                const proposedPosition = this.model.position.clone().add(step);
+                const collisionNormal = this._checkEyebotCollisions(proposedPosition);
 
-            if (direction.length() < 1) { // Reached target
-                this.setIdle();
-                return;
-            }
-
-            direction.normalize();
-            
-            const step = direction.clone().multiplyScalar(NPC_SPEED);
-            const newPos = this.model.position.clone().add(step);
-            
-            let collision = false;
-            if (playerModel) {
-                const playerPosition = playerModel.position;
-                /* @tweakable The effective collision radius for an NPC for NPC-player collision. */
-                const npcCollisionRadius = 0.5;
-                /* @tweakable The effective collision radius for the player for NPC-player collision. */
-                const playerCollisionRadius = 0.5;
-                const minDistance = npcCollisionRadius + playerCollisionRadius;
-                
-                const npcPos2D = new THREE.Vector2(newPos.x, newPos.z);
-                const playerPos2D = new THREE.Vector2(playerPosition.x, playerPosition.z);
-                
-                if (npcPos2D.distanceTo(playerPos2D) < minDistance) {
-                    collision = true;
-                }
-            }
-
-            // NPC-NPC collision check
-            const otherNpcs = this.getOtherNpcs(); // Assumes a method to get other NPCs
-            for (const otherNpc of otherNpcs) {
-                const distanceToOther = newPos.distanceTo(otherNpc.model.position);
-                if (distanceToOther < 1.0) { // Simple radius check
-                    collision = true;
-                    break;
-                }
-            }
-            
-            if (collision) {
-                isMoving = false; // NPC stops moving
-            } else {
-                // No collision, update position
-                if (this.isEyebot) {
-                    this.model.position.copy(newPos);
-                    this.model.userData.baseY = newPos.y;
+                if (collisionNormal) {
+                    this.state = 'avoiding';
+                    this.avoidTimer = 500;
+                    this.avoidDirection.copy(collisionNormal);
                 } else {
-                    const terrainHeight = this.terrain.userData.getHeight(newPos.x, newPos.z) + 0.2;
-                    this.model.position.set(newPos.x, terrainHeight, newPos.z);
+                    this.model.position.copy(proposedPosition);
+                    this.model.userData.baseY = proposedPosition.y;
+                }
+
+                if (direction.length() < 1) { // Reached target
+                    this.setIdle();
+                    return;
+                }
+            } else {
+                direction.y = 0;
+
+                if (direction.length() < 1) { // Reached target
+                    this.setIdle();
+                    return;
+                }
+
+                const step = direction.clone().multiplyScalar(NPC_SPEED);
+                const proposedPosition = this.model.position.clone().add(step);
+
+                let finalPosition = proposedPosition;
+                let collision = false;
+                
+                if (this.npcManager && this.npcManager.collisionManager) {
+                    const result = this.npcManager.collisionManager.checkCollisions(
+                        this.model.position,
+                        proposedPosition,
+                        new THREE.Vector3(), // Velocity is not used for simple NPC movement
+                        NPC_COLLISION_RADIUS,
+                        NPC_COLLISION_HEIGHT
+                    );
+                    finalPosition = result.finalPosition;
+                    // Check if a collision occurred by seeing if the final position is different from proposed
+                    if (finalPosition.distanceTo(proposedPosition) > 0.01) {
+                        collision = true;
+                    }
+                }
+
+                // Player collision check
+                if (playerModel) {
+                    const playerPosition = playerModel.position;
+                    /* @tweakable The effective collision radius for an NPC for NPC-player collision. */
+                    const npcCollisionRadius = 0.5;
+                    /* @tweakable The effective collision radius for the player for NPC-player collision. */
+                    const playerCollisionRadius = 0.5;
+                    const minDistance = npcCollisionRadius + playerCollisionRadius;
+                    
+                    const npcPos2D = new THREE.Vector2(finalPosition.x, finalPosition.z);
+                    const playerPos2D = new THREE.Vector2(playerPosition.x, playerPosition.z);
+                    
+                    if (npcPos2D.distanceTo(playerPos2D) < minDistance) {
+                        collision = true;
+                    }
+                }
+
+                // NPC-NPC collision check
+                const otherNpcs = this.getOtherNpcs(); // Assumes a method to get other NPCs
+                for (const otherNpc of otherNpcs) {
+                    const distanceToOther = finalPosition.distanceTo(otherNpc.model.position);
+                    if (distanceToOther < 1.0) { // Simple radius check
+                        collision = true;
+                        break;
+                    }
                 }
                 
-                if (!this.isEyebot) {
-                    const angle = Math.atan2(direction.x, direction.z);
-                    this.model.rotation.y = angle;
+                if (collision) {
+                    this.state = 'avoiding';
+                    /* @tweakable The duration in milliseconds for an NPC's avoidance maneuver after a collision. */
+                    this.avoidTimer = 500;
+                    this.avoidDirection.copy(direction).negate();
+                    // Add some randomness so it doesn't just go back and forth
+                    const randomAngle = (Math.random() - 0.5) * (Math.PI / 2); // +/- 45 degrees
+                    this.avoidDirection.applyAxisAngle(new THREE.Vector3(0, 1, 0), randomAngle);
+                    isMoving = true;
+                } else {
+                    // No collision, update position
+                    const terrainHeight = this.terrain.userData.getHeight(finalPosition.x, finalPosition.z) + 0.2;
+                    this.model.position.set(finalPosition.x, terrainHeight, finalPosition.z);
+
+                    if (!this.isEyebot) {
+                        const angle = Math.atan2(direction.x, direction.z);
+                        this.model.rotation.y = angle;
+                    }
                 }
+            }
+        } else if (this.state === 'avoiding') {
+            isMoving = true;
+            const step = this.avoidDirection.clone().multiplyScalar(NPC_SPEED);
+            const proposedPosition = this.model.position.clone().add(step);
+
+            if (this.isEyebot) {
+                // No collision check while actively avoiding to prevent getting stuck
+                this.model.position.copy(proposedPosition);
+                this.model.userData.baseY = proposedPosition.y;
+            } else {
+                const terrainHeight = this.terrain.userData.getHeight(proposedPosition.x, proposedPosition.z) + 0.2;
+                this.model.position.set(proposedPosition.x, terrainHeight, proposedPosition.z);
+            }
+
+            if (!this.isEyebot) {
+                const angle = Math.atan2(this.avoidDirection.x, this.avoidDirection.z);
+                this.model.rotation.y = angle;
             }
         }
         

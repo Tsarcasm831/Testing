@@ -78,6 +78,28 @@
   min-height: 20px;
 }
 
+.options-progress-bar-container {
+    /* @tweakable The width of the download progress bar. */
+    width: 100%;
+    /* @tweakable The height of the download progress bar. */
+    height: 8px;
+    /* @tweakable The background color of the download progress bar container. */
+    background-color: var(--white-10);
+    /* @tweakable The border radius of the download progress bar. */
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.options-progress-bar {
+    height: 100%;
+    /* @tweakable The color of the download progress bar. */
+    background-color: #2196F3;
+    width: 0%;
+    /* @tweakable The transition speed for the progress bar fill. */
+    transition: width 0.2s ease-in-out;
+}
+
 #replace-player-button {
   display: none;
   margin-top: 10px;

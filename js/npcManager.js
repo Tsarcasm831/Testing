@@ -13,6 +13,7 @@ export class NPCManager {
         this.playerControls = playerControls;
         this.npcs = [];
         this.lastUpdateTime = 0;
+        this.collisionManager = null;
         
         // Spawner is initialized once, and terrain is added later.
         this.npcSpawner = new NPCSpawner(scene, null);
@@ -78,6 +79,13 @@ export class NPCManager {
         this.npcSpawner.setAnimatedData('chicken', data);
         if (replaceExisting) {
             this.npcSpawner.replaceNpcModels('chicken');
+        }
+    }
+
+    useAnimatedOgres(data, replaceExisting = true) {
+        this.npcSpawner.setAnimatedData('ogre', data);
+        if (replaceExisting) {
+            this.npcSpawner.replaceNpcModels('ogre');
         }
     }
 

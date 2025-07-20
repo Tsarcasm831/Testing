@@ -7,4 +7,8 @@ export { createStarterHouse } from './worldgen/starterHouse.js';
 export { createGroundGrid } from './worldgen/groundGrid.js';
 export { createShopkeeper } from './worldgen/shopkeeper.js';
 export { createAmphitheatre } from './worldgen/amphitheatre.js';
-
+export { createHospital } from './worldgen/hospital.js';
+export { createTavern } from './worldgen/tavern.js';
+export { createWorkshop } from './worldgen/workshop.js';
+export { createNurse } from './worldgen/nurse.js';
+export { createTavernkeep } from './worldgen/tavernkeep.js';

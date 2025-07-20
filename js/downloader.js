@@ -8,19 +8,29 @@ export class Downloader {
       throw new Error(`Failed to fetch ${url}`);
     }
     const contentLength = parseInt(response.headers.get('Content-Length')) || 0;
-    const reader = response.body.getReader();
-    let received = 0;
-    const chunks = [];
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      chunks.push(value);
-      received += value.length;
-      if (progressCallback && contentLength) {
-        progressCallback(received / contentLength);
-      }
+    
+    // Create a new ReadableStream to ensure it's not closed prematurely.
+    const stream = new ReadableStream({
+        async start(controller) {
+            const reader = response.body.getReader();
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                controller.enqueue(value);
+            }
+            controller.close();
+        }
+    });
+
+    const newResponse = new Response(stream);
+    const blob = await newResponse.blob();
+
+    if (progressCallback && contentLength) {
+        // Since we consume the stream fully to create a blob, progress is 100% at the end.
+        progressCallback(1);
     }
-    return new Blob(chunks);
+
+    return blob;
   }
 
   async preloadAssets(assets, progressCallback, overallProgressCallback) {

@@ -6,6 +6,14 @@
   display: block;
 }
 
+.mobile-device #joystick {
+  display: block;
+}
+
+.mobile-device #lookPad {
+  display: block;
+}
+
 .mobile-device #jump-button {
   display: block;
 }
@@ -18,20 +26,20 @@
 
 /* @tweakable Vertical layout for main UI buttons on mobile */
 .mobile-device #options-button {
-    bottom: 180px;
-    right: 20px;
+    top: 20px;
+    right: 90px;
 }
 .mobile-device #map-button {
-    bottom: 250px;
-    right: 20px;
+    top: 20px;
+    right: 160px;
 }
 .mobile-device #inventory-button {
-    bottom: 320px;
-    right: 20px;
+    top: 20px;
+    right: 230px;
 }
 .mobile-device #chat-button {
-    bottom: 390px;
-    right: 20px;
+    top: 20px;
+    right: 300px;
 }
 
 .mobile-device #character-creator-button {

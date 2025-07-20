@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>3D Overworld Template v1.9.6.3</title>
+  <title>3D Overworld Template v1.9.6.8</title>
   <script>
     // Suppress specific cookie-related console errors and warnings
     /* @tweakable List of phrases to filter from console error/warning messages. */
@@ -39,6 +39,7 @@
   <link rel="stylesheet" href="styles/options.css">
   <link rel="stylesheet" href="styles/interaction.css">
   <link rel="stylesheet" href="styles/compass.css">
+  <link rel="stylesheet" href="admin.css">
   <script type="importmap">
     {
       "imports": {
@@ -47,15 +48,18 @@
       }
     }
   </script>
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.10.1/dist/nipplejs.min.js"></script>
 </head>
 <body oncontextmenu="return false;">
-  <div id="joystick-container"></div>
-  <div id="right-side-touch-area"></div>
+  <div id="joystick"></div>
+  <div id="camera-joystick-container"></div>
+  <div id="jump-button"></div>
   <div id="game-container">
     <div class="crosshair"></div>
   </div>
   <div id="label-container"></div>
+  <div id="css3d-container"></div>
   <div id="ui-container"></div>
   <script src="js/app.js" type="module"></script>
 </body>

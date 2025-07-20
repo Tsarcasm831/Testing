@@ -1,6 +1,6 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Downloader } from './downloader.js';
-import { setupAnimatedPlayer, setupAnimatedRobot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupEyebot, setupAnimatedShopkeeper } from './animationSetup.js';
+import { setupAnimatedPlayer, setupAnimatedRobot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupEyebot, setupAnimatedShopkeeper, setupAnimatedOgre } from './animationSetup.js';
 
 export class AssetReplacementManager {
     constructor(dependencies) {
@@ -53,6 +53,12 @@ export class AssetReplacementManager {
                 clipNames: ['idle', 'walk', 'listen'],
                 setupFn: setupAnimatedShopkeeper,
                 applyFn: (modelData) => this.dependencies.npcManager.useAnimatedShopkeepers(modelData)
+            },
+            'ogre': {
+                assetNames: ['Ogre Idle Animation', 'Ogre Walking Animation', 'Ogre Running Animation', 'Ogre Listening Animation'],
+                clipNames: ['idle', 'walk', 'run', 'listen'],
+                setupFn: setupAnimatedOgre,
+                applyFn: (modelData) => this.dependencies.npcManager.useAnimatedOgres(modelData)
             }
         };
     }
@@ -112,19 +118,7 @@ export class AssetReplacementManager {
 
         this.updateStatus('Replacing all models...');
 
-        for (const type in this.modelTypes) {
-            if (type === 'player') continue;
-
-            const capitalizedType = type.charAt(0).toUpperCase() + type.slice(1);
-            const useAnimatedFnName = `useAnimated${capitalizedType}s`;
-            const useModelsFnName = `use${capitalizedType}Models`;
-            
-            if(this.dependencies.npcManager[useAnimatedFnName]){
-                 this.dependencies.npcManager[useAnimatedFnName]({}, false); // Clear existing
-            } else if(this.dependencies.npcManager[useModelsFnName]) {
-                this.dependencies.npcManager[useModelsFnName]({}, false); // Clear existing
-            }
-        }
+        this.dependencies.npcManager.updatePlayerModel(null, true);
 
         for (const type of Object.keys(this.modelTypes)) {
             await this.replaceModel(type, false);

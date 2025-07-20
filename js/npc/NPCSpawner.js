@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { createPlayerModel } from '../playerModel.js';
-import { setupAnimatedRobot, setupEyebot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupAnimatedShopkeeper } from '../animationSetup.js';
+import { setupAnimatedRobot, setupEyebot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupAnimatedShopkeeper, setupAnimatedOgre } from '../animationSetup.js';
 import { presetCharacters } from '../characters/presets.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { NPC } from './NPC.js';
@@ -8,6 +8,7 @@ import {
     USE_BOUNDING_BOX_CULLING,
     ROBOT_SPAWN_CHANCE,
     EYEBOT_SPAWN_CHANCE,
+    OGRE_SPAWN_CHANCE,
     NPC_ADJECTIVES,
     MIN_NPCS_PER_ZONE,
     MAX_NPCS_PER_ZONE,
@@ -16,6 +17,7 @@ import {
     WIREFRAME_NPC_SCALE,
     ALIEN_NPC_SCALE,
     SHOPKEEPER_NPC_SCALE,
+    OGRE_NPC_SCALE,
     EYEBOT_NPC_SCALE,
     EYEBOT_FLY_HEIGHT,
     FIX_FRUSTUM_CULLING_BUG
@@ -106,6 +108,15 @@ export class NPCSpawner {
                 npcModel.traverse(c => { c.castShadow = true; });
                 npcModel.scale.set(CHICKEN_NPC_SCALE, CHICKEN_NPC_SCALE, CHICKEN_NPC_SCALE);
             }
+            else if (this.animatedData.ogre && this.animatedData.ogre.model && Math.random() < OGRE_SPAWN_CHANCE) {
+                preset = presetCharacters.find(p => p.id === 'ogre');
+                const ogreData = this.animatedData.ogre;
+                npcModel = SkeletonUtils.clone(ogreData.model);
+                ogreData.setupFn(npcModel, ogreData.idleClip, ogreData.walkClip, ogreData.runClip, ogreData.listenClip);
+                npcModel.name = `${adjective} Ogre`;
+                npcModel.traverse(c => { c.castShadow = true; });
+                npcModel.scale.set(OGRE_NPC_SCALE, OGRE_NPC_SCALE, OGRE_NPC_SCALE);
+            }
             else {
                 let availablePresets = presetCharacters;
                 if (this.animatedData.robot) {
@@ -122,6 +133,9 @@ export class NPCSpawner {
                 }
                 if (this.animatedData.eyebot) {
                     availablePresets = availablePresets.filter(p => p.id !== 'eyebot');
+                }
+                if (this.animatedData.ogre) {
+                    availablePresets = availablePresets.filter(p => p.id !== 'ogre');
                 }
                 
                 // Exclude the unique shopkeeper from random spawning
@@ -230,6 +244,9 @@ export class NPCSpawner {
                 } else if (npcType === 'shopkeeper') {
                     setupAnimatedShopkeeper(newModel, this.animatedData.shopkeeper.idleClip, this.animatedData.shopkeeper.walkClip, this.animatedData.shopkeeper.listenClip);
                 }
+                else if (npcType === 'ogre') {
+                    setupAnimatedOgre(newModel, this.animatedData.ogre.idleClip, this.animatedData.ogre.walkClip, this.animatedData.ogre.runClip, this.animatedData.ogre.listenClip);
+                }
             }
             
             const adjective = NPC_ADJECTIVES[Math.floor(Math.random() * NPC_ADJECTIVES.length)];
@@ -242,6 +259,7 @@ export class NPCSpawner {
                 case 'wireframe': newModel.name = `${adjective} Wireframe`; scale = WIREFRAME_NPC_SCALE; break;
                 case 'alien': newModel.name = `${adjective} Alien`; scale = ALIEN_NPC_SCALE; break;
                 case 'shopkeeper': newModel.name = `Shopkeeper`; scale = SHOPKEEPER_NPC_SCALE; break;
+                case 'ogre': newModel.name = `${adjective} Ogre`; scale = OGRE_NPC_SCALE; break;
             }
 
             newModel.traverse(c => { c.castShadow = true; });

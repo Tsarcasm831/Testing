@@ -1,0 +1,31 @@
+.options-tab.admin-tab {
+    border-bottom: 2px solid transparent;
+    color: #ffc107;
+}
+
+.options-tab.admin-tab:hover {
+    color: #ffeb3b;
+}
+
+.options-tab.admin-tab.active {
+    color: #ffeb3b;
+    border-bottom: 2px solid #ffc107;
+}
+
+#options-tab-admin h3 {
+    color: #ffc107;
+}
+
+#options-tab-admin input[type="text"] {
+    flex-grow: 1;
+    background-color: #ffffff;
+    color: black;
+    border: 1px solid #cccccc;
+    padding: 5px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+#save-youtube-url {
+    background-color: #ff9800;
+}

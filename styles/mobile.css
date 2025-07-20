@@ -1,9 +1,10 @@
 /* @tweakable Position and size of the movement joystick on mobile. */
-#joystick-container {
+#joystick {
   position: fixed;
+  /* @tweakable Bottom offset of joystick. */
   bottom: 20px;
+  /* @tweakable Left offset of joystick. */
   left: 20px;
-  right: auto;
   width: 150px;
   height: 150px;
   z-index: 1000;
@@ -14,7 +15,7 @@
   display: none;
 }
 
-#right-side-touch-area {
+#lookPad {
   position: fixed;
   top: 0;
   right: 0;
@@ -28,20 +29,24 @@
 /* @tweakable Position and size of the camera joystick on mobile. */
 #camera-joystick-container {
     position: fixed;
+    /* @tweakable Bottom offset of camera joystick. */
     bottom: 20px;
+    /* @tweakable Right offset of camera joystick. */
     right: 20px;
     width: 150px;
     height: 150px;
     z-index: 1000;
     touch-action: none;
     /* @tweakable The background color of the camera joystick area. */
-    background-color: var(--white-20);
+    background-color: rgba(255, 255, 255, 0.15);
     border-radius: 50%;
+    display: none;
 }
 
 /* @tweakable Position and size of the jump button on mobile. */
 #jump-button {
   position: fixed;
+  /* @tweakable The position of the jump button on mobile devices. */
   bottom: 30px;
   right: 180px;
   width: 80px;
@@ -56,4 +61,20 @@
   font-weight: bold;
   color: #333;
   user-select: none;
+}
+
+.mobile-device #joystick {
+  display: block;
+}
+
+.mobile-device #lookPad {
+  display: block;
+}
+
+.mobile-device #camera-joystick-container {
+  display: block;
+}
+
+.mobile-device #jump-button {
+  display: block;
 }

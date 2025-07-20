@@ -2,10 +2,9 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { SPEED, GRAVITY, JUMP_FORCE, MOBILE_SPEED_MULTIPLIER, FORCE_MOBILE_MODE, RUN_SPEED_MULTIPLIER } from "./controls/constants.js";
 import { InputManager } from "./controls/InputManager.js";
-import { CollisionManager } from "./collisionManager.js";
 
 /* @tweakable Speed of camera rotation with the joystick on mobile. */
-const mobileCameraRotateSpeed = 0.05;
+const mobileCameraRotateSpeed = 0.002;
 /* @tweakable Minimum camera zoom distance on mobile */
 const mobileMinZoom = 2;
 /* @tweakable Maximum camera zoom distance on mobile */
@@ -14,6 +13,8 @@ const mobileMaxZoom = 10;
 const PLAYER_COLLISION_RADIUS = 0.3;
 /* @tweakable The height of the player's collision shape. */
 const PLAYER_COLLISION_HEIGHT = 1.8;
+/* @tweakable Key for storing mobile controls preference in localStorage. */
+const MOBILE_CONTROLS_STORAGE_KEY = 'websim-force-mobile-controls';
 
 export class PlayerControls {
   constructor(scene, room, options = {}) {
@@ -35,6 +36,10 @@ export class PlayerControls {
     // Player state
     this.velocity = new THREE.Vector3();
     this.canJump = true;
+
+    // Clear any previously cached control setting to ensure autodetection works.
+    localStorage.removeItem('websim-force-mobile-controls');
+
     this.isMobile = FORCE_MOBILE_MODE || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     // Add mobile-device class to body for CSS styling
@@ -43,8 +48,8 @@ export class PlayerControls {
     }
 
     // Input manager
-    this.inputManager = new InputManager(this.isMobile, this.isMobile ? document.getElementById('right-side-touch-area') : this.domElement);
-    this.collisionManager = new CollisionManager(scene);
+    this.inputManager = new InputManager(this.isMobile, this.isMobile ? document.getElementById('lookPad') : this.domElement, this);
+    this.collisionManager = options.collisionManager;
 
     // Initial player position
     const initialPos = options.initialPosition || {};
@@ -91,36 +96,38 @@ export class PlayerControls {
     this.enabled = true; // Add enabled flag for chat input
   }
   
+  toggleMobileControls() {
+    this.isMobile = !this.isMobile;
+    localStorage.setItem(MOBILE_CONTROLS_STORAGE_KEY, this.isMobile);
+
+    this.inputManager.destroy();
+    this.inputManager = new InputManager(this.isMobile, this.isMobile ? document.getElementById('lookPad') : this.domElement, this);
+
+    if (this.isMobile) {
+        document.body.classList.add('mobile-device');
+    } else {
+        document.body.classList.remove('mobile-device');
+    }
+    
+    // Update orbit controls properties
+    this.controls.minDistance = this.isMobile ? mobileMinZoom : 3;
+    this.controls.maxDistance = this.isMobile ? mobileMaxZoom : 10;
+    
+    const instructions = document.querySelector(".instructions");
+    if (instructions && this.isMobile) {
+        instructions.style.display = 'none';
+    }
+  }
+
   setPlayerModel(model) {
     this.playerModel = model;
     if (this.terrain) {
-        const terrainHeight = this.terrain.userData.getHeight(this.playerX, this.playerZ);
+        const terrainHeight = this.collisionManager.getGroundHeight(this.playerX, this.playerZ);
         this.playerModel.position.set(this.playerX, terrainHeight + this.playerY, this.playerZ);
     } else {
         this.playerModel.position.set(this.playerX, this.playerY, this.playerZ);
     }
     this.lastPosition.copy(this.playerModel.position);
-  }
-
-  getGroundHeight(x, z) {
-    if (!this.terrain) return 0;
-
-    const raycaster = new THREE.Raycaster();
-    /* @tweakable The starting height of the raycast used to detect ground collision. Should be higher than the highest point in the world. */
-    const rayOriginHeight = 50;
-    const rayOrigin = new THREE.Vector3(x, rayOriginHeight, z);
-    const rayDirection = new THREE.Vector3(0, -1, 0);
-    raycaster.set(rayOrigin, rayDirection);
-
-    // Only check for intersection with the terrain object
-    const intersects = raycaster.intersectObject(this.terrain);
-
-    if (intersects.length > 0) {
-      return intersects[0].point.y; // Return the precise intersection point's y-coordinate
-    }
-
-    // Fallback to the noise function if raycast fails for some reason
-    return this.terrain.userData.getHeight(x, z);
   }
 
   initializeControls() {
@@ -131,6 +138,10 @@ export class PlayerControls {
     this.controls.maxPolarAngle = Math.PI * 0.9; // Prevent going below ground
     this.controls.minDistance = this.isMobile ? mobileMinZoom : 3; // Minimum zoom distance
     this.controls.maxDistance = this.isMobile ? mobileMaxZoom : 10; // Maximum zoom distance
+    /* @tweakable The rotation speed of the camera. */
+    this.controls.rotateSpeed = 0.5;
+     /* @tweakable The zoom speed of the camera. */
+    this.controls.zoomSpeed = 0.8;
     
     // Update camera offset when controls change
     this.controls.addEventListener('change', () => {
@@ -138,8 +149,10 @@ export class PlayerControls {
     });
 
     if (this.isMobile) {
-      // The jump button is created in app.js.
-      // The event listener is handled by InputManager.js.
+      // The InputManager handles the creation of joysticks and touch listeners.
+      // We just need to make sure the UI elements are visible.
+      document.getElementById('joystick').style.display = 'block';
+      document.getElementById('jump-button').style.display = 'block';
     } else {
       // Add instructions for desktop
       const instructionsDiv = document.createElement('div');
@@ -178,11 +191,11 @@ export class PlayerControls {
     });
   }
   
-  processMovement() {
+  processMovement(delta) {
     // Skip movement processing if controls are disabled
     if (!this.enabled) return;
 
-    if (this.isMobile && this.inputManager.isJumping() && this.canJump) {
+    if (this.inputManager.isJumping() && this.canJump) {
       this.velocity.y = JUMP_FORCE;
       this.canJump = false;
     }
@@ -191,7 +204,7 @@ export class PlayerControls {
     const y = this.playerModel.position.y;
     const z = this.playerModel.position.z;
     
-    const moveDirection = this.inputManager.getMovementDirection();
+    const moveDir = this.inputManager.getMovementDirection();
     const isRunning = this.inputManager.isRunning();
     
     const cameraDirection = new THREE.Vector3();
@@ -203,20 +216,8 @@ export class PlayerControls {
     rightVector.crossVectors(this.camera.up, cameraDirection).normalize();
     
     const movement = new THREE.Vector3();
-    if (this.isMobile) {
-        // For mobile, moveDirection.z is forward/backward from joystick
-        // moveDirection.x is left/right from joystick
-        movement.addScaledVector(cameraDirection, moveDirection.z);
-        // rightVector points left relative to the camera, so invert for correct orientation
-        movement.addScaledVector(rightVector, moveDirection.x * -1);
-    } else {
-        if (moveDirection.z !== 0) {
-            movement.add(cameraDirection.clone().multiplyScalar(moveDirection.z));
-        }
-        if (moveDirection.x !== 0) {
-            movement.add(rightVector.clone().multiplyScalar(moveDirection.x * -1)); // Invert for desktop standard
-        }
-    }
+    movement.addScaledVector(cameraDirection, moveDir.z);
+    movement.addScaledVector(rightVector, -moveDir.x);
     
     if (movement.length() > 0) {
         let moveSpeed = this.isMobile ? SPEED * MOBILE_SPEED_MULTIPLIER : SPEED;
@@ -251,7 +252,7 @@ export class PlayerControls {
     }
     
     // Ground collision logic moved here to always check against terrain after object collision
-    const terrainHeight = this.getGroundHeight(newX, newZ);
+    const terrainHeight = this.collisionManager.getGroundHeight(newX, newZ);
     /* @tweakable The vertical offset of the player model from the ground to prevent clipping. */
     const groundOffset = 0;
     const groundLevel = terrainHeight + groundOffset;
@@ -369,7 +370,20 @@ export class PlayerControls {
       }
     }
     
-    this.controls.update();
+    // Still update controls for camera movement when player movement is disabled
+    if (this.controls) {
+        // Mobile camera rotation is now handled by OrbitControls directly.
+        this.controls.update();
+    }
+
+    if (this.isMobile) {
+      // Mobile camera logic is now event-driven in initializeControls
+    }
+    
+    // Update animation mixer if it exists
+    if (this.playerModel && this.playerModel.userData.mixer) {
+        this.playerModel.userData.mixer.update(delta);
+    }
   }
   
   update() {
@@ -380,20 +394,12 @@ export class PlayerControls {
     this.time = (now * 0.01) % 1000;
     
     if (this.enabled) {
-      this.processMovement();
+      this.processMovement(delta);
     } else {
         // Still update controls for camera movement when player movement is disabled
-        if (this.controls) this.controls.update();
-    }
-
-    if (this.isMobile) {
-      this.controls.enabled = !this.inputManager.isCameraMoving();
-      const cameraMove = this.inputManager.getCameraMovement();
-      if (cameraMove.x !== 0 || cameraMove.y !== 0) {
-        const rotateSpeed = mobileCameraRotateSpeed;
-        this.controls.rotateLeft(-cameraMove.x * rotateSpeed);
-        this.controls.rotateUp(-cameraMove.y * rotateSpeed);
-      }
+        if (this.controls) {
+            this.controls.update();
+        }
     }
     
     // Update animation mixer if it exists

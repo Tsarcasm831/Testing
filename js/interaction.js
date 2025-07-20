@@ -19,7 +19,9 @@ export class InteractionManager {
         this.renderer = dependencies.renderer;
         
         this.isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         this.interactionPrompt = null;
+        this.mobileInteractionButton = null;
         this.conversationModal = null;
         this.targetNpc = null;
         this.lastCheckTime = 0;
@@ -38,6 +40,17 @@ export class InteractionManager {
         `;
         document.getElementById('game-container').appendChild(promptEl);
         this.interactionPrompt = promptEl;
+
+        // Create mobile interaction button
+        if (this.isMobile) {
+            const mobileButton = document.createElement('div');
+            mobileButton.id = 'mobile-interaction-button';
+            mobileButton.textContent = 'Talk';
+            mobileButton.style.display = 'none';
+            document.getElementById('ui-container').appendChild(mobileButton);
+            this.mobileInteractionButton = mobileButton;
+            this.mobileInteractionButton.addEventListener('click', this.handleMobileInteraction.bind(this));
+        }
 
         // Create conversation modal UI
         const modalEl = document.createElement('div');
@@ -65,6 +78,10 @@ export class InteractionManager {
                 this.interactionPrompt.style.display = 'none';
                 this.targetNpc = null;
             }
+            if (this.conversationModal.style.display === 'flex' && this.mobileInteractionButton && this.mobileInteractionButton.style.display !== 'none') {
+                this.mobileInteractionButton.style.display = 'none';
+                this.targetNpc = null;
+            }
             return;
         }
         
@@ -85,16 +102,19 @@ export class InteractionManager {
         this.targetNpc = closestNpc;
 
         if (this.targetNpc) {
-            this.updatePromptPosition();
-            const nameEl = this.interactionPrompt.querySelector('.interaction-npc-name');
-            const instructionEl = this.interactionPrompt.querySelector('.interaction-instruction');
-            
-            nameEl.innerText = this.targetNpc.model.name || 'NPC';
-            instructionEl.innerText = 'Press F to talk';
-            
-            nameEl.style.fontSize = NPC_NAME_FONT_SIZE;
-            instructionEl.style.fontSize = INSTRUCTION_FONT_SIZE;
-
+            if (this.isDesktop) {
+                this.updatePromptPosition();
+                const nameEl = this.interactionPrompt.querySelector('.interaction-npc-name');
+                const instructionEl = this.interactionPrompt.querySelector('.interaction-instruction');
+                
+                nameEl.innerText = this.targetNpc.model.name || 'NPC';
+                instructionEl.innerText = 'Press F to talk';
+                
+                nameEl.style.fontSize = NPC_NAME_FONT_SIZE;
+                instructionEl.style.fontSize = INSTRUCTION_FONT_SIZE;
+            } else if (this.mobileInteractionButton) {
+                this.mobileInteractionButton.style.display = 'flex';
+            }
         } else if (this.interactionPrompt.style.display !== 'none') {
             this.interactionPrompt.style.display = 'none';
         }
@@ -134,6 +154,12 @@ export class InteractionManager {
 
     handleKeyDown(event) {
         if (event.key.toLowerCase() === 'f' && this.targetNpc && this.conversationModal.style.display === 'none') {
+            this.startConversation();
+        }
+    }
+
+    handleMobileInteraction() {
+        if (this.targetNpc && this.conversationModal.style.display === 'none') {
             this.startConversation();
         }
     }
@@ -180,7 +206,8 @@ export class InteractionManager {
         this.conversationModal.querySelector('#npc-dialogue').innerText = text;
         this.conversationModal.style.display = 'flex';
         this.playerControls.enabled = false;
-        this.interactionPrompt.style.display = 'none';
+        if (this.interactionPrompt) this.interactionPrompt.style.display = 'none';
+        if (this.mobileInteractionButton) this.mobileInteractionButton.style.display = 'none';
     }
 
     closeModal() {

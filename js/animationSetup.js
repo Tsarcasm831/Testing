@@ -22,6 +22,12 @@ export function setupAnimatedPlayer(model, idleClip, walkClip, runClip) {
         run: mixer.clipAction(runClip),
     };
     
+    /* @tweakable The playback speed of the player animations. 1 is normal speed, 0.5 is half speed. */
+    const animationTimeScale = 0.5;
+    actions.idle.timeScale = animationTimeScale;
+    actions.walk.timeScale = animationTimeScale;
+    actions.run.timeScale = animationTimeScale;
+
     /* @tweakable Duration for fading between animations in seconds. */
     model.userData.animationFadeDuration = 0.3;
 
@@ -185,6 +191,37 @@ export function setupAnimatedShopkeeper(model, idleClip, walkClip, listenClip) {
     actions.idle.play();
 
     /* @tweakable Rotation offset for the animated shopkeeper GLB model in radians. */
+    const rotationOffset = 0;
+    model.userData.rotationOffset = rotationOffset;
+
+    model.userData.mixer = mixer;
+    model.userData.actions = actions;
+    model.userData.isAnimatedGLB = true;
+
+    return model;
+}
+
+export function setupAnimatedOgre(model, idleClip, walkClip, runClip, listenClip) {
+    idleClip.name = 'idle';
+    walkClip.name = 'walk';
+    runClip.name = 'run';
+    listenClip.name = 'listen';
+
+    model.animations = [idleClip, walkClip, runClip, listenClip];
+
+    const mixer = new THREE.AnimationMixer(model);
+    const actions = {
+        idle: mixer.clipAction(idleClip),
+        walk: mixer.clipAction(walkClip),
+        run: mixer.clipAction(runClip),
+        listen: mixer.clipAction(listenClip),
+    };
+    
+    /* @tweakable Duration for fading between ogre animations in seconds. */
+    model.userData.animationFadeDuration = 0.4;
+    actions.idle.play();
+
+    /* @tweakable Rotation offset for the animated ogre GLB model in radians. */
     const rotationOffset = 0;
     model.userData.rotationOffset = rotationOffset;
 

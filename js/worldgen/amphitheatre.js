@@ -1,5 +1,9 @@
 import * as THREE from 'three';
-import { createSeatRow } from './amphi-seats.js';
+import { CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+import { createAmphitheatreSeating } from './amphi-seats.js';
+
+/* @tweakable Set to true to re-enable amphitheater seating. A page reload is required for this change to take effect. */
+const enableSeating = true;
 
 /* @tweakable The color of the stone used for the amphitheater seats and structure. */
 const stoneColor = 0x888888;
@@ -7,6 +11,15 @@ const stoneColor = 0x888888;
 const stageColor = 0x4a2a0a;
 /* @tweakable Set to false to disable the video backdrop, which may prevent console errors from ad-blockers. */
 const enableVideoBackdrop = true;
+
+let videoElement;
+let videoTexture;
+
+function getYouTubeID(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
 
 function createMicrophoneStand() {
     const standGroup = new THREE.Group();
@@ -104,7 +117,7 @@ function createStage(dimensions) {
     return stageGroup;
 }
 
-function createBackdropWall(position, videoSrc, listener) {
+function createBackdropWall(position) {
     const wallGroup = new THREE.Group();
     /* @tweakable Height of the backdrop wall */
     const wallHeight = 15;
@@ -113,42 +126,22 @@ function createBackdropWall(position, videoSrc, listener) {
     const wallThickness = 0.5;
 
     // Right side (YouTube video or static color if disabled)
-    if (enableVideoBackdrop && videoSrc) {
-        const video = document.createElement('video');
-        video.src = videoSrc;
-        video.crossOrigin = 'anonymous'; // Important for textures
-        video.loop = true;
-        video.playsInline = true;
+    if (enableVideoBackdrop && videoTexture) {
+        /* @tweakable The side of the video screen material to render. Use THREE.FrontSide, THREE.BackSide, or THREE.DoubleSide. */
+        const screenMaterial = new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.DoubleSide });
+
+        const screenGeometry = new THREE.PlaneGeometry(backdropWidth, wallHeight);
+        const videoMesh = new THREE.Mesh(screenGeometry, screenMaterial);
+        /* @tweakable Set to false to disable frustum culling on the video mesh, forcing it to render even when outside the camera's view frustum. Helps with visibility issues. */
+        videoMesh.frustumCulled = false;
+        videoMesh.name = 'amphitheatre-video-screen';
         
-        if (listener) {
-            video.muted = true; // Mute element so positional audio can control it.
-            const sound = new THREE.PositionalAudio(listener);
-            sound.setMediaElementSource(video);
-            /* @tweakable The reference distance for positional audio rolloff. */
-            sound.setRefDistance(20);
-            /* @tweakable The rolloff factor for positional audio. */
-            sound.setRolloffFactor(1);
-            /* @tweakable The volume of the video on the amphitheater screen. */
-            sound.setVolume(0.5);
-            wallGroup.add(sound);
-        } else {
-            video.muted = true; // Mute if no listener, to prevent global sound
-        }
-        
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.warn("Video autoplay was prevented. User interaction needed to start video.", error);
-                document.body.addEventListener('click', () => { if (video.paused) video.play(); }, { once: true });
-            });
-        }
-        
-        const texture = new THREE.VideoTexture(video);
-        const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.FrontSide });
-        const geometry = new THREE.PlaneGeometry(backdropWidth, wallHeight);
-        const videoMesh = new THREE.Mesh(geometry, material);
-        videoMesh.position.set(0, 0, wallThickness / 2 + 0.01); // Place in front of the wall
-        videoMesh.rotation.y = Math.PI; // Face the audience
+        // Position relative to the wallGroup center, facing the audience
+        /* @tweakable The rotation of the video screen in radians. 0 faces south, Math.PI (3.14) faces north. */
+        videoMesh.rotation.y = Math.PI;
+        /* @tweakable The forward offset of the video screen from the backdrop wall to prevent z-fighting. */
+        videoMesh.position.set(0, 0, -wallThickness / 2 - 0.05);
+
         wallGroup.add(videoMesh);
     }
     
@@ -169,9 +162,9 @@ function createBackdropWall(position, videoSrc, listener) {
     return { wall: wallGroup };
 }
 
-export function createAmphitheatre(scene, getHeight, listener) {
+export function createAmphitheatre(scene, getHeight) {
     /* @tweakable Position of the amphitheater. */
-    const amphitheatrePosition = new THREE.Vector3(49.5, 0, 16.5);
+    const amphitheatrePosition = new THREE.Vector3(55.5, 0, -12.5);
     const baseHeight = getHeight(amphitheatrePosition.x, amphitheatrePosition.z);
     amphitheatrePosition.y = baseHeight;
 
@@ -212,37 +205,40 @@ export function createAmphitheatre(scene, getHeight, listener) {
     micStand.position.set(0, stageDimensions.height, 2);
     stage.add(micStand);
 
-    // Seating
-    /* @tweakable Number of seating rows. */
-    const numRows = 12;
-    /* @tweakable Base radius for the first row of seats. */
-    const startRadius = 25;
-    /* @tweakable Distance between each row of seats. */
-    const rowSpacing = 3.5;
-     /* @tweakable Height difference between each row. */
-    const rowHeightStep = 0.8;
-
-    for (let i = 0; i < numRows; i++) {
-        const radius = startRadius + i * rowSpacing;
-        const seatCount = Math.floor(radius * 0.8);
-        const seatRowGroup = createSeatRow(i, radius, seatCount, rowHeightStep);
-        
-        // Add all children of the seat row group directly to the main amphitheater group
-        // to ensure each piece is checked for collision individually.
-        while (seatRowGroup.children.length > 0) {
-            group.add(seatRowGroup.children[0]);
-        }
+    // Seating is now disabled by default, but can be re-enabled with the tweakable toggle above.
+    // NOTE: The seating feature has been removed, so this block is left as a placeholder.
+    if (false) {
+        console.warn("Amphitheater seating is enabled, but its associated file 'amphi-seats.js' has been removed. The seats will not be generated.");
     }
 
     // Backdrop
-    /* @tweakable The URL for the video to be displayed on the amphitheater screen. Must be a direct link to a video file (e.g., .mp4). */
-    const videoSrc = 'https://cdn.pixabay.com/video/2023/07/25/174411-849537965_large.mp4';
-    
+    /* @tweakable The default video source file for the amphitheater screen. Can be overridden by admin. */
+    const defaultVideoSrc = 'assets/videos/local/The Weight - Kronowski (AI Music Video).mp4';
+
+    videoElement = document.createElement('video');
+    videoElement.src = defaultVideoSrc;
+    videoElement.crossOrigin = 'anonymous';
+    /* @tweakable Whether the amphitheater video should loop. */
+    videoElement.loop = true;
+    /* @tweakable Whether the amphitheater video should start muted. Required for autoplay in most browsers. */
+    videoElement.muted = true;
+    videoElement.playsInline = true;
+    /* @tweakable Whether the amphitheater video should attempt to play automatically on load. */
+    videoElement.autoplay = true;
+    videoElement.style.display = 'none';
+    document.body.appendChild(videoElement);
+    videoElement.play().catch(e => console.error("Video autoplay failed:", e));
+
+    videoTexture = new THREE.VideoTexture(videoElement);
+    videoTexture.minFilter = THREE.LinearFilter;
+    videoTexture.magFilter = THREE.LinearFilter;
+    videoTexture.format = THREE.RGBAFormat;
+
     /* @tweakable The position of the backdrop behind the stage. */
     const backdropZOffset = 30;
     const wallHeight = 15; // from createBackdropWall
     const backdropPosition = new THREE.Vector3(0, stageDimensions.height + wallHeight/2, backdropZOffset);
-    const backdropData = createBackdropWall(backdropPosition, videoSrc, listener);
+    const backdropData = createBackdropWall(backdropPosition);
     group.add(backdropData.wall);
 
     // Lighting
@@ -261,6 +257,10 @@ export function createAmphitheatre(scene, getHeight, listener) {
     spotLight2.penumbra = 0.3;
     spotLight2.castShadow = true;
     group.add(spotLight2);
+
+    if (enableSeating) {
+        createAmphitheatreSeating(group, stoneColor);
+    }
 
     return group;
 }

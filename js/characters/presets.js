@@ -9,6 +9,9 @@ import { plantCreaturePreset } from './presets/plantCreature.js';
 import { slimePreset } from './presets/slime.js';
 import { ghostPreset } from './presets/ghost.js';
 import { knightPreset } from './presets/knight.js';
+import { ogrePreset } from './presets/ogre.js';
+import { nursePreset } from './presets/nurse.js';
+import { tavernkeepPreset } from './presets/tavernkeep.js';
 
 export const presetCharacters = [
   robotsPreset,
@@ -21,7 +24,10 @@ export const presetCharacters = [
   plantCreaturePreset,
   slimePreset,
   ghostPreset,
-  knightPreset
+  knightPreset,
+  ogrePreset,
+  nursePreset,
+  tavernkeepPreset
 ];
 
 export { availableTextures } from './textures.js';

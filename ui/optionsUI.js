@@ -1,5 +1,6 @@
 import { AssetReplacementManager } from '../js/assetReplacementManager.js';
 import * as THREE from "three";
+import { getPlayer, setYoutubePlayerUrl } from '../js/youtubePlayer.js';
 
 export class OptionsUI {
     constructor(dependencies) {
@@ -52,6 +53,7 @@ export class OptionsUI {
                         <input type="range" id="view-distance" min="50" max="250" value="100" step="10">
                         <span id="view-distance-value">100</span>
                     </div>
+                    <button id="toggle-mobile-controls-button" class="option-button" data-tooltip="Toggle on-screen controls.">Toggle Mobile Controls</button>
                     <button id="respawn-button" class="option-button" data-tooltip="Return to the starting area">Respawn</button>
                 </div>
                 <div id="options-tab-assets" class="options-tab-content">
@@ -67,6 +69,7 @@ export class OptionsUI {
                         <button class="option-button" id="replace-wireframes-button" data-tooltip="Replace wireframe NPCs with animated models">Use Animated Wireframes</button>
                         <button class="option-button" id="replace-aliens-button" data-tooltip="Replace alien NPCs with animated models">Use Animated Aliens</button>
                         <button class="option-button" id="replace-shopkeeper-button" data-tooltip="Replace shopkeeper NPC with an animated model">Use Animated Shopkeeper</button>
+                        <button class="option-button" id="replace-ogres-button" data-tooltip="Replace ogre NPCs with animated models">Use Animated Ogres</button>
                     </div>
                 </div>
                 <div id="options-tab-about" class="options-tab-content">
@@ -104,6 +107,9 @@ export class OptionsUI {
             });
         });
 
+        // Add admin tab if user is lordtsarcasm
+        this.addAdminTab();
+
         // Respawn logic
         modal.querySelector('#respawn-button').addEventListener('click', () => {
             const playerModel = this.playerControls.getPlayerModel();
@@ -134,9 +140,26 @@ export class OptionsUI {
             viewDistanceValue.textContent = distance;
         });
         
+        const toggleMobileButton = modal.querySelector('#toggle-mobile-controls-button');
+        const updateButtonText = () => {
+            const isMobile = this.playerControls.isMobile;
+            /* @tweakable Text for the mobile controls toggle button when mobile controls are active. */
+            const desktopText = "Use Desktop Controls";
+            /* @tweakable Text for the mobile controls toggle button when desktop controls are active. */
+            const mobileText = "Use Mobile Controls";
+            toggleMobileButton.textContent = isMobile ? desktopText : mobileText;
+        };
+        updateButtonText();
+        
+        toggleMobileButton.addEventListener('click', () => {
+            this.playerControls.toggleMobileControls();
+            updateButtonText();
+        });
+        
         const replaceButtons = [
             'use-all-assets-button', 'replace-player-button', 'replace-robots-button', 'replace-eyebots-button',
-            'replace-chickens-button', 'replace-wireframes-button', 'replace-aliens-button', 'replace-shopkeeper-button'
+            'replace-chickens-button', 'replace-wireframes-button', 'replace-aliens-button', 'replace-shopkeeper-button',
+            'replace-ogres-button'
         ];
 
         const toggleReplaceButtons = (show) => {
@@ -180,6 +203,55 @@ export class OptionsUI {
         modal.querySelector('#replace-shopkeeper-button').addEventListener('click', () => {
             this.assetReplacementManager.replaceModel('shopkeeper');
         });
+        modal.querySelector('#replace-ogres-button').addEventListener('click', () => {
+            this.assetReplacementManager.replaceModel('ogre');
+        });
+    }
+
+    async addAdminTab() {
+        const currentUser = await window.websim.getCurrentUser();
+        /* @tweakable Username of the admin user who can see the admin tab. */
+        const adminUsername = "lordtsarcasm";
+
+        if (currentUser && currentUser.username === adminUsername) {
+            const tabsContainer = document.querySelector('#options-tabs');
+            const contentContainer = document.querySelector('#options-content');
+
+            const adminTab = document.createElement('button');
+            adminTab.className = 'options-tab admin-tab';
+            adminTab.dataset.tab = 'admin';
+            adminTab.textContent = 'Admin';
+            tabsContainer.appendChild(adminTab);
+
+            const adminContent = document.createElement('div');
+            adminContent.id = 'options-tab-admin';
+            adminContent.className = 'options-tab-content';
+            adminContent.innerHTML = `
+                <h3>Admin Controls</h3>
+                <div class="option-item">
+                    <label for="youtube-url-input">Video URL:</label>
+                    <input type="text" id="youtube-url-input" placeholder="Enter video file URL...">
+                </div>
+                <button id="save-youtube-url" class="option-button" data-tooltip="Update the video screen for everyone">Set Video</button>
+            `;
+            contentContainer.appendChild(adminContent);
+
+            adminContent.querySelector('#save-youtube-url').addEventListener('click', () => {
+                const url = adminContent.querySelector('#youtube-url-input').value;
+                if (this.dependencies.room) {
+                    this.dependencies.room.updateRoomState({ youtubeUrl: url });
+                }
+            });
+
+            adminTab.addEventListener('click', (e) => {
+                document.querySelectorAll('.options-tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                document.querySelectorAll('.options-tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                adminContent.classList.add('active');
+            });
+        }
     }
 
     applyShadowQuality(quality) {
