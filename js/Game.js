@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { PlayerControls } from "./playerControls.js";
 import { createPlayerModel } from "./playerModel.js";
-import { ZONE_SIZE, createBarriers, createTrees, createClouds, createGroundGrid } from "./worldGeneration.js";
+import { ZONE_SIZE, createBarriers, createTrees, createClouds } from "./worldGeneration.js";
 import { BuildTool } from "./buildTool.js";
 import { AdvancedBuildTool } from "./advancedBuildTool.js";
 import { UIManager } from './uiManager.js';
@@ -12,6 +12,8 @@ import { InventoryManager } from './inventoryManager.js';
 import { NPCManager } from './npcManager.js';
 import { InteractionManager } from './interaction.js';
 import { AssetReplacementManager } from './assetReplacementManager.js';
+import { GridManager } from './gridManager.js';
+import { VideoManager } from './videoManager.js';
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import { CSS3DRenderer } from 'three/addons/renderers/CSS3DRenderer.js';
 import './npc/NPC.js';
@@ -23,24 +25,11 @@ import { World } from './world.js';
 import { initYoutubePlayer, togglePlayPause, togglePlayPauseKey, setYoutubePlayerUrl, getPlayer } from './youtubePlayer.js';
 import { CollisionManager } from './collisionManager.js';
 
-/* @tweakable A small buffer distance for the video screen occlusion check to prevent flickering when the camera is very close to an occluding object. */
-const OCCLUSION_BUFFER = 1.0;
-/* @tweakable The maximum distance at which grid labels are visible at full density. Lower values can improve performance. */
-const GRID_LABEL_VISIBILITY_DISTANCE = 7;
-/* @tweakable The distance at which to switch to a more sparse set of grid labels to reduce visual clutter and improve performance. */
-const GRID_LABEL_LOD_DISTANCE = 30;
-/* @tweakable The step rate for showing labels at the LOD distance. e.g., a value of 10 shows every 10th label. */
-const GRID_LABEL_LOD_STEP = 10;
-/* @tweakable How frequently to update grid label visibility (in frames). Larger numbers reduce lag but also decrease label responsiveness. */
-const LABEL_UPDATE_INTERVAL = 10;
+
 /* @tweakable The target username for the special spawn location. */
 const TARGET_SPAWN_USERNAME = "lordtsarcasm";
 /* @tweakable The special spawn location coordinates. */
 const SPECIAL_SPAWN_LOCATION = { x: 44.1, y: 13.7, z: 21.4 };
-/* @tweakable How frequently to check for video screen occlusion (in frames). Larger numbers reduce lag but also decrease occlusion responsiveness. */
-const VIDEO_OCCLUSION_CHECK_INTERVAL = 10;
-/* @tweakable How frequently to update video audio volume (in frames). Larger numbers reduce processing but also decrease responsiveness. */
-const VIDEO_AUDIO_UPDATE_INTERVAL = 10;
 
 function getYouTubeID(url) {
     if (!url) return null;
@@ -65,12 +54,9 @@ export class Game {
         this.multiplayerManager = null;
         this.interactionManager = null;
         this.uiManager = null;
-        this.gridHelper = null;
+        this.gridManager = null;
+        this.videoManager = null;
         this.dirLight = null;
-        this.labelUpdateCounter = 0;
-        this.videoOcclusionCheckCounter = 0;
-        this.videoAudioUpdateCounter = 0;
-        this.currentYoutubeUrl = null;
     }
 
     async init() {
@@ -92,6 +78,8 @@ export class Game {
         this.collisionManager = new CollisionManager(this.scene);
         this.setupPlayer(playerName, initialPosition);
         this.setupManagers();
+        this.gridManager = new GridManager(this.scene);
+        this.videoManager = new VideoManager(this.scene, this.camera, this.playerModel);
 
         const world = new World(this.scene, this.npcManager, this.room);
         const terrain = world.generate();
@@ -101,16 +89,12 @@ export class Game {
         
         this.npcManager.initializeSpawner(terrain);
 
-        this.setupGrid(terrain);
+        this.gridManager.create(terrain);
         this.setupBuildTools(terrain);
         this.setupMultiplayer();
         this.setupUI();
         this.setupEventListeners();
         initYoutubePlayer();
-
-        this.labelUpdateCounter = 0;
-        this.videoOcclusionCheckCounter = 0;
-        this.videoAudioUpdateCounter = 0;
         
         this.room.subscribeRoomState(this.handleRoomStateChange.bind(this));
         
@@ -150,10 +134,6 @@ export class Game {
         this.scene.add(ambientLight);
 
         this.dirLight = null;
-        this.labelUpdateCounter = 0;
-        this.videoOcclusionCheckCounter = 0;
-        this.videoAudioUpdateCounter = 0;
-        this.currentYoutubeUrl = null;
     }
 
     setupPlayer(playerName, initialPosition) {
@@ -186,19 +166,7 @@ export class Game {
         this.interactionManager.init();
     }
 
-    setupGrid(terrain) {
-        const gridHelperSize = 200;
-        const gridHelperDivisions = 200;
-        const gridHelperColorCenterLine = 0xffffff;
-        const gridHelperColorGrid = 0xcccccc;
-        this.gridHelper = createGroundGrid(terrain, gridHelperSize, gridHelperDivisions, gridHelperColorCenterLine, gridHelperColorGrid);
-        this.gridHelper.visible = false;
-        const initialLabelsGroup = this.gridHelper.getObjectByName('grid-labels-group');
-        if (initialLabelsGroup) {
-            initialLabelsGroup.visible = false;
-        }
-        this.scene.add(this.gridHelper);
-    }
+
 
     setupBuildTools(terrain) {
         this.buildTool = new BuildTool(this.scene, this.camera, this.playerControls, terrain);
@@ -238,7 +206,10 @@ export class Game {
         const assetReplacementManager = new AssetReplacementManager({
             playerControls: this.playerControls,
             npcManager: this.npcManager,
-            onPlayerModelReplaced: (model) => { this.playerModel = model; }
+            onPlayerModelReplaced: (model) => {
+                this.playerModel = model;
+                this.videoManager.setPlayerModel(model);
+            }
         });
 
         const characterCreator = new CharacterCreator(
@@ -250,6 +221,7 @@ export class Game {
                 this.playerModel = createPlayerModel(THREE, this.playerModel.name, newSpec);
                 this.scene.add(this.playerModel);
                 this.playerControls.playerModel = this.playerModel;
+                this.videoManager.setPlayerModel(this.playerModel);
                 return this.playerModel;
             }
         );
@@ -285,14 +257,7 @@ export class Game {
             const key = event.key.toLowerCase();
 
             if (key === 'g' && !this.advancedBuildTool.enabled) {
-                this.gridHelper.visible = !this.gridHelper.visible;
-                const labelsGroup = this.gridHelper.getObjectByName('grid-labels-group');
-                if (labelsGroup) labelsGroup.visible = this.gridHelper.visible;
-                if (!this.gridHelper.visible) {
-                    this.gridHelper.userData.clearLabels();
-                } else {
-                    this.gridHelper.userData.updateLabels(this.playerModel.position, GRID_LABEL_VISIBILITY_DISTANCE, GRID_LABEL_LOD_DISTANCE, GRID_LABEL_LOD_STEP);
-                }
+                this.gridManager.toggle(this.playerModel.position);
             }
 
             if (key === togglePlayPauseKey) {
@@ -306,10 +271,7 @@ export class Game {
     }
     
     handleRoomStateChange(roomState) {
-        if (roomState && roomState.youtubeUrl && roomState.youtubeUrl !== this.currentYoutubeUrl) {
-            this.currentYoutubeUrl = roomState.youtubeUrl;
-            setYoutubePlayerUrl(this.currentYoutubeUrl);
-        }
+        this.videoManager.handleRoomStateChange(roomState);
     }
 
     animate() {
@@ -320,18 +282,7 @@ export class Game {
         this.playerControls.update();
         if (this.uiManager) this.uiManager.update();
 
-        this.labelUpdateCounter++;
-        if (this.labelUpdateCounter >= LABEL_UPDATE_INTERVAL) {
-            this.labelUpdateCounter = 0;
-            if (this.gridHelper.visible) {
-                this.gridHelper.userData.updateLabels(
-                    this.playerModel.position,
-                    GRID_LABEL_VISIBILITY_DISTANCE,
-                    GRID_LABEL_LOD_DISTANCE,
-                    GRID_LABEL_LOD_STEP
-                );
-            }
-        }
+        this.gridManager.update(this.playerModel.position);
 
         this.interactionManager.update();
         this.npcManager.update();
@@ -352,80 +303,10 @@ export class Game {
         this.buildTool.checkExpiredObjects(currentTime, expirationTime);
         this.advancedBuildTool.checkExpiredObjects(currentTime, expirationTime);
         
-        this.videoOcclusionCheckCounter++;
-        if (this.videoOcclusionCheckCounter >= VIDEO_OCCLUSION_CHECK_INTERVAL) {
-            this.videoOcclusionCheckCounter = 0;
-            this.checkVideoOcclusion();
-        }
-
-        this.videoAudioUpdateCounter++;
-        if (this.videoAudioUpdateCounter >= VIDEO_AUDIO_UPDATE_INTERVAL) {
-            this.videoAudioUpdateCounter = 0;
-            this.updateVideoAudio();
-        }
+        this.videoManager.update();
 
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
     }
 
-    checkVideoOcclusion() {
-        const videoMesh = this.scene.getObjectByName('amphitheatre-video-screen');
-
-        if (videoMesh) {
-            const screenCenter = new THREE.Vector3();
-            videoMesh.getWorldPosition(screenCenter);
-            
-            const cameraPosition = new THREE.Vector3();
-            this.camera.getWorldPosition(cameraPosition);
-
-            const direction = screenCenter.clone().sub(cameraPosition).normalize();
-            const raycaster = new THREE.Raycaster(cameraPosition, direction);
-
-            const intersects = raycaster.intersectObjects(this.scene.children, true);
-            
-            let occluded = false;
-            const distanceToScreen = cameraPosition.distanceTo(screenCenter);
-
-            for (const intersect of intersects) {
-                if (intersect.object === videoMesh || intersect.object.userData.isPlayer || intersect.object.userData.isGridHelper) {
-                    continue;
-                }
-                if (intersect.distance < distanceToScreen - OCCLUSION_BUFFER) {
-                    occluded = true;
-                    break;
-                }
-            }
-            // Toggle visibility of the parent group to hide both video and backing
-            if(videoMesh.parent) videoMesh.parent.visible = !occluded;
-        }
-    }
-
-    updateVideoAudio() {
-        const videoMesh = this.scene.getObjectByName('amphitheatre-video-screen');
-        const videoEl = getPlayer();
-
-        if (videoMesh && videoEl && this.playerModel) {
-            const screenCenter = new THREE.Vector3();
-            videoMesh.getWorldPosition(screenCenter);
-
-            const playerPosition = this.playerModel.position;
-            const distance = playerPosition.distanceTo(screenCenter);
-            
-            /* @tweakable Maximum distance to hear video audio. */
-            const maxAudioDistance = 60;
-            /* @tweakable Distance at which video audio is at full volume. */
-            const minAudioDistance = 5;
-
-            if (distance < maxAudioDistance && videoMesh.parent && videoMesh.parent.visible) {
-                videoEl.muted = false;
-                const volume = 1.0 - THREE.MathUtils.smoothstep(distance, minAudioDistance, maxAudioDistance);
-                /* @tweakable A global volume multiplier for the video. */
-                const globalVideoVolume = 0.5;
-                // Using Math.pow for a more natural falloff (ease-in)
-                videoEl.volume = Math.pow(volume, 2) * globalVideoVolume;
-            } else {
-                videoEl.volume = 0;
-            }
-        }
-    }
 }
