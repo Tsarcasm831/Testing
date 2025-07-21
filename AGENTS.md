@@ -1,9 +1,15 @@
 # Repository Contribution Guidelines
 
-Detailed instructions are stored in the `agents/` directory. Read the files there before making changes.
+This repository maintains short guide files under the `agents/` directory.
+Read them all before contributing:
 
-- Update `CHANGELOG.md` with a short description for every change.
-- After every 10 changelog entries, move older entries to `CHANGELOG_ARCHIVE.md` to keep `CHANGELOG.md` concise.
-- Use the current UTC date for new changelog entries. Run `date -u +%Y-%m-%d` for the date heading and prefix each bullet beneath it with an `HHMM` timestamp from `date -u +%H%M`.
-- Run any available tests before committing, even if none exist yet.
+- `general.md` – development workflow and commit guidance.
+- `changelog.md` – how to record and archive changes.
+- `testing.md` – required commands to run before committing.
+
+Key points:
+
+- Update `CHANGELOG.md` for every change using UTC dates and an `HHMM` prefix for each bullet.
+- Keep only the most recent ten entries in `CHANGELOG.md`. Move older ones to `CHANGELOG_ARCHIVE.md`.
+- Run `npm test` or any project-specific tests before committing. Document test issues caused by environment limits in the pull request.
 

@@ -1,7 +1,11 @@
 # Changelog
 
 ## 2025-07-21
-- 2146 Convert lyrics display to canvas texture so it hides behind objects
+
+- 2146 Update contribution guidelines in AGENTS files
+
+- 2147 Convert lyrics display to canvas texture so it hides behind objects
+
 
 ## 2025-07-17
 - 2005 Compute amphitheater seat geometry bounds before adding to scene
