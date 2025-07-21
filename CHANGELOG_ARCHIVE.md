@@ -18,6 +18,7 @@
 
 - 1958 Reserve spawn area so players don't load inside objects
 - 1928 Add rotate and undo buttons to basic build mode
+- 1555 Restrict grid labels to show within 7m radius when grid toggled
 - 2018 Add map UI button and close control
 - 2057 Rework character creator modal layout for clearer flow
 - 2110 Fix build tool using undefined material index in object creator

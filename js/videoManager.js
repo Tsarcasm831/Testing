@@ -138,9 +138,9 @@ export class VideoManager {
 
     updateLyrics() {
         const videoEl = getPlayer();
-        const lyricsDisplay = document.getElementById('lyrics-display');
+        const lyricsCanvas = document.getElementById('lyrics-display');
 
-        if (videoEl && lyricsDisplay && !videoEl.paused) {
+        if (videoEl && lyricsCanvas && !videoEl.paused) {
             const currentTime = videoEl.currentTime;
             let newLyricIndex = -1;
 
@@ -155,9 +155,17 @@ export class VideoManager {
             if (newLyricIndex !== this.currentLyricIndex) {
                 this.currentLyricIndex = newLyricIndex;
                 const lyricText = this.currentLyricIndex !== -1 ? lyrics[this.currentLyricIndex].text : "";
-                const span = lyricsDisplay.querySelector('span');
-                if (span) {
-                    span.textContent = lyricText;
+                const ctx = lyricsCanvas.getContext('2d');
+                ctx.clearRect(0, 0, lyricsCanvas.width, lyricsCanvas.height);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+                ctx.fillRect(0, 0, lyricsCanvas.width, lyricsCanvas.height);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 64px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(lyricText, lyricsCanvas.width / 2, lyricsCanvas.height / 2);
+                if (lyricsCanvas.texture) {
+                    lyricsCanvas.texture.needsUpdate = true;
                 }
             }
         }
