@@ -19,6 +19,8 @@
 - 1958 Reserve spawn area so players don't load inside objects
 - 1928 Add rotate and undo buttons to basic build mode
 - 1555 Restrict grid labels to show within 7m radius when grid toggled
+- 1623 Label every grid cell and keep labels visible only when the grid is toggled
+- 1640 Enable dual joysticks for mobile look and movement
 - 2018 Add map UI button and close control
 - 2057 Rework character creator modal layout for clearer flow
 - 2110 Fix build tool using undefined material index in object creator
@@ -45,3 +47,5 @@
 - 1522 Fix HouseBlocks module loading error by merging it into starterHouse.js
 - 1507 Break up worldGeneration.js into modular files
 - 1555 Restrict grid labels to show within 7m radius when grid toggled
+- 1623 Label every grid cell and keep labels visible only when the grid is toggled
+- 1640 Enable dual joysticks for mobile look and movement

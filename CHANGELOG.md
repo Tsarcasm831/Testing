@@ -5,6 +5,7 @@
 - 2146 Update contribution guidelines in AGENTS files
 
 - 2147 Convert lyrics display to canvas texture so it hides behind objects
+- 2158 Update lyrics with corrected lines
 
 
 ## 2025-07-17
@@ -16,8 +17,6 @@
 - 1200 Fix shopkeeper not spawning and improve interaction system performance
 
 ## 2025-07-14
-- 1623 Label every grid cell and keep labels visible only when the grid is toggled
-- 1640 Enable dual joysticks for mobile look and movement
 - 1706 Generate grid labels on demand to eliminate DOM lag
 - 1747 Ensure joystick containers display on mobile initialization
 - 1758 Correct A/D key mapping and improve mobile joystick handling
