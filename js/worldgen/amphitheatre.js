@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 import { createAmphitheatreSeating } from './amphi-seats.js';
 
 /* @tweakable Set to true to re-enable amphitheater seating. A page reload is required for this change to take effect. */
@@ -144,48 +143,40 @@ function createBackdropWall(position) {
 
         wallGroup.add(videoMesh);
 
-        const lyricsElement = document.createElement('div');
-        lyricsElement.id = 'lyrics-display';
-        /* @tweakable The width of the lyrics display in pixels. */
-        lyricsElement.style.width = '1200px';
-        /* @tweakable The height of the lyrics display in pixels. */
-        lyricsElement.style.height = '150px';
-        /* @tweakable The background color of the lyrics box. */
-        lyricsElement.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
-        /* @tweakable The text color for the lyrics. */
-        lyricsElement.style.color = 'white';
-        /* @tweakable The font size for the lyrics. */
-        lyricsElement.style.fontSize = '50px';
-        lyricsElement.style.fontFamily = 'Arial, sans-serif';
-        lyricsElement.style.fontWeight = 'bold';
-        lyricsElement.style.textShadow = '2px 2px 5px #000';
-        lyricsElement.style.textAlign = 'center';
-        lyricsElement.style.display = 'flex';
-        lyricsElement.style.justifyContent = 'center';
-        lyricsElement.style.alignItems = 'center';
-        lyricsElement.style.padding = '10px';
-        lyricsElement.style.boxSizing = 'border-box';
-        lyricsElement.style.borderRadius = '15px';
-        lyricsElement.innerHTML = '<span></span>';
-        
-        const lyricsObject = new CSS3DObject(lyricsElement);
-        lyricsObject.name = 'amphitheatre-lyrics-display';
-        
-        lyricsObject.rotation.copy(videoMesh.rotation);
-        
-        /* @tweakable The scale of the lyrics display in the 3D world. */
-        const lyricsScale = 0.0333;
-        lyricsObject.scale.set(lyricsScale, lyricsScale, lyricsScale);
+        const lyricsCanvas = document.createElement('canvas');
+        lyricsCanvas.id = 'lyrics-display';
+        lyricsCanvas.width = 1024;
+        lyricsCanvas.height = 128;
+        lyricsCanvas.style.display = 'none';
+        document.body.appendChild(lyricsCanvas);
+
+        const lyricsCtx = lyricsCanvas.getContext('2d');
+        lyricsCtx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        lyricsCtx.fillRect(0, 0, lyricsCanvas.width, lyricsCanvas.height);
+        lyricsCtx.font = 'bold 64px Arial';
+        lyricsCtx.fillStyle = 'white';
+        lyricsCtx.textAlign = 'center';
+        lyricsCtx.textBaseline = 'middle';
+
+        const lyricsTexture = new THREE.CanvasTexture(lyricsCanvas);
+        lyricsCanvas.texture = lyricsTexture;
+
+        const lyricsGeometry = new THREE.PlaneGeometry(backdropWidth, 5);
+        const lyricsMaterial = new THREE.MeshBasicMaterial({ map: lyricsTexture, transparent: true });
+        const lyricsMesh = new THREE.Mesh(lyricsGeometry, lyricsMaterial);
+        lyricsMesh.name = 'amphitheatre-lyrics-display';
+
+        lyricsMesh.rotation.copy(videoMesh.rotation);
 
         /* @tweakable The vertical position of the lyrics on the screen. Negative values are lower. */
         const lyricsYOffset = -6;
-        lyricsObject.position.set(
-            videoMesh.position.x, 
+        lyricsMesh.position.set(
+            videoMesh.position.x,
             videoMesh.position.y + lyricsYOffset,
             videoMesh.position.z + 0.02
         );
-        
-        wallGroup.add(lyricsObject);
+
+        wallGroup.add(lyricsMesh);
     }
     
     // Add a solid backing wall. This will be visible if the video fails to load or is disabled.
