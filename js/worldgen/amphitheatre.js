@@ -292,7 +292,8 @@ export function createAmphitheatre(scene, getHeight) {
     group.add(spotLight2);
 
     if (enableSeating) {
-        createAmphitheatreSeating(group, stoneColor);
+        const seatRotationY = Math.PI / 2; // Rotate seats 90 degrees counter-clockwise
+        createAmphitheatreSeating(group, stoneColor, seatRotationY);
     }
 
     return group;
