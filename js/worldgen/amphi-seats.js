@@ -5,7 +5,7 @@ import * as THREE from 'three';
  * @param {THREE.Group} group The group to add seating to.
  * @param {THREE.Color | number} stoneColor The color of the seats.
  */
-export function createAmphitheatreSeating(group, stoneColor, rotationY = 0) {
+export function createAmphitheatreSeating(group, stoneColor) {
     /* @tweakable The number of seating rows. */
     const numRows = 8;
     /* @tweakable The height of each seating row. */
@@ -49,15 +49,13 @@ export function createAmphitheatreSeating(group, stoneColor, rotationY = 0) {
         geometry.rotateX(-Math.PI / 2);
         
         const seatRow = new THREE.Mesh(geometry, material);
-        seatRow.rotation.y = rotationY;
         seatRow.castShadow = true;
         seatRow.receiveShadow = true;
         seatRow.userData.isSeatRow = true;
         
         // Normalize angles to be in the [0, 2*PI] range for consistent collision checks.
-        const normalize = (a) => (a % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
-        const normalizedStartAngle = normalize(startAngle + rotationY);
-        const normalizedEndAngle = normalize(endAngle + rotationY);
+        const normalizedStartAngle = startAngle < 0 ? startAngle + 2 * Math.PI : startAngle;
+        const normalizedEndAngle = endAngle < 0 ? endAngle + 2 * Math.PI : endAngle;
 
         seatRow.userData.seatRowData = {
             innerRadius,

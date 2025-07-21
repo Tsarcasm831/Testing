@@ -2,8 +2,8 @@
 export const FIX_FRUSTUM_CULLING_BUG = true;
 /* @tweakable Use bounding box for frustum culling on complex models. May improve performance and fix crashes. Set to false for debugging culling issues. */
 export const USE_BOUNDING_BOX_CULLING = true;
-/* @tweakable NPC movement speed. */
-export const NPC_SPEED = 0.03;
+/* @tweakable NPC movement speed in units per second. */
+export const NPC_SPEED = 1.8;
 /* @tweakable How far the NPC wanders from its initial spawn point. */
 export const WANDER_RADIUS = 20;
 /* @tweakable Minimum time in seconds the NPC waits before wandering to a new spot. */

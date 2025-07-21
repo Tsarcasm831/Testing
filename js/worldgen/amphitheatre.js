@@ -168,12 +168,14 @@ function createBackdropWall(position) {
 
         lyricsMesh.rotation.copy(videoMesh.rotation);
 
-        /* @tweakable The vertical position of the lyrics on the screen. Negative values are lower. */
-        const lyricsYOffset = -6;
+        /* @tweakable The vertical position of the lyrics on the screen. Negative values are lower. The bottom of the video screen is at -7.5. */
+        const lyricsYOffset = -5;
+        /* @tweakable The forward offset of the lyrics display from the video screen to prevent z-fighting. A more negative value moves it closer to the audience. */
+        const lyricsZOffset = -0.08;
         lyricsMesh.position.set(
             videoMesh.position.x,
             videoMesh.position.y + lyricsYOffset,
-            videoMesh.position.z + 0.02
+            videoMesh.position.z + lyricsZOffset
         );
 
         wallGroup.add(lyricsMesh);
@@ -292,8 +294,7 @@ export function createAmphitheatre(scene, getHeight) {
     group.add(spotLight2);
 
     if (enableSeating) {
-        const seatRotationY = Math.PI / 2; // Rotate seats 90 degrees counter-clockwise
-        createAmphitheatreSeating(group, stoneColor, seatRotationY);
+        createAmphitheatreSeating(group, stoneColor);
     }
 
     return group;
