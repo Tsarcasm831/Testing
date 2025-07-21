@@ -49,3 +49,4 @@
 - 1555 Restrict grid labels to show within 7m radius when grid toggled
 - 1623 Label every grid cell and keep labels visible only when the grid is toggled
 - 1640 Enable dual joysticks for mobile look and movement
+- 1706 Generate grid labels on demand to eliminate DOM lag

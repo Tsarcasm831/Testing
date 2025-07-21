@@ -6,6 +6,7 @@
 
 - 2147 Convert lyrics display to canvas texture so it hides behind objects
 - 2158 Update lyrics with corrected lines
+- 2208 Rotate amphitheater seats 90 degrees counter-clockwise and update collision angles
 
 
 ## 2025-07-17
@@ -17,7 +18,6 @@
 - 1200 Fix shopkeeper not spawning and improve interaction system performance
 
 ## 2025-07-14
-- 1706 Generate grid labels on demand to eliminate DOM lag
 - 1747 Ensure joystick containers display on mobile initialization
 - 1758 Correct A/D key mapping and improve mobile joystick handling
 
