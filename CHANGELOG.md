@@ -8,6 +8,7 @@
 - 2158 Update lyrics with corrected lines
 - 2208 Rotate amphitheater seats 90 degrees counter-clockwise and update collision angles
 - 2217 Use per-model bounding boxes for NPC collision detection
+- 2223 Clarify changelog entry retention rules to allow unlimited current-day items
 
 
 ## 2025-07-17
