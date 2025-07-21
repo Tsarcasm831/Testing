@@ -50,3 +50,5 @@
 - 1623 Label every grid cell and keep labels visible only when the grid is toggled
 - 1640 Enable dual joysticks for mobile look and movement
 - 1706 Generate grid labels on demand to eliminate DOM lag
+- 1747 Ensure joystick containers display on mobile initialization
+- 1758 Correct A/D key mapping and improve mobile joystick handling

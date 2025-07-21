@@ -13,10 +13,6 @@ import {
 const NPC_ACCELERATION = 2.0;
 /* @tweakable The distance from the target at which the NPC starts to decelerate. */
 const DECELERATION_DISTANCE = 5.0;
-/* @tweakable The radius of the NPC's collision shape. */
-const NPC_COLLISION_RADIUS = 0.3;
-/* @tweakable The height of the NPC's collision shape. */
-const NPC_COLLISION_HEIGHT = 1.8;
 
 export class NPC {
     constructor(model, presetId, zoneKey, isEyebot, startPosition, terrain) {
@@ -37,6 +33,17 @@ export class NPC {
         this.currentSpeed = 0;
         /* @tweakable The radius of an eyebot's collision sphere. */
         this.eyebotCollisionRadius = 1.0;
+
+        // Calculate per-model collision bounds
+        this.boundingBox = new THREE.Box3().setFromObject(this.model);
+        const size = new THREE.Vector3();
+        this.boundingBox.getSize(size);
+        this.collisionRadius = Math.max(size.x, size.z) / 2;
+        this.collisionHeight = size.y;
+        // Eyebots use a spherical bound
+        if (isEyebot) {
+            this.eyebotCollisionRadius = this.collisionRadius;
+        }
 
         if (isEyebot) {
             this.model.userData.baseY = startPosition.y;
@@ -202,8 +209,8 @@ export class NPC {
                                 this.model.position,
                                 proposedPosition,
                                 new THREE.Vector3(), // Velocity is not used for simple NPC movement
-                                NPC_COLLISION_RADIUS,
-                                NPC_COLLISION_HEIGHT
+                                this.collisionRadius,
+                                this.collisionHeight
                             );
                             finalPosition = result.finalPosition;
                             // Check if a collision occurred by seeing if the final position is different from proposed
@@ -216,7 +223,7 @@ export class NPC {
                         if (playerModel) {
                             const playerPosition = playerModel.position;
                             /* @tweakable The effective collision radius for an NPC for NPC-player collision. */
-                            const npcCollisionRadius = 0.5;
+                            const npcCollisionRadius = this.collisionRadius;
                             /* @tweakable The effective collision radius for the player for NPC-player collision. */
                             const playerCollisionRadius = 0.5;
                             const minDistance = npcCollisionRadius + playerCollisionRadius;
@@ -233,7 +240,8 @@ export class NPC {
                         const otherNpcs = this.getOtherNpcs(); // Assumes a method to get other NPCs
                         for (const otherNpc of otherNpcs) {
                             const distanceToOther = finalPosition.distanceTo(otherNpc.model.position);
-                            if (distanceToOther < 1.0) { // Simple radius check
+                            const minDistance = this.collisionRadius + (otherNpc.collisionRadius || 0.5);
+                            if (distanceToOther < minDistance) {
                                 collision = true;
                                 break;
                             }
