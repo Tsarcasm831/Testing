@@ -285,7 +285,17 @@ export class NPCSpawner {
 
             newModel.position.copy(npc.model.position);
             npc.model = newModel;
-            
+
+            // Update NPC collision bounds
+            npc.boundingBox = new THREE.Box3().setFromObject(newModel);
+            const size = new THREE.Vector3();
+            npc.boundingBox.getSize(size);
+            npc.collisionRadius = Math.max(size.x, size.z) / 2;
+            npc.collisionHeight = size.y;
+            if (npc.isEyebot) {
+                npc.eyebotCollisionRadius = npc.collisionRadius;
+            }
+
             this.scene.add(newModel);
         });
     }
