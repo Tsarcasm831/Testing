@@ -1,0 +1,22 @@
+{
+  "database": {
+    "schema": {
+      "characters": {
+        "description": {
+          "type": "text",
+          "description": "User-provided description for the character."
+        },
+        "spec": {
+          "type": "jsonb",
+          "description": "The JSON specification for the character's appearance."
+        },
+        "referenceImage": {
+          "type": "text",
+          "description": "URL of the reference image used for generation, if any."
+        }
+      }
+    },
+    "instructions": "This database stores community-created characters. Use the 'spec' field to render characters and 'referenceImage' to show the source image."
+  }
+}
+

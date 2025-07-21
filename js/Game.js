@@ -307,6 +307,7 @@ export class Game {
 
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);
+        this.css3dRenderer.render(this.scene, this.camera);
     }
 
 }

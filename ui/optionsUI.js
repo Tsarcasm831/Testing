@@ -18,9 +18,11 @@ export class OptionsUI {
         button.id = 'options-button';
         button.classList.add('circle-button');
         button.setAttribute('data-tooltip', 'Options');
+        /* @tweakable The URL for the options gear icon. */
+        const optionsIconUrl = "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Images/Icons/gear_icon.png";
         /* @tweakable The size of the options gear icon. */
         const optionsIconSize = "28px";
-        button.innerHTML = `<img src="gear_icon.png" alt="Options" style="width: ${optionsIconSize}; height: ${optionsIconSize};">`;
+        button.innerHTML = `<img src="${optionsIconUrl}" alt="Options" style="width: ${optionsIconSize}; height: ${optionsIconSize};">`;
         uiContainer.appendChild(button);
 
         const modal = document.createElement('div');
@@ -70,6 +72,7 @@ export class OptionsUI {
                         <button class="option-button" id="replace-aliens-button" data-tooltip="Replace alien NPCs with animated models">Use Animated Aliens</button>
                         <button class="option-button" id="replace-shopkeeper-button" data-tooltip="Replace shopkeeper NPC with an animated model">Use Animated Shopkeeper</button>
                         <button class="option-button" id="replace-ogres-button" data-tooltip="Replace ogre NPCs with animated models">Use Animated Ogres</button>
+                        <button class="option-button" id="replace-knights-button" data-tooltip="Replace knight NPCs with animated models">Use Animated Knights</button>
                     </div>
                 </div>
                 <div id="options-tab-about" class="options-tab-content">
@@ -159,7 +162,7 @@ export class OptionsUI {
         const replaceButtons = [
             'use-all-assets-button', 'replace-player-button', 'replace-robots-button', 'replace-eyebots-button',
             'replace-chickens-button', 'replace-wireframes-button', 'replace-aliens-button', 'replace-shopkeeper-button',
-            'replace-ogres-button'
+            'replace-ogres-button', 'replace-knights-button'
         ];
 
         const toggleReplaceButtons = (show) => {
@@ -205,6 +208,9 @@ export class OptionsUI {
         });
         modal.querySelector('#replace-ogres-button').addEventListener('click', () => {
             this.assetReplacementManager.replaceModel('ogre');
+        });
+        modal.querySelector('#replace-knights-button').addEventListener('click', () => {
+            this.assetReplacementManager.replaceModel('knight');
         });
     }
 

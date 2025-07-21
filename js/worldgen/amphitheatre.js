@@ -143,6 +143,49 @@ function createBackdropWall(position) {
         videoMesh.position.set(0, 0, -wallThickness / 2 - 0.05);
 
         wallGroup.add(videoMesh);
+
+        const lyricsElement = document.createElement('div');
+        lyricsElement.id = 'lyrics-display';
+        /* @tweakable The width of the lyrics display in pixels. */
+        lyricsElement.style.width = '1200px';
+        /* @tweakable The height of the lyrics display in pixels. */
+        lyricsElement.style.height = '150px';
+        /* @tweakable The background color of the lyrics box. */
+        lyricsElement.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+        /* @tweakable The text color for the lyrics. */
+        lyricsElement.style.color = 'white';
+        /* @tweakable The font size for the lyrics. */
+        lyricsElement.style.fontSize = '50px';
+        lyricsElement.style.fontFamily = 'Arial, sans-serif';
+        lyricsElement.style.fontWeight = 'bold';
+        lyricsElement.style.textShadow = '2px 2px 5px #000';
+        lyricsElement.style.textAlign = 'center';
+        lyricsElement.style.display = 'flex';
+        lyricsElement.style.justifyContent = 'center';
+        lyricsElement.style.alignItems = 'center';
+        lyricsElement.style.padding = '10px';
+        lyricsElement.style.boxSizing = 'border-box';
+        lyricsElement.style.borderRadius = '15px';
+        lyricsElement.innerHTML = '<span></span>';
+        
+        const lyricsObject = new CSS3DObject(lyricsElement);
+        lyricsObject.name = 'amphitheatre-lyrics-display';
+        
+        lyricsObject.rotation.copy(videoMesh.rotation);
+        
+        /* @tweakable The scale of the lyrics display in the 3D world. */
+        const lyricsScale = 0.0333;
+        lyricsObject.scale.set(lyricsScale, lyricsScale, lyricsScale);
+
+        /* @tweakable The vertical position of the lyrics on the screen. Negative values are lower. */
+        const lyricsYOffset = -6;
+        lyricsObject.position.set(
+            videoMesh.position.x, 
+            videoMesh.position.y + lyricsYOffset,
+            videoMesh.position.z + 0.02
+        );
+        
+        wallGroup.add(lyricsObject);
     }
     
     // Add a solid backing wall. This will be visible if the video fails to load or is disabled.
@@ -213,7 +256,7 @@ export function createAmphitheatre(scene, getHeight) {
 
     // Backdrop
     /* @tweakable The default video source file for the amphitheater screen. Can be overridden by admin. */
-    const defaultVideoSrc = 'assets/videos/local/The Weight - Kronowski (AI Music Video).mp4';
+    const defaultVideoSrc = 'https://file.garden/Zy7B0LkdIVpGyzA1/Videos/The%20Weight%20-%20Kronowski%20(AI%20Music%20Video).mp4';
 
     videoElement = document.createElement('video');
     videoElement.src = defaultVideoSrc;
@@ -223,11 +266,10 @@ export function createAmphitheatre(scene, getHeight) {
     /* @tweakable Whether the amphitheater video should start muted. Required for autoplay in most browsers. */
     videoElement.muted = true;
     videoElement.playsInline = true;
-    /* @tweakable Whether the amphitheater video should attempt to play automatically on load. */
-    videoElement.autoplay = true;
+    /* @tweakable Whether the amphitheater video should attempt to play automatically on load. Set to false to require manual play trigger (default: 'p' key). */
+    videoElement.autoplay = false;
     videoElement.style.display = 'none';
     document.body.appendChild(videoElement);
-    videoElement.play().catch(e => console.error("Video autoplay failed:", e));
 
     videoTexture = new THREE.VideoTexture(videoElement);
     videoTexture.minFilter = THREE.LinearFilter;

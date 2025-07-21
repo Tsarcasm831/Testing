@@ -1,8 +1,5 @@
 # Changelog
 
-## 2025-07-20
-- 1720 Refactor Game.js into GridManager and VideoManager modules
-
 ## 2025-07-17
 - 2005 Compute amphitheater seat geometry bounds before adding to scene
 

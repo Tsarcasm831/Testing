@@ -16,7 +16,6 @@ export function setYoutubePlayerUrl(url) {
     if (videoElement) {
         /* @tweakable The new source URL for the video screen. */
         videoElement.src = url;
-        videoElement.play().catch(e => console.error("Failed to play new video:", e));
     }
 }
 
@@ -30,6 +29,7 @@ export function togglePlayPause() {
     }
 }
 
+/* @tweakable The key used to toggle play/pause for the amphitheater video. */
 export const togglePlayPauseKey = 'p';
 
 export function getPlayer() {

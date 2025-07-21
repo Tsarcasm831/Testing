@@ -19,9 +19,11 @@ export class BuildUI {
         buildButton.id = 'build-button';
         buildButton.classList.add('circle-button');
         buildButton.setAttribute('data-tooltip', 'Build Mode');
+        /* @tweakable The URL for the build mode hammer icon. */
+        const buildIconUrl = "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Images/Icons/hammer_icon.png";
         /* @tweakable The size of the build mode hammer icon. */
         const buildIconSize = "28px";
-        buildButton.innerHTML = `<img src="hammer_icon.png" alt="Build" style="width: ${buildIconSize}; height: ${buildIconSize};">`;
+        buildButton.innerHTML = `<img src="${buildIconUrl}" alt="Build" style="width: ${buildIconSize}; height: ${buildIconSize};">`;
         uiContainer.appendChild(buildButton);
         
         const uselessButton = document.createElement('div');

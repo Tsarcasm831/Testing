@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { createPlayerModel } from '../playerModel.js';
-import { setupAnimatedRobot, setupEyebot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupAnimatedShopkeeper, setupAnimatedOgre } from '../animationSetup.js';
+import { setupAnimatedRobot, setupEyebot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupAnimatedShopkeeper, setupAnimatedOgre, setupAnimatedKnight } from '../animationSetup.js';
 import { presetCharacters } from '../characters/presets.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { NPC } from './NPC.js';
@@ -9,6 +9,7 @@ import {
     ROBOT_SPAWN_CHANCE,
     EYEBOT_SPAWN_CHANCE,
     OGRE_SPAWN_CHANCE,
+    KNIGHT_SPAWN_CHANCE,
     NPC_ADJECTIVES,
     MIN_NPCS_PER_ZONE,
     MAX_NPCS_PER_ZONE,
@@ -18,6 +19,7 @@ import {
     ALIEN_NPC_SCALE,
     SHOPKEEPER_NPC_SCALE,
     OGRE_NPC_SCALE,
+    KNIGHT_NPC_SCALE,
     EYEBOT_NPC_SCALE,
     EYEBOT_FLY_HEIGHT,
     FIX_FRUSTUM_CULLING_BUG
@@ -117,6 +119,15 @@ export class NPCSpawner {
                 npcModel.traverse(c => { c.castShadow = true; });
                 npcModel.scale.set(OGRE_NPC_SCALE, OGRE_NPC_SCALE, OGRE_NPC_SCALE);
             }
+            else if (this.animatedData.knight && this.animatedData.knight.model && Math.random() < KNIGHT_SPAWN_CHANCE) {
+                preset = presetCharacters.find(p => p.id === 'knight');
+                const knightData = this.animatedData.knight;
+                npcModel = SkeletonUtils.clone(knightData.model);
+                knightData.setupFn(npcModel, knightData.idleClip, knightData.walkClip, knightData.runClip, knightData.listenClip);
+                npcModel.name = `${adjective} Knight`;
+                npcModel.traverse(c => { c.castShadow = true; });
+                npcModel.scale.set(KNIGHT_NPC_SCALE, KNIGHT_NPC_SCALE, KNIGHT_NPC_SCALE);
+            }
             else {
                 let availablePresets = presetCharacters;
                 if (this.animatedData.robot) {
@@ -136,6 +147,9 @@ export class NPCSpawner {
                 }
                 if (this.animatedData.ogre) {
                     availablePresets = availablePresets.filter(p => p.id !== 'ogre');
+                }
+                if (this.animatedData.knight) {
+                    availablePresets = availablePresets.filter(p => p.id !== 'knight');
                 }
                 
                 // Exclude the unique shopkeeper from random spawning
@@ -247,6 +261,9 @@ export class NPCSpawner {
                 else if (npcType === 'ogre') {
                     setupAnimatedOgre(newModel, this.animatedData.ogre.idleClip, this.animatedData.ogre.walkClip, this.animatedData.ogre.runClip, this.animatedData.ogre.listenClip);
                 }
+                else if (npcType === 'knight') {
+                    setupAnimatedKnight(newModel, this.animatedData.knight.idleClip, this.animatedData.knight.walkClip, this.animatedData.knight.runClip, this.animatedData.knight.listenClip);
+                }
             }
             
             const adjective = NPC_ADJECTIVES[Math.floor(Math.random() * NPC_ADJECTIVES.length)];
@@ -260,6 +277,7 @@ export class NPCSpawner {
                 case 'alien': newModel.name = `${adjective} Alien`; scale = ALIEN_NPC_SCALE; break;
                 case 'shopkeeper': newModel.name = `Shopkeeper`; scale = SHOPKEEPER_NPC_SCALE; break;
                 case 'ogre': newModel.name = `${adjective} Ogre`; scale = OGRE_NPC_SCALE; break;
+                case 'knight': newModel.name = `${adjective} Knight`; scale = KNIGHT_NPC_SCALE; break;
             }
 
             newModel.traverse(c => { c.castShadow = true; });

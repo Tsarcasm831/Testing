@@ -1,6 +1,6 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Downloader } from './downloader.js';
-import { setupAnimatedPlayer, setupAnimatedRobot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupEyebot, setupAnimatedShopkeeper, setupAnimatedOgre } from './animationSetup.js';
+import { setupAnimatedPlayer, setupAnimatedRobot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupEyebot, setupAnimatedShopkeeper, setupAnimatedOgre, setupAnimatedKnight } from './animationSetup.js';
 
 export class AssetReplacementManager {
     constructor(dependencies) {
@@ -59,6 +59,12 @@ export class AssetReplacementManager {
                 clipNames: ['idle', 'walk', 'run', 'listen'],
                 setupFn: setupAnimatedOgre,
                 applyFn: (modelData) => this.dependencies.npcManager.useAnimatedOgres(modelData)
+            },
+            'knight': {
+                assetNames: ['Knight Idle Animation', 'Knight Walking Animation', 'Knight Running Animation', 'Knight Listening Animation'],
+                clipNames: ['idle', 'walk', 'run', 'listen'],
+                setupFn: setupAnimatedKnight,
+                applyFn: (modelData) => this.dependencies.npcManager.useAnimatedKnights(modelData)
             }
         };
     }

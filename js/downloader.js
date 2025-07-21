@@ -5,32 +5,41 @@ export class Downloader {
   async download(url, progressCallback) {
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Failed to fetch ${url}`);
+      throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
     }
-    const contentLength = parseInt(response.headers.get('Content-Length')) || 0;
-    
-    // Create a new ReadableStream to ensure it's not closed prematurely.
-    const stream = new ReadableStream({
-        async start(controller) {
-            const reader = response.body.getReader();
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                controller.enqueue(value);
-            }
-            controller.close();
+
+    const contentLength = response.headers.get('Content-Length');
+    if (!contentLength || !response.body) {
+      // If we don't know the size, or there's no body, we can't report progress.
+      if (progressCallback) progressCallback(0.5); // Indeterminate progress
+      const blob = await response.blob();
+      if (progressCallback) progressCallback(1);
+      return blob;
+    }
+
+    const total = parseInt(contentLength, 10);
+    let loaded = 0;
+    const chunks = [];
+    const reader = response.body.getReader();
+
+    while (true) {
+      try {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
         }
-    });
-
-    const newResponse = new Response(stream);
-    const blob = await newResponse.blob();
-
-    if (progressCallback && contentLength) {
-        // Since we consume the stream fully to create a blob, progress is 100% at the end.
-        progressCallback(1);
+        chunks.push(value);
+        loaded += value.length;
+        if (progressCallback) {
+          progressCallback(loaded / total);
+        }
+      } catch (error) {
+        console.error(`Error reading stream for ${url}:`, error);
+        throw error;
+      }
     }
 
-    return blob;
+    return new Blob(chunks);
   }
 
   async preloadAssets(assets, progressCallback, overallProgressCallback) {
@@ -44,7 +53,7 @@ export class Downloader {
         const asset = queue.shift();
         if (asset) {
           try {
-            const blob = await this.download(asset.url, p => {
+            const blob = await this.download(asset.url, (p) => {
               if (progressCallback) progressCallback(asset, p);
             });
             results[asset.name] = blob;

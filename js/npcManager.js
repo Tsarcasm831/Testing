@@ -89,6 +89,13 @@ export class NPCManager {
         }
     }
 
+    useAnimatedKnights(data, replaceExisting = true) {
+        this.npcSpawner.setAnimatedData('knight', data);
+        if (replaceExisting) {
+            this.npcSpawner.replaceNpcModels('knight');
+        }
+    }
+
     activateZone(zoneKey) {
         if (!this.npcSpawner) return; // Don't spawn if spawner isn't ready
 

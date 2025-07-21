@@ -12,7 +12,11 @@ export class InventoryUI {
         inventoryButton.id = 'inventory-button';
         inventoryButton.classList.add('circle-button');
         inventoryButton.setAttribute('data-tooltip', 'Inventory (I)');
-        inventoryButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.88 4.02A1.5 1.5 0 0017.5 3h-11a1.5 1.5 0 00-1.38 1.02L2.5 12.19l-1 5A1.5 1.5 0 003 19h18a1.5 1.5 0 001.5-1.81l-1-5-2.62-8.17zM12 11.5a2.5 2.5 0 01-2.5-2.5A2.5 2.5 0 0112 6.5a2.5 2.5 0 012.5 2.5A2.5 2.5 0 0112 11.5z"/></svg>`;
+        /* @tweakable The URL for the inventory icon. */
+        const inventoryIconUrl = "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Images/Icons/inventory_icon.png";
+        /* @tweakable The size of the inventory icon. */
+        const inventoryIconSize = "28px";
+        inventoryButton.innerHTML = `<img src="${inventoryIconUrl}" alt="Inventory" style="width: ${inventoryIconSize}; height: ${inventoryIconSize};">`;
         uiContainer.appendChild(inventoryButton);
 
         const inventoryPanel = document.createElement('div');

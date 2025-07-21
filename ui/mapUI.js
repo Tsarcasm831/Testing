@@ -94,9 +94,12 @@ export class MapUI {
         const mapButton = document.createElement('div');
         mapButton.id = 'map-button';
         mapButton.classList.add('circle-button');
+        mapButton.setAttribute('data-tooltip', 'Map (M)');
+        /* @tweakable The URL for the map icon. */
+        const mapIconUrl = "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Images/Icons/map_icon.png";
         /* @tweakable The size of the map icon. */
         const mapIconSize = "28px";
-        mapButton.innerHTML = `<img src="map_icon.png" alt="Map" style="width: ${mapIconSize}; height: ${mapIconSize};">`;
+        mapButton.innerHTML = `<img src="${mapIconUrl}" alt="Map" style="width: ${mapIconSize}; height: ${mapIconSize};">`;
         uiContainer.appendChild(mapButton);
 
         uiContainer.appendChild(this.mapContainer);
