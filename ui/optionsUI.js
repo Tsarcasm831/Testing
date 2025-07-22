@@ -1,6 +1,6 @@
-import { AssetReplacementManager } from '../js/assetReplacementManager.js';
-import * as THREE from "three";
-import { getPlayer, setYoutubePlayerUrl } from '../js/youtubePlayer.js';
+import { addAdminTab } from './options/adminTab.js';
+import { setupAssetControls } from './options/assetControls.js';
+import { applyPerformanceMode, applyShadowQuality } from './options/performance.js';
 
 export class OptionsUI {
     constructor(dependencies) {
@@ -115,7 +115,7 @@ export class OptionsUI {
         });
 
         // Add admin tab if user is lordtsarcasm
-        this.addAdminTab();
+        addAdminTab(this.dependencies);
 
         // Respawn logic
         modal.querySelector('#respawn-button').addEventListener('click', () => {
@@ -130,11 +130,11 @@ export class OptionsUI {
         const performanceModeCheckbox = modal.querySelector('#performance-mode');
         const isPerformanceMode = localStorage.getItem('performanceMode') === 'true';
         performanceModeCheckbox.checked = isPerformanceMode;
-        if (isPerformanceMode) this.applyPerformanceMode(true);
+        if (isPerformanceMode) applyPerformanceMode(this, true);
 
         performanceModeCheckbox.addEventListener('change', (e) => {
             const enabled = e.target.checked;
-            this.applyPerformanceMode(enabled);
+            applyPerformanceMode(this, enabled);
             localStorage.setItem('performanceMode', enabled);
         });
         
@@ -142,9 +142,9 @@ export class OptionsUI {
         const shadowQualitySelect = modal.querySelector('#shadow-quality');
         const defaultShadowQuality = this.playerControls.isMobile ? 'low' : 'medium';
         shadowQualitySelect.value = localStorage.getItem('shadowQuality') || defaultShadowQuality;
-        this.applyShadowQuality(shadowQualitySelect.value);
+        applyShadowQuality(this, shadowQualitySelect.value);
         shadowQualitySelect.addEventListener('change', (e) => {
-            this.applyShadowQuality(e.target.value);
+            applyShadowQuality(this, e.target.value);
             localStorage.setItem('shadowQuality', e.target.value);
         });
 
@@ -176,188 +176,7 @@ export class OptionsUI {
             updateButtonText();
         });
         
-        const replaceButtons = [
-            'use-all-assets-button', 'replace-player-button', 'replace-robots-button', 'replace-eyebots-button',
-            'replace-chickens-button', 'replace-wireframes-button', 'replace-aliens-button', 'replace-shopkeeper-button',
-            'replace-ogres-button', 'replace-knights-button'
-        ];
-
-        const toggleReplaceButtons = (show) => {
-            const container = modal.querySelector('#asset-replacement-buttons');
-            if (container) {
-                container.style.display = show ? 'grid' : 'none';
-            }
-        };
-        
-        toggleReplaceButtons(false);
-
-        modal.querySelector('#download-assets').addEventListener('click', async () => {
-            const success = await this.assetReplacementManager.downloadExternalAssets();
-            if (success) {
-                toggleReplaceButtons(true);
-            }
-        });
-
-        modal.querySelector('#use-all-assets-button').addEventListener('click', () => {
-            this.assetReplacementManager.replaceAllModels();
-        });
-
-        modal.querySelector('#replace-player-button').addEventListener('click', () => {
-            this.assetReplacementManager.replaceModel('player');
-        });
-        modal.querySelector('#replace-robots-button').addEventListener('click', () => {
-            this.assetReplacementManager.replaceModel('robot');
-        });
-        modal.querySelector('#replace-eyebots-button').addEventListener('click', () => {
-            this.assetReplacementManager.replaceModel('eyebot');
-        });
-        modal.querySelector('#replace-chickens-button').addEventListener('click', () => {
-            this.assetReplacementManager.replaceModel('chicken');
-        });
-        modal.querySelector('#replace-wireframes-button').addEventListener('click', () => {
-            this.assetReplacementManager.replaceModel('wireframe');
-        });
-        modal.querySelector('#replace-aliens-button').addEventListener('click', () => {
-            this.assetReplacementManager.replaceModel('alien');
-        });
-        modal.querySelector('#replace-shopkeeper-button').addEventListener('click', () => {
-            this.assetReplacementManager.replaceModel('shopkeeper');
-        });
-        modal.querySelector('#replace-ogres-button').addEventListener('click', () => {
-            this.assetReplacementManager.replaceModel('ogre');
-        });
-        modal.querySelector('#replace-knights-button').addEventListener('click', () => {
-            this.assetReplacementManager.replaceModel('knight');
-        });
+        setupAssetControls(modal, this.assetReplacementManager);
     }
 
-    async addAdminTab() {
-        const currentUser = await window.websim.getCurrentUser();
-        /* @tweakable Username of the admin user who can see the admin tab. */
-        const adminUsername = "lordtsarcasm";
-
-        if (currentUser && currentUser.username === adminUsername) {
-            const tabsContainer = document.querySelector('#options-tabs');
-            const contentContainer = document.querySelector('#options-content');
-
-            const adminTab = document.createElement('button');
-            adminTab.className = 'options-tab admin-tab';
-            adminTab.dataset.tab = 'admin';
-            adminTab.textContent = 'Admin';
-            tabsContainer.appendChild(adminTab);
-
-            const adminContent = document.createElement('div');
-            adminContent.id = 'options-tab-admin';
-            adminContent.className = 'options-tab-content';
-            adminContent.innerHTML = `
-                <h3>Admin Controls</h3>
-                <div class="option-item">
-                    <label for="youtube-url-input">Video URL:</label>
-                    <input type="text" id="youtube-url-input" placeholder="Enter video file URL...">
-                </div>
-                <button id="save-youtube-url" class="option-button" data-tooltip="Update the video screen for everyone">Set Video</button>
-            `;
-            contentContainer.appendChild(adminContent);
-
-            adminContent.querySelector('#save-youtube-url').addEventListener('click', () => {
-                const url = adminContent.querySelector('#youtube-url-input').value;
-                if (this.dependencies.room) {
-                    this.dependencies.room.updateRoomState({ youtubeUrl: url });
-                }
-            });
-
-            adminTab.addEventListener('click', (e) => {
-                document.querySelectorAll('.options-tab').forEach(t => t.classList.remove('active'));
-                e.target.classList.add('active');
-                document.querySelectorAll('.options-tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                adminContent.classList.add('active');
-            });
-        }
-    }
-
-    applyPerformanceMode(enabled) {
-        const shadowSelect = document.getElementById('shadow-quality');
-        const viewDistanceSlider = document.getElementById('view-distance');
-        const viewDistanceValue = document.getElementById('view-distance-value');
-
-        if (enabled) {
-            // Store current settings before overriding
-            if (!this.prePerformanceSettings) {
-                this.prePerformanceSettings = {
-                    shadowQuality: shadowSelect.value,
-                    viewDistance: viewDistanceSlider.value
-                };
-            }
-            // Apply performance settings
-            this.applyShadowQuality('off');
-            shadowSelect.value = 'off';
-            shadowSelect.disabled = true;
-
-            const performanceViewDistance = 75;
-            this.playerControls.camera.far = performanceViewDistance;
-            this.playerControls.camera.updateProjectionMatrix();
-            viewDistanceSlider.value = performanceViewDistance;
-            viewDistanceSlider.disabled = true;
-            viewDistanceValue.textContent = performanceViewDistance;
-
-        } else {
-            // Restore previous settings if they exist
-            if (this.prePerformanceSettings) {
-                this.applyShadowQuality(this.prePerformanceSettings.shadowQuality);
-                shadowSelect.value = this.prePerformanceSettings.shadowQuality;
-
-                const restoredViewDistance = parseInt(this.prePerformanceSettings.viewDistance);
-                this.playerControls.camera.far = restoredViewDistance;
-                this.playerControls.camera.updateProjectionMatrix();
-                viewDistanceSlider.value = restoredViewDistance;
-                viewDistanceValue.textContent = restoredViewDistance;
-
-                this.prePerformanceSettings = null;
-            }
-            shadowSelect.disabled = false;
-            viewDistanceSlider.disabled = false;
-        }
-    }
-
-    applyShadowQuality(quality) {
-        if (!this.renderer || !this.dirLight) return;
-        
-        switch(quality) {
-            case 'high':
-                this.renderer.shadowMap.enabled = true;
-                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                this.dirLight.castShadow = true;
-                this.dirLight.shadow.mapSize.width = 2048;
-                this.dirLight.shadow.mapSize.height = 2048;
-                this.dirLight.shadow.radius = 2.0;
-                break;
-            case 'medium':
-                this.renderer.shadowMap.enabled = true;
-                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                this.dirLight.castShadow = true;
-                this.dirLight.shadow.mapSize.width = 1024;
-                this.dirLight.shadow.mapSize.height = 1024;
-                this.dirLight.shadow.radius = 1.5;
-                break;
-            case 'low':
-                this.renderer.shadowMap.enabled = true;
-                this.renderer.shadowMap.type = THREE.PCFShadowMap;
-                this.dirLight.castShadow = true;
-                this.dirLight.shadow.mapSize.width = 512;
-                this.dirLight.shadow.mapSize.height = 512;
-                break;
-            case 'off':
-                this.renderer.shadowMap.enabled = false;
-                this.dirLight.castShadow = false;
-                break;
-        }
-        // Force materials to update
-        this.scene.traverse(obj => {
-            if(obj.material) {
-                obj.material.needsUpdate = true;
-            }
-        });
-    }
 }
