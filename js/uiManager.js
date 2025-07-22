@@ -8,6 +8,7 @@ import { InventoryUI } from '../ui/inventoryUI.js';
 import { MapUI } from '../ui/mapUI.js';
 import { OptionsUI } from '../ui/optionsUI.js';
 import { CompassUI } from '../ui/compassUI.js';
+import { MusicUI } from '../ui/musicUI.js';
 
 export class UIManager {
     constructor(dependencies) {
@@ -40,6 +41,8 @@ export class UIManager {
 
         this.mapUI = new MapUI(this.dependencies);
         this.mapUI.create();
+
+        new MusicUI(this.dependencies).create();
 
         this.compassUI = new CompassUI(this.dependencies);
         this.compassUI.create();
