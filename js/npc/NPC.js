@@ -13,6 +13,10 @@ import {
 const NPC_ACCELERATION = 2.0;
 /* @tweakable The distance from the target at which the NPC starts to decelerate. */
 const DECELERATION_DISTANCE = 5.0;
+/* @tweakable The distance from the player beyond which NPC animations are updated less frequently. */
+const ANIMATION_LOD_DISTANCE = 25;
+/* @tweakable The update rate (in frames) for NPC animations beyond the LOD distance. e.g., 2 means every other frame. */
+const ANIMATION_LOD_RATE = 2;
 
 export class NPC {
     constructor(model, presetId, zoneKey, isEyebot, startPosition, terrain) {
@@ -31,6 +35,7 @@ export class NPC {
         this.avoidTimer = 0;
         this.avoidDirection = new THREE.Vector3();
         this.currentSpeed = 0;
+        this.animationFrameCounter = 0;
         /* @tweakable The radius of an eyebot's collision sphere. */
         this.eyebotCollisionRadius = 1.0;
 
@@ -289,14 +294,14 @@ export class NPC {
             }
         }
         
-        this.updateAnimation(isMoving, false, isVisible);
+        this.updateAnimation(isMoving, false, isVisible, playerModel.position);
 
         if (isVisible && this.model.userData.updateAnimations) {
             this.model.userData.updateAnimations(performance.now() * 0.001);
         }
     }
 
-    updateAnimation(isMoving, isInteracting = false, isVisible = true) {
+    updateAnimation(isMoving, isInteracting = false, isVisible = true, playerPosition) {
         if (this.isEyebot) {
             return;
         }
@@ -342,6 +347,14 @@ export class NPC {
         }
         
         if (isVisible && this.model.userData.mixer) {
+            const distanceToPlayer = this.model.position.distanceTo(playerPosition);
+            if (distanceToPlayer > ANIMATION_LOD_DISTANCE) {
+                this.animationFrameCounter++;
+                if (this.animationFrameCounter % ANIMATION_LOD_RATE !== 0) {
+                    return; // Skip update
+                }
+            }
+
             const delta = (performance.now() - (this.model.userData.lastMixerUpdate || performance.now())) / 1000;
             this.model.userData.mixer.update(delta);
             this.model.userData.lastMixerUpdate = performance.now();

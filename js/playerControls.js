@@ -15,12 +15,14 @@ const PLAYER_COLLISION_RADIUS = 0.3;
 const PLAYER_COLLISION_HEIGHT = 1.8;
 /* @tweakable Key for storing mobile controls preference in localStorage. */
 const MOBILE_CONTROLS_STORAGE_KEY = 'websim-force-mobile-controls';
+/* @tweakable The camera's default maximum view distance. Lower values improve performance. */
+const DEFAULT_FAR_PLANE = 150;
 
 export class PlayerControls {
   constructor(scene, room, options = {}) {
     this.scene = scene;
     this.room = room;
-    this.camera = options.camera || new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    this.camera = options.camera || new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, DEFAULT_FAR_PLANE);
     this.renderer = options.renderer;
     this.domElement = this.renderer ? this.renderer.domElement : document.body;
     this.playerModel = options.playerModel;
@@ -37,10 +39,13 @@ export class PlayerControls {
     this.velocity = new THREE.Vector3();
     this.canJump = true;
 
-    // Clear any previously cached control setting to ensure autodetection works.
-    localStorage.removeItem('websim-force-mobile-controls');
-
-    this.isMobile = FORCE_MOBILE_MODE || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    // Load control preference from localStorage
+    const savedControlMode = localStorage.getItem(MOBILE_CONTROLS_STORAGE_KEY);
+    if (savedControlMode !== null) {
+      this.isMobile = savedControlMode === 'true';
+    } else {
+      this.isMobile = FORCE_MOBILE_MODE || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    }
     
     // Add mobile-device class to body for CSS styling
     if (this.isMobile) {

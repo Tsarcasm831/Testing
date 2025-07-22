@@ -1,7 +1,6 @@
-Changelog Updates
-=================
+Testing Before Commit
+=====================
 
-- Record each change in `CHANGELOG.md` with a short bullet summary.
-- Group bullets under a heading using `date -u +%Y-%m-%d` for the date.
-- Prefix every bullet with the time from `date -u +%H%M`.
-- Keep only the latest ten bullet entries from days before today in `CHANGELOG.md` and move older ones to `CHANGELOG_ARCHIVE.md`. Bullets from the current UTC day may exceed this limit.
+- Always run `npm test` or any other project-specific test command before committing.
+- If Python modules include tests, run `python -m pytest` as well.
+- When tests are missing or fail because of environment limitations, note this in the pull request description.

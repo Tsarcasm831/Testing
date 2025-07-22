@@ -7,6 +7,8 @@ const MOVE_JOYSTICK_SENSITIVITY = 1.2;
 const CAMERA_TOUCH_SENSITIVITY = 1.0;
 /* @tweakable The exponent for joystick input curve. >1 for slower start, <1 for faster start. */
 const JOYSTICK_INPUT_CURVE = 1.2;
+/* @tweakable The size of the joystick nipple when using mobile controls on a desktop. */
+const DESKTOP_NIPPLE_SIZE = 120;
 
 export class InputManager {
   constructor(isMobile, cameraTouchElement, playerControls = null) {
@@ -62,16 +64,17 @@ export class InputManager {
     };
     this.touchStartHandler = (e) => {
         if (this.playerControls && !this.playerControls.enabled) return;
-        if (e.touches.length === 1) {
-            this.lastTouchX = e.touches[0].clientX;
-            this.lastTouchY = e.touches[0].clientY;
+        const touch = e.type.startsWith('touch') ? e.touches[0] : e;
+        if (touch) {
+            this.lastTouchX = touch.clientX;
+            this.lastTouchY = touch.clientY;
             this.cameraMoving = true;
         }
     };
     this.touchMoveHandler = (e) => {
         if (this.playerControls && !this.playerControls.enabled) return;
-        if (e.touches.length === 1) {
-            const touch = e.touches[0];
+        const touch = e.type.startsWith('touch') ? e.touches[0] : e;
+        if (touch && this.cameraMoving) {
             this.cameraX = (touch.clientX - this.lastTouchX) * CAMERA_TOUCH_SENSITIVITY;
             this.cameraY = (touch.clientY - this.lastTouchY) * CAMERA_TOUCH_SENSITIVITY;
             this.lastTouchX = touch.clientX;
@@ -116,7 +119,7 @@ export class InputManager {
       mode: 'static',
       position: { left: '50%', top: '50%' },
       color: 'rgba(255, 255, 255, 0.5)',
-      size: 120
+      size: this.isMobile ? Math.min(moveJoystickContainer.clientWidth, moveJoystickContainer.clientHeight) : DESKTOP_NIPPLE_SIZE
     });
 
     this.moveJoystick.on('move', this.joystickMoveHandler);
@@ -133,7 +136,7 @@ export class InputManager {
                 mode: 'static',
                 position: { left: '50%', top: '50%' },
                 color: 'rgba(255, 255, 255, 0.5)',
-                size: 120
+                size: this.isMobile ? Math.min(cameraJoystickContainer.clientWidth, cameraJoystickContainer.clientHeight) : DESKTOP_NIPPLE_SIZE
             });
             this.cameraJoystick.on('move', this.cameraJoystickMoveHandler);
             this.cameraJoystick.on('end', this.cameraJoystickEndHandler);
@@ -142,6 +145,12 @@ export class InputManager {
         this.cameraTouchElement.addEventListener('touchstart', this.touchStartHandler);
         this.cameraTouchElement.addEventListener('touchmove', this.touchMoveHandler);
         this.cameraTouchElement.addEventListener('touchend', this.touchEndHandler);
+
+        // Add mouse events for desktop "mobile" mode
+        this.cameraTouchElement.addEventListener('mousedown', this.touchStartHandler);
+        this.cameraTouchElement.addEventListener('mousemove', this.touchMoveHandler);
+        this.cameraTouchElement.addEventListener('mouseup', this.touchEndHandler);
+        this.cameraTouchElement.addEventListener('mouseleave', this.touchEndHandler);
     }
 
     const jumpButton = document.getElementById('jump-button');
@@ -169,6 +178,10 @@ export class InputManager {
         this.cameraTouchElement.removeEventListener('touchstart', this.touchStartHandler);
         this.cameraTouchElement.removeEventListener('touchmove', this.touchMoveHandler);
         this.cameraTouchElement.removeEventListener('touchend', this.touchEndHandler);
+        this.cameraTouchElement.removeEventListener('mousedown', this.touchStartHandler);
+        this.cameraTouchElement.removeEventListener('mousemove', this.touchMoveHandler);
+        this.cameraTouchElement.removeEventListener('mouseup', this.touchEndHandler);
+        this.cameraTouchElement.removeEventListener('mouseleave', this.touchEndHandler);
     }
     const jumpButton = document.getElementById('jump-button');
     if (jumpButton) {
@@ -183,7 +196,9 @@ export class InputManager {
     if (this.isMobile) {
         // z becomes forward/backward, x becomes left/right
         moveDirection.z = this.moveForward;
-        moveDirection.x = this.moveRight;
+        /* @tweakable Invert horizontal movement if controls feel wrong. Use 1 (normal) or -1 (inverted). */
+        const horizontalDirection = 1;
+        moveDirection.x = this.moveRight * horizontalDirection;
     } else {
       if (this.keysPressed.has("w") || this.keysPressed.has("arrowup")) {
         moveDirection.z = 1;

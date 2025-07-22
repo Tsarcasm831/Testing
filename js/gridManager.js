@@ -1,4 +1,4 @@
-import { createGroundGrid } from './worldGeneration.js';
+import { createGroundGrid, CLUSTER_SIZE } from './worldGeneration.js';
 
 export const GRID_LABEL_VISIBILITY_DISTANCE = 7;
 export const GRID_LABEL_LOD_DISTANCE = 30;
@@ -13,8 +13,10 @@ export class GridManager {
     }
 
     create(terrain) {
-        const gridHelperSize = 200;
-        const gridHelperDivisions = 200;
+        /* @tweakable The size of the grid helper. Should match the world size. */
+        const gridHelperSize = CLUSTER_SIZE;
+        /* @tweakable The number of divisions in the grid helper. More divisions create a finer grid. */
+        const gridHelperDivisions = 400;
         const gridHelperColorCenterLine = 0xffffff;
         const gridHelperColorGrid = 0xcccccc;
         this.gridHelper = createGroundGrid(

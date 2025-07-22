@@ -23,9 +23,9 @@ export const NPC_ADJECTIVES = ["Wandering", "Mysterious", "Lost", "Curious", "Si
 /* @tweakable Min NPCs per zone. */
 export const MIN_NPCS_PER_ZONE = 1;
 /* @tweakable Max NPCs per zone. This has a large impact on performance. */
-export const MAX_NPCS_PER_ZONE = 4;
-/* @tweakable Radius of active zones around player (in zones). 1 = 3x3 grid. A lower number improves performance by having fewer active NPCs. */
-export const ACTIVE_ZONE_RADIUS = 1;
+export const MAX_NPCS_PER_ZONE = 1;
+/* @tweakable Radius of active zones around player (in zones). 0 = 1x1 grid, 1 = 3x3 grid. A lower number improves performance by having fewer active NPCs. */
+export const ACTIVE_ZONE_RADIUS = 0;
 /* @tweakable When an NPC is being interacted with, this is how long they will remain idle after the conversation ends. */
 export const POST_INTERACTION_IDLE_SECONDS = 5;
 /* @tweakable The scale of the animated robot NPCs. */

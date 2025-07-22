@@ -161,6 +161,12 @@
     margin-bottom: 15px;
 }
 
+.option-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
 .option-item label {
     font-weight: bold;
 }

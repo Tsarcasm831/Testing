@@ -42,18 +42,22 @@ export class OptionsUI {
                 <div id="options-tab-general" class="options-tab-content active">
                     <h3>General Settings</h3>
                     <div class="option-item">
+                        <label for="performance-mode">Performance Mode</label>
+                        <input type="checkbox" id="performance-mode">
+                    </div>
+                    <div class="option-item">
                         <label for="shadow-quality">Shadow Quality</label>
                         <select id="shadow-quality">
                             <option value="high">High</option>
-                            <option value="medium" selected>Medium</option>
+                            <option value="medium">Medium</option>
                             <option value="low">Low</option>
                             <option value="off">Off</option>
                         </select>
                     </div>
                      <div class="option-item">
                         <label for="view-distance">View Distance</label>
-                        <input type="range" id="view-distance" min="50" max="250" value="100" step="10">
-                        <span id="view-distance-value">100</span>
+                        <input type="range" id="view-distance" min="50" max="300" value="150" step="10">
+                        <span id="view-distance-value">150</span>
                     </div>
                     <button id="toggle-mobile-controls-button" class="option-button" data-tooltip="Toggle on-screen controls.">Toggle Mobile Controls</button>
                     <button id="respawn-button" class="option-button" data-tooltip="Return to the starting area">Respawn</button>
@@ -121,10 +125,23 @@ export class OptionsUI {
             modal.style.display = 'none';
             this.playerControls.enabled = true;
         });
+
+        // Performance Mode Logic
+        const performanceModeCheckbox = modal.querySelector('#performance-mode');
+        const isPerformanceMode = localStorage.getItem('performanceMode') === 'true';
+        performanceModeCheckbox.checked = isPerformanceMode;
+        if (isPerformanceMode) this.applyPerformanceMode(true);
+
+        performanceModeCheckbox.addEventListener('change', (e) => {
+            const enabled = e.target.checked;
+            this.applyPerformanceMode(enabled);
+            localStorage.setItem('performanceMode', enabled);
+        });
         
         // Shadow Quality Logic
         const shadowQualitySelect = modal.querySelector('#shadow-quality');
-        shadowQualitySelect.value = localStorage.getItem('shadowQuality') || 'medium';
+        const defaultShadowQuality = this.playerControls.isMobile ? 'low' : 'medium';
+        shadowQualitySelect.value = localStorage.getItem('shadowQuality') || defaultShadowQuality;
         this.applyShadowQuality(shadowQualitySelect.value);
         shadowQualitySelect.addEventListener('change', (e) => {
             this.applyShadowQuality(e.target.value);
@@ -257,6 +274,50 @@ export class OptionsUI {
                 });
                 adminContent.classList.add('active');
             });
+        }
+    }
+
+    applyPerformanceMode(enabled) {
+        const shadowSelect = document.getElementById('shadow-quality');
+        const viewDistanceSlider = document.getElementById('view-distance');
+        const viewDistanceValue = document.getElementById('view-distance-value');
+
+        if (enabled) {
+            // Store current settings before overriding
+            if (!this.prePerformanceSettings) {
+                this.prePerformanceSettings = {
+                    shadowQuality: shadowSelect.value,
+                    viewDistance: viewDistanceSlider.value
+                };
+            }
+            // Apply performance settings
+            this.applyShadowQuality('off');
+            shadowSelect.value = 'off';
+            shadowSelect.disabled = true;
+
+            const performanceViewDistance = 75;
+            this.playerControls.camera.far = performanceViewDistance;
+            this.playerControls.camera.updateProjectionMatrix();
+            viewDistanceSlider.value = performanceViewDistance;
+            viewDistanceSlider.disabled = true;
+            viewDistanceValue.textContent = performanceViewDistance;
+
+        } else {
+            // Restore previous settings if they exist
+            if (this.prePerformanceSettings) {
+                this.applyShadowQuality(this.prePerformanceSettings.shadowQuality);
+                shadowSelect.value = this.prePerformanceSettings.shadowQuality;
+
+                const restoredViewDistance = parseInt(this.prePerformanceSettings.viewDistance);
+                this.playerControls.camera.far = restoredViewDistance;
+                this.playerControls.camera.updateProjectionMatrix();
+                viewDistanceSlider.value = restoredViewDistance;
+                viewDistanceValue.textContent = restoredViewDistance;
+
+                this.prePerformanceSettings = null;
+            }
+            shadowSelect.disabled = false;
+            viewDistanceSlider.disabled = false;
         }
     }
 

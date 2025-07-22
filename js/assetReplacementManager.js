@@ -3,6 +3,9 @@ import { Downloader } from './downloader.js';
 import { setupAnimatedPlayer, setupAnimatedRobot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupEyebot, setupAnimatedShopkeeper, setupAnimatedOgre, setupAnimatedKnight } from './animationSetup.js';
 
 export class AssetReplacementManager {
+    /* @tweakable The number of models to parse in parallel. Higher values may be faster but use more memory and CPU. */
+    static parallelModelLoads = 5;
+
     constructor(dependencies) {
         this.dependencies = dependencies;
         this.downloader = new Downloader();
@@ -113,40 +116,15 @@ export class AssetReplacementManager {
         }
     }
 
-    /* @tweakable Delay in milliseconds between replacing each model type when using 'Use All'. */
-    static allAssetsReplacementDelay = 200;
-
-    async replaceAllModels() {
-        if (!this.assets) {
-            this.updateStatus('Please download assets first.');
-            return;
-        }
-
-        this.updateStatus('Replacing all models...');
-
-        this.dependencies.npcManager.updatePlayerModel(null, true);
-
-        for (const type of Object.keys(this.modelTypes)) {
-            await this.replaceModel(type, false);
-            await new Promise(resolve => setTimeout(resolve, AssetReplacementManager.allAssetsReplacementDelay));
-        }
-        
-        // After all models are loaded and set, respawn NPCs
-        this.dependencies.npcManager.updatePlayerModel(null, true);
-
-        this.updateStatus('All models have been replaced.');
-    }
-
-    async replaceModel(type, respawnNpcs = true) {
+    async prepareModelData(type) {
         const modelInfo = this.modelTypes[type];
         if (!modelInfo) {
             console.error(`Unknown model type: ${type}`);
-            return;
+            return null;
         }
-        
+
         if (!this.assets) {
-            this.updateStatus('Please download assets first.');
-            return;
+            return null;
         }
 
         const requiredAssets = {};
@@ -154,12 +132,10 @@ export class AssetReplacementManager {
             if (!this.assets[name]) {
                 this.updateStatus(`${name} asset missing.`);
                 console.error(`${name} asset is missing.`);
-                return;
+                return null;
             }
             requiredAssets[name] = this.assets[name];
         }
-
-        this.updateStatus(`Loading ${type} model...`);
 
         const loader = new GLTFLoader();
         const assetUrls = Object.values(requiredAssets).map(asset => URL.createObjectURL(asset));
@@ -170,7 +146,7 @@ export class AssetReplacementManager {
             const model = gltfResults[0].scene;
             const animations = gltfResults.map(gltf => gltf.animations[0]).filter(Boolean);
 
-            let modelData = { model, setupFn: modelInfo.setupFn };
+            let modelData = { type, model, setupFn: modelInfo.setupFn };
             if (modelInfo.clipNames && modelInfo.clipNames.length > 0) {
                 animations.forEach((clip, index) => {
                     const clipName = modelInfo.clipNames[index];
@@ -179,20 +155,90 @@ export class AssetReplacementManager {
                     }
                 });
             }
-
-            if (type === 'player') {
-                modelInfo.applyFn(modelData);
-            } else if (modelInfo.applyFn) {
-                // Pass respawnNpcs flag to NPC replacement methods
-                modelInfo.applyFn(modelData, respawnNpcs);
-            }
-
-            this.updateStatus(`${type.charAt(0).toUpperCase() + type.slice(1)} model applied.`);
+            return modelData;
         } catch (error) {
             console.error(`Error loading ${type} model:`, error);
             this.updateStatus(`Failed to load ${type} model.`);
+            return null;
         } finally {
             assetUrls.forEach(url => URL.revokeObjectURL(url));
+        }
+    }
+
+    async replaceAllModels() {
+        if (!this.assets) {
+            this.updateStatus('Please download assets first.');
+            return;
+        }
+
+        this.updateStatus('Replacing all models...', 0);
+
+        this.dependencies.npcManager.updatePlayerModel(null, true);
+
+        const modelTypes = Object.keys(this.modelTypes);
+        const queue = [...modelTypes];
+        const results = [];
+        let loadedCount = 0;
+
+        const worker = async () => {
+            while (queue.length > 0) {
+                const type = queue.shift();
+                if (type) {
+                    const modelData = await this.prepareModelData(type);
+                    if (modelData) {
+                        results.push(modelData);
+                    }
+                    loadedCount++;
+                    const progress = loadedCount / modelTypes.length;
+                    this.updateStatus(`Loading models... ${(progress * 100).toFixed(0)}%`, progress);
+                }
+            }
+        };
+
+        const workers = [];
+        const numWorkers = Math.min(AssetReplacementManager.parallelModelLoads, modelTypes.length);
+        for (let i = 0; i < numWorkers; i++) {
+            workers.push(worker());
+        }
+        await Promise.all(workers);
+
+        this.updateStatus('Applying models...');
+        
+        const allModelData = results.filter(data => data !== null);
+        
+        allModelData.forEach(modelData => {
+            const { type } = modelData;
+            const modelInfo = this.modelTypes[type];
+    
+            if (type === 'player') {
+                modelInfo.applyFn(modelData);
+            } else if (modelInfo.applyFn) {
+                modelInfo.applyFn(modelData, false);
+            }
+        });
+        
+        this.dependencies.npcManager.updatePlayerModel(null, true);
+
+        this.updateStatus('All models have been replaced.');
+    }
+
+    async replaceModel(type, respawnNpcs = true) {
+        if (!this.assets) {
+            this.updateStatus('Please download assets first.');
+            return;
+        }
+        
+        this.updateStatus(`Loading ${type} model...`);
+        const modelData = await this.prepareModelData(type);
+
+        if (modelData) {
+            const modelInfo = this.modelTypes[type];
+            if (type === 'player') {
+                modelInfo.applyFn(modelData);
+            } else if (modelInfo.applyFn) {
+                modelInfo.applyFn(modelData, respawnNpcs);
+            }
+            this.updateStatus(`${type.charAt(0).toUpperCase() + type.slice(1)} model applied.`);
         }
     }
 
