@@ -1,5 +1,9 @@
 # Changelog
 
+## 2025-07-22
+
+- 2122 Add music button and modal with scrollable song and collaborator lists
+
 ## 2025-07-21
 
 - 2146 Update contribution guidelines in AGENTS files

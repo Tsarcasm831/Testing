@@ -39,6 +39,12 @@
     /* @tweakable The right position of the map button on mobile. */
     right: 20px;
 }
+.mobile-device #music-button {
+    /* @tweakable The bottom position of the music button on mobile. */
+    bottom: 430px;
+    /* @tweakable The right position of the music button on mobile. */
+    right: 20px;
+}
 .mobile-device #inventory-button {
     /* @tweakable The bottom position of the inventory button on mobile. */
     bottom: 220px;
