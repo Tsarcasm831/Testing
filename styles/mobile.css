@@ -7,6 +7,7 @@
   left: 20px;
   width: min(25vh, 150px);
   height: min(25vh, 150px);
+  /* @tweakable The z-index of the joystick. Should be high enough to be interactive but below other modals. */
   z-index: 1000;
   touch-action: none;
   /* @tweakable The background color of the joystick area. */
@@ -21,7 +22,8 @@
   right: 0;
   width: 50%;
   height: 100%;
-  z-index: 999;
+  /* @tweakable The z-index for the camera look pad. Should be high enough to capture touch but below other UI elements. */
+  z-index: 99;
   touch-action: none;
   display: none;
 }
@@ -35,6 +37,7 @@
     right: 20px;
     width: min(25vh, 150px);
     height: min(25vh, 150px);
+    /* @tweakable The z-index of the camera joystick. Should be high enough to be interactive but below other modals. */
     z-index: 1000;
     touch-action: none;
     /* @tweakable The background color of the camera joystick area. */
@@ -46,14 +49,16 @@
 /* @tweakable Position and size of the jump button on mobile. */
 #jump-button {
   position: fixed;
-  /* @tweakable The position of the jump button on mobile devices. */
+  /* @tweakable The bottom position of the jump button on mobile devices. */
   bottom: 30px;
-  right: 180px;
+  /* @tweakable The right position of the jump button on mobile devices. */
+  right: 120px;
   width: 80px;
   height: 80px;
   background-color: var(--white-50);
   border-radius: 50%;
   display: none;
+  /* @tweakable The z-index of the jump button. Should be high enough to be interactive but below other modals. */
   z-index: 1000;
   touch-action: none;
   text-align: center;
@@ -77,4 +82,9 @@
 
 .mobile-device #jump-button {
   display: block;
+}
+
+/* @tweakable Set to 'flex' to re-enable the loading screen on mobile devices. */
+.mobile-device #loading-screen {
+    display: none;
 }

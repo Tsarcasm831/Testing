@@ -26,6 +26,13 @@ export class InputManager {
     this.cameraMoving = false;
     this.lastTouchX = 0;
     this.lastTouchY = 0;
+    /* @tweakable The maximum distance in pixels the cursor can move between mousedown and mouseup for it to be considered a click. */
+    this.clickThreshold = 10;
+    this.mouseDownPos = { x: 0, y: 0 };
+    this.isDragging = false;
+
+    /* @tweakable A list of CSS selectors for UI elements that should not trigger camera movement when clicked/tapped in mobile mode. */
+    this.clickableSelectors = ['button', '.circle-button', '[data-tooltip]'];
 
     // Event handlers
     this.keydownHandler = (e) => {
@@ -64,19 +71,36 @@ export class InputManager {
     };
     this.touchStartHandler = (e) => {
         if (this.playerControls && !this.playerControls.enabled) return;
+        
+        // Check if the event target is a clickable UI element
+        if (e.target && this.clickableSelectors.some(selector => e.target.closest(selector))) {
+            return; // Don't start camera movement if a button is clicked
+        }
+
         const touch = e.type.startsWith('touch') ? e.touches[0] : e;
         if (touch) {
             this.lastTouchX = touch.clientX;
             this.lastTouchY = touch.clientY;
+            this.mouseDownPos.x = touch.clientX;
+            this.mouseDownPos.y = touch.clientY;
             this.cameraMoving = true;
+            this.isDragging = false; // Reset dragging flag
         }
     };
     this.touchMoveHandler = (e) => {
         if (this.playerControls && !this.playerControls.enabled) return;
         const touch = e.type.startsWith('touch') ? e.touches[0] : e;
         if (touch && this.cameraMoving) {
-            this.cameraX = (touch.clientX - this.lastTouchX) * CAMERA_TOUCH_SENSITIVITY;
-            this.cameraY = (touch.clientY - this.lastTouchY) * CAMERA_TOUCH_SENSITIVITY;
+            const dx = touch.clientX - this.mouseDownPos.x;
+            const dy = touch.clientY - this.mouseDownPos.y;
+            if (Math.sqrt(dx * dx + dy * dy) > this.clickThreshold) {
+                this.isDragging = true;
+            }
+
+            if (this.isDragging) {
+              this.cameraX = (touch.clientX - this.lastTouchX) * CAMERA_TOUCH_SENSITIVITY;
+              this.cameraY = (touch.clientY - this.lastTouchY) * CAMERA_TOUCH_SENSITIVITY;
+            }
             this.lastTouchX = touch.clientX;
             this.lastTouchY = touch.clientY;
         }
@@ -85,6 +109,7 @@ export class InputManager {
         this.cameraX = 0;
         this.cameraY = 0;
         this.cameraMoving = false;
+        this.isDragging = false;
     };
     this.jumpTouchStartHandler = (e) => {
         e.preventDefault();
@@ -126,7 +151,7 @@ export class InputManager {
     this.moveJoystick.on('end', this.joystickEndHandler);
 
     /* @tweakable Set to true to use a second joystick for camera controls on mobile. */
-    const useCameraJoystick = true;
+    const useCameraJoystick = false;
 
     if (useCameraJoystick) {
         const cameraJoystickContainer = document.getElementById('camera-joystick-container');

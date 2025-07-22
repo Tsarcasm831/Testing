@@ -1,30 +1,35 @@
 /*
 This file will be created.
 */
-let player;
-let isPlayerReady = false;
-let currentVideoId = null;
-let videoElement;
+let videoElement = null;
 
 export function initYoutubePlayer() {
-    // This no longer initializes the YouTube IFrame API
-    // It will be used to manage the video element for the VideoTexture
-    videoElement = document.querySelector('video'); // Assuming the video element is already created
+    // The video element is created in amphitheatre.js and might not exist when this is called.
+    // We'll grab it when it's needed.
+}
+
+function ensureVideoElement() {
+    if (!videoElement) {
+        videoElement = document.getElementById('amphitheatre-video');
+    }
+    return videoElement;
 }
 
 export function setYoutubePlayerUrl(url) {
-    if (videoElement) {
+    const video = ensureVideoElement();
+    if (video) {
         /* @tweakable The new source URL for the video screen. */
-        videoElement.src = url;
+        video.src = url;
     }
 }
 
 export function togglePlayPause() {
-    if (videoElement) {
-        if (videoElement.paused) {
-            videoElement.play();
+    const video = ensureVideoElement();
+    if (video) {
+        if (video.paused) {
+            video.play().catch(e => console.error("Video play failed:", e));
         } else {
-            videoElement.pause();
+            video.pause();
         }
     }
 }
@@ -33,5 +38,5 @@ export function togglePlayPause() {
 export const togglePlayPauseKey = 'p';
 
 export function getPlayer() {
-    return videoElement;
+    return ensureVideoElement();
 }

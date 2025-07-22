@@ -54,8 +54,9 @@ export const nursePreset = {
       {
         type: "box",
         color: "#666666",
-        position: { x: 0, y: 0, z: 0 },
-        scale: { x: 0.5, y: 0.1, z: 0.3 },
+        position: { x: 0, y: 0.3, z: 0 },
+        /* @tweakable The size of the nurse's collision volume. */
+        scale: { x: 0.6, y: 0.6, z: 0.4 },
         transparent: true,
         opacity: 0,
       },

@@ -251,23 +251,31 @@ export function createAmphitheatre(scene, getHeight) {
     /* @tweakable The default video source file for the amphitheater screen. Can be overridden by admin. */
     const defaultVideoSrc = 'https://file.garden/Zy7B0LkdIVpGyzA1/Videos/The%20Weight%20-%20Kronowski%20(AI%20Music%20Video).mp4';
 
-    videoElement = document.createElement('video');
-    videoElement.src = defaultVideoSrc;
-    videoElement.crossOrigin = 'anonymous';
-    /* @tweakable Whether the amphitheater video should loop. */
-    videoElement.loop = true;
-    /* @tweakable Whether the amphitheater video should start muted. Required for autoplay in most browsers. */
-    videoElement.muted = true;
-    videoElement.playsInline = true;
-    /* @tweakable Whether the amphitheater video should attempt to play automatically on load. Set to false to require manual play trigger (default: 'p' key). */
-    videoElement.autoplay = false;
-    videoElement.style.display = 'none';
-    document.body.appendChild(videoElement);
+    /* @tweakable If true, a video element will be created for the amphitheater. Set to false on mobile if loading issues persist. */
+    const enableVideoElement = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    videoTexture = new THREE.VideoTexture(videoElement);
-    videoTexture.minFilter = THREE.LinearFilter;
-    videoTexture.magFilter = THREE.LinearFilter;
-    videoTexture.format = THREE.RGBAFormat;
+    if (enableVideoElement) {
+        videoElement = document.createElement('video');
+        videoElement.id = 'amphitheatre-video';
+        videoElement.src = defaultVideoSrc;
+        videoElement.crossOrigin = 'anonymous';
+        /* @tweakable Whether the amphitheater video should loop. */
+        videoElement.loop = true;
+        /* @tweakable Whether the amphitheater video should start muted. Required for autoplay in most browsers. */
+        videoElement.muted = true;
+        videoElement.playsInline = true;
+        /* @tweakable Whether the amphitheater video should attempt to play automatically on load. Set to false to require manual play trigger (default: 'p' key). */
+        videoElement.autoplay = false;
+        videoElement.style.display = 'none';
+        document.body.appendChild(videoElement);
+
+        videoTexture = new THREE.VideoTexture(videoElement);
+        videoTexture.minFilter = THREE.LinearFilter;
+        videoTexture.magFilter = THREE.LinearFilter;
+        videoTexture.format = THREE.RGBAFormat;
+    } else {
+        videoTexture = null; // Ensure videoTexture is null if element is not created
+    }
 
     /* @tweakable The position of the backdrop behind the stage. */
     const backdropZOffset = 30;

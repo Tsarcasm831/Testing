@@ -28,18 +28,18 @@ export class InteractionManager {
     }
 
     init() {
-        if (!this.isDesktop) return;
-
-        // Create interaction prompt UI
-        const promptEl = document.createElement('div');
-        promptEl.id = 'interaction-prompt';
-        promptEl.style.display = 'none';
-        promptEl.innerHTML = `
-            <div class="interaction-npc-name"></div>
-            <div class="interaction-instruction"></div>
-        `;
-        document.getElementById('game-container').appendChild(promptEl);
-        this.interactionPrompt = promptEl;
+        // Create interaction prompt UI for desktop
+        if (this.isDesktop) {
+            const promptEl = document.createElement('div');
+            promptEl.id = 'interaction-prompt';
+            promptEl.style.display = 'none';
+            promptEl.innerHTML = `
+                <div class="interaction-npc-name"></div>
+                <div class="interaction-instruction"></div>
+            `;
+            document.getElementById('game-container').appendChild(promptEl);
+            this.interactionPrompt = promptEl;
+        }
 
         // Create mobile interaction button
         if (this.isMobile) {
@@ -73,18 +73,21 @@ export class InteractionManager {
 
     update() {
         const now = performance.now();
-        if (!this.isDesktop || this.conversationModal.style.display === 'flex' || (now - this.lastCheckTime < INTERACTION_CHECK_DELAY)) {
-            if (this.conversationModal.style.display === 'flex' && this.interactionPrompt.style.display !== 'none') {
+        if (this.conversationModal && this.conversationModal.style.display === 'flex') {
+             if (this.interactionPrompt && this.interactionPrompt.style.display !== 'none') {
                 this.interactionPrompt.style.display = 'none';
-                this.targetNpc = null;
             }
-            if (this.conversationModal.style.display === 'flex' && this.mobileInteractionButton && this.mobileInteractionButton.style.display !== 'none') {
+            if (this.mobileInteractionButton && this.mobileInteractionButton.style.display !== 'none') {
                 this.mobileInteractionButton.style.display = 'none';
-                this.targetNpc = null;
             }
+            this.targetNpc = null;
             return;
         }
         
+        if (now - this.lastCheckTime < INTERACTION_CHECK_DELAY) {
+            return;
+        }
+
         this.lastCheckTime = now;
 
         const playerPos = this.playerControls.getPlayerModel().position;
@@ -104,24 +107,21 @@ export class InteractionManager {
         if (this.targetNpc) {
             if (this.isDesktop) {
                 this.updatePromptPosition();
-                const nameEl = this.interactionPrompt.querySelector('.interaction-npc-name');
-                const instructionEl = this.interactionPrompt.querySelector('.interaction-instruction');
-                
-                nameEl.innerText = this.targetNpc.model.name || 'NPC';
-                instructionEl.innerText = 'Press F to talk';
-                
-                nameEl.style.fontSize = NPC_NAME_FONT_SIZE;
-                instructionEl.style.fontSize = INSTRUCTION_FONT_SIZE;
             } else if (this.mobileInteractionButton) {
                 this.mobileInteractionButton.style.display = 'flex';
             }
-        } else if (this.interactionPrompt.style.display !== 'none') {
-            this.interactionPrompt.style.display = 'none';
+        } else {
+            if (this.isDesktop && this.interactionPrompt && this.interactionPrompt.style.display !== 'none') {
+                this.interactionPrompt.style.display = 'none';
+            }
+            if (this.isMobile && this.mobileInteractionButton && this.mobileInteractionButton.style.display !== 'none') {
+                this.mobileInteractionButton.style.display = 'none';
+            }
         }
     }
 
     updatePromptPosition() {
-        if (!this.targetNpc) return;
+        if (!this.targetNpc || !this.interactionPrompt) return;
 
         const pos = this.targetNpc.model.position.clone();
         pos.y += PROMPT_VERTICAL_OFFSET;
@@ -132,6 +132,16 @@ export class InteractionManager {
             this.interactionPrompt.style.top = `${screenPos.y}px`;
             this.interactionPrompt.style.transform = 'translate(-50%, -50%)';
             this.interactionPrompt.style.display = 'block';
+
+            const nameEl = this.interactionPrompt.querySelector('.interaction-npc-name');
+            const instructionEl = this.interactionPrompt.querySelector('.interaction-instruction');
+            
+            nameEl.innerText = this.targetNpc.model.name || 'NPC';
+            instructionEl.innerText = 'Press F to talk';
+            
+            nameEl.style.fontSize = NPC_NAME_FONT_SIZE;
+            instructionEl.style.fontSize = INSTRUCTION_FONT_SIZE;
+
         } else {
             this.interactionPrompt.style.display = 'none';
         }

@@ -22,6 +22,7 @@ body {
 }
 
 #game-container {
+  /* @tweakable The z-index for the game container. This should be high to ensure the game is visible. */
   z-index: 1;
 }
 

@@ -1,9 +1,5 @@
 # Changelog
 
-## 2025-07-22
-
-- 1751 Refactor OptionsUI into smaller modules
-
 ## 2025-07-21
 
 - 2146 Update contribution guidelines in AGENTS files

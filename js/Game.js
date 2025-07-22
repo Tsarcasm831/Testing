@@ -105,6 +105,16 @@ export class Game {
         }
 
         this.start();
+
+        // Hide loading screen after a short delay to ensure first frame has rendered
+        /* @tweakable Delay in milliseconds before hiding the loading screen. */
+        const loadingScreenHideDelay = 100;
+        setTimeout(() => {
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.display = 'none';
+            }
+        }, loadingScreenHideDelay);
     }
 
     setupScene() {
@@ -165,8 +175,6 @@ export class Game {
         });
         this.interactionManager.init();
     }
-
-
 
     setupBuildTools(terrain) {
         this.buildTool = new BuildTool(this.scene, this.camera, this.playerControls, terrain);
@@ -309,5 +317,4 @@ export class Game {
         this.labelRenderer.render(this.scene, this.camera);
         this.css3dRenderer.render(this.scene, this.camera);
     }
-
 }

@@ -20,7 +20,7 @@ export const PILLARS_PER_ZONE = 0.1;
 /* @tweakable The number of trees generated per zone. Lower for better performance. Reload required. */
 export const TREES_PER_ZONE = 0.3;
 /* @tweakable The total number of cloud groups to generate. Lower for better performance. A reload is required for this to take effect. */
-export const CLOUD_COUNT = 25;
+export const CLOUD_COUNT = 20;
 
 /* @tweakable The radius around the amphitheater to keep clear of trees and barriers. Reload required on change. */
 export const AMPHITHEATRE_CLEARING_RADIUS = 60;

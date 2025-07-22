@@ -2,12 +2,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>3D Overworld Template v1.9.8.1</title>
+  <title>3D Overworld Template v1.9.8.5</title>
   <script>
     // Suppress specific cookie-related console errors and warnings
     /* @tweakable List of phrases to filter from console error/warning messages. */
     const consoleFilter = ['Cookie', 'rejected for invalid domain'];
 
+    // NOTE: Disabling custom console filtering for easier debugging.
+    /*
     const originalError = console.error;
     console.error = (...args) => {
       if (typeof args[0] === 'string' && consoleFilter.every(phrase => args[0].includes(phrase))) {
@@ -23,6 +25,7 @@
       }
       originalWarn.apply(console, args);
     };
+    */
   </script>
   <link rel="stylesheet" href="styles/theme.css">
   <link rel="stylesheet" href="styles/base.css">
@@ -52,8 +55,18 @@
   <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.10.1/dist/nipplejs.min.js"></script>
 </head>
 <body oncontextmenu="return false;">
+  <div id="loading-screen">
+    <div id="loading-container">
+      <h1>Loading World...</h1>
+      <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+      </div>
+      <div id="loading-status">Initializing...</div>
+    </div>
+  </div>
   <div id="joystick"></div>
   <div id="camera-joystick-container"></div>
+  <div id="lookPad"></div>
   <div id="jump-button"></div>
   <div id="game-container">
     <div class="crosshair"></div>

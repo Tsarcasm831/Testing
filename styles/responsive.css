@@ -1,5 +1,7 @@
 .mobile-device #joystick-container {
   display: block;
+  width: 90%;
+  height: 60%;
 }
 
 .mobile-device #right-side-touch-area {
@@ -26,20 +28,28 @@
 
 /* @tweakable Vertical layout for main UI buttons on mobile */
 .mobile-device #options-button {
-    top: 20px;
-    right: 90px;
+    /* @tweakable The bottom position of the options button on mobile. */
+    bottom: 360px;
+    /* @tweakable The right position of the options button on mobile. */
+    right: 20px;
 }
 .mobile-device #map-button {
-    top: 20px;
-    right: 160px;
+    /* @tweakable The bottom position of the map button on mobile. */
+    bottom: 290px;
+    /* @tweakable The right position of the map button on mobile. */
+    right: 20px;
 }
 .mobile-device #inventory-button {
-    top: 20px;
-    right: 230px;
+    /* @tweakable The bottom position of the inventory button on mobile. */
+    bottom: 220px;
+    /* @tweakable The right position of the inventory button on mobile. */
+    right: 20px;
 }
 .mobile-device #chat-button {
-    top: 20px;
-    right: 300px;
+    /* @tweakable The bottom position of the chat button on mobile. */
+    bottom: 80px;
+    /* @tweakable The right position of the chat button on mobile. */
+    right: 20px;
 }
 
 .mobile-device #character-creator-button {
