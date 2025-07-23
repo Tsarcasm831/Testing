@@ -56,14 +56,41 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: var(--black-70);
+  background-color: var(--black-80);
   padding: 20px;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 16px;
   color: #fff;
   z-index: 100;
-  max-width: 400px;
-  text-align: center;
+  max-width: 450px;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.instructions h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.instructions-section {
+    margin-bottom: 15px;
+}
+
+.instructions ul {
+    list-style-type: none;
+    padding-left: 15px;
+    margin: 5px 0;
+}
+
+.instructions li {
+    margin-bottom: 5px;
+}
+
+.instructions .click-to-begin {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.1em;
 }
 
 #dev-toggle-button {
@@ -196,4 +223,18 @@ button:active {
   font-weight: bold;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
   pointer-events: none;
+}
+
+.seat-label {
+  /* @tweakable The text color for the amphitheater seat labels. */
+  color: rgba(255, 255, 100, 0.9);
+  font-family: Arial, sans-serif;
+  /* @tweakable The font size for the amphitheater seat labels. */
+  font-size: 10px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 1px 3px;
+  border-radius: 2px;
 }

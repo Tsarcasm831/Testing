@@ -280,6 +280,13 @@ export class InputManager {
     return this.keysPressed.has("shift");
   }
 
+  isSprinting() {
+    if (this.isMobile) {
+        return false;
+    }
+    return this.keysPressed.has("control");
+  }
+
   resetJump() {
     // This method is no longer needed for mobile jump logic
     // but we keep it in case it's used elsewhere or for future features.

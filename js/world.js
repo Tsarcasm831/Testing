@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createTerrain, createBarriers, createTrees, createClouds, createStarterHouse, createShopkeeper, createAmphitheatre, createHospital, createTavern, createWorkshop, createNurse, createTavernkeep } from './worldGeneration.js';
+import { createTerrain, createBarriers, createTrees, createClouds, createStarterHouse, createShopkeeper, createAmphitheatre, createHospital, createTavern, createWorkshop, createNurse, createTavernkeep, createGrass } from './worldGeneration.js';
 
 export class World {
     constructor(scene, npcManager, room) {
@@ -22,6 +22,7 @@ export class World {
         createWorkshop(this.scene, this.terrain.userData.getHeight);
         createNurse(this.scene, this.terrain, this.npcManager, hospital.position);
         createTavernkeep(this.scene, this.terrain, this.npcManager, tavern.position);
-        return this.terrain;
+        const grass = createGrass(this.scene, this.terrain);
+        return { terrain: this.terrain, grass: grass };
     }
 }

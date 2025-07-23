@@ -10,7 +10,11 @@ export class MusicUI {
         button.id = 'music-button';
         button.classList.add('circle-button');
         button.setAttribute('data-tooltip', 'Music');
-        button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M9 3v12a4 4 0 11-2-3.465V6h8V3H9z"/></svg>`;
+        /* @tweakable The URL for the music icon. */
+        const musicIconUrl = "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Images/Icons/music_icon.png";
+        /* @tweakable The size of the music icon. */
+        const musicIconSize = "28px";
+        button.innerHTML = `<img src="${musicIconUrl}" alt="Music" style="width: ${musicIconSize}; height: ${musicIconSize};">`;
         uiContainer.appendChild(button);
 
         const modal = document.createElement('div');

@@ -1,11 +1,21 @@
 import * as THREE from 'three';
+import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 /**
  * Creates and adds amphitheater seating to a group.
  * @param {THREE.Group} group The group to add seating to.
  * @param {THREE.Color | number} stoneColor The color of the seats.
  */
+/* @tweakable Set to false to disable collision for amphitheater seats. */
+const SEAT_COLLISION_ENABLED = false;
+
 export function createAmphitheatreSeating(group, stoneColor) {
+    /* @tweakable The rotation of the amphitheater seats in degrees. */
+    const seatingRotation = 90;
+    const seatingGroup = new THREE.Group();
+    seatingGroup.rotation.y = THREE.MathUtils.degToRad(seatingRotation);
+    group.add(seatingGroup);
+
     /* @tweakable The number of seating rows. */
     const numRows = 8;
     /* @tweakable The height of each seating row. */
@@ -24,6 +34,61 @@ export function createAmphitheatreSeating(group, stoneColor) {
     const endAngle = angleRad / 2;
     
     const material = new THREE.MeshStandardMaterial({ color: stoneColor, roughness: 0.85, metalness: 0.1 });
+
+    /* @tweakable The thickness of the foundation under the amphitheater seats. A larger value helps prevent it from appearing to float on uneven terrain. */
+    const foundationThickness = 10.0;
+    /* @tweakable The color of the foundation under the amphitheater seats. */
+    const foundationColor = 0x666666;
+    const foundationMaterial = new THREE.MeshStandardMaterial({ color: foundationColor, roughness: 0.9, metalness: 0.1 });
+    
+    const firstRowInnerRadius = startRadius;
+    const lastRowOuterRadius = startRadius + numRows * (rowDepth + radiusStep) - radiusStep;
+
+    const foundationShape = new THREE.Shape();
+    foundationShape.moveTo(firstRowInnerRadius * Math.cos(startAngle), firstRowInnerRadius * Math.sin(startAngle));
+    foundationShape.absarc(0, 0, firstRowInnerRadius, startAngle, endAngle, false);
+    foundationShape.lineTo(lastRowOuterRadius * Math.cos(endAngle), lastRowOuterRadius * Math.sin(endAngle));
+    foundationShape.absarc(0, 0, lastRowOuterRadius, endAngle, startAngle, true);
+    foundationShape.lineTo(firstRowInnerRadius * Math.cos(startAngle), firstRowInnerRadius * Math.sin(startAngle));
+
+    const foundationExtrudeSettings = {
+        steps: 1,
+        depth: foundationThickness,
+        bevelEnabled: false,
+    };
+
+    const foundationGeometry = new THREE.ExtrudeGeometry(foundationShape, foundationExtrudeSettings);
+    foundationGeometry.translate(0, 0, -foundationThickness); // Extrude downwards from y=0
+    foundationGeometry.rotateX(-Math.PI / 2);
+
+    const foundationMesh = new THREE.Mesh(foundationGeometry, foundationMaterial);
+    foundationMesh.castShadow = true;
+    foundationMesh.receiveShadow = true;
+    /* @tweakable Set to true to enable collision for the amphitheater seat foundation. */
+    foundationMesh.userData.isBarrier = false;
+    seatingGroup.add(foundationMesh);
+
+    /* @tweakable The width of an individual seat. */
+    const seatWidth = 0.8;
+    /* @tweakable The depth of an individual seat base. */
+    const seatDepth = 0.5;
+    /* @tweakable The height/thickness of the seat base. */
+    const seatBaseHeight = 0.1;
+    /* @tweakable The height of the seat backrest. */
+    const backrestHeight = 0.7;
+    /* @tweakable The thickness of the seat backrest. */
+    const backrestThickness = 0.08;
+    /* @tweakable The gap between individual seats. */
+    const seatGap = 0.15;
+    /* @tweakable The color of the individual seats (e.g., a wood color). */
+    const seatColor = 0x5a4a3a;
+
+    const seatMaterial = new THREE.MeshStandardMaterial({ color: seatColor, roughness: 0.8, metalness: 0.1 });
+    const seatBaseGeom = new THREE.BoxGeometry(seatWidth, seatBaseHeight, seatDepth);
+    const seatBackGeom = new THREE.BoxGeometry(seatWidth, backrestHeight, backrestThickness);
+
+    /* @tweakable The target point for all seats to face. */
+    const targetPoint = new THREE.Vector3(55.625, 0, -63.125); // Corresponds to grid IK200
 
     for (let i = 0; i < numRows; i++) {
         const innerRadius = startRadius + i * (rowDepth + radiusStep);
@@ -51,18 +116,90 @@ export function createAmphitheatreSeating(group, stoneColor) {
         const seatRow = new THREE.Mesh(geometry, material);
         seatRow.castShadow = true;
         seatRow.receiveShadow = true;
-        seatRow.userData.isSeatRow = true;
         
-        // Normalize angles to be in the [0, 2*PI] range for consistent collision checks.
-        const normalizedStartAngle = startAngle < 0 ? startAngle + 2 * Math.PI : startAngle;
-        const normalizedEndAngle = endAngle < 0 ? endAngle + 2 * Math.PI : endAngle;
+        if (SEAT_COLLISION_ENABLED) {
+            seatRow.userData.isSeatRow = true;
+            // Normalize angles to be in the [0, 2*PI] range and apply parent rotation for consistent collision checks.
+            /* @tweakable An offset in degrees to adjust the collision angles of the amphitheater seats. Can be used to fine-tune collision detection if it feels off. */
+            const collisionAngleOffset = 0;
+            const rotationRad = THREE.MathUtils.degToRad(seatingRotation + collisionAngleOffset);
+            let normalizedStartAngle = startAngle + rotationRad;
+            let normalizedEndAngle = endAngle + rotationRad;
 
-        seatRow.userData.seatRowData = {
-            innerRadius,
-            outerRadius,
-            startAngle: normalizedStartAngle,
-            endAngle: normalizedEndAngle
-        };
-        group.add(seatRow);
+            // Ensure angles are within [0, 2*PI]
+            while(normalizedStartAngle < 0) normalizedStartAngle += 2 * Math.PI;
+            while(normalizedEndAngle < 0) normalizedEndAngle += 2 * Math.PI;
+            normalizedStartAngle = normalizedStartAngle % (2 * Math.PI);
+            normalizedEndAngle = normalizedEndAngle % (2 * Math.PI);
+
+            seatRow.userData.seatRowData = {
+                innerRadius,
+                outerRadius,
+                startAngle: normalizedStartAngle,
+                endAngle: normalizedEndAngle
+            };
+        }
+        seatingGroup.add(seatRow);
+        
+        // Add individual seats on top of the tier
+        const seatRadius = innerRadius + rowDepth / 2;
+        const circumferencePortion = angleRad * seatRadius;
+        const totalSeatSpace = seatWidth + seatGap;
+        const numSeats = Math.floor(circumferencePortion / totalSeatSpace);
+        
+        // Center the seats within the arc
+        const totalAngleOfSeats = numSeats * totalSeatSpace / seatRadius;
+        const startAngleForSeats = startAngle + (angleRad - totalAngleOfSeats) / 2;
+        const angleStep = totalSeatSpace / seatRadius;
+
+        for (let j = 0; j < numSeats; j++) {
+            const seatAngle = startAngleForSeats + (j * angleStep);
+
+            const seat = new THREE.Group();
+            
+            const x = seatRadius * Math.cos(seatAngle);
+            const z = seatRadius * Math.sin(seatAngle);
+            seat.position.set(x, y + rowHeight, z);
+
+            // Calculate rotation for each seat to face the center of its curve
+            const angleToCenter = Math.atan2(x, z);
+            
+            /* @tweakable An offset in degrees to adjust the final rotation of individual seats. Use this to fine-tune the direction they face. 0 should make them face the center of the amphitheater arc. */
+            const seatRotationOffset = 180;
+            seat.rotation.y = angleToCenter + THREE.MathUtils.degToRad(seatRotationOffset);
+            
+            const seatBase = new THREE.Mesh(seatBaseGeom, seatMaterial);
+            seatBase.position.y = seatBaseHeight / 2;
+            seatBase.castShadow = true;
+            seat.add(seatBase);
+
+            const seatBack = new THREE.Mesh(seatBackGeom, seatMaterial);
+            seatBack.position.y = backrestHeight / 2;
+            seatBack.position.z = -seatDepth / 2 + backrestThickness / 2;
+            seatBack.castShadow = true;
+            seat.add(seatBack);
+            
+            seatingGroup.add(seat);
+
+            /* @tweakable Set to true to enable unique labels on each seatback, visible with the grid. */
+            const enableSeatLabels = true;
+            if (enableSeatLabels) {
+                const labelDiv = document.createElement('div');
+                labelDiv.className = 'seat-label';
+                labelDiv.textContent = `R${i + 1}-S${j + 1}`;
+                
+                const seatLabel = new CSS2DObject(labelDiv);
+                seatLabel.userData.isSeatLabel = true;
+                seatLabel.visible = false; // Initially hidden, toggled by GridManager
+
+                const labelPosition = seatBack.position.clone();
+                /* @tweakable Vertical offset of the seat label from the top of the seatback. */
+                const seatLabelVerticalOffset = 0.1;
+                labelPosition.y += backrestHeight / 2 + seatLabelVerticalOffset;
+                seatLabel.position.copy(labelPosition);
+
+                seat.add(seatLabel);
+            }
+        }
     }
 }

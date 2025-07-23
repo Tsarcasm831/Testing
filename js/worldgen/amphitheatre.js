@@ -79,6 +79,18 @@ function createStage(dimensions) {
     stage.userData.isBlock = true;
     stageGroup.add(stage);
 
+    /* @tweakable The height of the foundation under the stage. */
+    const foundationHeight = 2.0;
+    /* @tweakable The color of the stage foundation. */
+    const foundationColor = 0x331a00;
+    const foundationMaterial = new THREE.MeshStandardMaterial({ color: foundationColor, roughness: 0.9, metalness: 0.1 });
+    const foundationGeometry = new THREE.BoxGeometry(dimensions.width, foundationHeight, dimensions.depth);
+    const foundation = new THREE.Mesh(foundationGeometry, foundationMaterial);
+    foundation.position.y = -foundationHeight / 2;
+    foundation.castShadow = true;
+    foundation.receiveShadow = true;
+    stageGroup.add(foundation);
+
     // Add stairs
     /* @tweakable The rotation of the stairs in degrees around the Y axis. */
     const stairRotationY = 0;

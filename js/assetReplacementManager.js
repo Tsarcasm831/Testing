@@ -72,6 +72,38 @@ export class AssetReplacementManager {
         };
     }
 
+    async preloadAndApplyPlayerModel() {
+        this.updateStatus('Loading special player model...');
+        try {
+            const response = await fetch('assets.json');
+            const data = await response.json();
+            const playerAssetNames = this.modelTypes['player'].assetNames;
+            const playerAssetsToDownload = data.assets.filter(a => playerAssetNames.includes(a.name));
+
+            if (playerAssetsToDownload.length !== playerAssetNames.length) {
+                console.error("Missing some player assets in assets.json");
+                this.updateStatus('Failed to load player assets.');
+                return;
+            }
+
+            const downloadedAssets = await this.downloader.preloadAssets(playerAssetsToDownload, null, (progress) => {
+                 this.updateStatus(`Downloading player model... ${(progress * 100).toFixed(0)}%`, progress);
+            });
+            this.assets = { ...(this.assets || {}), ...downloadedAssets };
+
+            const modelData = await this.prepareModelData('player');
+            if (modelData) {
+                this.applyToPlayer(modelData);
+                this.updateStatus('Player model loaded.');
+            } else {
+                throw new Error("Failed to prepare player model data");
+            }
+        } catch (e) {
+            this.updateStatus('Failed to load player model.');
+            console.error(e);
+        }
+    }
+
     setStatusElement(element) {
         this.statusElement = element;
     }

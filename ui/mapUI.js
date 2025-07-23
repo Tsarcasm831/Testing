@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { ZONE_SIZE, ZONES_PER_CHUNK_SIDE, CHUNKS_PER_CLUSTER_SIDE } from '../js/worldGeneration.js';
+import { ZONE_SIZE, ZONES_PER_CHUNK_SIDE, CHUNKS_PER_CLUSTER_SIDE, GROUND_TEXTURE_FILENAME } from '../js/worldGeneration.js';
 
 /* @tweakable The base size of the map display in pixels. */
 const MAP_SIZE = 400;
@@ -132,7 +132,7 @@ export class MapUI {
         if (!terrain || !terrain.material || !terrain.material.map) return;
 
         const textureLoader = new THREE.TextureLoader();
-        textureLoader.load('ground_texture.png', (texture) => {
+        textureLoader.load(GROUND_TEXTURE_FILENAME, (texture) => {
             const tmpCanvas = document.createElement('canvas');
             tmpCanvas.width = texture.image.width;
             tmpCanvas.height = texture.image.height;

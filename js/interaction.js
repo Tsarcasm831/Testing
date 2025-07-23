@@ -9,7 +9,7 @@ const NPC_NAME_FONT_SIZE = '16px';
 /* @tweakable Font size for the instruction text in the interaction prompt. */
 const INSTRUCTION_FONT_SIZE = '14px';
 /* @tweakable The delay in milliseconds between checks for interactable NPCs. Higher values improve performance but reduce responsiveness. */
-const INTERACTION_CHECK_DELAY = 250; // ms
+const INTERACTION_CHECK_DELAY = 251; // ms
 
 export class InteractionManager {
     constructor(dependencies) {

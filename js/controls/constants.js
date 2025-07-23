@@ -11,5 +11,8 @@ export const MOBILE_SPEED_MULTIPLIER = 1.0;
 /* @tweakable Multiplier for player speed when running. */
 export const RUN_SPEED_MULTIPLIER = 1.8;
 
+/* @tweakable Multiplier for player speed when sprinting (super-running). This is applied on top of the base speed. */
+export const SPRINT_SPEED_MULTIPLIER = 3.6;
+
 /* @tweakable Force mobile controls for testing on desktop. Reload is required. */
 export const FORCE_MOBILE_MODE = false;

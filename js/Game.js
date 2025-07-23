@@ -30,6 +30,10 @@ import { CollisionManager } from './collisionManager.js';
 const TARGET_SPAWN_USERNAME = "lordtsarcasm";
 /* @tweakable The special spawn location coordinates. */
 const SPECIAL_SPAWN_LOCATION = { x: 44.1, y: 13.7, z: 21.4 };
+/* @tweakable The target username for the post-load teleport. */
+const TELEPORT_USERNAME = "lordtsarcasm";
+/* @tweakable The coordinates to teleport the user to after their special GLB model loads. */
+const TELEPORT_LOCATION = { x: 53.8, y: 14, z: -3.0 };
 
 function getYouTubeID(url) {
     if (!url) return null;
@@ -57,6 +61,7 @@ export class Game {
         this.gridManager = null;
         this.videoManager = null;
         this.dirLight = null;
+        this.grass = null;
     }
 
     async init() {
@@ -78,25 +83,65 @@ export class Game {
         this.collisionManager = new CollisionManager(this.scene);
         this.setupPlayer(playerName, initialPosition);
         this.setupManagers();
+
+        const assetReplacementManager = new AssetReplacementManager({
+            playerControls: this.playerControls,
+            npcManager: this.npcManager,
+            onPlayerModelReplaced: (model) => {
+                this.playerModel = model;
+                if(this.videoManager) this.videoManager.setPlayerModel(model);
+            }
+        });
+
+        /* @tweakable The username for which to preload the animated player model. */
+        const preloadUsername = "lordtsarcasm";
+        if (currentUser && currentUser.username === preloadUsername) {
+            const loadingStatus = document.getElementById('loading-status');
+            if (loadingStatus) loadingStatus.textContent = 'Loading special player model...';
+            
+            const statusElement = document.createElement('div');
+            statusElement.style.marginTop = '10px';
+            statusElement.id = 'preload-status';
+            document.getElementById('loading-container').appendChild(statusElement);
+            assetReplacementManager.setStatusElement(statusElement);
+
+            await assetReplacementManager.preloadAndApplyPlayerModel();
+            
+            // Teleport after special model load
+            if (currentUser.username === TELEPORT_USERNAME) {
+                const playerModel = this.playerControls.getPlayerModel();
+                playerModel.position.set(TELEPORT_LOCATION.x, TELEPORT_LOCATION.y, TELEPORT_LOCATION.z);
+                this.playerControls.velocity.set(0, 0, 0); // Reset velocity
+                this.playerControls.lastPosition.copy(playerModel.position);
+            }
+            
+            statusElement.remove();
+        }
+
         this.gridManager = new GridManager(this.scene);
         this.videoManager = new VideoManager(this.scene, this.camera, this.playerModel);
 
         const world = new World(this.scene, this.npcManager, this.room);
-        const terrain = world.generate();
+        const worldObjects = world.generate();
+        const terrain = worldObjects.terrain;
+        this.grass = worldObjects.grass;
 
         this.playerControls.terrain = terrain;
         this.collisionManager.setTerrain(terrain);
-        
         this.npcManager.initializeSpawner(terrain);
 
         this.gridManager.create(terrain);
         this.setupBuildTools(terrain);
         this.setupMultiplayer();
-        this.setupUI();
+        this.setupUI(assetReplacementManager);
         this.setupEventListeners();
         initYoutubePlayer();
         
-        this.room.subscribeRoomState(this.handleRoomStateChange.bind(this));
+        this.room.subscribeRoomState((roomState) => {
+            if (roomState && roomState.youtubeUrl) {
+                setYoutubePlayerUrl(roomState.youtubeUrl);
+            }
+        });
         
         // Add this to initialize with the current room state
         const currentRoomState = this.room.roomState;
@@ -177,13 +222,15 @@ export class Game {
     }
 
     setupBuildTools(terrain) {
+        const objectCreator = new ObjectCreator(this.scene, this.camera, this.room);
+
         this.buildTool = new BuildTool(this.scene, this.camera, this.playerControls, terrain);
         this.buildTool.setRoom(this.room);
         
-        const objectCreator = new ObjectCreator(this.scene, this.camera, this.room, this.buildTool);
         this.advancedBuildTool = new AdvancedBuildTool(this.scene, this.camera, this.renderer, this.buildTool, objectCreator);
         this.advancedBuildTool.setRoom(this.room);
         this.advancedBuildTool.setOrbitControls(this.playerControls.controls);
+        objectCreator.buildTool = this.buildTool;
         
         if (this.room.roomState && this.room.roomState.buildObjects) {
             Object.values(this.room.roomState.buildObjects || {}).forEach(buildData => {
@@ -210,16 +257,7 @@ export class Game {
         this.multiplayerManager.init();
     }
 
-    setupUI() {
-        const assetReplacementManager = new AssetReplacementManager({
-            playerControls: this.playerControls,
-            npcManager: this.npcManager,
-            onPlayerModelReplaced: (model) => {
-                this.playerModel = model;
-                this.videoManager.setPlayerModel(model);
-            }
-        });
-
+    setupUI(assetReplacementManager) {
         const characterCreator = new CharacterCreator(
             THREE,
             this.room,
@@ -312,6 +350,10 @@ export class Game {
         this.advancedBuildTool.checkExpiredObjects(currentTime, expirationTime);
         
         this.videoManager.update();
+
+        if (this.grass && this.grass.material.userData.uniforms) {
+            this.grass.material.userData.uniforms.time.value = time;
+        }
 
         this.renderer.render(this.scene, this.camera);
         this.labelRenderer.render(this.scene, this.camera);

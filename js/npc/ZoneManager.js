@@ -1,11 +1,15 @@
 import { ACTIVE_ZONE_RADIUS } from './constants.js';
 import { ZONE_SIZE } from '../worldGeneration.js';
 
+/* @tweakable Adjusts how many NPC zones are loaded based on view distance. Higher values load more zones but may reduce performance. 1.0 is a direct relationship. */
+const NPC_ZONE_VIEW_DISTANCE_RATIO = 1.0;
+
 export class ZoneManager {
     constructor(playerControls, onActivate, onDeactivate) {
         this.playerControls = playerControls;
         this.onActivate = onActivate;
         this.onDeactivate = onDeactivate;
+        this.lastActiveZoneRadius = -1;
 
         this.activeZones = new Set();
         this.playerZoneKey = null;
@@ -17,20 +21,24 @@ export class ZoneManager {
         return `${x},${z}`;
     }
 
-    update() {
+    update(viewDistance) {
         const playerPos = this.playerControls.getPlayerModel().position;
         const currentZoneKey = this._getZoneKey(playerPos);
+        
+        const activeZoneRadius = viewDistance ? Math.ceil((viewDistance / ZONE_SIZE) * NPC_ZONE_VIEW_DISTANCE_RATIO) : 1;
 
-        if (currentZoneKey === this.playerZoneKey) {
-            return; // No change in zone
+        if (currentZoneKey === this.playerZoneKey && activeZoneRadius === this.lastActiveZoneRadius) {
+            return; // No change in zone or view distance radius
         }
+        
+        this.lastActiveZoneRadius = activeZoneRadius;
         this.playerZoneKey = currentZoneKey;
 
         const [zoneX, zoneZ] = currentZoneKey.split(',').map(Number);
         const newActiveZones = new Set();
 
-        for (let x = zoneX - ACTIVE_ZONE_RADIUS; x <= zoneX + ACTIVE_ZONE_RADIUS; x++) {
-            for (let z = zoneZ - ACTIVE_ZONE_RADIUS; z <= zoneZ + ACTIVE_ZONE_RADIUS; z++) {
+        for (let x = zoneX - activeZoneRadius; x <= zoneX + activeZoneRadius; x++) {
+            for (let z = zoneZ - activeZoneRadius; z <= zoneZ + activeZoneRadius; z++) {
                 newActiveZones.add(`${x},${z}`);
             }
         }

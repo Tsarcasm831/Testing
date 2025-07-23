@@ -19,7 +19,9 @@
 /* @tweakable Position of the inventory button on the screen. */
 #inventory-button {
   position: fixed;
-  bottom: 220px;
+  /* @tweakable The bottom position of the inventory button. */
+  bottom: 90px;
+  /* @tweakable The right position of the inventory button. */
   right: 20px;
   z-index: 1000;
   touch-action: none;

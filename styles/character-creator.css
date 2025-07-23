@@ -13,80 +13,213 @@
   border: 2px solid var(--white-30);
 }
 
+/* @tweakable The background color of the character creator modal. */
 #character-creator-modal {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: var(--black-90);
+  background-color: rgba(30, 30, 35, 0.95);
   color: white;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 0;
+  border-radius: 12px;
   /* @tweakable The z-index for the character creator modal. */
   z-index: 2000;
-  display: none;
   width: 90%;
-  max-width: 700px;
-  box-shadow: 0 0 20px var(--black-50);
+  max-width: 800px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
   pointer-events: auto;
+  border: 1px solid var(--white-20);
+  display: none;
+  flex-direction: column;
 }
 
-#character-creator-modal h2 {
-  margin-top: 0;
+#character-creator-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--white-20);
+    flex-shrink: 0;
+}
+
+#character-creator-header h2 {
+    margin: 0;
+    font-size: 22px;
+}
+
+#close-character-creator {
+  width: 28px;
+  height: 28px;
+  background-color: var(--white-20);
+  border-radius: 50%;
   text-align: center;
+  line-height: 28px;
+  font-weight: bold;
+  font-size: 18px;
   color: #fff;
-  margin-bottom: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+#close-character-creator:hover {
+  background-color: var(--white-30);
+  transform: rotate(90deg);
 }
 
-#character-creator-modal .creator-body {
+/* @tweakable Styles for the tab navigation bar. */
+#character-creator-tabs {
+    display: flex;
+    padding: 0 10px;
+    border-bottom: 1px solid var(--white-20);
+    flex-shrink: 0;
+}
+
+/* @tweakable Styles for individual tab buttons. */
+.creator-tab {
+    flex: 1;
+    padding: 12px 10px;
+    background-color: transparent;
+    border: none;
+    color: var(--white-70);
+    cursor: pointer;
+    font-size: 16px;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+.creator-tab:hover {
+    color: var(--white-full);
+    background-color: var(--white-10);
+}
+/* @tweakable The color of the active tab indicator. */
+.creator-tab.active {
+    color: var(--white-full);
+    border-bottom: 3px solid #2196F3;
+    font-weight: bold;
+}
+
+#character-creator-content {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+    max-height: 70vh;
+}
+
+.creator-tab-content {
+    display: none;
+}
+.creator-tab-content.active {
+    display: block;
+}
+
+.creator-tab-content h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--white-20);
+}
+
+.creator-body {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
 }
 
-#character-creator-modal .creator-inputs,
-#character-creator-modal .creator-preview {
-  flex: 1 1 240px;
-}
-
-#character-creator-modal .creator-preview {
+.creator-inputs,
+.creator-preview {
+  flex: 1 1 300px;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-#character-creator-modal textarea {
+.creator-inputs label {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+/* @tweakable Background and text color for input fields. */
+#character-creator-modal textarea, #character-creator-modal input[type="file"] {
   width: 100%;
-  height: 100px;
-  margin-bottom: 20px;
   padding: 10px;
-  border-radius: 5px;
-  background-color: var(--white-90);
-  color: #333;
+  border-radius: 6px;
+  background-color: var(--white-10);
+  border: 1px solid var(--white-30);
+  color: #fff;
   font-size: 16px;
-  resize: none;
+  resize: vertical;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+#character-creator-modal textarea {
+  height: 120px;
+}
+#character-creator-modal input[type="file"]::file-selector-button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+#character-creator-modal input[type="file"]::file-selector-button:hover {
+    background-color: #1976D2;
 }
 
-#character-creator-modal .creator-actions {
+#character-preview-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--white-05);
+    border-radius: 8px;
+    min-height: 250px;
+    margin-bottom: 15px;
+}
+
+#character-preview {
+  min-height: 200px; 
+}
+
+#character-status {
+  text-align: center;
+  font-style: italic;
+  margin-top: 15px;
+  min-height: 20px;
+}
+
+.creator-actions {
   display: flex;
-  justify-content: space-between;
   gap: 10px;
-  margin-top: 10px;
 }
 
 #character-creator-modal button {
-  padding: 10px 15px;
-  border-radius: 5px;
+  padding: 12px 15px;
+  border-radius: 6px;
   border: none;
   cursor: pointer;
   font-weight: bold;
+  font-size: 16px;
   flex: 1;
+  transition: background-color 0.2s, transform 0.1s;
+}
+#character-creator-modal button:active {
+    transform: scale(0.98);
 }
 
 #generate-character-button {
   background-color: #4CAF50;
   color: white;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+#generate-character-button svg {
+    width: 20px;
+    height: 20px;
+}
+#generate-character-button:hover {
+    background-color: #45a049;
 }
 
 #apply-character-button {
@@ -94,57 +227,44 @@
   color: white;
   display: none;
 }
+#apply-character-button:hover {
+    background-color: #1976D2;
+}
 
 #cancel-character-button {
   background-color: #f44336;
   color: white;
 }
 
-#character-preview {
-  margin: 15px 0;
-  text-align: center;
-  min-height: 150px; 
-  padding: 10px;
-  border-radius: 5px;
-  background-color: var(--white-10);
-  position: relative; 
-}
-
-#character-status {
-  text-align: center;
-  font-style: italic;
-  margin: 10px 0;
-  min-height: 20px;
-}
-
 .character-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 10px;
-  margin-top: 15px;
-  max-height: 200px;
+  gap: 15px;
+  max-height: 400px;
   overflow-y: auto;
-  padding: 5px;
-  background-color: var(--white-05);
+  padding: 10px;
+  background-color: transparent;
   border-radius: 5px;
 }
 
+/* @tweakable Background color and border for gallery items. */
 .character-option {
-  background-color: var(--white-20);
-  padding: 8px;
-  border-radius: 5px;
+  background-color: var(--white-10);
+  padding: 10px;
+  border-radius: 8px;
   cursor: pointer;
   text-align: center;
   font-size: 14px;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.2s, border-color 0.2s;
+  border: 2px solid transparent;
 }
-
 .character-option:hover {
-  background-color: var(--white-30);
+  background-color: var(--white-20);
+  transform: translateY(-2px);
 }
-
+/* @tweakable Border color for selected gallery items. */
 .character-option.selected {
-  background-color: rgba(33, 150, 243, 0.4);
+  background-color: rgba(33, 150, 243, 0.2);
   border: 2px solid #2196F3;
 }
 
@@ -204,10 +324,11 @@
 }
 
 .character-thumbnail {
-  height: 60px;
+  height: 80px;
   overflow: hidden;
   border-radius: 4px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  background-color: var(--black-50);
 }
 
 .character-thumbnail img {
@@ -217,7 +338,8 @@
 }
 
 .character-name {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

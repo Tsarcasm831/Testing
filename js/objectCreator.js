@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 
 export class ObjectCreator {
-    constructor(scene, camera, room, buildTool) {
+    constructor(scene, camera, room) {
         this.scene = scene;
         this.camera = camera;
         this.room = room;
-        this.buildTool = buildTool;
+        this.buildTool = null; // This will be set from Game.js
 
         this.objectLibrary = [
             { name: 'Box', geometry: 'BoxGeometry', params: [1, 1, 1] },

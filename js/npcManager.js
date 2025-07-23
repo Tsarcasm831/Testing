@@ -136,7 +136,7 @@ export class NPCManager {
     }
 
     update() {
-        this.zoneManager.update();
+        this.zoneManager.update(this.playerControls.camera.far);
 
         const now = performance.now();
         const delta = now - (this.lastUpdateTime || now);

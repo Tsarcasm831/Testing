@@ -33,7 +33,9 @@
 /* @tweakable Position of the chat button on the screen. */
 #chat-button {
   position: fixed;
-  bottom: 80px;
+  /* @tweakable The bottom position of the chat button. */
+  bottom: 20px;
+  /* @tweakable The right position of the chat button. */
   right: 20px;
   z-index: 1000;
   touch-action: none;
@@ -43,7 +45,9 @@
 /* @tweakable Position of the changelog button on the screen. */
 #changelog-button {
   position: fixed;
-  bottom: 150px;
+  /* @tweakable The bottom position of the changelog button. */
+  bottom: 300px;
+  /* @tweakable The right position of the changelog button. */
   right: 20px;
   z-index: 1000;
   touch-action: none;

@@ -18,6 +18,13 @@
     text-align: center;
 }
 
+#preload-status {
+    font-size: 1em;
+    margin-top: 10px;
+    color: #cccccc;
+    width: 300px;
+}
+
 #loading-container h1 {
     font-size: 2.5em;
     margin-bottom: 20px;

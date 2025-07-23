@@ -49,6 +49,12 @@ export class GridManager {
                 GRID_LABEL_LOD_STEP
             );
         }
+
+        this.scene.traverse((obj) => {
+            if (obj.userData.isSeatLabel) {
+                obj.visible = this.gridHelper.visible;
+            }
+        });
     }
 
     update(playerPosition) {

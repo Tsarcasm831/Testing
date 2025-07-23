@@ -36,7 +36,7 @@ export class CharacterCreator {
             return;
         }
 
-        this.modal.style.display = 'block';
+        this.modal.style.display = 'flex';
         this.descriptionInput.value = this.currentCharacterDescription;
 
         document.getElementById('reference-preview').innerHTML = '';
@@ -245,7 +245,7 @@ export class CharacterCreator {
     }
 
     loadCommunityCharacters() {
-        const gallery = document.getElementById('character-gallery');
+        const gallery = document.getElementById('community-gallery');
         gallery.innerHTML = '';
         const characters = this.characterCollection.getList();
 

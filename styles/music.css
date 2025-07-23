@@ -1,6 +1,8 @@
 #music-button {
     position: fixed;
-    bottom: 360px;
+    /* @tweakable The bottom position of the music button. */
+    bottom: 230px;
+    /* @tweakable The right position of the music button. */
     right: 20px;
     z-index: 1000;
     touch-action: none;
@@ -9,7 +11,9 @@
 
 /* Mobile layout */
 .mobile-device #music-button {
-    bottom: 430px;
+    /* @tweakable The bottom position of the music button on mobile devices. */
+    bottom: 230px;
+    /* @tweakable The right position of the music button on mobile devices. */
     right: 20px;
 }
 
@@ -22,11 +26,13 @@
     color: white;
     padding: 20px;
     border-radius: 10px;
-    /* wa-hey */
-    width: 69%;
+    /* @tweakable The width of the music modal as a percentage of the viewport width. */
+    width: 90%;
     max-width: 600px;
-    max-height: 80%;
+    /* @tweakable The maximum height of the music modal as a percentage of the viewport height. */
+    max-height: 80vh;
     display: none;
+    flex-direction: column;
     box-shadow: 0 0 20px var(--black-50);
     pointer-events: auto;
     overflow: hidden;
@@ -38,6 +44,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    flex-shrink: 0;
 }
 
 #close-music {
@@ -55,6 +62,7 @@
 #music-tabs {
     display: flex;
     border-bottom: 1px solid var(--white-20);
+    flex-shrink: 0;
 }
 
 .music-tab {
@@ -75,9 +83,9 @@
 }
 
 #music-content {
-    padding: 15px 0;
-    max-height: 300px;
+    padding: 15px 5px 15px 0;
     overflow-y: auto;
+    flex-grow: 1;
 }
 
 .music-tab-content {

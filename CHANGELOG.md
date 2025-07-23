@@ -2,6 +2,7 @@
 
 ## 2025-07-22
 
+- 2123 Add distinct biomes and tree types. The world now features five biomes: a central Grassland, Sand (Palm trees), Snow (Snowy Pine trees), Forest (Deciduous and Pine trees), and Dirt/Stone (Sparse, bare trees).
 - 2122 Add music button and modal with scrollable song and collaborator lists
 
 ## 2025-07-21

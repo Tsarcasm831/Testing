@@ -64,16 +64,26 @@ export class MultiplayerManager {
 
     subscribeToMessages() {
         this.room.onmessage = (event) => {
-            const data = event.data;
-            switch(data.type) {
-                case 'build_object':
-                    if (data.isAdvanced) this.advancedBuildTool.receiveBuildObject(data);
-                    else this.buildTool.receiveBuildObject(data);
-                    break;
-                case 'transform_object': this.advancedBuildTool.receiveObjectTransform(data); break;
-                case 'delete_build_object': this.advancedBuildTool.receiveDeleteObject(data.objectId); break;
-                case 'color_object': this.advancedBuildTool.receiveObjectColor(data); break;
-                case 'extend_lifespan': this.buildTool.receiveLifespanExtension(data); break;
+            try {
+                const data = event.data;
+                if (!data || !data.type) return; // Add guard against empty/malformed messages
+
+                switch(data.type) {
+                    case 'build_object':
+                        if (data.isAdvanced) this.advancedBuildTool.receiveBuildObject(data);
+                        else this.buildTool.receiveBuildObject(data);
+                        break;
+                    case 'transform_object': this.advancedBuildTool.receiveObjectTransform(data); break;
+                    case 'delete_build_object': this.advancedBuildTool.receiveDeleteObject(data.objectId); break;
+                    case 'color_object': this.advancedBuildTool.receiveObjectColor(data); break;
+                    case 'extend_lifespan': this.buildTool.receiveLifespanExtension(data); break;
+                }
+            } catch (error) {
+                /* @tweakable Set to true to see detailed logs for WebSocket message handling errors. */
+                const enableWebSocketErrorLogging = true;
+                if (enableWebSocketErrorLogging) {
+                    console.error("Error handling incoming WebSocket message:", error, event.data);
+                }
             }
         };
     }
@@ -145,8 +155,13 @@ export class MultiplayerManager {
             const actions = playerModel.userData.actions;
             const fadeDuration = playerModel.userData.animationFadeDuration || 0.5;
             let newActionName = 'idle';
-            if (playerData.moving) {
-                newActionName = playerData.running ? 'run' : 'walk';
+
+            if (playerData.flying) {
+                /* @tweakable Animation to play for other flying players. Options: 'idle', 'walk', 'run'. */
+                const remoteFlyAnimation = 'run';
+                newActionName = playerData.moving ? remoteFlyAnimation : 'idle';
+            } else if (playerData.moving) {
+                newActionName = playerData.sprinting ? 'run' : (playerData.running ? 'run' : 'walk');
             }
 
             const currentActionName = playerModel.userData.currentAction || 'idle';

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { SPEED, GRAVITY, JUMP_FORCE, MOBILE_SPEED_MULTIPLIER, FORCE_MOBILE_MODE, RUN_SPEED_MULTIPLIER } from "./controls/constants.js";
+import { SPEED, GRAVITY, JUMP_FORCE, MOBILE_SPEED_MULTIPLIER, FORCE_MOBILE_MODE, RUN_SPEED_MULTIPLIER, SPRINT_SPEED_MULTIPLIER } from "./controls/constants.js";
 import { InputManager } from "./controls/InputManager.js";
 
 /* @tweakable Speed of camera rotation with the joystick on mobile. */
@@ -32,8 +32,15 @@ export class PlayerControls {
     this.wasMoving = false;
     this.isRunning = false;
     this.wasRunning = false;
+    this.isSprinting = false;
+    this.wasSprinting = false;
     this.lastUpdateTime = 0;
     this.currentAction = 'idle';
+    this.isFlying = false;
+    this.wasFlying = false;
+    this.lastSpacebarTime = 0;
+    /* @tweakable The time in milliseconds between spacebar presses to trigger flight mode. */
+    this.doubleTapThreshold = 300;
     
     // Player state
     this.velocity = new THREE.Vector3();
@@ -90,7 +97,8 @@ export class PlayerControls {
         z: this.playerZ,
         rotation: 0,
         moving: false,
-        running: false
+        running: false,
+        flying: false
       };
       if (this.playerModel && this.playerModel.userData.characterSpec) {
         presenceData.characterSpec = this.playerModel.userData.characterSpec;
@@ -101,6 +109,14 @@ export class PlayerControls {
     this.enabled = true; // Add enabled flag for chat input
   }
   
+  toggleFlightMode() {
+    this.isFlying = !this.isFlying;
+    if (this.isFlying) {
+        this.velocity.y = 0; // Stop any falling/jumping momentum
+        this.canJump = false; 
+    }
+  }
+
   toggleMobileControls() {
     this.isMobile = !this.isMobile;
     localStorage.setItem(MOBILE_CONTROLS_STORAGE_KEY, this.isMobile);
@@ -162,7 +178,36 @@ export class PlayerControls {
       // Add instructions for desktop
       const instructionsDiv = document.createElement('div');
       instructionsDiv.className = "instructions";
-      instructionsDiv.innerHTML = "Click to begin. <br>Use WASD to move, Space to jump.";
+
+      /* @tweakable The title for the instructions popup. */
+      const instructionsTitle = "Welcome to the World!";
+      /* @tweakable The content for the instructions popup. Can include HTML. */
+      const instructionsContent = `
+        <div class="instructions-section">
+            <strong>Controls:</strong>
+            <ul>
+                <li><b>WASD:</b> Move</li>
+                <li><b>Space:</b> Jump/Double tap to fly</li>
+                <li><b>Shift:</b> Run</li>
+                <li><b>Ctrl:</b> Sprint</li>
+                <li><b>F:</b> Interact with NPCs</li>
+                <li><b>/:</b> Open Chat</li>
+            </ul>
+        </div>
+        <div class="instructions-section">
+            <strong>Features:</strong>
+            <ul>
+                <li>Explore four distinct biomes with unique trees and structures.</li>
+                <li>Use the <b>Build Mode</b> (hammer icon) to create your own structures.</li>
+                <li>Customize your character with the <b>Character Creator</b> (top-left icon).</li>
+                <li>Chat and build with other players online!</li>
+            </ul>
+        </div>
+        <p class="click-to-begin"><b>Click anywhere to begin your adventure.</b></p>
+      `;
+
+      instructionsDiv.innerHTML = `<h2>${instructionsTitle}</h2>${instructionsContent}`;
+
       document.getElementById('game-container').appendChild(instructionsDiv);
       
       // Hide instructions on first click
@@ -175,14 +220,20 @@ export class PlayerControls {
   }
 
   setupEventListeners() {
-    // Listen for jump key on desktop
+    // Listen for jump/flight key on desktop
     document.addEventListener("keydown", (e) => {
       if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
           return;
       }
-      if (this.inputManager.isJumping() && this.canJump && !this.isMobile) {
-        this.velocity.y = JUMP_FORCE;
-        this.canJump = false;
+      if (e.key === " " && !this.isMobile) {
+        if (e.repeat) return; // Ignore holding down space
+        const now = performance.now();
+        if (now - this.lastSpacebarTime < this.doubleTapThreshold) {
+            this.toggleFlightMode();
+            this.lastSpacebarTime = 0; // Reset after double tap
+        } else {
+            this.lastSpacebarTime = now;
+        }
       }
     });
     
@@ -200,194 +251,313 @@ export class PlayerControls {
     // Skip movement processing if controls are disabled
     if (!this.enabled) return;
 
-    if (this.inputManager.isJumping() && this.canJump) {
-      this.velocity.y = JUMP_FORCE;
-      this.canJump = false;
-    }
-    
-    const x = this.playerModel.position.x;
-    const y = this.playerModel.position.y;
-    const z = this.playerModel.position.z;
-    
-    const moveDir = this.inputManager.getMovementDirection();
-    const isRunning = this.inputManager.isRunning();
-    
-    const cameraDirection = new THREE.Vector3();
-    this.camera.getWorldDirection(cameraDirection);
-    cameraDirection.y = 0; 
-    cameraDirection.normalize();
-    
-    const rightVector = new THREE.Vector3();
-    rightVector.crossVectors(this.camera.up, cameraDirection).normalize();
-    
-    const movement = new THREE.Vector3();
-    movement.addScaledVector(cameraDirection, moveDir.z);
-    movement.addScaledVector(rightVector, -moveDir.x);
-    
-    if (movement.length() > 0) {
-        let moveSpeed = this.isMobile ? SPEED * MOBILE_SPEED_MULTIPLIER : SPEED;
-        if (isRunning) {
-          moveSpeed *= RUN_SPEED_MULTIPLIER;
+    if (this.isFlying) {
+        /* @tweakable The speed of the player while flying. */
+        const flightSpeed = SPEED * 4;
+        this.velocity.y = 0;
+
+        const cameraDirection = new THREE.Vector3();
+        this.camera.getWorldDirection(cameraDirection);
+
+        const rightVector = new THREE.Vector3();
+        rightVector.crossVectors(this.camera.up, cameraDirection).normalize();
+        
+        const moveDir = this.inputManager.getMovementDirection();
+        
+        const movement = new THREE.Vector3();
+        movement.addScaledVector(cameraDirection, moveDir.z * flightSpeed);
+        movement.addScaledVector(rightVector, -moveDir.x * flightSpeed);
+        
+        if (this.inputManager.keysPressed.has(" ")) { // Go up
+            movement.y += flightSpeed;
         }
-        movement.normalize().multiplyScalar(moveSpeed);
-    }
+        /* @tweakable Key used to fly down. */
+        const flyDownKey = "shift";
+        if (this.inputManager.keysPressed.has(flyDownKey)) { // Go down
+            movement.y -= flightSpeed;
+        }
+        
+        this.playerModel.position.add(movement);
 
-    this.velocity.y -= GRAVITY;
-    
-    let newX = x + movement.x;
-    let newY = y + this.velocity.y;
-    let newZ = z + movement.z;
-    
-    // Use the CollisionManager to check for collisions
-    const { finalPosition, finalVelocity, canJump, standingOnBlock } = this.collisionManager.checkCollisions(
-        this.playerModel.position,
-        new THREE.Vector3(newX, newY, newZ),
-        this.velocity,
-        PLAYER_COLLISION_RADIUS,
-        PLAYER_COLLISION_HEIGHT
-    );
-    
-    newX = finalPosition.x;
-    newY = finalPosition.y;
-    newZ = finalPosition.z;
-    this.velocity.copy(finalVelocity);
-    
-    if (canJump) {
-        this.canJump = true;
-    }
-    
-    // Ground collision logic moved here to always check against terrain after object collision
-    const terrainHeight = this.collisionManager.getGroundHeight(newX, newZ);
-    /* @tweakable The vertical offset of the player model from the ground to prevent clipping. */
-    const groundOffset = 0;
-    const groundLevel = terrainHeight + groundOffset;
+        const isMovingNow = moveDir.lengthSq() > 0.001 || Math.abs(movement.y) > 0.001;
+        this.isMoving = isMovingNow;
 
-    // If standing on a block, the newY is already set by the collision manager.
-    // We just need to make sure we don't fall through it to the terrain below.
-    if (standingOnBlock) {
-        if (newY < groundLevel) {
-            // This case is unlikely but handles situations where a block might be slightly below terrain
-            newY = groundLevel;
-            this.velocity.y = 0;
-            this.canJump = true;
+        if (this.playerModel) {
+            if (moveDir.lengthSq() > 0.001) {
+                const horizontalMovement = new THREE.Vector3(cameraDirection.x, 0, cameraDirection.z).normalize();
+                const angle = Math.atan2(horizontalMovement.x, horizontalMovement.z);
+                const offset = this.playerModel.userData.isAnimatedGLB ? (this.playerModel.userData.rotationOffset || 0) : 0;
+                this.playerModel.rotation.y = angle - offset;
+            }
+
+            if (this.playerModel.userData.isAnimatedGLB) {
+                const actions = this.playerModel.userData.actions;
+                const fadeDuration = this.playerModel.userData.animationFadeDuration || 0.5;
+                /* @tweakable The animation to play while flying. Options: 'idle', 'walk', 'run'. */
+                const flyAnimation = 'run';
+                let newActionName = isMovingNow ? flyAnimation : 'idle';
+                
+                if (this.currentAction !== newActionName) {
+                    const from = actions[this.currentAction];
+                    const to = actions[newActionName];
+                    if(from && to) {
+                        from.fadeOut(fadeDuration);
+                        to.reset().fadeIn(fadeDuration).play();
+                    } else if (to) {
+                        to.reset().fadeIn(fadeDuration).play();
+                    }
+                    this.currentAction = newActionName;
+                }
+            } else {
+                const leftLeg = this.playerModel.getObjectByName("leftLeg");
+                const rightLeg = this.playerModel.getObjectByName("rightLeg");
+                if (leftLeg && rightLeg) {
+                    leftLeg.rotation.x = 0;
+                    rightLeg.rotation.x = 0;
+                }
+            }
+            
+            const newTarget = new THREE.Vector3(this.playerModel.position.x, this.playerModel.position.y + 1, this.playerModel.position.z);
+            if (this.controls) this.controls.target.copy(newTarget);
+            this.camera.position.copy(newTarget).add(this.cameraOffset);
+            
+            if (this.room && (
+                this.lastPosition.distanceTo(this.playerModel.position) > 0.01 ||
+                this.isMoving !== this.wasMoving ||
+                this.isFlying !== this.wasFlying
+              )) {
+              
+              const offset = this.playerModel.userData.rotationOffset || 0;
+              const presenceData = {
+                x: this.playerModel.position.x,
+                y: this.playerModel.position.y,
+                z: this.playerModel.position.z,
+                rotation: this.playerModel.rotation.y - offset,
+                moving: this.isMoving,
+                running: false,
+                sprinting: false,
+                flying: this.isFlying
+              };
+              
+              if (this.playerModel.userData.isGLB) {
+                presenceData.isGLB = true;
+              } else if (this.playerModel.userData.characterSpec) {
+                presenceData.characterSpec = this.playerModel.userData.characterSpec;
+              }
+              
+              this.room.updatePresence(presenceData);
+              
+              this.lastPosition.copy(this.playerModel.position);
+              this.wasMoving = this.isMoving;
+              this.wasFlying = this.isFlying;
+            }
+        }
+        
+        if (this.controls) this.controls.update();
+
+        if (this.isMobile) {
+          // Mobile camera logic is now event-driven in initializeControls
         }
     } else {
-        // Not standing on a block, so check against terrain.
-        // Apply gravity.
-        this.velocity.y -= GRAVITY;
-        newY = this.playerModel.position.y + this.velocity.y;
 
-        if (newY < groundLevel) {
-            newY = groundLevel;
-            this.velocity.y = 0;
-            this.canJump = true;
-        }
-    }
-    
-    const isMovingNow = movement.length() > 0.001;
-    this.isMoving = isMovingNow;
-    
-    if (this.playerModel) {
-      this.playerModel.position.set(newX, newY, newZ);
-      
-      if (isMovingNow) {
-        const angle = Math.atan2(movement.x, movement.z);
-        const offset = this.playerModel.userData.isAnimatedGLB ? (this.playerModel.userData.rotationOffset || 0) : 0;
-        this.playerModel.rotation.y = angle - offset; 
+      if (this.inputManager.isJumping() && this.canJump) {
+        this.velocity.y = JUMP_FORCE;
+        this.canJump = false;
       }
       
-      // Handle animations
-      if (this.playerModel.userData.isAnimatedGLB) {
-        const actions = this.playerModel.userData.actions;
-        const fadeDuration = this.playerModel.userData.animationFadeDuration || 0.5;
-        
-        let newActionName = 'idle';
-        if (isMovingNow) {
-          newActionName = isRunning ? 'run' : 'walk';
-        }
-        
-        if (this.currentAction !== newActionName) {
-            const from = actions[this.currentAction];
-            const to = actions[newActionName];
-            if(from && to) {
-                from.fadeOut(fadeDuration);
-                to.reset().fadeIn(fadeDuration).play();
-            }
-            this.currentAction = newActionName;
-        }
+      const x = this.playerModel.position.x;
+      const y = this.playerModel.position.y;
+      const z = this.playerModel.position.z;
+      
+      const moveDir = this.inputManager.getMovementDirection();
+      this.isRunning = this.inputManager.isRunning();
+      this.isSprinting = this.inputManager.isSprinting();
+      
+      const cameraDirection = new THREE.Vector3();
+      this.camera.getWorldDirection(cameraDirection);
+      cameraDirection.y = 0; 
+      cameraDirection.normalize();
+      
+      const rightVector = new THREE.Vector3();
+      rightVector.crossVectors(this.camera.up, cameraDirection).normalize();
+      
+      const movement = new THREE.Vector3();
+      movement.addScaledVector(cameraDirection, moveDir.z);
+      movement.addScaledVector(rightVector, -moveDir.x);
+      
+      if (movement.length() > 0) {
+          let moveSpeed = this.isMobile ? SPEED * MOBILE_SPEED_MULTIPLIER : SPEED;
+          if (this.isSprinting) {
+              moveSpeed *= SPRINT_SPEED_MULTIPLIER;
+          } else if (this.isRunning) {
+            moveSpeed *= RUN_SPEED_MULTIPLIER;
+          }
+          movement.normalize().multiplyScalar(moveSpeed);
+      }
+
+      this.velocity.y -= GRAVITY;
+      
+      let newX = x + movement.x;
+      let newY = y + this.velocity.y;
+      let newZ = z + movement.z;
+      
+      // Use the CollisionManager to check for collisions
+      const { finalPosition, finalVelocity, canJump, standingOnBlock } = this.collisionManager.checkCollisions(
+          this.playerModel.position,
+          new THREE.Vector3(newX, newY, newZ),
+          this.velocity,
+          PLAYER_COLLISION_RADIUS,
+          PLAYER_COLLISION_HEIGHT
+      );
+      
+      newX = finalPosition.x;
+      newY = finalPosition.y;
+      newZ = finalPosition.z;
+      this.velocity.copy(finalVelocity);
+      
+      if (canJump) {
+          this.canJump = true;
+      }
+      
+      // Ground collision logic moved here to always check against terrain after object collision
+      const terrainHeight = this.collisionManager.getGroundHeight(newX, newZ);
+      /* @tweakable The vertical offset of the player model from the ground to prevent clipping. */
+      const groundOffset = 0;
+      const groundLevel = terrainHeight + groundOffset;
+
+      // If standing on a block, the newY is already set by the collision manager.
+      // We just need to make sure we don't fall through it to the terrain below.
+      if (standingOnBlock) {
+          if (newY < groundLevel) {
+              // This case is unlikely but handles situations where a block might be slightly below terrain
+              newY = groundLevel;
+              this.velocity.y = 0;
+              this.canJump = true;
+          }
       } else {
+          // Not standing on a block, so check against terrain.
+          // Apply gravity.
+          this.velocity.y -= GRAVITY;
+          newY = this.playerModel.position.y + this.velocity.y;
+
+          if (newY < groundLevel) {
+              newY = groundLevel;
+              this.velocity.y = 0;
+              this.canJump = true;
+          }
+      }
+      
+      const isMovingNow = movement.length() > 0.001;
+      this.isMoving = isMovingNow;
+      
+      if (this.playerModel) {
+        this.playerModel.position.set(newX, newY, newZ);
+        
         if (isMovingNow) {
-            const leftLeg = this.playerModel.getObjectByName("leftLeg");
-            const rightLeg = this.playerModel.getObjectByName("rightLeg");
-            
-            if (leftLeg && rightLeg) {
-              /* @tweakable Speed of the procedural leg swing animation. */
-              const walkSpeed = 5; 
-              /* @tweakable Amplitude of the procedural leg swing animation. */
-              const walkAmplitude = 0.3;
-              leftLeg.rotation.x = Math.sin(this.time * walkSpeed) * walkAmplitude;
-              rightLeg.rotation.x = Math.sin(this.time * walkSpeed + Math.PI) * walkAmplitude;
-            }
+          const angle = Math.atan2(movement.x, movement.z);
+          const offset = this.playerModel.userData.isAnimatedGLB ? (this.playerModel.userData.rotationOffset || 0) : 0;
+          this.playerModel.rotation.y = angle - offset; 
+        }
+        
+        // Handle animations
+        if (this.playerModel.userData.isAnimatedGLB) {
+          const actions = this.playerModel.userData.actions;
+          const fadeDuration = this.playerModel.userData.animationFadeDuration || 0.5;
+          
+          let newActionName = 'idle';
+          if (isMovingNow) {
+            newActionName = this.isSprinting ? 'sprint' : this.isRunning ? 'run' : 'walk';
+          }
+          
+          if (this.currentAction !== newActionName) {
+              const from = actions[this.currentAction];
+              const to = actions[newActionName];
+              if(from && to) {
+                  from.fadeOut(fadeDuration);
+                  to.reset().fadeIn(fadeDuration).play();
+              }
+              this.currentAction = newActionName;
+          }
         } else {
-            const leftLeg = this.playerModel.getObjectByName("leftLeg");
-            const rightLeg = this.playerModel.getObjectByName("rightLeg");
-            
-            if (leftLeg && rightLeg) {
-              leftLeg.rotation.x = 0;
-              rightLeg.rotation.x = 0;
-            }
+          if (isMovingNow) {
+              const leftLeg = this.playerModel.getObjectByName("leftLeg");
+              const rightLeg = this.playerModel.getObjectByName("rightLeg");
+              
+              if (leftLeg && rightLeg) {
+                /* @tweakable Speed of the procedural leg swing animation. */
+                const walkSpeed = 5; 
+                /* @tweakable Amplitude of the procedural leg swing animation. */
+                const walkAmplitude = 0.3;
+                leftLeg.rotation.x = Math.sin(this.time * walkSpeed) * walkAmplitude;
+                rightLeg.rotation.x = Math.sin(this.time * walkSpeed + Math.PI) * walkAmplitude;
+              }
+          } else {
+              const leftLeg = this.playerModel.getObjectByName("leftLeg");
+              const rightLeg = this.playerModel.getObjectByName("rightLeg");
+              
+              if (leftLeg && rightLeg) {
+                leftLeg.rotation.x = 0;
+                rightLeg.rotation.x = 0;
+              }
+          }
+        }
+        
+        const newTarget = new THREE.Vector3(this.playerModel.position.x, this.playerModel.position.y + 1, this.playerModel.position.z);
+        if (this.controls) this.controls.target.copy(newTarget);
+        this.camera.position.copy(newTarget).add(this.cameraOffset);
+        
+        if (this.room && (
+            Math.abs(this.lastPosition.x - newX) > 0.01 ||
+            Math.abs(this.lastPosition.y - newY) > 0.01 ||
+            Math.abs(this.lastPosition.z - newZ) > 0.01 ||
+            this.isMoving !== this.wasMoving ||
+            this.isRunning !== this.wasRunning ||
+            this.isSprinting !== this.wasSprinting ||
+            this.isFlying !== this.wasFlying
+          )) {
+          
+          const offset = this.playerModel.userData.rotationOffset || 0;
+          const presenceData = {
+            x: newX,
+            y: newY,
+            z: newZ,
+            rotation: this.playerModel.rotation.y - offset,
+            moving: this.isMoving,
+            running: this.isRunning,
+            sprinting: this.isSprinting,
+            flying: this.isFlying
+          };
+  
+          if (this.playerModel.userData.isGLB) {
+            presenceData.isGLB = true;
+          } else if (this.playerModel.userData.characterSpec) {
+            presenceData.characterSpec = this.playerModel.userData.characterSpec;
+          }
+          
+          this.room.updatePresence(presenceData);
+          
+          this.lastPosition.set(newX, newY, newZ);
+          this.wasMoving = this.isMoving;
+          this.wasRunning = this.isRunning;
+          this.wasSprinting = this.isSprinting;
+          this.wasFlying = this.isFlying;
         }
       }
       
-      const newTarget = new THREE.Vector3(this.playerModel.position.x, this.playerModel.position.y + 1, this.playerModel.position.z);
-      if (this.controls) this.controls.target.copy(newTarget);
-      this.camera.position.copy(newTarget).add(this.cameraOffset);
-      
-      if (this.room && (
-          Math.abs(this.lastPosition.x - newX) > 0.01 ||
-          Math.abs(this.lastPosition.y - newY) > 0.01 ||
-          Math.abs(this.lastPosition.z - newZ) > 0.01 ||
-          this.isMoving !== this.wasMoving ||
-          isRunning !== this.wasRunning
-        )) {
-        
-        const offset = this.playerModel.userData.rotationOffset || 0;
-        const presenceData = {
-          x: newX,
-          y: newY,
-          z: newZ,
-          rotation: this.playerModel.rotation.y - offset,
-          moving: this.isMoving,
-          running: isRunning,
-        };
-
-        if (this.playerModel.userData.isGLB) {
-          presenceData.isGLB = true;
-        } else if (this.playerModel.userData.characterSpec) {
-          presenceData.characterSpec = this.playerModel.userData.characterSpec;
-        }
-        
-        this.room.updatePresence(presenceData);
-        
-        this.lastPosition.set(newX, newY, newZ);
-        this.wasMoving = this.isMoving;
-        this.wasRunning = isRunning;
+      // Still update controls for camera movement when player movement is disabled
+      if (this.controls) {
+          // Mobile camera rotation is now handled by OrbitControls directly.
+          this.controls.update();
       }
-    }
-    
-    // Still update controls for camera movement when player movement is disabled
-    if (this.controls) {
-        // Mobile camera rotation is now handled by OrbitControls directly.
-        this.controls.update();
-    }
 
-    if (this.isMobile) {
-      // Mobile camera logic is now event-driven in initializeControls
-    }
-    
-    // Update animation mixer if it exists
-    if (this.playerModel && this.playerModel.userData.mixer) {
-        this.playerModel.userData.mixer.update(delta);
+      if (this.isMobile) {
+        // Mobile camera logic is now event-driven in initializeControls
+      }
+      
+      // Update animation mixer if it exists
+      if (this.playerModel && this.playerModel.userData.mixer) {
+          this.playerModel.userData.mixer.update(delta);
+      }
     }
   }
   

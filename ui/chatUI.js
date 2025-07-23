@@ -48,7 +48,11 @@ export class ChatUI {
         this.chatButton.id = 'chat-button';
         this.chatButton.classList.add('circle-button');
         this.chatButton.setAttribute('data-tooltip', 'Toggle Chat');
-        this.chatButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4.929 19.071c-1.243-1.243-1.95-2.925-1.95-4.707C2.979 9.58 7.56 5.02 12.368 5.02c4.787 0 9.39 4.54 9.39 9.344 0 4.804-4.583 9.364-9.39 9.364a13.9 13.9 0 01-3.64-.563L4.929 19.07z"/></svg>`;
+        /* @tweakable The URL for the chat icon. */
+        const chatIconUrl = "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Images/Icons/chat_icon.png";
+        /* @tweakable The size of the chat icon. */
+        const chatIconSize = "28px";
+        this.chatButton.innerHTML = `<img src="${chatIconUrl}" alt="Chat" style="width: ${chatIconSize}; height: ${chatIconSize};">`;
         uiContainer.appendChild(this.chatButton);
 
         this.setupEventListeners();

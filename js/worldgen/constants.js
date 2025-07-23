@@ -11,6 +11,7 @@ export const SPAWN_SAFE_RADIUS = 10;
 
 export const TERRAIN_AMPLITUDE = 10;
 export const TERRAIN_SCALE = 80;
+/* @tweakable The number of times the ground texture repeats within a zone. Lower values increase perceived texture resolution but may show tiling. Higher values decrease resolution. */
 export const TERRAIN_TEXTURE_REPEAT_PER_ZONE = 50;
 /* @tweakable Number of segments for the terrain geometry. Lower for better performance. A reload is required for this to take effect. */
 export const TERRAIN_SEGMENTS = 150;
@@ -24,3 +25,6 @@ export const CLOUD_COUNT = 20;
 
 /* @tweakable The radius around the amphitheater to keep clear of trees and barriers. Reload required on change. */
 export const AMPHITHEATRE_CLEARING_RADIUS = 60;
+
+/* @tweakable The filename of the ground texture to use. Options: ground_texture.png, ground_texture_sand.png, ground_texture_dirt.png, ground_texture_stone.png, ground_texture_snow.png, ground_texture_forest.png */
+export const GROUND_TEXTURE_FILENAME = 'ground_texture.png';

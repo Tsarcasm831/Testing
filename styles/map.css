@@ -69,7 +69,9 @@
 /* @tweakable Position of the map button on the screen. */
 #map-button {
     position: fixed;
-    bottom: 290px;
+    /* @tweakable The bottom position of the map button. */
+    bottom: 160px;
+    /* @tweakable The right position of the map button. */
     right: 20px;
     z-index: 1000;
     touch-action: none;
