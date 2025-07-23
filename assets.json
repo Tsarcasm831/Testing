@@ -8,32 +8,32 @@
     {
       "type": "image",
       "name": "Ground texture",
-      "url": "ground_texture.png"
+      "url": "assets/ground_textures/ground_texture.png"
     },
     {
       "type": "image",
       "name": "Sand texture",
-      "url": "ground_texture_sand.png"
+      "url": "assets/ground_textures/ground_texture_sand.png"
     },
     {
       "type": "image",
       "name": "Dirt texture",
-      "url": "ground_texture_dirt.png"
+      "url": "assets/ground_textures/ground_texture_dirt.png"
     },
     {
       "type": "image",
       "name": "Stone texture",
-      "url": "ground_texture_stone.png"
+      "url": "assets/ground_textures/ground_texture_stone.png"
     },
     {
       "type": "image",
       "name": "Snow texture",
-      "url": "ground_texture_snow.png"
+      "url": "assets/ground_textures/ground_texture_snow.png"
     },
     {
       "type": "image",
       "name": "Forest texture",
-      "url": "ground_texture_forest.png"
+      "url": "assets/ground_textures/ground_texture_forest.png"
     },
     {
       "type": "script",

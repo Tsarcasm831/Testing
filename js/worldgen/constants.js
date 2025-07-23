@@ -26,5 +26,8 @@ export const CLOUD_COUNT = 20;
 /* @tweakable The radius around the amphitheater to keep clear of trees and barriers. Reload required on change. */
 export const AMPHITHEATRE_CLEARING_RADIUS = 60;
 
-/* @tweakable The filename of the ground texture to use. Options: ground_texture.png, ground_texture_sand.png, ground_texture_dirt.png, ground_texture_stone.png, ground_texture_snow.png, ground_texture_forest.png */
-export const GROUND_TEXTURE_FILENAME = 'ground_texture.png';
+/* @tweakable The filename of the ground texture to use. Files live in
+   `assets/ground_textures/`. Options: ground_texture.png,
+   ground_texture_sand.png, ground_texture_dirt.png, ground_texture_stone.png,
+   ground_texture_snow.png, ground_texture_forest.png */
+export const GROUND_TEXTURE_FILENAME = 'assets/ground_textures/ground_texture.png';

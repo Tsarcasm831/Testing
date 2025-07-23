@@ -49,14 +49,14 @@ export function createTerrain(scene) {
   geometry.computeVertexNormals();
 
   const textureLoader = new THREE.TextureLoader();
-  const textures = {
-      grass: textureLoader.load('ground_texture.png'),
-      sand: textureLoader.load('ground_texture_sand.png'),
-      dirt: textureLoader.load('ground_texture_dirt.png'),
-      stone: textureLoader.load('ground_texture_stone.png'),
-      snow: textureLoader.load('ground_texture_snow.png'),
-      forest: textureLoader.load('ground_texture_forest.png')
-  };
+    const textures = {
+        grass: textureLoader.load('assets/ground_textures/ground_texture.png'),
+        sand: textureLoader.load('assets/ground_textures/ground_texture_sand.png'),
+        dirt: textureLoader.load('assets/ground_textures/ground_texture_dirt.png'),
+        stone: textureLoader.load('assets/ground_textures/ground_texture_stone.png'),
+        snow: textureLoader.load('assets/ground_textures/ground_texture_snow.png'),
+        forest: textureLoader.load('assets/ground_textures/ground_texture_forest.png')
+    };
 
   const totalZonesSide = ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE;
   const repeatValue = TERRAIN_TEXTURE_REPEAT_PER_ZONE * totalZonesSide;
