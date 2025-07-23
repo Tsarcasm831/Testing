@@ -1,47 +1,22 @@
 import * as THREE from "three";
-import { PlayerControls } from "./playerControls.js";
-import { createPlayerModel } from "./playerModel.js";
-import { ZONE_SIZE, createBarriers, createTrees, createClouds } from "./worldGeneration.js";
-import { BuildTool } from "./buildTool.js";
-import { AdvancedBuildTool } from "./advancedBuildTool.js";
-import { UIManager } from './uiManager.js';
-import { CharacterCreator } from './characterCreator.js';
-import { MultiplayerManager } from './multiplayerManager.js';
-import { ObjectCreator } from './objectCreator.js';
-import { InventoryManager } from './inventoryManager.js';
-import { NPCManager } from './npcManager.js';
-import { InteractionManager } from './interaction.js';
 import { AssetReplacementManager } from './assetReplacementManager.js';
 import { GridManager } from './gridManager.js';
 import { VideoManager } from './videoManager.js';
-import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
-import { CSS3DRenderer } from 'three/addons/renderers/CSS3DRenderer.js';
-import { Sky } from 'three/addons/objects/Sky.js';
 import './npc/NPC.js';
 import './npc/ZoneManager.js';
 import './npc/NPCSpawner.js';
-import { PreviewManager } from './previewManager.js'; 
 import { FORCE_MOBILE_MODE } from './controls/constants.js';
 import { World } from './world.js';
-import { initYoutubePlayer, togglePlayPause, togglePlayPauseKey, setYoutubePlayerUrl, getPlayer } from './youtubePlayer.js';
+import { initYoutubePlayer, togglePlayPause, togglePlayPauseKey, setYoutubePlayerUrl } from './youtubePlayer.js';
 import { CollisionManager } from './collisionManager.js';
-
-
-/* @tweakable The target username for the special spawn location. */
-const TARGET_SPAWN_USERNAME = "lordtsarcasm";
-/* @tweakable The special spawn location coordinates. */
-const SPECIAL_SPAWN_LOCATION = { x: 44.1, y: 13.7, z: 21.4 };
-/* @tweakable The target username for the post-load teleport. */
-const TELEPORT_USERNAME = "lordtsarcasm";
-/* @tweakable The coordinates to teleport the user to after their special GLB model loads. */
-const TELEPORT_LOCATION = { x: 53.8, y: 14, z: -3.0 };
-
-function getYouTubeID(url) {
-    if (!url) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-}
+import { TARGET_SPAWN_USERNAME, SPECIAL_SPAWN_LOCATION, TELEPORT_USERNAME, TELEPORT_LOCATION } from './game/constants.js';
+import { setupScene } from './game/setupScene.js';
+import { setupPlayer } from './game/setupPlayer.js';
+import { setupManagers } from './game/setupManagers.js';
+import { setupBuildTools } from './game/setupBuildTools.js';
+import { setupMultiplayer } from './game/setupMultiplayer.js';
+import { setupUI } from './game/setupUI.js';
+import { setupEventListeners } from './game/setupEventListeners.js';
 
 export class Game {
     constructor() {
@@ -174,198 +149,31 @@ export class Game {
     }
 
     setupScene() {
-        this.scene = new THREE.Scene();
-
-        // Realistic Sky
-        const sky = new Sky();
-        /* @tweakable The scale of the sky dome. It should be large enough to encompass the entire scene. */
-        const skyScale = 5000;
-        sky.scale.setScalar(skyScale);
-        this.scene.add(sky);
-
-        this.dirLight = new THREE.DirectionalLight(0xffffff, 3);
-        this.dirLight.castShadow = true;
-        this.dirLight.shadow.mapSize.width = 1024;
-        this.dirLight.shadow.mapSize.height = 1024;
-        this.dirLight.shadow.camera.near = 0.5;
-        this.dirLight.shadow.camera.far = 500;
-        this.dirLight.shadow.camera.left = -100;
-        this.dirLight.shadow.camera.right = 100;
-        this.dirLight.shadow.camera.top = 100;
-        this.dirLight.shadow.camera.bottom = -100;
-        this.scene.add(this.dirLight);
-        this.scene.add(this.dirLight.target);
-        
-        const sun = this.sun;
-        
-        /* @tweakable The turbidity of the sky (haziness). */
-        const turbidity = 10;
-        /* @tweakable The Rayleigh scattering effect, affects the blue color of the sky. */
-        const rayleigh = 2;
-        /* @tweakable The Mie coefficient, for haze and light scattering. */
-        const mieCoefficient = 0.005;
-        /* @tweakable The Mie directional G, for how light scatters directionally. */
-        const mieDirectionalG = 0.8;
-        /* @tweakable The elevation of the sun in degrees (0 is horizon, 90 is directly overhead). */
-        const elevation = 4;
-        /* @tweakable The azimuth of the sun in degrees (direction, 0 is North). */
-        const azimuth = 180;
-
-        const phi = THREE.MathUtils.degToRad(90 - elevation);
-        const theta = THREE.MathUtils.degToRad(azimuth);
-        sun.setFromSphericalCoords(1, phi, theta);
-
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        document.getElementById('game-container').appendChild(this.renderer.domElement);
-
-        this.labelRenderer = new CSS2DRenderer();
-        this.labelRenderer.setSize(window.innerWidth, window.innerHeight);
-        this.labelRenderer.domElement.style.position = 'absolute';
-        this.labelRenderer.domElement.style.top = '0px';
-        this.labelRenderer.domElement.style.pointerEvents = 'none';
-        document.getElementById('label-container').appendChild(this.labelRenderer.domElement);
-        
-        this.css3dRenderer = new CSS3DRenderer();
-        this.css3dRenderer.setSize(window.innerWidth, window.innerHeight);
-        this.css3dRenderer.domElement.style.position = 'absolute';
-        this.css3dRenderer.domElement.style.top = '0px';
-        document.getElementById('css3d-container').appendChild(this.css3dRenderer.domElement);
-
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        this.scene.add(ambientLight);
-
-        const uniforms = sky.material.uniforms;
-        uniforms['turbidity'].value = turbidity;
-        uniforms['rayleigh'].value = rayleigh;
-        uniforms['mieCoefficient'].value = mieCoefficient;
-        uniforms['mieDirectionalG'].value = mieDirectionalG;
-        uniforms['sunPosition'].value.copy(sun);
-        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        setupScene(this);
     }
 
     setupPlayer(playerName, initialPosition) {
-        this.playerModel = createPlayerModel(THREE, playerName);
-        this.scene.add(this.playerModel);
-
-        this.playerControls = new PlayerControls(this.scene, this.room, {
-            renderer: this.renderer,
-            initialPosition: initialPosition,
-            playerModel: this.playerModel,
-            terrain: null,
-            collisionManager: this.collisionManager
-        });
-
-        this.camera = this.playerControls.getCamera();
-        const listener = new THREE.AudioListener();
-        this.camera.add(listener);
+        setupPlayer(this, playerName, initialPosition);
     }
 
     setupManagers() {
-        this.npcManager = new NPCManager(this.scene, null, this.playerControls);
-        this.npcManager.collisionManager = this.collisionManager;
-        
-        this.interactionManager = new InteractionManager({
-            playerControls: this.playerControls,
-            npcManager: this.npcManager,
-            camera: this.camera,
-            renderer: this.renderer
-        });
-        this.interactionManager.init();
+        setupManagers(this);
     }
 
     setupBuildTools(terrain) {
-        const objectCreator = new ObjectCreator(this.scene, this.camera, this.room);
-
-        this.buildTool = new BuildTool(this.scene, this.camera, this.playerControls, terrain);
-        this.buildTool.setRoom(this.room);
-        
-        this.advancedBuildTool = new AdvancedBuildTool(this.scene, this.camera, this.renderer, this.buildTool, objectCreator);
-        this.advancedBuildTool.setRoom(this.room);
-        this.advancedBuildTool.setOrbitControls(this.playerControls.controls);
-        objectCreator.buildTool = this.buildTool;
-        
-        if (this.room.roomState && this.room.roomState.buildObjects) {
-            Object.values(this.room.roomState.buildObjects || {}).forEach(buildData => {
-                if (buildData.isAdvanced) {
-                    this.advancedBuildTool.receiveBuildObject(buildData);
-                } else {
-                    this.buildTool.receiveBuildObject(buildData);
-                }
-            });
-        }
+        setupBuildTools(this, terrain);
     }
 
     setupMultiplayer() {
-        this.multiplayerManager = new MultiplayerManager({
-            room: this.room,
-            scene: this.scene,
-            camera: this.camera,
-            renderer: this.renderer,
-            buildTool: this.buildTool,
-            advancedBuildTool: this.advancedBuildTool,
-            createPlayerModel: (three, username, spec) => createPlayerModel(three, username, spec),
-            playerControls: this.playerControls
-        });
-        this.multiplayerManager.init();
+        setupMultiplayer(this);
     }
 
     setupUI(assetReplacementManager) {
-        const characterCreator = new CharacterCreator(
-            THREE,
-            this.room,
-            this.playerControls,
-            (newSpec) => {
-                this.scene.remove(this.playerModel);
-                this.playerModel = createPlayerModel(THREE, this.playerModel.name, newSpec);
-                this.scene.add(this.playerModel);
-                this.playerControls.playerModel = this.playerModel;
-                this.videoManager.setPlayerModel(this.playerModel);
-                return this.playerModel;
-            }
-        );
-        
-        const inventoryManager = new InventoryManager({ playerControls: this.playerControls });
-
-        this.uiManager = new UIManager({
-            playerControls: this.playerControls,
-            buildTool: this.buildTool,
-            advancedBuildTool: this.advancedBuildTool,
-            characterCreator,
-            objectCreator: this.advancedBuildTool.objectCreator,
-            inventoryManager,
-            multiplayerManager: this.multiplayerManager,
-            npcManager: this.npcManager,
-            assetReplacementManager,
-            room: this.room,
-            renderer: this.renderer,
-            playerModel: this.playerModel,
-            dirLight: this.dirLight,
-            scene: this.scene,
-            gridManager: this.gridManager
-        });
-        const { inventoryUI } = this.uiManager.init();
-        
-        inventoryManager.inventoryUI = inventoryUI;
-        inventoryManager.init();
+        setupUI(this, assetReplacementManager);
     }
     
     setupEventListeners() {
-        window.addEventListener('keydown', (event) => {
-            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
-
-            const key = event.key.toLowerCase();
-
-            if (key === 'g' && !this.advancedBuildTool.enabled) {
-                this.gridManager.toggle(this.playerModel.position);
-            }
-
-            if (key === togglePlayPauseKey) {
-                togglePlayPause();
-            }
-        });
+        setupEventListeners(this);
     }
 
     start() {
