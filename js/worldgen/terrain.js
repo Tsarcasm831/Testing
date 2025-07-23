@@ -7,7 +7,8 @@ import {
   TERRAIN_TEXTURE_REPEAT_PER_ZONE,
   TERRAIN_AMPLITUDE,
   TERRAIN_SCALE,
-  GROUND_TEXTURE_FILENAME
+  GROUND_TEXTURE_FILENAME,
+  ZONE_SIZE
 } from './constants.js';
 
 /* @tweakable The width of the blend between biomes. Higher values create a smoother transition. */
@@ -50,7 +51,7 @@ export function createTerrain(scene) {
 
   const textureLoader = new THREE.TextureLoader();
   const textures = {
-      grass: textureLoader.load('ground_texture.png'),
+      grass: textureLoader.load(GROUND_TEXTURE_FILENAME),
       sand: textureLoader.load('ground_texture_sand.png'),
       dirt: textureLoader.load('ground_texture_dirt.png'),
       stone: textureLoader.load('ground_texture_stone.png'),
@@ -60,6 +61,7 @@ export function createTerrain(scene) {
 
   const totalZonesSide = ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE;
   const repeatValue = TERRAIN_TEXTURE_REPEAT_PER_ZONE * totalZonesSide;
+  const textureScaleValue = TERRAIN_TEXTURE_REPEAT_PER_ZONE / ZONE_SIZE;
 
   for (const key in textures) {
       // HACK: To prevent CORS issues with textures on some browsers,
@@ -99,7 +101,7 @@ export function createTerrain(scene) {
       shader.uniforms.grassRadius = { value: GRASS_RADIUS };
       shader.uniforms.grassBlendWidth = { value: GRASS_BLEND_WIDTH };
       /* @tweakable The overall scale of the terrain textures. Smaller values make textures larger. */
-      shader.uniforms.textureScale = { value: 0.2 };
+      shader.uniforms.textureScale = { value: textureScaleValue };
 
       shader.vertexShader = 'varying vec3 vWorldPosition;\n' + shader.vertexShader;
       shader.vertexShader = shader.vertexShader.replace(
