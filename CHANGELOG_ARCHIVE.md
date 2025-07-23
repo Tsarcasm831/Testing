@@ -46,3 +46,7 @@
 - 1818 Fix player asset replacement to avoid duplicate player model
 - 1522 Fix HouseBlocks module loading error by merging it into starterHouse.js
 - 1507 Break up worldGeneration.js into modular files
+
+## 2025-07-15
+- 1205 Fix compass not displaying directions and add tweakable offset
+- 1200 Fix shopkeeper not spawning and improve interaction system performance

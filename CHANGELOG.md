@@ -1,7 +1,9 @@
 # Changelog
 
 ## 2025-07-23
+- 2214 Refactor Game.js into modular setup files
 - 0000 Rewrite mats.json to load modules from js/mats
+
 
 ## 2025-07-22
 
@@ -25,6 +27,7 @@
 ## 2025-07-15
 - 1210 Fix amphitheater seat collision by correctly positioning the seats and improving collision padding logic.
 - 1205 Fix compass not displaying directions and add tweakable offset
+
 
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).
