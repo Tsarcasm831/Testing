@@ -10,6 +10,6 @@ Read them all before contributing:
 Key points:
 
 - Update `CHANGELOG.md` for every change using UTC dates and an `HHMM` prefix for each bullet.
-- Keep only the most recent ten entries from previous days in `CHANGELOG.md`. Move older ones to `CHANGELOG_ARCHIVE.md`. Entries from the current UTC day may exceed this count.
+- `CHANGELOG.md` should contain only entries from the current UTC day. Move all older entries to `CHANGELOG_ARCHIVE.md`.
 - Run `npm test` or any project-specific tests before committing. Document test issues caused by environment limits in the pull request.
 
