@@ -2,6 +2,7 @@
 ## 2025-07-23
 
 - 2018 Break playerControls.js into smaller modules for readability.
+- 2057 Apply ground textures across the entire world by scaling shaders correctly.
 
 ## 2025-07-22
 
