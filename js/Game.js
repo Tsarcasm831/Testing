@@ -16,6 +16,7 @@ import { GridManager } from './gridManager.js';
 import { VideoManager } from './videoManager.js';
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 import { CSS3DRenderer } from 'three/addons/renderers/CSS3DRenderer.js';
+import { Sky } from 'three/addons/objects/Sky.js';
 import './npc/NPC.js';
 import './npc/ZoneManager.js';
 import './npc/NPCSpawner.js';
@@ -49,6 +50,7 @@ export class Game {
         this.camera = null;
         this.renderer = null;
         this.labelRenderer = null;
+        this.css3dRenderer = null;
         this.playerControls = null;
         this.playerModel = null;
         this.npcManager = null;
@@ -62,6 +64,7 @@ export class Game {
         this.videoManager = null;
         this.dirLight = null;
         this.grass = null;
+        this.sun = new THREE.Vector3();
     }
 
     async init() {
@@ -96,6 +99,12 @@ export class Game {
         /* @tweakable The username for which to preload the animated player model. */
         const preloadUsername = "lordtsarcasm";
         if (currentUser && currentUser.username === preloadUsername) {
+            /* @tweakable If true, the default procedural model is hidden while the special GLB model loads. */
+            const hideDefaultModelDuringLoad = true;
+            if (hideDefaultModelDuringLoad) {
+                this.playerModel.visible = false;
+            }
+            
             const loadingStatus = document.getElementById('loading-status');
             if (loadingStatus) loadingStatus.textContent = 'Loading special player model...';
             
@@ -121,7 +130,9 @@ export class Game {
         this.gridManager = new GridManager(this.scene);
         this.videoManager = new VideoManager(this.scene, this.camera, this.playerModel);
 
-        const world = new World(this.scene, this.npcManager, this.room);
+        const matsResponse = await fetch('mats.json');
+        const matsData = await matsResponse.json();
+        const world = new World(this.scene, this.npcManager, this.room, matsData);
         const worldObjects = world.generate();
         const terrain = worldObjects.terrain;
         this.grass = worldObjects.grass;
@@ -164,7 +175,45 @@ export class Game {
 
     setupScene() {
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x87CEEB);
+
+        // Realistic Sky
+        const sky = new Sky();
+        /* @tweakable The scale of the sky dome. It should be large enough to encompass the entire scene. */
+        const skyScale = 5000;
+        sky.scale.setScalar(skyScale);
+        this.scene.add(sky);
+
+        this.dirLight = new THREE.DirectionalLight(0xffffff, 3);
+        this.dirLight.castShadow = true;
+        this.dirLight.shadow.mapSize.width = 1024;
+        this.dirLight.shadow.mapSize.height = 1024;
+        this.dirLight.shadow.camera.near = 0.5;
+        this.dirLight.shadow.camera.far = 500;
+        this.dirLight.shadow.camera.left = -100;
+        this.dirLight.shadow.camera.right = 100;
+        this.dirLight.shadow.camera.top = 100;
+        this.dirLight.shadow.camera.bottom = -100;
+        this.scene.add(this.dirLight);
+        this.scene.add(this.dirLight.target);
+        
+        const sun = this.sun;
+        
+        /* @tweakable The turbidity of the sky (haziness). */
+        const turbidity = 10;
+        /* @tweakable The Rayleigh scattering effect, affects the blue color of the sky. */
+        const rayleigh = 2;
+        /* @tweakable The Mie coefficient, for haze and light scattering. */
+        const mieCoefficient = 0.005;
+        /* @tweakable The Mie directional G, for how light scatters directionally. */
+        const mieDirectionalG = 0.8;
+        /* @tweakable The elevation of the sun in degrees (0 is horizon, 90 is directly overhead). */
+        const elevation = 4;
+        /* @tweakable The azimuth of the sun in degrees (direction, 0 is North). */
+        const azimuth = 180;
+
+        const phi = THREE.MathUtils.degToRad(90 - elevation);
+        const theta = THREE.MathUtils.degToRad(azimuth);
+        sun.setFromSphericalCoords(1, phi, theta);
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -188,7 +237,13 @@ export class Game {
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         this.scene.add(ambientLight);
 
-        this.dirLight = null;
+        const uniforms = sky.material.uniforms;
+        uniforms['turbidity'].value = turbidity;
+        uniforms['rayleigh'].value = rayleigh;
+        uniforms['mieCoefficient'].value = mieCoefficient;
+        uniforms['mieDirectionalG'].value = mieDirectionalG;
+        uniforms['sunPosition'].value.copy(sun);
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     }
 
     setupPlayer(playerName, initialPosition) {
@@ -288,7 +343,8 @@ export class Game {
             renderer: this.renderer,
             playerModel: this.playerModel,
             dirLight: this.dirLight,
-            scene: this.scene
+            scene: this.scene,
+            gridManager: this.gridManager
         });
         const { inventoryUI } = this.uiManager.init();
         
@@ -340,9 +396,17 @@ export class Game {
         this.multiplayerManager.updatePlayerLabels();
         
         if (this.dirLight && this.dirLight.castShadow) {
-            const lightOffset = new THREE.Vector3(30, 40, 25);
-            this.dirLight.position.copy(this.playerModel.position).add(lightOffset);
-            this.dirLight.target.position.copy(this.playerModel.position);
+            const lightTargetPosition = this.playerModel.position.clone();
+            this.dirLight.position.copy(lightTargetPosition).add(this.sun.clone().multiplyScalar(200));
+            this.dirLight.target.position.copy(lightTargetPosition);
+
+            /* @tweakable The size of the area covered by directional light shadows. Smaller values produce sharper shadows but may cause shadows to disappear at the edge of the screen. */
+            const shadowFrustumSize = 50;
+            this.dirLight.shadow.camera.left = -shadowFrustumSize / 2;
+            this.dirLight.shadow.camera.right = shadowFrustumSize / 2;
+            this.dirLight.shadow.camera.top = shadowFrustumSize / 2;
+            this.dirLight.shadow.camera.bottom = -shadowFrustumSize / 2;
+            this.dirLight.shadow.camera.updateProjectionMatrix();
         }
         
         const expirationTime = 50 * 60 * 1000;

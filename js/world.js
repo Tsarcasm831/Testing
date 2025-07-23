@@ -2,11 +2,12 @@ import * as THREE from 'three';
 import { createTerrain, createBarriers, createTrees, createClouds, createStarterHouse, createShopkeeper, createAmphitheatre, createHospital, createTavern, createWorkshop, createNurse, createTavernkeep, createGrass } from './worldGeneration.js';
 
 export class World {
-    constructor(scene, npcManager, room) {
+    constructor(scene, npcManager, room, matsData) {
         this.scene = scene;
         this.npcManager = npcManager;
         this.terrain = null;
         this.room = room;
+        this.matsData = matsData;
     }
 
     generate() {
@@ -14,7 +15,7 @@ export class World {
         createBarriers(this.scene, this.terrain.userData.getHeight);
         createTrees(this.scene, this.terrain.userData.getHeight);
         createClouds(this.scene);
-        const house = createStarterHouse(this.scene, this.terrain.userData.getHeight);
+        const house = createStarterHouse(this.scene, this.terrain.userData.getHeight, this.matsData);
         createShopkeeper(this.scene, this.terrain, this.npcManager, house.position);
         createAmphitheatre(this.scene, this.terrain.userData.getHeight);
         const hospital = createHospital(this.scene, this.terrain.userData.getHeight);

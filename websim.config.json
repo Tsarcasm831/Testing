@@ -14,6 +14,12 @@
           "type": "text",
           "description": "URL of the reference image used for generation, if any."
         }
+      },
+      "admin_notes": {
+        "content": {
+          "type": "text",
+          "description": "Persistent notes for admins."
+        }
       }
     },
     "instructions": "This database stores community-created characters. Use the 'spec' field to render characters and 'referenceImage' to show the source image."

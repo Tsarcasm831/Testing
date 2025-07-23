@@ -106,7 +106,9 @@ export class MultiplayerManager {
 
     addPlayer(clientId, playerData) {
         const peerInfo = this.room.peers[clientId] || {};
-        const peerName = peerInfo.username || `Player${clientId.substring(0, 4)}`;
+        /* @tweakable The prefix to use for player names when a username is not available. */
+        const fallbackNamePrefix = 'Player';
+        const peerName = peerInfo.username || `${fallbackNamePrefix}${clientId.substring(0, 4)}`;
         
         const playerModel = this.createPlayerModel(THREE, peerName, playerData.characterSpec);
         playerModel.position.set(playerData.x, playerData.y || 0.5, playerData.z);

@@ -127,7 +127,7 @@
           "name": "Wood Siding",
           "materialID": "siding_wood",
           "modelModule": "assets/models/siding/woodSiding.js",
-          "textureDir": "assets/textures/siding/woodSiding/",
+          "textureDir": "assets/textures/claddingAndSiding/woodSiding/",
           "textureDesc": "Horizontal cedar clapboards, semi-transparent stain, visible grain, slight warping, nail heads flush. Provide tiling seamlessness, normal for board overlap."
         },
         {

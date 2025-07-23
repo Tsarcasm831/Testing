@@ -10,6 +10,7 @@ export class OptionsUI {
         this.renderer = dependencies.renderer;
         this.dirLight = dependencies.dirLight;
         this.scene = dependencies.scene;
+        this.modal = null;
     }
 
     create() {
@@ -88,17 +89,22 @@ export class OptionsUI {
             </div>
         `;
         uiContainer.appendChild(modal);
+        this.modal = modal;
         
         this.assetReplacementManager.setStatusElement(modal.querySelector('#download-status'));
 
-        button.addEventListener('click', () => {
-            modal.style.display = 'block';
-            this.playerControls.enabled = false;
-        });
+        button.addEventListener('click', () => this.toggleModal());
 
-        modal.querySelector('#close-options').addEventListener('click', () => {
-            modal.style.display = 'none';
-            this.playerControls.enabled = true;
+        modal.querySelector('#close-options').addEventListener('click', () => this.toggleModal());
+
+        window.addEventListener('keydown', (e) => {
+            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+
+            /* @tweakable The keybind to open the options menu. */
+            const optionsKeybind = '`';
+            if (e.key === optionsKeybind) {
+                this.toggleModal();
+            }
         });
 
         // Tab switching logic
@@ -115,15 +121,14 @@ export class OptionsUI {
         });
 
         // Add admin tab if user is lordtsarcasm
-        addAdminTab(this.dependencies);
+        addAdminTab(this.dependencies, modal);
 
         // Respawn logic
         modal.querySelector('#respawn-button').addEventListener('click', () => {
             const playerModel = this.playerControls.getPlayerModel();
             playerModel.position.set(0, 5, 0); // Respawn at center, slightly elevated
             this.playerControls.velocity.set(0, 0, 0); // Reset velocity
-            modal.style.display = 'none';
-            this.playerControls.enabled = true;
+            this.toggleModal();
         });
 
         // Performance Mode Logic
@@ -179,4 +184,16 @@ export class OptionsUI {
         setupAssetControls(modal, this.assetReplacementManager);
     }
 
+    toggleModal() {
+        if (!this.modal) return;
+        const isVisible = this.modal.style.display === 'block';
+
+        if (isVisible) {
+            this.modal.style.display = 'none';
+            this.playerControls.enabled = true;
+        } else {
+            this.modal.style.display = 'block';
+            this.playerControls.enabled = false;
+        }
+    }
 }

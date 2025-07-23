@@ -1,3 +1,17 @@
+import * as THREE from 'three';
+import {
+  SPEED,
+  GRAVITY,
+  JUMP_FORCE,
+  MOBILE_SPEED_MULTIPLIER,
+  RUN_SPEED_MULTIPLIER,
+  SPRINT_SPEED_MULTIPLIER,
+} from '../controls/constants.js';
+import {
+  PLAYER_COLLISION_RADIUS,
+  PLAYER_COLLISION_HEIGHT
+} from './constants.js';
+
 export function processMovement(pc, delta) {
     // Skip movement processing if controls are disabled
     if (!pc.enabled) return;

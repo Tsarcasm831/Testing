@@ -1,8 +1,4 @@
 # Changelog
-## 2025-07-23
-
-- 2018 Break playerControls.js into smaller modules for readability.
-- 2057 Apply ground textures across the entire world by scaling shaders correctly.
 
 ## 2025-07-22
 
@@ -25,6 +21,8 @@
 
 ## 2025-07-15
 - 1210 Fix amphitheater seat collision by correctly positioning the seats and improving collision padding logic.
+- 1205 Fix compass not displaying directions and add tweakable offset
+- 1200 Fix shopkeeper not spawning and improve interaction system performance
 
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).
