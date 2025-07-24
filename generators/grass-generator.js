@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { MathRandom } from '../js/worldgen/random.js';
 
 /* @tweakable The number of grass instances to generate. Higher numbers can impact performance. */
-const GRASS_COUNT = 150000;
+const GRASS_COUNT = 50000;
 /* @tweakable The base color of the grass blades. */
 const GRASS_BASE_COLOR = 0x338833;
 /* @tweakable How much color can vary. A value of 0.4 means lightness can vary by +/- 20%. */

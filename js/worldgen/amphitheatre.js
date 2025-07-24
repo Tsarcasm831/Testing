@@ -4,12 +4,36 @@ import { createAmphitheatreSeating } from './amphi-seats.js';
 /* @tweakable Set to true to re-enable amphitheater seating. A page reload is required for this change to take effect. */
 const enableSeating = true;
 
+/* @tweakable Set to true to enable collision for the amphitheater stage, stairs, and foundation. */
+const AMPHITHEATRE_COLLISION_ENABLED = false;
 /* @tweakable The color of the stone used for the amphitheater seats and structure. */
 const stoneColor = 0x888888;
 /* @tweakable The color of the stage platform. */
 const stageColor = 0x4a2a0a;
 /* @tweakable Set to false to disable the video backdrop, which may prevent console errors from ad-blockers. */
 const enableVideoBackdrop = true;
+/* @tweakable Set to true to show a visible outline box for debugging stage collision. */
+const DEBUG_STAGE_COLLISION_BOX = true;
+/* @tweakable The color of the debug collision box for the stage. */
+const DEBUG_STAGE_COLLISION_BOX_COLOR = 0x00ffff;
+/* @tweakable Set to true to show a visible outline box for debugging stair collision. */
+const DEBUG_STAIR_COLLISION_BOX = true;
+/* @tweakable The color of the debug collision box for the stairs. */
+const DEBUG_STAIR_COLLISION_BOX_COLOR = 0x00ff00;
+/* @tweakable Set to true to show a visible outline box for debugging the stage foundation. */
+const DEBUG_FOUNDATION_COLLISION_BOX = true;
+/* @tweakable The color of the debug collision box for the stage foundation. */
+const DEBUG_FOUNDATION_COLLISION_BOX_COLOR = 0xff00ff;
+/* @tweakable Set to true to show a visible outline box for debugging the backdrop wall collision. */
+const DEBUG_BACKDROP_COLLISION_BOX = true;
+/* @tweakable The color of the debug collision box for the backdrop wall. */
+const DEBUG_BACKDROP_COLLISION_BOX_COLOR = 0xffff00;
+/* @tweakable Set to false to disable collision for the microphone stand on the stage. */
+const MIC_STAND_COLLISION_ENABLED = false;
+/* @tweakable Set to true to show a visible outline box for debugging microphone collision. */
+const DEBUG_MIC_COLLISION_BOX = false;
+/* @tweakable The color of the debug collision box for the microphone. */
+const DEBUG_MIC_COLLISION_BOX_COLOR = 0xff0000;
 
 let videoElement;
 let videoTexture;
@@ -40,6 +64,12 @@ function createMicrophoneStand() {
     const base = new THREE.Mesh(baseGeometry, standMaterial);
     base.position.y = baseHeight / 2;
     standGroup.add(base);
+    if (DEBUG_MIC_COLLISION_BOX) {
+        const micHelper = new THREE.BoxHelper(base, DEBUG_MIC_COLLISION_BOX_COLOR);
+        micHelper.userData.isDebugBorder = true;
+        micHelper.visible = false;
+        standGroup.add(micHelper);
+    }
 
     // Pole
     /* @tweakable The height of the microphone stand pole. */
@@ -50,6 +80,12 @@ function createMicrophoneStand() {
     const pole = new THREE.Mesh(poleGeometry, standMaterial);
     pole.position.y = baseHeight + poleHeight / 2;
     standGroup.add(pole);
+    if (DEBUG_MIC_COLLISION_BOX) {
+        const poleHelper = new THREE.BoxHelper(pole, DEBUG_MIC_COLLISION_BOX_COLOR);
+        poleHelper.userData.isDebugBorder = true;
+        poleHelper.visible = false;
+        standGroup.add(poleHelper);
+    }
 
     // Mic head
     /* @tweakable The size of the microphone head. */
@@ -58,10 +94,18 @@ function createMicrophoneStand() {
     const micHead = new THREE.Mesh(micHeadGeometry, micMaterial);
     micHead.position.y = baseHeight + poleHeight + micHeadRadius * 0.8;
     standGroup.add(micHead);
+    if (DEBUG_MIC_COLLISION_BOX) {
+        const micHeadHelper = new THREE.BoxHelper(micHead, DEBUG_MIC_COLLISION_BOX_COLOR);
+        micHeadHelper.userData.isDebugBorder = true;
+        micHeadHelper.visible = false;
+        standGroup.add(micHeadHelper);
+    }
     
     standGroup.traverse(child => {
         if (child.isMesh) {
             child.castShadow = true;
+            // Explicitly set collidable status based on the tweakable constant
+            child.userData.isBarrier = MIC_STAND_COLLISION_ENABLED;
         }
     });
 
@@ -76,8 +120,17 @@ function createStage(dimensions) {
     stage.position.y = dimensions.height / 2;
     stage.castShadow = true;
     stage.receiveShadow = true;
-    stage.userData.isBlock = true;
+    if (AMPHITHEATRE_COLLISION_ENABLED) {
+        stage.userData.isBlock = true;
+    }
     stageGroup.add(stage);
+
+    if (DEBUG_STAGE_COLLISION_BOX) {
+        const stageHelper = new THREE.BoxHelper(stage, DEBUG_STAGE_COLLISION_BOX_COLOR);
+        stageHelper.userData.isDebugBorder = true;
+        stageHelper.visible = false;
+        stageGroup.add(stageHelper);
+    }
 
     /* @tweakable The height of the foundation under the stage. */
     const foundationHeight = 2.0;
@@ -90,6 +143,12 @@ function createStage(dimensions) {
     foundation.castShadow = true;
     foundation.receiveShadow = true;
     stageGroup.add(foundation);
+    if (DEBUG_FOUNDATION_COLLISION_BOX) {
+        const foundationHelper = new THREE.BoxHelper(foundation, DEBUG_FOUNDATION_COLLISION_BOX_COLOR);
+        foundationHelper.userData.isDebugBorder = true;
+        foundationHelper.visible = false;
+        stageGroup.add(foundationHelper);
+    }
 
     // Add stairs
     /* @tweakable The rotation of the stairs in degrees around the Y axis. */
@@ -120,10 +179,19 @@ function createStage(dimensions) {
     
         stair.castShadow = true;
         stair.receiveShadow = true;
-        stair.userData.isBlock = true;
-        stair.userData.isStair = true;
+        if (AMPHITHEATRE_COLLISION_ENABLED) {
+            stair.userData.isBlock = true;
+            stair.userData.isStair = true;
+        }
     
         stairsGroup.add(stair);
+
+        if (DEBUG_STAIR_COLLISION_BOX) {
+            const stairHelper = new THREE.BoxHelper(stair, DEBUG_STAIR_COLLISION_BOX_COLOR);
+            stairHelper.userData.isDebugBorder = true;
+            stairHelper.visible = false;
+            stairsGroup.add(stairHelper);
+        }
     }
     return stageGroup;
 }
@@ -154,6 +222,12 @@ function createBackdropWall(position) {
         videoMesh.position.set(0, 0, -wallThickness / 2 - 0.05);
 
         wallGroup.add(videoMesh);
+        if (DEBUG_BACKDROP_COLLISION_BOX) {
+            const videoHelper = new THREE.BoxHelper(videoMesh, DEBUG_BACKDROP_COLLISION_BOX_COLOR);
+            videoHelper.userData.isDebugBorder = true;
+            videoHelper.visible = false;
+            videoMesh.add(videoHelper);
+        }
 
         const lyricsCanvas = document.createElement('canvas');
         lyricsCanvas.id = 'lyrics-display';
@@ -191,6 +265,12 @@ function createBackdropWall(position) {
         );
 
         wallGroup.add(lyricsMesh);
+        if (DEBUG_BACKDROP_COLLISION_BOX) {
+            const lyricsHelper = new THREE.BoxHelper(lyricsMesh, DEBUG_BACKDROP_COLLISION_BOX_COLOR);
+            lyricsHelper.userData.isDebugBorder = true;
+            lyricsHelper.visible = false;
+            lyricsMesh.add(lyricsHelper);
+        }
     }
     
     // Add a solid backing wall. This will be visible if the video fails to load or is disabled.
@@ -205,6 +285,12 @@ function createBackdropWall(position) {
     backingWall.castShadow = true;
     backingWall.receiveShadow = true;
     wallGroup.add(backingWall);
+    if (DEBUG_BACKDROP_COLLISION_BOX) {
+        const backingWallHelper = new THREE.BoxHelper(backingWall, DEBUG_BACKDROP_COLLISION_BOX_COLOR);
+        backingWallHelper.userData.isDebugBorder = true;
+        backingWallHelper.visible = false;
+        backingWall.add(backingWallHelper);
+    }
 
     wallGroup.position.copy(position);
     return { wall: wallGroup };
@@ -248,9 +334,9 @@ export function createAmphitheatre(scene, getHeight) {
     group.add(stage);
 
     // Add microphone stand to the stage
+    const micStandPosition = { x: 0, y: stageDimensions.height, z: 2 };
     const micStand = createMicrophoneStand();
-    /* @tweakable The position of the microphone stand on the stage. */
-    micStand.position.set(0, stageDimensions.height, 2);
+    micStand.position.set(micStandPosition.x, micStandPosition.y, micStandPosition.z);
     stage.add(micStand);
 
     // Seating is now disabled by default, but can be re-enabled with the tweakable toggle above.

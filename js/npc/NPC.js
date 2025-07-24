@@ -14,9 +14,9 @@ const NPC_ACCELERATION = 2.0;
 /* @tweakable The distance from the target at which the NPC starts to decelerate. */
 const DECELERATION_DISTANCE = 5.0;
 /* @tweakable The distance from the player beyond which NPC animations are updated less frequently. */
-const ANIMATION_LOD_DISTANCE = 25;
-/* @tweakable The update rate (in frames) for NPC animations beyond the LOD distance. e.g., 2 means every other frame. */
-const ANIMATION_LOD_RATE = 2;
+const ANIMATION_LOD_DISTANCE = 20;
+/* @tweakable The update rate (in frames) for NPC animations beyond the LOD distance. e.g., 2 means every other frame, 3 means every third frame. */
+const ANIMATION_LOD_RATE = 3;
 
 export class NPC {
     constructor(model, presetId, zoneKey, isEyebot, startPosition, terrain) {

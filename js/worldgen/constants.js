@@ -14,14 +14,15 @@ export const TERRAIN_SCALE = 80;
 /* @tweakable The number of times the ground texture repeats within a zone. Lower values increase perceived texture resolution but may show tiling. Higher values decrease resolution. */
 export const TERRAIN_TEXTURE_REPEAT_PER_ZONE = 50;
 /* @tweakable Number of segments for the terrain geometry. Lower for better performance. A reload is required for this to take effect. */
-export const TERRAIN_SEGMENTS = 150;
+export const TERRAIN_SEGMENTS = 100;
 /* @tweakable The number of barriers generated per zone. Lower for better performance. Reload required. */
-export const BARRIERS_PER_ZONE = 0.2;
-export const PILLARS_PER_ZONE = 0.1;
+export const BARRIERS_PER_ZONE = 0.1;
+/* @tweakable The number of pillars generated per zone. Lower for better performance. Reload required. */
+export const PILLARS_PER_ZONE = 0.05;
 /* @tweakable The number of trees generated per zone. Lower for better performance. Reload required. */
-export const TREES_PER_ZONE = 0.3;
+export const TREES_PER_ZONE = 0.2;
 /* @tweakable The total number of cloud groups to generate. Lower for better performance. A reload is required for this to take effect. */
-export const CLOUD_COUNT = 20;
+export const CLOUD_COUNT = 15;
 
 /* @tweakable The radius around the amphitheater to keep clear of trees and barriers. Reload required on change. */
 export const AMPHITHEATRE_CLEARING_RADIUS = 60;

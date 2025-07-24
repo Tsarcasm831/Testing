@@ -4,6 +4,8 @@ export const GRID_LABEL_VISIBILITY_DISTANCE = 7;
 export const GRID_LABEL_LOD_DISTANCE = 30;
 export const GRID_LABEL_LOD_STEP = 10;
 export const LABEL_UPDATE_INTERVAL = 10;
+/* @tweakable Set to true to link debug border visibility to grid visibility. */
+const TOGGLE_DEBUG_BORDERS_WITH_GRID = true;
 
 export class GridManager {
     constructor(scene) {
@@ -48,6 +50,15 @@ export class GridManager {
                 GRID_LABEL_LOD_DISTANCE,
                 GRID_LABEL_LOD_STEP
             );
+        }
+
+        if (TOGGLE_DEBUG_BORDERS_WITH_GRID) {
+            const newVisibility = this.gridHelper.visible;
+            this.scene.traverse((obj) => {
+                if (obj.userData.isDebugBorder) {
+                    obj.visible = newVisibility;
+                }
+            });
         }
 
         this.scene.traverse((obj) => {

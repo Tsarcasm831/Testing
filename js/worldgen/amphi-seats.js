@@ -6,8 +6,22 @@ import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
  * @param {THREE.Group} group The group to add seating to.
  * @param {THREE.Color | number} stoneColor The color of the seats.
  */
-/* @tweakable Set to false to disable collision for amphitheater seats. */
+/* @tweakable Set to true to enable collision for amphitheater seats. */
 const SEAT_COLLISION_ENABLED = false;
+/* @tweakable Set to true to enable collision for the foundation under the seats. */
+const SEAT_FOUNDATION_COLLISION_ENABLED = false;
+/* @tweakable Set to true to show a visible outline box for debugging seat row collision. */
+const DEBUG_SEAT_COLLISION_BOX = true;
+/* @tweakable The color of the debug collision box for seat rows. */
+const DEBUG_SEAT_COLLISION_BOX_COLOR = 0xffff00;
+/* @tweakable Set to true to show a visible outline box for debugging the seat foundation collision. */
+const DEBUG_FOUNDATION_COLLISION_BOX = true;
+/* @tweakable The color of the debug collision box for the seat foundation. */
+const DEBUG_FOUNDATION_COLLISION_BOX_COLOR = 0xff00ff;
+/* @tweakable Set to true to show a visible outline box for debugging individual seats. */
+const DEBUG_INDIVIDUAL_SEAT_BOX = true;
+/* @tweakable The color of the debug collision box for individual seats. */
+const DEBUG_INDIVIDUAL_SEAT_BOX_COLOR = 0xffa500;
 
 export function createAmphitheatreSeating(group, stoneColor) {
     /* @tweakable The rotation of the amphitheater seats in degrees. */
@@ -64,9 +78,22 @@ export function createAmphitheatreSeating(group, stoneColor) {
     const foundationMesh = new THREE.Mesh(foundationGeometry, foundationMaterial);
     foundationMesh.castShadow = true;
     foundationMesh.receiveShadow = true;
-    /* @tweakable Set to true to enable collision for the amphitheater seat foundation. */
-    foundationMesh.userData.isBarrier = false;
+    if (SEAT_FOUNDATION_COLLISION_ENABLED) {
+        foundationMesh.userData.isBarrier = true;
+    }
     seatingGroup.add(foundationMesh);
+
+    if (DEBUG_FOUNDATION_COLLISION_BOX) {
+        const wireframeGeometry = new THREE.WireframeGeometry(foundationGeometry);
+        const line = new THREE.LineSegments(wireframeGeometry);
+        line.material.color.set(DEBUG_FOUNDATION_COLLISION_BOX_COLOR);
+        line.material.depthTest = false;
+        line.material.opacity = 0.5;
+        line.material.transparent = true;
+        line.userData.isDebugBorder = true;
+        line.visible = false;
+        seatingGroup.add(line);
+    }
 
     /* @tweakable The width of an individual seat. */
     const seatWidth = 0.8;
@@ -119,27 +146,28 @@ export function createAmphitheatreSeating(group, stoneColor) {
         
         if (SEAT_COLLISION_ENABLED) {
             seatRow.userData.isSeatRow = true;
-            // Normalize angles to be in the [0, 2*PI] range and apply parent rotation for consistent collision checks.
-            /* @tweakable An offset in degrees to adjust the collision angles of the amphitheater seats. Can be used to fine-tune collision detection if it feels off. */
-            const collisionAngleOffset = 0;
-            const rotationRad = THREE.MathUtils.degToRad(seatingRotation + collisionAngleOffset);
-            let normalizedStartAngle = startAngle + rotationRad;
-            let normalizedEndAngle = endAngle + rotationRad;
-
-            // Ensure angles are within [0, 2*PI]
-            while(normalizedStartAngle < 0) normalizedStartAngle += 2 * Math.PI;
-            while(normalizedEndAngle < 0) normalizedEndAngle += 2 * Math.PI;
-            normalizedStartAngle = normalizedStartAngle % (2 * Math.PI);
-            normalizedEndAngle = normalizedEndAngle % (2 * Math.PI);
-
             seatRow.userData.seatRowData = {
-                innerRadius,
-                outerRadius,
-                startAngle: normalizedStartAngle,
-                endAngle: normalizedEndAngle
+                innerRadius: innerRadius,
+                outerRadius: outerRadius,
+                startAngle: startAngle,
+                endAngle: endAngle
             };
+            /* @tweakable Set to true to allow players to step up onto seats without jumping. */
+            seatRow.userData.isStair = true;
         }
         seatingGroup.add(seatRow);
+
+        if (DEBUG_SEAT_COLLISION_BOX) {
+            const wireframeGeometry = new THREE.WireframeGeometry(geometry);
+            const line = new THREE.LineSegments(wireframeGeometry);
+            line.material.color.set(DEBUG_SEAT_COLLISION_BOX_COLOR);
+            line.material.depthTest = false;
+            line.material.opacity = 0.5;
+            line.material.transparent = true;
+            line.userData.isDebugBorder = true;
+            line.visible = false;
+            seatingGroup.add(line);
+        }
         
         // Add individual seats on top of the tier
         const seatRadius = innerRadius + rowDepth / 2;
@@ -172,12 +200,24 @@ export function createAmphitheatreSeating(group, stoneColor) {
             seatBase.position.y = seatBaseHeight / 2;
             seatBase.castShadow = true;
             seat.add(seatBase);
+            if (DEBUG_INDIVIDUAL_SEAT_BOX) {
+                const seatBaseHelper = new THREE.BoxHelper(seatBase, DEBUG_INDIVIDUAL_SEAT_BOX_COLOR);
+                seatBaseHelper.userData.isDebugBorder = true;
+                seatBaseHelper.visible = false;
+                seat.add(seatBaseHelper);
+            }
 
             const seatBack = new THREE.Mesh(seatBackGeom, seatMaterial);
             seatBack.position.y = backrestHeight / 2;
             seatBack.position.z = -seatDepth / 2 + backrestThickness / 2;
             seatBack.castShadow = true;
             seat.add(seatBack);
+            if (DEBUG_INDIVIDUAL_SEAT_BOX) {
+                const seatBackHelper = new THREE.BoxHelper(seatBack, DEBUG_INDIVIDUAL_SEAT_BOX_COLOR);
+                seatBackHelper.userData.isDebugBorder = true;
+                seatBackHelper.visible = false;
+                seat.add(seatBackHelper);
+            }
             
             seatingGroup.add(seat);
 

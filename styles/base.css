@@ -93,6 +93,17 @@ body {
     font-size: 1.1em;
 }
 
+#help-button {
+  position: fixed;
+  /* @tweakable The top position of the help button. */
+  top: 150px;
+  /* @tweakable The right position of the help button. */
+  right: 20px;
+  z-index: 1000;
+  touch-action: none;
+  cursor: pointer;
+}
+
 #dev-toggle-button {
   position: fixed;
   /* @tweakable Position of the dev-mode toggle button. */

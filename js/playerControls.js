@@ -45,17 +45,27 @@ export class PlayerControls {
     this.lastSpacebarTime = 0;
     /* @tweakable The time in milliseconds between spacebar presses to trigger flight mode. */
     this.doubleTapThreshold = 300;
+    this.instructionsDiv = null;
     
     // Player state
     this.velocity = new THREE.Vector3();
     this.canJump = true;
 
     // Load control preference from localStorage
+    const currentUser = options.currentUser;
     const savedControlMode = localStorage.getItem(MOBILE_CONTROLS_STORAGE_KEY);
     if (savedControlMode !== null) {
       this.isMobile = savedControlMode === 'true';
     } else {
       this.isMobile = FORCE_MOBILE_MODE || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    }
+    
+    /* @tweakable The username to default to desktop controls for. */
+    const desktopDefaultUsername = "lordtsarcasm";
+
+    // Override for specific user
+    if (currentUser && currentUser.username === desktopDefaultUsername) {
+        this.isMobile = false;
     }
     
     // Add mobile-device class to body for CSS styling
@@ -119,6 +129,48 @@ export class PlayerControls {
         this.velocity.y = 0; // Stop any falling/jumping momentum
         this.canJump = false; 
     }
+  }
+
+  showInstructions() {
+    if (this.isMobile || !this.instructionsDiv) return;
+
+    this.instructionsDiv.style.display = 'block';
+
+    const createHelpButton = () => {
+      let helpButton = document.getElementById('help-button');
+      if (helpButton) {
+        helpButton.style.display = 'flex';
+        return;
+      }
+
+      helpButton = document.createElement('div');
+      helpButton.id = 'help-button';
+      helpButton.classList.add('circle-button');
+      helpButton.setAttribute('data-tooltip', 'Help');
+      /* @tweakable The URL for the help icon. */
+      const helpIconUrl = "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Images/Icons/help_icon.png";
+      /* @tweakable The size of the help icon. */
+      const helpIconSize = "28px";
+      helpButton.innerHTML = `<img src="${helpIconUrl}" alt="Help" style="width: ${helpIconSize}; height: ${helpIconSize};">`;
+      document.getElementById('ui-container').appendChild(helpButton);
+
+      helpButton.addEventListener('click', () => {
+        this.instructionsDiv.style.display = this.instructionsDiv.style.display === 'none' ? 'block' : 'none';
+      });
+
+      this.instructionsDiv.addEventListener('click', () => {
+        this.instructionsDiv.style.display = 'none';
+      });
+    };
+
+    /* @tweakable Delay in milliseconds before automatically hiding the instructions after they appear. */
+    const autoHideInstructionsDelay = 2000;
+    setTimeout(() => {
+      if (this.instructionsDiv) {
+        this.instructionsDiv.style.display = 'none';
+      }
+      if(this.createHelpButton) this.createHelpButton();
+    }, autoHideInstructionsDelay);
   }
 
   toggleMobileControls() {

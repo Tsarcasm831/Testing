@@ -89,7 +89,7 @@ export class CollisionManager {
         blockMeshes.forEach(block => {
             let result;
             if (block.userData.isSeatRow) {
-                result = this._checkCollisionWithSeatRow(currentPosition, finalPosition, finalVelocity, playerRadius, playerHeight, block);
+                result = this._checkCollisionWithSeatRow(currentPosition, finalPosition, velocity, playerRadius, playerHeight, block);
             } else {
                 result = this._checkCollisionWithBlock(currentPosition, finalPosition, finalVelocity, playerRadius, playerHeight, block);
             }
@@ -99,7 +99,7 @@ export class CollisionManager {
                 finalPosition.y = result.newY;
                 finalVelocity.y = 0;
                 canJump = true;
-            } else if (result.collided) {
+            } else if (result.collided && !block.userData.isSeatRow) {
                 // When colliding, revert the player's position to the last known non-colliding state
                 // and then adjust based on which axis has less overlap to simulate sliding.
                 const boundingBox = new THREE.Box3().setFromObject(block);
@@ -129,6 +129,11 @@ export class CollisionManager {
                         finalPosition.x = currentPosition.x;
                     }
                 }
+            } else if (result.collided && block.userData.isSeatRow) {
+                 // The new logic in _checkCollisionWithSeatRow now handles this better.
+                 // We simply stop horizontal movement if a side collision is detected.
+                 finalPosition.x = currentPosition.x;
+                 finalPosition.z = currentPosition.z;
             }
         });
         
@@ -242,33 +247,30 @@ export class CollisionManager {
         block.parent.getWorldPosition(amphitheatreCenter);
         
         const playerToAmphiCenter = new THREE.Vector2(newPosition.x - amphitheatreCenter.x, newPosition.z - amphitheatreCenter.z);
-        const distSq = playerToAmphiCenter.lengthSq();
+        const dist = playerToAmphiCenter.length();
 
         // More accurate radial check
-        const innerRadius = seatData.innerRadius - playerRadius - SEAT_INNER_RADIUS_PADDING;
-        const outerRadius = seatData.outerRadius + playerRadius + SEAT_OUTER_RADIUS_PADDING;
-        if (distSq < innerRadius * innerRadius || distSq > outerRadius * outerRadius) {
-            return { collided: false, standingOnBlock: false, newY: newPosition.y };
-        }
+        /* @tweakable Inner collision radius for seats, accounting for player size. */
+        const innerRadius = seatData.innerRadius - playerRadius - SEAT_SIDE_COLLISION_PADDING;
+        /* @tweakable Outer collision radius for seats, accounting for player size. */
+        const outerRadius = seatData.outerRadius + playerRadius + SEAT_SIDE_COLLISION_PADDING;
         
         // Angular check
         let playerAngle = Math.atan2(playerToAmphiCenter.y, playerToAmphiCenter.x);
+
+        const amphitheatreRotation = block.parent.rotation.y;
+        playerAngle -= amphitheatreRotation;
+
         if (playerAngle < 0) playerAngle += 2 * Math.PI;
 
         const startAngle = seatData.startAngle;
         const endAngle = seatData.endAngle;
 
         let inAngle = false;
-        // The startAngle and endAngle are now always in [0, 2*PI]
         if (startAngle < endAngle) {
-            // Normal case, e.g. start at 270 deg, end at 90 deg (crossing 360/0)
             inAngle = playerAngle >= startAngle && playerAngle <= endAngle;
-        } else { // Handles wrap around (e.g. startAngle is 300deg, endAngle is 60deg)
+        } else { // Wraps around
             inAngle = playerAngle >= startAngle || playerAngle <= endAngle;
-        }
-
-        if (!inAngle) {
-            return { collided: false, standingOnBlock: false, newY: newPosition.y };
         }
         
         // Vertical collision check
@@ -280,7 +282,10 @@ export class CollisionManager {
         if (
             velocity.y <= 0 &&
             currentPosition.y >= seatTopY - STEP_HEIGHT && // Can step up
-            newPosition.y <= seatTopY + SEAT_LANDING_TOLERANCE // Feet are at or below the top
+            newPosition.y <= seatTopY + SEAT_LANDING_TOLERANCE && // Feet are at or below the top
+            dist >= seatData.innerRadius - SEAT_INNER_RADIUS_PADDING &&
+            dist <= seatData.outerRadius + SEAT_OUTER_RADIUS_PADDING &&
+            inAngle
         ) {
             standingOnBlock = true;
             newY = seatTopY;
@@ -290,7 +295,10 @@ export class CollisionManager {
             newPosition.y < seatTopY && // player bottom is below seat top
             newPosition.y + playerHeight > seatBottomY // player top is above seat bottom
         ) {
-            collided = true;
+            // If vertically aligned for side collision, check if we are outside the valid area
+            if (!inAngle || dist < innerRadius || dist > outerRadius) {
+                collided = true;
+            }
         }
 
         return { collided, standingOnBlock, newY };

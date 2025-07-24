@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { PlayerControls } from '../playerControls.js';
 import { createPlayerModel } from '../playerModel.js';
 
-export function setupPlayer(game, playerName, initialPosition) {
+export function setupPlayer(game, playerName, initialPosition, currentUser) {
     game.playerModel = createPlayerModel(THREE, playerName);
     game.scene.add(game.playerModel);
 
@@ -11,10 +11,12 @@ export function setupPlayer(game, playerName, initialPosition) {
         initialPosition: initialPosition,
         playerModel: game.playerModel,
         terrain: null,
-        collisionManager: game.collisionManager
+        collisionManager: game.collisionManager,
+        currentUser: currentUser
     });
 
     game.camera = game.playerControls.getCamera();
     const listener = new THREE.AudioListener();
     game.camera.add(listener);
 }
+
