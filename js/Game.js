@@ -17,6 +17,7 @@ import { setupBuildTools } from './game/setupBuildTools.js';
 import { setupMultiplayer } from './game/setupMultiplayer.js';
 import { setupUI } from './game/setupUI.js';
 import { setupEventListeners } from './game/setupEventListeners.js';
+import { updateDayNightCycle } from './game/updateDayNightCycle.js';
 
 export class Game {
     constructor() {
@@ -40,6 +41,8 @@ export class Game {
         this.dirLight = null;
         this.grass = null;
         this.sun = new THREE.Vector3();
+        this.sky = null;
+        this.ambientLight = null;
     }
 
     async init() {
@@ -188,6 +191,8 @@ export class Game {
         requestAnimationFrame(() => this.animate());
         const time = performance.now() * 0.001;
         const currentTime = Date.now();
+
+        updateDayNightCycle(this);
         
         this.playerControls.update();
         if (this.uiManager) this.uiManager.update();

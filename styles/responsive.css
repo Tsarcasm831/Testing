@@ -116,3 +116,7 @@
   width: 90%;
   height: 60%;
 }
+.mobile-device #clock-container {
+    top: 20px;
+    left: 20px;
+}
