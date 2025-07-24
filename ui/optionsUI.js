@@ -76,6 +76,7 @@ export class OptionsUI {
                         <button class="option-button" id="replace-wireframes-button" data-tooltip="Replace wireframe NPCs with animated models">Use Animated Wireframes</button>
                         <button class="option-button" id="replace-aliens-button" data-tooltip="Replace alien NPCs with animated models">Use Animated Aliens</button>
                         <button class="option-button" id="replace-shopkeeper-button" data-tooltip="Replace shopkeeper NPC with an animated model">Use Animated Shopkeeper</button>
+                        <button class="option-button" id="replace-sprites-button" data-tooltip="Replace sprite NPCs with animated models">Use Animated Sprites</button>
                         <button class="option-button" id="replace-ogres-button" data-tooltip="Replace ogre NPCs with animated models">Use Animated Ogres</button>
                         <button class="option-button" id="replace-knights-button" data-tooltip="Replace knight NPCs with animated models">Use Animated Knights</button>
                     </div>

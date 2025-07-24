@@ -1,6 +1,6 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Downloader } from './downloader.js';
-import { setupAnimatedPlayer, setupAnimatedRobot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupEyebot, setupAnimatedShopkeeper, setupAnimatedOgre, setupAnimatedKnight } from './animationSetup.js';
+import { setupAnimatedPlayer, setupAnimatedRobot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupEyebot, setupAnimatedShopkeeper, setupAnimatedOgre, setupAnimatedKnight, setupAnimatedSprite } from './animationSetup.js';
 
 export class AssetReplacementManager {
     /* @tweakable The number of models to parse in parallel. Higher values may be faster but use more memory and CPU. */
@@ -56,6 +56,12 @@ export class AssetReplacementManager {
                 clipNames: ['idle', 'walk', 'listen'],
                 setupFn: setupAnimatedShopkeeper,
                 applyFn: (modelData) => this.dependencies.npcManager.useAnimatedShopkeepers(modelData)
+            },
+            "sprite": {
+                assetNames: ["Sprite Idle Animation", "Sprite Walking Animation", "Sprite Running Animation", "Sprite Listening Animation"],
+                clipNames: ["idle", "walk", "run", "listen"],
+                setupFn: setupAnimatedSprite,
+                applyFn: (modelData) => this.dependencies.npcManager.useAnimatedSprites(modelData)
             },
             'ogre': {
                 assetNames: ['Ogre Idle Animation', 'Ogre Walking Animation', 'Ogre Running Animation', 'Ogre Listening Animation'],

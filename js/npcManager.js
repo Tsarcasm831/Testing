@@ -95,6 +95,13 @@ export class NPCManager {
             this.npcSpawner.replaceNpcModels('knight');
         }
     }
+    useAnimatedSprites(data, replaceExisting = true) {
+        this.npcSpawner.setAnimatedData("sprite", data);
+        if (replaceExisting) {
+            this.npcSpawner.replaceNpcModels("sprite");
+        }
+    }
+
 
     activateZone(zoneKey) {
         if (!this.npcSpawner) return; // Don't spawn if spawner isn't ready

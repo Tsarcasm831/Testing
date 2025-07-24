@@ -43,6 +43,9 @@ export function setupAssetControls(modal, assetReplacementManager) {
     modal.querySelector('#replace-ogres-button').addEventListener('click', () => {
         assetReplacementManager.replaceModel('ogre');
     });
+    modal.querySelector('#replace-sprites-button').addEventListener('click', () => {
+        assetReplacementManager.replaceModel('sprite');
+    });
     modal.querySelector('#replace-knights-button').addEventListener('click', () => {
         assetReplacementManager.replaceModel('knight');
     });
