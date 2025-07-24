@@ -232,13 +232,16 @@ export function setupAnimatedOgre(model, idleClip, walkClip, runClip, listenClip
     return model;
 }
 
-export function setupAnimatedKnight(model, idleClip, walkClip, runClip, listenClip) {
+export function setupAnimatedKnight(model, idleClip, walkClip, runClip, listenClip, cheerClip, cheer1Clip) {
     idleClip.name = 'idle';
     walkClip.name = 'walk';
     runClip.name = 'run';
     listenClip.name = 'listen';
 
-    model.animations = [idleClip, walkClip, runClip, listenClip];
+    cheerClip.name = 'cheer';
+    cheer1Clip.name = 'cheer1';
+
+    model.animations = [idleClip, walkClip, runClip, listenClip, cheerClip, cheer1Clip];
 
     const mixer = new THREE.AnimationMixer(model);
     const actions = {
@@ -246,6 +249,8 @@ export function setupAnimatedKnight(model, idleClip, walkClip, runClip, listenCl
         walk: mixer.clipAction(walkClip),
         run: mixer.clipAction(runClip),
         listen: mixer.clipAction(listenClip),
+        cheer: mixer.clipAction(cheerClip),
+        cheer1: mixer.clipAction(cheer1Clip),
     };
     
     /* @tweakable Duration for fading between knight animations in seconds. */

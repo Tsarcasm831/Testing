@@ -262,7 +262,15 @@ export class NPCSpawner {
                     setupAnimatedOgre(newModel, this.animatedData.ogre.idleClip, this.animatedData.ogre.walkClip, this.animatedData.ogre.runClip, this.animatedData.ogre.listenClip);
                 }
                 else if (npcType === 'knight') {
-                    setupAnimatedKnight(newModel, this.animatedData.knight.idleClip, this.animatedData.knight.walkClip, this.animatedData.knight.runClip, this.animatedData.knight.listenClip);
+                    setupAnimatedKnight(
+                        newModel,
+                        this.animatedData.knight.idleClip,
+                        this.animatedData.knight.walkClip,
+                        this.animatedData.knight.runClip,
+                        this.animatedData.knight.listenClip,
+                        this.animatedData.knight.cheerClip,
+                        this.animatedData.knight.cheer1Clip
+                    );
                 }
             }
             

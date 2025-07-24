@@ -64,8 +64,15 @@ export class AssetReplacementManager {
                 applyFn: (modelData) => this.dependencies.npcManager.useAnimatedOgres(modelData)
             },
             'knight': {
-                assetNames: ['Knight Idle Animation', 'Knight Walking Animation', 'Knight Running Animation', 'Knight Listening Animation'],
-                clipNames: ['idle', 'walk', 'run', 'listen'],
+                assetNames: [
+                    'Knight Idle Animation',
+                    'Knight Walking Animation',
+                    'Knight Running Animation',
+                    'Knight Listening Animation',
+                    'Knight Cheer with Both Hands Animation',
+                    'Knight Cheer with Both Hands 1 Animation'
+                ],
+                clipNames: ['idle', 'walk', 'run', 'listen', 'cheer', 'cheer1'],
                 setupFn: setupAnimatedKnight,
                 applyFn: (modelData) => this.dependencies.npcManager.useAnimatedKnights(modelData)
             }

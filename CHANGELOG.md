@@ -3,6 +3,7 @@
 ## 2025-07-23
 - 2214 Break Game.js into smaller initialization modules for easier maintenance
 - 0000 Rewrite mats.json to load building modules from `js/mats`
+- 1619 Add knight cheer animations to assets and update armored knight setup
 
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).
