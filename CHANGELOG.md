@@ -3,6 +3,7 @@
 ## 2025-07-24
 - 1609 Added kitbashing material generator and regenerated js/mats modules
 - 1504 Split amphitheatre.js into smaller modules
+- 1551 Added houseItems.js with 25 kitbashed furniture items
 
 
 ## Guidelines for future updates
