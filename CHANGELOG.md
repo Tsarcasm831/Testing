@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2025-07-23
+- 1621 Added "Use Animated Sprites" option with new sprite models and animations
 - 2214 Break Game.js into smaller initialization modules for easier maintenance
 - 1614 Move ground textures into assets/ground_textures and update references
 - 0000 Rewrite mats.json to load building modules from `js/mats`

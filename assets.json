@@ -236,5 +236,26 @@
       "name": "Knight Listening Animation",
       "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored%20Knight/Animation_Listening_Gesture_withSkin.glb"
     }
+    ,
+    {
+      "type": "model",
+      "name": "Sprite Idle Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Sprite/Animation_Idle_6_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Sprite Walking Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Sprite/Animation_Walking_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Sprite Running Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Sprite/Animation_Running_withSkin.glb"
+    },
+    {
+      "type": "model",
+      "name": "Sprite Listening Animation",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Sprite/Animation_Listening_Gesture_withSkin.glb"
+    }
   ]
 }

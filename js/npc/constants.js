@@ -19,6 +19,8 @@ export const OGRE_SPAWN_CHANCE = 0.15;
 /* @tweakable The chance (from 0 to 1) that a spawned NPC will be a knight when animated knights are enabled. */
 export const KNIGHT_SPAWN_CHANCE = 0.15;
 /* @tweakable Adjectives to describe NPCs. An adjective is randomly picked from this list. */
+/* @tweakable The chance (from 0 to 1) that a spawned NPC will be a sprite when animated sprites are enabled. */
+export const SPRITE_SPAWN_CHANCE = 0.2;
 export const NPC_ADJECTIVES = ["Wandering", "Mysterious", "Lost", "Curious", "Silent", "Ancient", "Jolly", "Grumpy"];
 /* @tweakable Min NPCs per zone. */
 export const MIN_NPCS_PER_ZONE = 1;
@@ -42,6 +44,8 @@ export const SHOPKEEPER_NPC_SCALE = 1.0;
 export const OGRE_NPC_SCALE = 1.2;
 /* @tweakable The scale of the animated knight NPCs. */
 export const KNIGHT_NPC_SCALE = 1.0;
+/* @tweakable The scale of the animated sprite NPCs. */
+export const SPRITE_NPC_SCALE = 1.0;
 /* @tweakable The scale of the eyebot NPCs. */
 export const EYEBOT_NPC_SCALE = 0.25;
 /* @tweakable Base height of eyebots above terrain. */
