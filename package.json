@@ -6,6 +6,9 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "echo \"No tests specified\" && exit 0"
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }

@@ -232,11 +232,47 @@ export function setupAnimatedOgre(model, idleClip, walkClip, runClip, listenClip
     return model;
 }
 
-export function setupAnimatedKnight(model, idleClip, walkClip, runClip, listenClip) {
+export function setupAnimatedKnight(model, idleClip, walkClip, runClip, listenClip, cheerClip, cheer1Clip) {
     idleClip.name = 'idle';
     walkClip.name = 'walk';
     runClip.name = 'run';
     listenClip.name = 'listen';
+
+    cheerClip.name = 'cheer';
+    cheer1Clip.name = 'cheer1';
+
+    model.animations = [idleClip, walkClip, runClip, listenClip, cheerClip, cheer1Clip];
+
+    const mixer = new THREE.AnimationMixer(model);
+    const actions = {
+        idle: mixer.clipAction(idleClip),
+        walk: mixer.clipAction(walkClip),
+        run: mixer.clipAction(runClip),
+        listen: mixer.clipAction(listenClip),
+        cheer: mixer.clipAction(cheerClip),
+        cheer1: mixer.clipAction(cheer1Clip),
+    };
+    
+    /* @tweakable Duration for fading between knight animations in seconds. */
+    model.userData.animationFadeDuration = 0.4;
+    actions.idle.play();
+
+    /* @tweakable Rotation offset for the animated knight GLB model in radians. */
+    const rotationOffset = 0;
+    model.userData.rotationOffset = rotationOffset;
+
+    model.userData.mixer = mixer;
+    model.userData.actions = actions;
+    model.userData.isAnimatedGLB = true;
+
+    return model;
+}
+
+export function setupAnimatedSprite(model, idleClip, walkClip, runClip, listenClip) {
+    idleClip.name = "idle";
+    walkClip.name = "walk";
+    runClip.name = "run";
+    listenClip.name = "listen";
 
     model.animations = [idleClip, walkClip, runClip, listenClip];
 
@@ -247,12 +283,10 @@ export function setupAnimatedKnight(model, idleClip, walkClip, runClip, listenCl
         run: mixer.clipAction(runClip),
         listen: mixer.clipAction(listenClip),
     };
-    
-    /* @tweakable Duration for fading between knight animations in seconds. */
+
     model.userData.animationFadeDuration = 0.4;
     actions.idle.play();
 
-    /* @tweakable Rotation offset for the animated knight GLB model in radians. */
     const rotationOffset = 0;
     model.userData.rotationOffset = rotationOffset;
 

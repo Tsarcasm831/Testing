@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { createPlayerModel } from '../playerModel.js';
-import { setupAnimatedRobot, setupEyebot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupAnimatedShopkeeper, setupAnimatedOgre, setupAnimatedKnight } from '../animationSetup.js';
+import { setupAnimatedRobot, setupEyebot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupAnimatedShopkeeper, setupAnimatedOgre, setupAnimatedKnight, setupAnimatedSprite } from '../animationSetup.js';
 import { presetCharacters } from '../characters/presets.js';
 import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js';
 import { NPC } from './NPC.js';
@@ -10,6 +10,7 @@ import {
     EYEBOT_SPAWN_CHANCE,
     OGRE_SPAWN_CHANCE,
     KNIGHT_SPAWN_CHANCE,
+    SPRITE_SPAWN_CHANCE,
     NPC_ADJECTIVES,
     MIN_NPCS_PER_ZONE,
     MAX_NPCS_PER_ZONE,
@@ -20,6 +21,7 @@ import {
     SHOPKEEPER_NPC_SCALE,
     OGRE_NPC_SCALE,
     KNIGHT_NPC_SCALE,
+    SPRITE_NPC_SCALE,
     EYEBOT_NPC_SCALE,
     EYEBOT_FLY_HEIGHT,
     FIX_FRUSTUM_CULLING_BUG
@@ -110,6 +112,14 @@ export class NPCSpawner {
                 npcModel.traverse(c => { c.castShadow = true; });
                 npcModel.scale.set(CHICKEN_NPC_SCALE, CHICKEN_NPC_SCALE, CHICKEN_NPC_SCALE);
             }
+            else if (this.animatedData.sprite && this.animatedData.sprite.model && Math.random() < SPRITE_SPAWN_CHANCE) {
+                preset = presetCharacters.find(p => p.id === "sprite");
+                const spriteData = this.animatedData.sprite;
+                npcModel = SkeletonUtils.clone(spriteData.model);
+                spriteData.setupFn(npcModel, spriteData.idleClip, spriteData.walkClip, spriteData.runClip, spriteData.listenClip);
+                npcModel.name = `${adjective} Sprite`;
+                npcModel.traverse(c => { c.castShadow = true; });
+            }
             else if (this.animatedData.ogre && this.animatedData.ogre.model && Math.random() < OGRE_SPAWN_CHANCE) {
                 preset = presetCharacters.find(p => p.id === 'ogre');
                 const ogreData = this.animatedData.ogre;
@@ -150,6 +160,9 @@ export class NPCSpawner {
                 }
                 if (this.animatedData.knight) {
                     availablePresets = availablePresets.filter(p => p.id !== 'knight');
+                }
+                if (this.animatedData.sprite) {
+                    availablePresets = availablePresets.filter(p => p.id !== 'sprite');
                 }
                 
                 // Exclude the unique shopkeeper from random spawning
@@ -262,7 +275,15 @@ export class NPCSpawner {
                     setupAnimatedOgre(newModel, this.animatedData.ogre.idleClip, this.animatedData.ogre.walkClip, this.animatedData.ogre.runClip, this.animatedData.ogre.listenClip);
                 }
                 else if (npcType === 'knight') {
-                    setupAnimatedKnight(newModel, this.animatedData.knight.idleClip, this.animatedData.knight.walkClip, this.animatedData.knight.runClip, this.animatedData.knight.listenClip);
+                    setupAnimatedKnight(
+                        newModel,
+                        this.animatedData.knight.idleClip,
+                        this.animatedData.knight.walkClip,
+                        this.animatedData.knight.runClip,
+                        this.animatedData.knight.listenClip,
+                        this.animatedData.knight.cheerClip,
+                        this.animatedData.knight.cheer1Clip
+                    );
                 }
             }
             
@@ -276,6 +297,7 @@ export class NPCSpawner {
                 case 'wireframe': newModel.name = `${adjective} Wireframe`; scale = WIREFRAME_NPC_SCALE; break;
                 case 'alien': newModel.name = `${adjective} Alien`; scale = ALIEN_NPC_SCALE; break;
                 case 'shopkeeper': newModel.name = `Shopkeeper`; scale = SHOPKEEPER_NPC_SCALE; break;
+                case 'sprite': newModel.name = `${adjective} Sprite`; scale = SPRITE_NPC_SCALE; break;
                 case 'ogre': newModel.name = `${adjective} Ogre`; scale = OGRE_NPC_SCALE; break;
                 case 'knight': newModel.name = `${adjective} Knight`; scale = KNIGHT_NPC_SCALE; break;
             }
