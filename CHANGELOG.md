@@ -1,7 +1,9 @@
 # Changelog
 
 ## 2025-07-24
+- 1609 Added kitbashing material generator and regenerated js/mats modules
 - 1504 Split amphitheatre.js into smaller modules
+
 
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).
