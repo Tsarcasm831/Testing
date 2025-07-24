@@ -8,6 +8,7 @@ export function setupScene(game) {
 
     // Realistic Sky
     const sky = new Sky();
+    game.sky = sky;
     /* @tweakable The scale of the sky dome. It should be large enough to encompass the entire scene. */
     const skyScale = 5000;
     sky.scale.setScalar(skyScale);
@@ -66,6 +67,7 @@ export function setupScene(game) {
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     game.scene.add(ambientLight);
+    game.ambientLight = ambientLight;
 
     const uniforms = sky.material.uniforms;
     uniforms['turbidity'].value = turbidity;

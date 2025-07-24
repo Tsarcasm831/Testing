@@ -2,6 +2,7 @@
 
 ## 2025-07-23
 - 2214 Break Game.js into smaller initialization modules for easier maintenance
+- 1617 Add Denver-based day/night clock with dynamic sun lighting
 - 0000 Rewrite mats.json to load building modules from `js/mats`
 
 ## Guidelines for future updates

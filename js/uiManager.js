@@ -9,6 +9,7 @@ import { MapUI } from '../ui/mapUI.js';
 import { OptionsUI } from '../ui/optionsUI.js';
 import { CompassUI } from '../ui/compassUI.js';
 import { MusicUI } from '../ui/musicUI.js';
+import { ClockUI } from '../ui/clockUI.js';
 
 export class UIManager {
     constructor(dependencies) {
@@ -18,6 +19,7 @@ export class UIManager {
         this.optionsUI = null;
         this.chatUI = null;
         this.compassUI = null;
+        this.clockUI = null;
         this.tooltipElement = null;
     }
 
@@ -46,6 +48,9 @@ export class UIManager {
 
         this.compassUI = new CompassUI(this.dependencies);
         this.compassUI.create();
+
+        this.clockUI = new ClockUI(this.dependencies);
+        this.clockUI.create();
 
         this.initTooltip();
 
@@ -107,6 +112,9 @@ export class UIManager {
         }
         if (this.compassUI) {
             this.compassUI.update();
+        }
+        if (this.clockUI) {
+            this.clockUI.update();
         }
     }
 }
