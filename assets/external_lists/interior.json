@@ -1,0 +1,99 @@
+{
+  "schema": {
+    "type": "string - category of asset such as image, model, audio or script",
+    "name": "string - human friendly asset name",
+    "url": "string - relative path or remote URL to download the asset"
+  },
+  "assets": [
+    {
+      "type": "image",
+      "name": "carpet albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/height.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "ceramicTile albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/ceramicTile/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "ceramicTile ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/ceramicTile/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "ceramicTile normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/ceramicTile/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "ceramicTile roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/ceramicTile/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "hardwood albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/hardwood/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "hardwood ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/hardwood/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "hardwood normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/hardwood/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "hardwood roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/hardwood/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "plaster albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/plaster/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "plaster ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/plaster/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "plaster normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/plaster/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "plaster roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/plaster/roughness.png"
+    }
+  ]
+}
