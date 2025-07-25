@@ -44,6 +44,31 @@ export async function addAdminTab(dependencies, modal) {
         `;
         contentContainer.appendChild(adminContent);
 
+        /* @tweakable Title for the lyrics editor section in the admin panel. */
+        const lyricsEditorTitle = 'Amphitheater Lyrics Editor';
+        /* @tweakable Instructions for the lyrics editor. */
+        const lyricsEditorInstructions = 'Edit the lyrics JSON below. The format is an array of objects, each with a "time" (in seconds) and "text" property.';
+        /* @tweakable Text for the save button in the lyrics editor. */
+        const lyricsSaveButtonText = 'Save Lyrics';
+        
+        const lyricsTab = document.createElement('button');
+        lyricsTab.className = 'options-tab admin-tab';
+        lyricsTab.dataset.tab = 'lyrics';
+        lyricsTab.textContent = 'Lyrics';
+        tabsContainer.appendChild(lyricsTab);
+
+        const lyricsContent = document.createElement('div');
+        lyricsContent.id = 'options-tab-lyrics';
+        lyricsContent.className = 'options-tab-content';
+        lyricsContent.innerHTML = `
+            <h3>${lyricsEditorTitle}</h3>
+            <p style="font-size: 14px; color: var(--white-70); margin-top: -10px; margin-bottom: 10px;">${lyricsEditorInstructions}</p>
+            <textarea id="lyrics-textarea" style="width: 100%; height: 250px; background-color: #222; color: white; border: 1px solid #555; border-radius: 4px; padding: 5px; font-family: monospace; font-size: 12px;"></textarea>
+            <button id="save-lyrics-button" class="option-button" style="margin-top: 10px;">${lyricsSaveButtonText}</button>
+            <div id="lyrics-status" style="margin-top: 5px; color: #4CAF50;"></div>
+        `;
+        contentContainer.appendChild(lyricsContent);
+
         adminContent.querySelector('#save-youtube-url').addEventListener('click', () => {
             const url = adminContent.querySelector('#youtube-url-input').value;
             if (dependencies.room) {
@@ -123,6 +148,64 @@ export async function addAdminTab(dependencies, modal) {
             });
         }
 
+        // Lyrics Feature Logic
+        if (room) {
+            const lyricsTextarea = lyricsContent.querySelector('#lyrics-textarea');
+            const saveLyricsButton = lyricsContent.querySelector('#save-lyrics-button');
+            const lyricsStatus = lyricsContent.querySelector('#lyrics-status');
+            let currentLyricsRecord = null;
+            const lyricsCollection = room.collection('lyrics');
+
+            lyricsCollection.subscribe(lyricsData => {
+                if (lyricsData && lyricsData.length > 0) {
+                    currentLyricsRecord = lyricsData[0];
+                     if (document.activeElement !== lyricsTextarea) {
+                        lyricsTextarea.value = JSON.stringify(currentLyricsRecord.content, null, 2);
+                    }
+                } else {
+                    currentLyricsRecord = null;
+                }
+            });
+
+            saveLyricsButton.addEventListener('click', async () => {
+                /* @tweakable Message shown when saving lyrics. */
+                const savingLyricsMessage = 'Saving lyrics...';
+                /* @tweakable Message shown on successful lyrics save. */
+                const savedLyricsMessage = 'Lyrics saved!';
+                /* @tweakable Message shown when there is an error saving lyrics due to invalid JSON. */
+                const invalidJsonMessage = 'Error: Invalid JSON format.';
+                /* @tweakable Generic error message for saving lyrics. */
+                const errorLyricsMessage = 'Error saving lyrics.';
+                /* @tweakable Duration to show status messages in milliseconds. */
+                const lyricsStatusDuration = 2000;
+
+                let lyricsContent;
+                try {
+                    lyricsContent = JSON.parse(lyricsTextarea.value);
+                } catch (e) {
+                    lyricsStatus.textContent = invalidJsonMessage;
+                    lyricsStatus.style.color = '#f44336';
+                    return;
+                }
+
+                lyricsStatus.textContent = savingLyricsMessage;
+                lyricsStatus.style.color = '#4CAF50';
+                try {
+                    if (currentLyricsRecord) {
+                        await lyricsCollection.update(currentLyricsRecord.id, { content: lyricsContent });
+                    } else {
+                        await lyricsCollection.create({ content: lyricsContent });
+                    }
+                    lyricsStatus.textContent = savedLyricsMessage;
+                    setTimeout(() => { lyricsStatus.textContent = ''; }, lyricsStatusDuration);
+                } catch (e) {
+                    lyricsStatus.textContent = errorLyricsMessage;
+                    lyricsStatus.style.color = '#f44336';
+                    console.error("Error saving lyrics:", e);
+                }
+            });
+        }
+
         adminTab.addEventListener('click', (e) => {
             document.querySelectorAll('.options-tab').forEach(t => t.classList.remove('active'));
             e.target.classList.add('active');
@@ -130,6 +213,15 @@ export async function addAdminTab(dependencies, modal) {
                 content.classList.remove('active');
             });
             adminContent.classList.add('active');
+        });
+
+        lyricsTab.addEventListener('click', (e) => {
+            document.querySelectorAll('.options-tab').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+            document.querySelectorAll('.options-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            lyricsContent.classList.add('active');
         });
     }
 }

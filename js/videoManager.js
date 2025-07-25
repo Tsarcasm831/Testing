@@ -11,7 +11,7 @@ const ENABLE_VIDEO_OCCLUSION = false;
 const LYRIC_TIME_OFFSET = 0;
 
 /* @tweakable The lyrics for the song with timestamps in seconds. */
-const lyrics = [
+const defaultLyrics = [
   { time: 2, text: "I'll be the one" },
   { time: 5, text: "Out in the rain" },
   { time: 8, text: "With all of your heart" },
@@ -77,14 +77,45 @@ const lyrics = [
 ];
 
 export class VideoManager {
-    constructor(scene, camera, playerModel) {
+    constructor(scene, camera, playerModel, room) {
         this.scene = scene;
         this.camera = camera;
         this.playerModel = playerModel;
+        this.room = room;
         this.videoOcclusionCheckCounter = 0;
         this.videoAudioUpdateCounter = 0;
         this.currentYoutubeUrl = null;
         this.currentLyricIndex = -1;
+        this.lyrics = [];
+        this.initLyrics();
+    }
+
+    async initLyrics() {
+        if (!this.room) return;
+        const lyricsCollection = this.room.collection('lyrics');
+        
+        lyricsCollection.subscribe(lyricsData => {
+            if (lyricsData && lyricsData.length > 0) {
+                // getList is newest first, so we'll take the first one.
+                this.lyrics = lyricsData[0].content;
+                if (Array.isArray(this.lyrics)) {
+                    this.lyrics.sort((a, b) => a.time - b.time);
+                } else {
+                    this.lyrics = [];
+                }
+            } else {
+                this.lyrics = [];
+            }
+        });
+
+        const existingLyrics = lyricsCollection.getList();
+        // Use a slight delay to ensure subscription has a chance to populate.
+        setTimeout(async () => {
+            if (this.lyrics.length === 0 && (!existingLyrics || existingLyrics.length === 0)) {
+                console.log("No lyrics found in database, creating default set.");
+                await lyricsCollection.create({ content: defaultLyrics });
+            }
+        }, 2000);
     }
 
     setPlayerModel(model) {
@@ -156,12 +187,12 @@ export class VideoManager {
         const videoEl = getPlayer();
         const lyricsCanvas = document.getElementById('lyrics-display');
 
-        if (videoEl && lyricsCanvas && !videoEl.paused) {
+        if (videoEl && lyricsCanvas && !videoEl.paused && this.lyrics && this.lyrics.length > 0) {
             const currentTime = videoEl.currentTime;
             let newLyricIndex = -1;
 
-            for (let i = 0; i < lyrics.length; i++) {
-                if (currentTime >= (lyrics[i].time + LYRIC_TIME_OFFSET)) {
+            for (let i = 0; i < this.lyrics.length; i++) {
+                if (currentTime >= (this.lyrics[i].time + LYRIC_TIME_OFFSET)) {
                     newLyricIndex = i;
                 } else {
                     break;
@@ -170,7 +201,7 @@ export class VideoManager {
             
             if (newLyricIndex !== this.currentLyricIndex) {
                 this.currentLyricIndex = newLyricIndex;
-                const lyricText = this.currentLyricIndex !== -1 ? lyrics[this.currentLyricIndex].text : "";
+                const lyricText = this.currentLyricIndex !== -1 ? this.lyrics[this.currentLyricIndex].text : "";
                 const ctx = lyricsCanvas.getContext('2d');
                 ctx.clearRect(0, 0, lyricsCanvas.width, lyricsCanvas.height);
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';

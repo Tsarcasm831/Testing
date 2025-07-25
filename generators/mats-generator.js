@@ -1,3 +1,4 @@
+/* @tweakable A script to regenerate material modules with kitbashing comments. Run this if you update mats.json */
 const fs = require('fs');
 const path = require('path');
 

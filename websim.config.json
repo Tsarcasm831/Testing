@@ -15,6 +15,12 @@
           "description": "URL of the reference image used for generation, if any."
         }
       },
+      "lyrics": {
+        "content": {
+          "type": "jsonb",
+          "description": "The lyrics array for the amphitheater video."
+        }
+      },
       "admin_notes": {
         "content": {
           "type": "text",
@@ -25,4 +31,3 @@
     "instructions": "This database stores community-created characters. Use the 'spec' field to render characters and 'referenceImage' to show the source image."
   }
 }
-

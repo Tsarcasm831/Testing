@@ -1,7 +1,9 @@
 #clock-container {
     position: fixed;
+    /* @tweakable The top position of the clock UI element. */
     top: 20px;
-    left: 20px;
+    /* @tweakable The left position of the clock UI element. */
+    left: 95px;
     background-color: var(--black-50);
     color: white;
     padding: 4px 8px;

@@ -1,6 +1,8 @@
+import * as THREE from 'three';
 import { addAdminTab } from './options/adminTab.js';
 import { setupAssetControls } from './options/assetControls.js';
 import { applyPerformanceMode, applyShadowQuality } from './options/performance.js';
+import * as houseItems from '../js/items/houseItems.js';
 
 export class OptionsUI {
     constructor(dependencies) {
@@ -11,6 +13,12 @@ export class OptionsUI {
         this.dirLight = dependencies.dirLight;
         this.scene = dependencies.scene;
         this.modal = null;
+        this.itemPreviewScene = null;
+        this.itemPreviewCamera = null;
+        this.itemPreviewRenderer = null;
+        this.itemPreviewModel = null;
+        this.itemPreviewAnimationId = null;
+        this.itemPreviewContainer = null;
     }
 
     create() {
@@ -37,6 +45,7 @@ export class OptionsUI {
             <div id="options-tabs">
                 <button class="options-tab active" data-tab="general">General</button>
                 <button class="options-tab" data-tab="assets">Assets</button>
+                <button class="options-tab" data-tab="items">Items</button>
                 <button class="options-tab" data-tab="about">About</button>
             </div>
             <div id="options-content">
@@ -81,6 +90,13 @@ export class OptionsUI {
                         <button class="option-button" id="replace-knights-button" data-tooltip="Replace knight NPCs with animated models">Use Animated Knights</button>
                     </div>
                 </div>
+                <div id="options-tab-items" class="options-tab-content">
+                    <h3>Item Catalog</h3>
+                    <div class="item-catalog-body">
+                        <div id="item-list-container" class="item-list"></div>
+                        <div id="item-preview-container" class="item-preview"></div>
+                    </div>
+                </div>
                 <div id="options-tab-about" class="options-tab-content">
                     <h3>About</h3>
                     <p>3D Overworld Template v1.9</p>
@@ -119,6 +135,12 @@ export class OptionsUI {
                 });
                 modal.querySelector(`#options-tab-${tabName}`).classList.add('active');
             });
+        });
+
+        modal.querySelector('.options-tab[data-tab="items"]').addEventListener('click', (e) => {
+            if (!this.itemPreviewRenderer) {
+                this.setupItemPreview();
+            }
         });
 
         // Add admin tab if user is lordtsarcasm
@@ -185,6 +207,90 @@ export class OptionsUI {
         setupAssetControls(modal, this.assetReplacementManager);
     }
 
+    setupItemPreview() {
+        this.itemPreviewContainer = this.modal.querySelector('#item-preview-container');
+        this.itemPreviewScene = new THREE.Scene();
+        
+        /* @tweakable The background color of the item preview scene. */
+        const previewBackgroundColor = 0x2a2a2a;
+        this.itemPreviewScene.background = new THREE.Color(previewBackgroundColor);
+
+        this.itemPreviewCamera = new THREE.PerspectiveCamera(50, this.itemPreviewContainer.clientWidth / this.itemPreviewContainer.clientHeight, 0.1, 1000);
+        this.itemPreviewCamera.position.set(0, 1.5, 3);
+        this.itemPreviewCamera.lookAt(0, 0.5, 0);
+
+        this.itemPreviewRenderer = new THREE.WebGLRenderer({ antialias: true });
+        this.itemPreviewRenderer.setSize(this.itemPreviewContainer.clientWidth, this.itemPreviewContainer.clientHeight);
+        this.itemPreviewContainer.appendChild(this.itemPreviewRenderer.domElement);
+        
+        /* @tweakable The intensity of the ambient light in the item preview. */
+        const ambientLightIntensity = 0.8;
+        const ambLight = new THREE.AmbientLight(0xffffff, ambientLightIntensity);
+        this.itemPreviewScene.add(ambLight);
+
+        /* @tweakable The intensity of the directional light in the item preview. */
+        const directionalLightIntensity = 1.5;
+        const dirLight = new THREE.DirectionalLight(0xffffff, directionalLightIntensity);
+        dirLight.position.set(5, 10, 7.5);
+        this.itemPreviewScene.add(dirLight);
+
+        this.populateItemList();
+        this.animateItemPreview();
+    }
+
+    populateItemList() {
+        const listContainer = this.modal.querySelector('#item-list-container');
+        listContainer.innerHTML = '';
+        for (const itemName in houseItems) {
+            if (typeof houseItems[itemName] === 'function') {
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.textContent = itemName.replace('create', '').replace(/([A-Z])/g, ' $1').trim();
+                button.addEventListener('click', () => this.showItemInPreview(itemName));
+                listContainer.appendChild(button);
+            }
+        }
+    }
+
+    showItemInPreview(itemName) {
+        if (this.itemPreviewModel) {
+            this.itemPreviewScene.remove(this.itemPreviewModel);
+        }
+        this.itemPreviewModel = houseItems[itemName]();
+
+        const box = new THREE.Box3().setFromObject(this.itemPreviewModel);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        const maxSize = Math.max(size.x, size.y, size.z);
+        
+        /* @tweakable The scaling factor for items in the preview window to fit them in view. */
+        const scale = 1.5 / maxSize;
+        
+        this.itemPreviewModel.scale.set(scale, scale, scale);
+        this.itemPreviewModel.position.sub(center.multiplyScalar(scale));
+        
+        this.itemPreviewScene.add(this.itemPreviewModel);
+    }
+    
+    animateItemPreview() {
+        this.itemPreviewAnimationId = requestAnimationFrame(this.animateItemPreview.bind(this));
+        if (this.itemPreviewModel) {
+            /* @tweakable The rotation speed of the item in the preview window. */
+            const rotationSpeed = 0.01;
+            this.itemPreviewModel.rotation.y += rotationSpeed;
+        }
+        if(this.itemPreviewRenderer) {
+            this.itemPreviewRenderer.render(this.itemPreviewScene, this.itemPreviewCamera);
+        }
+    }
+
+    stopItemPreviewAnimation() {
+        if (this.itemPreviewAnimationId) {
+            cancelAnimationFrame(this.itemPreviewAnimationId);
+            this.itemPreviewAnimationId = null;
+        }
+    }
+
     toggleModal() {
         if (!this.modal) return;
         const isVisible = this.modal.style.display === 'block';
@@ -192,6 +298,7 @@ export class OptionsUI {
         if (isVisible) {
             this.modal.style.display = 'none';
             this.playerControls.enabled = true;
+            this.stopItemPreviewAnimation();
         } else {
             this.modal.style.display = 'block';
             this.playerControls.enabled = false;

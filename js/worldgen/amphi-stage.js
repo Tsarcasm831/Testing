@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 /* @tweakable Set to true to enable collision for the amphitheater stage, stairs, and foundation. */
-const AMPHITHEATRE_COLLISION_ENABLED = false;
+const AMPHITHEATRE_COLLISION_ENABLED = true;
 /* @tweakable The color of the stage platform. */
 const stageColor = 0x4a2a0a;
 /* @tweakable Set to true to show a visible outline box for debugging stage collision. */
@@ -47,6 +47,9 @@ export function createStage(dimensions) {
     foundation.position.y = -foundationHeight / 2;
     foundation.castShadow = true;
     foundation.receiveShadow = true;
+    if (AMPHITHEATRE_COLLISION_ENABLED) {
+        foundation.userData.isBlock = true;
+    }
     stageGroup.add(foundation);
     if (DEBUG_FOUNDATION_COLLISION_BOX) {
         const foundationHelper = new THREE.BoxHelper(foundation, DEBUG_FOUNDATION_COLLISION_BOX_COLOR);
@@ -65,21 +68,29 @@ export function createStage(dimensions) {
     /* @tweakable The number of stairs leading to the stage. */
     const stairCount = 4;
     const stairHeight = dimensions.height / stairCount;
-    /* @tweakable The depth of each stair step. */
+    /* @tweakable The depth of each individual stair step. */
     const stairDepth = 0.5;
-    /* @tweakable The starting Z position of the stairs relative to the stage's front edge. */
-    const stairStartZ = -dimensions.depth / 2 - stairDepth / 2;
 
-    for (let i = 0; i < stairCount; i++) {
-        /* @tweakable The width of the stairs, which get narrower closer to the stage. */
-        const stairWidth = dimensions.width * (0.4 - i * 0.05);
-        const stairGeometry = new THREE.BoxGeometry(stairWidth, stairHeight, stairDepth);
+    // Build stairs from top to bottom to help with potential z-fighting on overlaps
+    for (let i = stairCount - 1; i >= 0; i--) {
+        /* @tweakable The width of the widest (bottom) stair step, as a factor of stage width. */
+        const baseStairWidthFactor = 0.4;
+        /* @tweakable How much narrower each step gets compared to the one below it, as a factor of stage width. */
+        const stairWidthTaperFactor = 0.05;
+        const stepIndexFromBottom = stairCount - 1 - i;
+        const stairWidth = dimensions.width * (baseStairWidthFactor - stepIndexFromBottom * stairWidthTaperFactor);
+
+        const currentStepTotalHeight = (i + 1) * stairHeight;
+        
+        // Use a single geometry for each step, from ground to its top, to create a solid look.
+        const stairGeometry = new THREE.BoxGeometry(stairWidth, currentStepTotalHeight, stairDepth);
         const stair = new THREE.Mesh(stairGeometry, stageMaterial);
 
+        // Position the step. Y is based on its height from ground. Z is based on its distance from stage.
         stair.position.set(
             0,
-            i * stairHeight + stairHeight / 2,
-            stairStartZ - (stairCount - 1 - i) * stairDepth
+            currentStepTotalHeight / 2, // Center of the box is at half its total height
+            -dimensions.depth / 2 - stairDepth / 2 - stepIndexFromBottom * stairDepth
         );
 
         stair.castShadow = true;

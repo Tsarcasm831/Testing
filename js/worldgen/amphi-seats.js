@@ -23,6 +23,51 @@ const DEBUG_INDIVIDUAL_SEAT_BOX = true;
 /* @tweakable The color of the debug collision box for individual seats. */
 const DEBUG_INDIVIDUAL_SEAT_BOX_COLOR = 0xffa500;
 
+/**
+ * Creates stairs leading up to the first row of amphitheater seats.
+ * @param {THREE.Group} group The group to add the stairs to.
+ * @param {object} options Options for stairs creation.
+ * @param {number} options.startRadius The starting radius of the seats.
+ * @param {number} options.rowHeight The height of one seating tier.
+ * @param {THREE.Material} options.material The material for the stairs.
+ */
+/* @tweakable Set to true to add stairs leading to the amphitheater seats. */
+const ENABLE_SEATING_STAIRS = true;
+function createStairsToSeats(group, options) {
+    if (!ENABLE_SEATING_STAIRS) return;
+
+    const { startRadius, rowHeight, material } = options;
+    const stairsGroup = new THREE.Group();
+
+    /* @tweakable The number of steps for the amphitheater seating stairs. */
+    const stairCount = 10;
+    /* @tweakable The width of the amphitheater seating stairs. */
+    const stairWidth = 8;
+    /* @tweakable The total depth of the amphitheater seating staircase. */
+    const totalStairDepth = 8;
+    
+    const stairHeight = rowHeight / stairCount;
+    const stairDepth = totalStairDepth / stairCount;
+
+    for (let i = 0; i < stairCount; i++) {
+        const stepGeo = new THREE.BoxGeometry(stairWidth, stairHeight, stairDepth);
+        const step = new THREE.Mesh(stepGeo, material);
+        step.position.set(
+            0,
+            i * stairHeight + stairHeight / 2,
+            -startRadius + totalStairDepth / 2 - i * stairDepth - stairDepth / 2
+        );
+
+        step.castShadow = true;
+        step.receiveShadow = true;
+        step.userData.isBarrier = SEAT_COLLISION_ENABLED;
+        step.userData.isStair = SEAT_COLLISION_ENABLED;
+        stairsGroup.add(step);
+    }
+
+    group.add(stairsGroup);
+}
+
 export function createAmphitheatreSeating(group, stoneColor) {
     /* @tweakable The rotation of the amphitheater seats in degrees. */
     const seatingRotation = 90;
@@ -242,4 +287,6 @@ export function createAmphitheatreSeating(group, stoneColor) {
             }
         }
     }
+
+    createStairsToSeats(seatingGroup, { startRadius, rowHeight, material });
 }

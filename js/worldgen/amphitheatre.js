@@ -23,43 +23,20 @@ export function createAmphitheatre(scene, getHeight) {
     group.position.copy(amphitheatrePosition);
     scene.add(group);
 
-    /* @tweakable Whether the amphitheater ground plane is collidable. */
-    const isGroundCollidable = true;
-
-    // Ground plane (removed as per user request)
-    /* @tweakable Set to true to re-enable the flat ground plane for the amphitheater. */
-    const enableAmphitheatreGroundPlane = false;
-    if (enableAmphitheatreGroundPlane) {
-        const groundSize = 120;
-        const groundGeometry = new THREE.CircleGeometry(groundSize / 2, 64);
-        const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.9 });
-        const groundPlane = new THREE.Mesh(groundGeometry, groundMaterial);
-        groundPlane.rotation.x = -Math.PI / 2;
-        groundPlane.receiveShadow = true;
-        if (isGroundCollidable) {
-            groundPlane.userData.isBlock = true;
-        }
-        group.add(groundPlane);
-    }
-
     // Stage
     /* @tweakable Dimensions of the stage platform. */
     const stageDimensions = { width: 20, height: 1.5, depth: 15 };
     const stage = createStage(stageDimensions);
+    /* @tweakable The position of the stage within the amphitheater group. */
     stage.position.z = 10;
     group.add(stage);
 
     // Add microphone stand to the stage
+    /* @tweakable The position of the microphone stand on the stage. */
     const micStandPosition = { x: 0, y: stageDimensions.height, z: 2 };
     const micStand = createMicrophoneStand();
     micStand.position.set(micStandPosition.x, micStandPosition.y, micStandPosition.z);
     stage.add(micStand);
-
-    // Seating is now disabled by default, but can be re-enabled with the tweakable toggle above.
-    // NOTE: The seating feature has been removed, so this block is left as a placeholder.
-    if (false) {
-        console.warn("Amphitheater seating is enabled, but its associated file 'amphi-seats.js' has been removed. The seats will not be generated.");
-    }
 
     // Backdrop
     /* @tweakable The default video source file for the amphitheater screen. Can be overridden by admin. */
