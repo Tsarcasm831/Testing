@@ -1,7 +1,9 @@
 # Changelog
 
 ## 2025-07-25
+- 1450 Expanded README with project overview, features and run instructions
 - 1446 Added crowd NPC presets for robots, humans and aliens
+
 
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).
