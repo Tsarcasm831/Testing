@@ -1,10 +1,7 @@
 # Changelog
 
-## 2025-07-24
-- 1609 Added kitbashing material generator and regenerated js/mats modules
-- 1504 Split amphitheatre.js into smaller modules
-- 1551 Added houseItems.js with 25 kitbashed furniture items
-
+## 2025-07-25
+- 1446 Added crowd NPC presets for robots, humans and aliens
 
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).
