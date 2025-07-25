@@ -18,6 +18,7 @@ import { setupMultiplayer } from './game/setupMultiplayer.js';
 import { setupUI } from './game/setupUI.js';
 import { setupEventListeners } from './game/setupEventListeners.js';
 import { updateDayNightCycle } from './game/updateDayNightCycle.js';
+import { cacheAssetLists } from './assetListCache.js';
 
 export class Game {
     constructor() {
@@ -64,6 +65,14 @@ export class Game {
         this.collisionManager = new CollisionManager(this.scene);
         this.setupPlayer(playerName, initialPosition);
         this.setupManagers();
+
+        await cacheAssetLists([
+            'assets/external_lists/claddingAndSiding.json',
+            'assets/external_lists/interior.json',
+            'assets/external_lists/roofing.json',
+            'assets/external_lists/structural.json',
+            'assets/external_lists/walls.json'
+        ]);
 
         const assetReplacementManager = new AssetReplacementManager({
             playerControls: this.playerControls,
