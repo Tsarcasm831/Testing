@@ -9,11 +9,11 @@ const NPC_COLLISION_PADDING = 0.2;
 /* @tweakable Additional padding around Ogres for collision detection. */
 const OGRE_COLLISION_PADDING = 0.4;
 /* @tweakable Padding for player collision with the inside radius of amphitheater seats. A larger value makes it harder to fall into the gap. */
-const SEAT_INNER_RADIUS_PADDING = 0.3;
+const SEAT_INNER_RADIUS_PADDING = 0.1;
 /* @tweakable Padding for player collision with the outside radius of amphitheater seats. A larger value makes it harder to fall off the back. */
-const SEAT_OUTER_RADIUS_PADDING = 0.3;
-/* @tweakable Vertical tolerance for landing on a seat. A small positive value helps prevent falling through edges. */
-const SEAT_LANDING_TOLERANCE = 0.2;
+const SEAT_OUTER_RADIUS_PADDING = 0.1;
+/* @tweakable Vertical tolerance for landing on a seat or stair. A small positive value helps prevent falling through edges. */
+const SEAT_LANDING_TOLERANCE = 0.25;
 /* @tweakable Additional padding around the player for side collisions with seats to prevent clipping through. */
 const SEAT_SIDE_COLLISION_PADDING = 0.1;
 
@@ -69,7 +69,7 @@ export class CollisionManager {
         this.scene.traverse(child => {
             // This is a more robust way of collecting collidable objects,
             // as it checks the entire scene graph, not just direct children.
-            if (child.userData.isBlock || child.userData.isBarrier || (child.type === "Group" && child.userData.isTree) || child.userData.isNpc || child.userData.isSeatRow) {
+            if ((child.userData.isBlock || child.userData.isBarrier || (child.type === "Group" && child.userData.isTree) || child.userData.isNpc) && child.userData.isCollidable !== false) {
                 child.getWorldPosition(worldPosition);
                 /* @tweakable The distance from the player to check for collidable objects. Lowering may improve performance but can cause missed collisions with large objects. */
                 const effectiveCollisionRadius = COLLISION_CHECK_RADIUS + (child.geometry?.boundingSphere?.radius || 0);
@@ -87,19 +87,14 @@ export class CollisionManager {
         const movementVector = new THREE.Vector3().subVectors(proposedPosition, currentPosition);
 
         blockMeshes.forEach(block => {
-            let result;
-            if (block.userData.isSeatRow) {
-                result = this._checkCollisionWithSeatRow(currentPosition, finalPosition, velocity, playerRadius, playerHeight, block);
-            } else {
-                result = this._checkCollisionWithBlock(currentPosition, finalPosition, finalVelocity, playerRadius, playerHeight, block);
-            }
+            let result = this._checkCollisionWithBlock(currentPosition, finalPosition, finalVelocity, playerRadius, playerHeight, block);
             
             if(result.standingOnBlock) {
                 standingOnBlock = true;
                 finalPosition.y = result.newY;
                 finalVelocity.y = 0;
                 canJump = true;
-            } else if (result.collided && !block.userData.isSeatRow) {
+            } else if (result.collided) {
                 // When colliding, revert the player's position to the last known non-colliding state
                 // and then adjust based on which axis has less overlap to simulate sliding.
                 const boundingBox = new THREE.Box3().setFromObject(block);
@@ -142,11 +137,6 @@ export class CollisionManager {
                         finalPosition.z = currentPosition.z;
                     }
                 }
-            } else if (result.collided && block.userData.isSeatRow) {
-                 // The new logic in _checkCollisionWithSeatRow now handles this better.
-                 // We simply stop horizontal movement if a side collision is detected.
-                 finalPosition.x = currentPosition.x;
-                 finalPosition.z = currentPosition.z;
             }
         });
         
@@ -214,7 +204,7 @@ export class CollisionManager {
             !block.userData.isNpc && // Prevent standing on NPCs
             velocity.y <= 0 &&
             currentPosition.y >= blockTop - 0.2 &&
-            newPosition.y <= (blockTop + 0.20) &&
+            newPosition.y <= (blockTop + SEAT_LANDING_TOLERANCE) &&
             Math.abs(newPosition.x - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
             Math.abs(newPosition.z - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius)
         ) {
@@ -224,7 +214,7 @@ export class CollisionManager {
             block.userData.isStair &&
             velocity.y <= 0 &&
             currentPosition.y >= blockTop - STEP_HEIGHT &&
-            newPosition.y <= blockTop + 0.2 &&
+            newPosition.y <= blockTop + SEAT_LANDING_TOLERANCE &&
             Math.abs(newPosition.x - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
             Math.abs(newPosition.z - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius)
         ) {
@@ -263,27 +253,31 @@ export class CollisionManager {
         const dist = playerToAmphiCenter.length();
 
         // More accurate radial check
-        /* @tweakable Inner collision radius for seats, accounting for player size. */
-        const innerRadius = seatData.innerRadius - playerRadius - SEAT_SIDE_COLLISION_PADDING;
-        /* @tweakable Outer collision radius for seats, accounting for player size. */
-        const outerRadius = seatData.outerRadius + playerRadius + SEAT_SIDE_COLLISION_PADDING;
+        /* @tweakable Padding for player collision with the inside radius of amphitheater seats. A larger value makes it harder to fall into the gap. */
+        const innerRadius = seatData.innerRadius - playerRadius - SEAT_INNER_RADIUS_PADDING;
+        /* @tweakable Padding for player collision with the outside radius of amphitheater seats. A larger value makes it harder to fall off the back. */
+        const outerRadius = seatData.outerRadius + playerRadius + SEAT_OUTER_RADIUS_PADDING;
         
         // Angular check
         let playerAngle = Math.atan2(playerToAmphiCenter.y, playerToAmphiCenter.x);
 
         const amphitheatreRotation = block.parent.rotation.y;
-        playerAngle -= amphitheatreRotation;
+        
+        // Normalize all angles to the range [0, 2*PI] for consistent comparison
+        const normalizeAngle = (angle) => {
+            const newAngle = angle % (2 * Math.PI);
+            return newAngle < 0 ? newAngle + 2 * Math.PI : newAngle;
+        };
 
-        if (playerAngle < 0) playerAngle += 2 * Math.PI;
-
-        const startAngle = seatData.startAngle;
-        const endAngle = seatData.endAngle;
-
+        let normalizedPlayerAngle = normalizeAngle(playerAngle - amphitheatreRotation);
+        let startAngle = normalizeAngle(seatData.startAngle);
+        let endAngle = normalizeAngle(seatData.endAngle);
+        
         let inAngle = false;
         if (startAngle < endAngle) {
-            inAngle = playerAngle >= startAngle && playerAngle <= endAngle;
-        } else { // Wraps around
-            inAngle = playerAngle >= startAngle || playerAngle <= endAngle;
+            inAngle = normalizedPlayerAngle >= startAngle && normalizedPlayerAngle <= endAngle;
+        } else { // Wraps around 0/2PI, e.g. from 315deg to 45deg
+            inAngle = normalizedPlayerAngle >= startAngle || normalizedPlayerAngle <= endAngle;
         }
         
         // Vertical collision check
@@ -308,8 +302,12 @@ export class CollisionManager {
             newPosition.y < seatTopY && // player bottom is below seat top
             newPosition.y + playerHeight > seatBottomY // player top is above seat bottom
         ) {
-            // If vertically aligned for side collision, check if we are outside the valid area
-            if (!inAngle || dist < innerRadius || dist > outerRadius) {
+            // Check for side collisions (hitting the ends of the arc) or radial collisions (hitting inner/outer walls)
+            if (dist >= innerRadius && dist <= outerRadius && !inAngle) {
+                // If within the radii but outside the angle, it's a side collision
+                collided = true;
+            } else if (inAngle && (dist < innerRadius || dist > outerRadius)) {
+                // If within the angle but outside radii, it's a radial wall collision
                 collided = true;
             }
         }

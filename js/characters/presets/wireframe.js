@@ -82,6 +82,8 @@ export const wireframePreset = {
         scale: { x: 0.5, y: 0.1, z: 0.3 },
         roughness: 0.2,
         metalness: 0.8,
+        /* @tweakable Set to false if the invisible collision base for the wireframe should not be rendered, even if transparent. */
+        visible: false,
         transparent: true,
         opacity: 0.8
       }

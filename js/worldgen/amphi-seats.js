@@ -11,9 +11,11 @@ import { createSpectatorSpec } from '../characters/presets/spectator.js';
  * @param {THREE.Color | number} stoneColor The color of the seats.
  */
 /* @tweakable Set to true to enable collision for amphitheater seats. */
-const SEAT_COLLISION_ENABLED = false;
+const SEAT_COLLISION_ENABLED = true;
+/* @tweakable The number of segments to approximate the curve of each seat row. More segments are more accurate but less performant. */
+const SEAT_ROW_SEGMENTS = 20;
 /* @tweakable Set to true to spawn crowd NPCs in the amphitheater seats. NOTE: This may contribute to loading timeouts on some platforms. */
-const SPAWN_CROWD_NPCS = false;
+const SPAWN_CROWD_NPCS = true;
 /* @tweakable Set to true to use simplified, low-poly models for crowd NPCs to improve performance. */
 const USE_SPECTATOR_MODELS = true;
 /* @tweakable Set to true to enable collision for the foundation under the seats. */
@@ -41,6 +43,8 @@ const DEBUG_INDIVIDUAL_SEAT_BOX_COLOR = 0xffa500;
  */
 /* @tweakable Set to true to add stairs leading to the amphitheater seats. */
 const ENABLE_SEATING_STAIRS = true;
+/* @tweakable Set to true to enable collision on the amphitheater stairs. */
+const SEATING_STAIRS_COLLISION_ENABLED = true;
 function createStairsToSeats(group, options) {
     if (!ENABLE_SEATING_STAIRS) return;
 
@@ -68,8 +72,8 @@ function createStairsToSeats(group, options) {
 
         step.castShadow = true;
         step.receiveShadow = true;
-        step.userData.isBarrier = SEAT_COLLISION_ENABLED;
-        step.userData.isStair = SEAT_COLLISION_ENABLED;
+        step.userData.isBarrier = SEATING_STAIRS_COLLISION_ENABLED;
+        step.userData.isStair = SEATING_STAIRS_COLLISION_ENABLED;
         stairsGroup.add(step);
     }
 
@@ -215,54 +219,40 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
 
     for (let i = 0; i < numRows; i++) {
         const innerRadius = startRadius + i * (rowDepth + radiusStep);
-        const outerRadius = innerRadius + rowDepth;
         const y = i * rowHeight;
         
-        const shape = new THREE.Shape();
-        shape.moveTo(innerRadius * Math.cos(startAngle), innerRadius * Math.sin(startAngle));
-        shape.absarc(0, 0, innerRadius, startAngle, endAngle, false);
-        shape.lineTo(outerRadius * Math.cos(endAngle), outerRadius * Math.sin(endAngle));
-        shape.absarc(0, 0, outerRadius, endAngle, startAngle, true);
-        shape.lineTo(innerRadius * Math.cos(startAngle), innerRadius * Math.sin(startAngle));
+        // Create a series of box segments to approximate the curved seating row for collision
+        const midRadius = innerRadius + rowDepth / 2;
+        const segmentAngleStep = angleRad / SEAT_ROW_SEGMENTS;
+        const segmentWidth = segmentAngleStep * midRadius; // Arc length for a segment
 
-        const extrudeSettings = {
-            steps: 1,
-            depth: rowHeight,
-            bevelEnabled: false,
-        };
+        for (let j = 0; j < SEAT_ROW_SEGMENTS; j++) {
+            const currentAngle = startAngle + (j + 0.5) * segmentAngleStep;
+            
+            const x = midRadius * Math.cos(currentAngle);
+            const z = midRadius * Math.sin(currentAngle);
 
-        const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-        // The geometry is extruded along Z, then rotated. So we translate Z before rotation.
-        geometry.translate(0, 0, y); 
-        geometry.rotateX(-Math.PI / 2);
-        
-        const seatRow = new THREE.Mesh(geometry, material);
-        seatRow.castShadow = true;
-        seatRow.receiveShadow = true;
-        
-        if (SEAT_COLLISION_ENABLED) {
-            seatRow.userData.isSeatRow = true;
-            seatRow.userData.seatRowData = {
-                innerRadius: innerRadius,
-                outerRadius: outerRadius,
-                startAngle: startAngle,
-                endAngle: endAngle
-            };
-            /* @tweakable Set to true to allow players to step up onto seats without jumping. */
-            seatRow.userData.isStair = true;
-        }
-        seatingGroup.add(seatRow);
+            const segmentGeo = new THREE.BoxGeometry(segmentWidth, rowHeight, rowDepth);
+            const segmentMesh = new THREE.Mesh(segmentGeo, material);
 
-        if (DEBUG_SEAT_COLLISION_BOX) {
-            const wireframeGeometry = new THREE.WireframeGeometry(geometry);
-            const line = new THREE.LineSegments(wireframeGeometry);
-            line.material.color.set(DEBUG_SEAT_COLLISION_BOX_COLOR);
-            line.material.depthTest = false;
-            line.material.opacity = 0.5;
-            line.material.transparent = true;
-            line.userData.isDebugBorder = true;
-            line.visible = false;
-            seatingGroup.add(line);
+            segmentMesh.position.set(x, y + rowHeight / 2, z);
+            segmentMesh.lookAt(0, y + rowHeight / 2, 0); // Orient segment along the curve
+
+            segmentMesh.castShadow = true;
+            segmentMesh.receiveShadow = true;
+
+            if (SEAT_COLLISION_ENABLED) {
+                segmentMesh.userData.isBarrier = true;
+                segmentMesh.userData.isStair = true;
+            }
+            seatingGroup.add(segmentMesh);
+
+            if (DEBUG_SEAT_COLLISION_BOX) {
+                const segmentHelper = new THREE.BoxHelper(segmentMesh, DEBUG_SEAT_COLLISION_BOX_COLOR);
+                segmentHelper.userData.isDebugBorder = true;
+                segmentHelper.visible = false;
+                seatingGroup.add(segmentHelper);
+            }
         }
         
         // Add individual seats on top of the tier
@@ -274,10 +264,10 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
         // Center the seats within the arc
         const totalAngleOfSeats = numSeats * totalSeatSpace / seatRadius;
         const startAngleForSeats = startAngle + (angleRad - totalAngleOfSeats) / 2;
-        const angleStep = totalSeatSpace / seatRadius;
+        const seatAngleStep = totalSeatSpace / seatRadius;
 
         for (let j = 0; j < numSeats; j++) {
-            const seatAngle = startAngleForSeats + (j * angleStep);
+            const seatAngle = startAngleForSeats + (j * seatAngleStep);
 
             const seat = new THREE.Group();
             
@@ -342,8 +332,20 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
     }
 
     if (SPAWN_CROWD_NPCS && npcManager && terrain) {
-        const crowdPresets = presetCharacters.filter(p => p.id.startsWith('crowd_'));
-        spawnCrowdNPCs(seatingGroup, crowdPresets, seatTransforms, npcManager, terrain, seatBaseHeight);
+        /* @tweakable The types of crowd NPCs to spawn, one of each will be chosen randomly. */
+        const crowdTypesToSpawn = ['bot', 'male', 'female', 'alien'];
+        const allCrowdPresets = presetCharacters.filter(p => p.id.startsWith('crowd_'));
+        
+        const presetsToSpawn = [];
+        crowdTypesToSpawn.forEach(type => {
+            const presetsOfType = allCrowdPresets.filter(p => p.id.startsWith(`crowd_${type}_`));
+            if (presetsOfType.length > 0) {
+                const chosenPreset = presetsOfType[Math.floor(Math.random() * presetsOfType.length)];
+                presetsToSpawn.push(chosenPreset);
+            }
+        });
+
+        spawnCrowdNPCs(seatingGroup, presetsToSpawn, seatTransforms, npcManager, terrain, seatBaseHeight);
     }
 
     createStairsToSeats(seatingGroup, { startRadius, rowHeight, material });

@@ -51,6 +51,8 @@ export const tavernkeepPreset = {
         color: "#666666",
         position: { x: 0, y: 0, z: 0 },
         scale: { x: 0.5, y: 0.1, z: 0.3 },
+        /* @tweakable Set to false if the invisible collision base for the tavernkeep should not be rendered, even if transparent. */
+        visible: false,
         transparent: true,
         opacity: 0,
       },

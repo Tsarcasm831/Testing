@@ -33,7 +33,7 @@ function simpleNoise(x, z) {
   return y;
 }
 
-export function createTerrain(scene) {
+export async function createTerrain(scene, assetManager) {
   const terrainSize = CLUSTER_SIZE;
   const segments = TERRAIN_SEGMENTS;
 
@@ -50,18 +50,22 @@ export function createTerrain(scene) {
 
   const textureLoader = new THREE.TextureLoader();
     const textures = {
-        grass: textureLoader.load('assets/ground_textures/ground_texture.png'),
-        sand: textureLoader.load('assets/ground_textures/ground_texture_sand.png'),
-        dirt: textureLoader.load('assets/ground_textures/ground_texture_dirt.png'),
-        stone: textureLoader.load('assets/ground_textures/ground_texture_stone.png'),
-        snow: textureLoader.load('assets/ground_textures/ground_texture_snow.png'),
-        forest: textureLoader.load('assets/ground_textures/ground_texture_forest.png')
+        grass: await assetManager.getTexture('Ground texture'),
+        sand: await assetManager.getTexture('Sand texture'),
+        dirt: await assetManager.getTexture('Dirt texture'),
+        stone: await assetManager.getTexture('Stone texture'),
+        snow: await assetManager.getTexture('Snow texture'),
+        forest: await assetManager.getTexture('Forest texture')
     };
 
   const totalZonesSide = ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE;
   const repeatValue = TERRAIN_TEXTURE_REPEAT_PER_ZONE * totalZonesSide;
 
   for (const key in textures) {
+      if (!textures[key] || !textures[key].image) {
+        console.warn(`Texture for ${key} failed to load, will be black.`);
+        continue;
+      }
       // HACK: To prevent CORS issues with textures on some browsers,
       // we set crossOrigin to 'anonymous'
       if (textures[key].image) {
@@ -81,22 +85,27 @@ export function createTerrain(scene) {
   }
 
   const material = new THREE.MeshStandardMaterial({
-    map: textures.grass,
+    map: textures.grass || new THREE.Texture(), // Fallback to empty texture
+    color: textures.grass ? 0xffffff : 0x808080, // Use gray if texture is missing
     roughness: 0.8,
     metalness: 0.2
   });
 
   material.onBeforeCompile = shader => {
-      shader.uniforms.sandTexture = { value: textures.sand };
-      shader.uniforms.snowTexture = { value: textures.snow };
-      shader.uniforms.forestTexture = { value: textures.forest };
-      shader.uniforms.dirtTexture = { value: textures.dirt };
-      shader.uniforms.stoneTexture = { value: textures.stone };
+      shader.uniforms.sandTexture = { value: textures.sand || new THREE.Texture() };
+      shader.uniforms.snowTexture = { value: textures.snow || new THREE.Texture() };
+      shader.uniforms.forestTexture = { value: textures.forest || new THREE.Texture() };
+      shader.uniforms.dirtTexture = { value: textures.dirt || new THREE.Texture() };
+      shader.uniforms.stoneTexture = { value: textures.stone || new THREE.Texture() };
       /* @tweakable The width of the blend between biomes. Higher values create a smoother transition. */
       shader.uniforms.blendWidth = { value: BIOME_BLEND_WIDTH };
+      /* @tweakable The starting height for stone to appear in the dirt/stone biome. */
       shader.uniforms.stoneStartHeight = { value: STONE_START_HEIGHT };
+      /* @tweakable The height range over which stone fully replaces dirt. */
       shader.uniforms.stoneTransitionHeight = { value: STONE_TRANSITION_HEIGHT };
+      /* @tweakable The radius of the central grass biome before it starts blending into other biomes. */
       shader.uniforms.grassRadius = { value: GRASS_RADIUS };
+      /* @tweakable The width of the blend from the central grass biome to other biomes. */
       shader.uniforms.grassBlendWidth = { value: GRASS_BLEND_WIDTH };
       /* @tweakable The overall scale of the terrain textures. Smaller values make textures larger. */
       shader.uniforms.textureScale = { value: 0.2 };
@@ -181,16 +190,17 @@ export function createTerrain(scene) {
       shader.fragmentShader = shader.fragmentShader.replace(
           '#include <map_fragment>',
           `
-          vec4 texelColor = triplanarTexture(map, vWorldPosition, vNormal); // Base grass texture
+          vec4 defaultColor = vec4(0.5, 0.5, 0.5, 1.0); // Fallback gray
+          vec4 texelColor = texture2D(map, vUv).w > 0.0 ? triplanarTexture(map, vWorldPosition, vNormal) : defaultColor; // Base grass texture
 
           vec2 pos = vWorldPosition.xz;
           float height = vWorldPosition.y;
 
-          vec4 sandColor = triplanarTexture(sandTexture, vWorldPosition, vNormal);
-          vec4 snowColor = triplanarTexture(snowTexture, vWorldPosition, vNormal);
-          vec4 forestColor = triplanarTexture(forestTexture, vWorldPosition, vNormal);
-          vec4 dirtColor = triplanarTexture(dirtTexture, vWorldPosition, vNormal);
-          vec4 stoneColor = triplanarTexture(stoneTexture, vWorldPosition, vNormal);
+          vec4 sandColor = texture2D(sandTexture, vUv).w > 0.0 ? triplanarTexture(sandTexture, vWorldPosition, vNormal) : defaultColor;
+          vec4 snowColor = texture2D(snowTexture, vUv).w > 0.0 ? triplanarTexture(snowTexture, vWorldPosition, vNormal) : defaultColor;
+          vec4 forestColor = texture2D(forestTexture, vUv).w > 0.0 ? triplanarTexture(forestTexture, vWorldPosition, vNormal) : defaultColor;
+          vec4 dirtColor = texture2D(dirtTexture, vUv).w > 0.0 ? triplanarTexture(dirtTexture, vWorldPosition, vNormal) : defaultColor;
+          vec4 stoneColor = texture2D(stoneTexture, vUv).w > 0.0 ? triplanarTexture(stoneTexture, vWorldPosition, vNormal) : defaultColor;
           
           float blendNoise = (fbm(pos * NOISE_SCALE) - 0.25) * blendWidth;
 

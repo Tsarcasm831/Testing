@@ -1,18 +1,48 @@
 import * as THREE from 'three';
 
-export function createMaterial(textureDir, repeatU = 1, repeatV = 1) {
+/* @tweakable The base URL for downloading PBR texture assets. This is now a fallback, as textures are loaded via AssetManager. */
+const TEXTURE_BASE_URL = 'https://file.garden/Zy7B0LkdIVpGyzA1/Public/';
+
+export function createMaterial(textureDir, repeatU = 1, repeatV = 1, assetManager = null) {
   const loader = new THREE.TextureLoader();
-  const textures = {
-    map: loader.load(`${textureDir}albedo.png`),
-    normalMap: loader.load(`${textureDir}normal.png`),
-    roughnessMap: loader.load(`${textureDir}roughness.png`),
-    aoMap: loader.load(`${textureDir}ao.png`),
+  loader.setCrossOrigin('anonymous');
+  const fullTextureDir = `${TEXTURE_BASE_URL}${textureDir}`;
+  
+  const onLoad = () => {};
+  const onProgress = () => {};
+  const onError = (err) => {
+    console.error(`Failed to load texture from ${err.path}. Using fallback color.`);
   };
+  
+  const textures = {
+    map: loader.load(`${fullTextureDir}albedo.png`, onLoad, onProgress, (err) => onError({path: `${fullTextureDir}albedo.png`})),
+    normalMap: loader.load(`${fullTextureDir}normal.png`, onLoad, onProgress, (err) => onError({path: `${fullTextureDir}normal.png`})),
+    roughnessMap: loader.load(`${fullTextureDir}roughness.png`, onLoad, onProgress, (err) => onError({path: `${fullTextureDir}roughness.png`})),
+    aoMap: loader.load(`${fullTextureDir}ao.png`, onLoad, onProgress, (err) => onError({path: `${fullTextureDir}ao.png`})),
+  };
+
   for (const tex of Object.values(textures)) {
     if (tex) {
       tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
       tex.repeat.set(repeatU, repeatV);
     }
   }
-  return new THREE.MeshStandardMaterial(textures);
+  const material = new THREE.MeshStandardMaterial(textures);
+  /* @tweakable Fallback color for materials if textures fail to load. */
+  material.onBeforeCompile = (shader) => {
+    shader.fragmentShader = shader.fragmentShader.replace(
+      '#include <map_fragment>',
+      `
+      #if defined(USE_MAP)
+        vec4 texelColor = texture2D(map, vUv);
+        // If texture is black (likely failed to load), use a fallback color.
+        if (all(equal(texelColor.rgb, vec3(0.0)))) {
+            texelColor = vec4(0.5, 0.5, 0.5, 1.0); // Fallback to gray
+        }
+        diffuseColor *= texelColor;
+      #endif
+      `
+    );
+  };
+  return material;
 }

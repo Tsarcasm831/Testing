@@ -63,7 +63,7 @@ export class Game {
 
         this.setupScene();
         this.collisionManager = new CollisionManager(this.scene);
-        this.setupPlayer(playerName, initialPosition);
+        this.setupPlayer(playerName, initialPosition, currentUser);
         this.setupManagers();
 
         await cacheAssetLists([
@@ -83,6 +83,16 @@ export class Game {
             }
         });
 
+        const loadingStatus = document.getElementById('loading-status');
+        const progressBar = document.getElementById('progress-bar');
+        assetReplacementManager.setStatusElement(loadingStatus, progressBar);
+
+        /* @tweakable Set to true to automatically download all GLB assets on the loading screen. */
+        const downloadAllAssetsOnLoad = true;
+        if (downloadAllAssetsOnLoad) {
+            await assetReplacementManager.preloadAllGameAssets();
+        }
+
         /* @tweakable The username for which to preload the animated player model. */
         const preloadUsername = "lordtsarcasm";
         if (currentUser && currentUser.username === preloadUsername) {
@@ -92,15 +102,8 @@ export class Game {
                 this.playerModel.visible = false;
             }
             
-            const loadingStatus = document.getElementById('loading-status');
             if (loadingStatus) loadingStatus.textContent = 'Loading special player model...';
             
-            const statusElement = document.createElement('div');
-            statusElement.style.marginTop = '10px';
-            statusElement.id = 'preload-status';
-            document.getElementById('loading-container').appendChild(statusElement);
-            assetReplacementManager.setStatusElement(statusElement);
-
             await assetReplacementManager.preloadAndApplyPlayerModel();
             
             // Teleport after special model load
@@ -110,8 +113,6 @@ export class Game {
                 this.playerControls.velocity.set(0, 0, 0); // Reset velocity
                 this.playerControls.lastPosition.copy(playerModel.position);
             }
-            
-            statusElement.remove();
         }
 
         this.gridManager = new GridManager(this.scene);
@@ -119,8 +120,8 @@ export class Game {
 
         const matsResponse = await fetch('mats.json');
         const matsData = await matsResponse.json();
-        const world = new World(this.scene, this.npcManager, this.room, matsData);
-        const worldObjects = world.generate();
+        const world = new World(this.scene, this.npcManager, this.room, matsData, assetReplacementManager);
+        const worldObjects = await world.generate();
         const terrain = worldObjects.terrain;
         this.grass = worldObjects.grass;
 
@@ -164,8 +165,8 @@ export class Game {
         setupScene(this);
     }
 
-    setupPlayer(playerName, initialPosition) {
-        setupPlayer(this, playerName, initialPosition);
+    setupPlayer(playerName, initialPosition, currentUser) {
+        setupPlayer(this, playerName, initialPosition, currentUser);
     }
 
     setupManagers() {

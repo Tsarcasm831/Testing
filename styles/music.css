@@ -1,7 +1,7 @@
 #music-button {
     position: fixed;
     /* @tweakable The bottom position of the music button. */
-    bottom: 230px;
+    bottom: 300px;
     /* @tweakable The right position of the music button. */
     right: 20px;
     z-index: 1000;

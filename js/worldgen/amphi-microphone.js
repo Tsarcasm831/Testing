@@ -69,6 +69,8 @@ export function createMicrophoneStand() {
             child.castShadow = true;
             // Explicitly set collidable status based on the tweakable constant
             child.userData.isBarrier = MIC_STAND_COLLISION_ENABLED;
+            /* @tweakable When collision is disabled, setting this to false prevents the collision manager from checking it at all. */
+            child.userData.isCollidable = MIC_STAND_COLLISION_ENABLED;
         }
     });
 

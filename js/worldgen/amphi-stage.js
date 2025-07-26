@@ -3,23 +3,25 @@ import * as THREE from 'three';
 /* @tweakable Set to true to enable collision for the amphitheater stage platform. */
 const STAGE_COLLISION_ENABLED = true;
 /* @tweakable Set to true to enable collision for the stairs leading to the stage. */
-const STAIRS_COLLISION_ENABLED = false;
+const STAIRS_COLLISION_ENABLED = true;
 /* @tweakable Set to true to enable collision for the foundation under the stage. */
 const FOUNDATION_COLLISION_ENABLED = false;
 /* @tweakable The color of the stage platform. */
 const stageColor = 0x4a2a0a;
 /* @tweakable Set to true to show a visible outline box for debugging stage collision. */
-const DEBUG_STAGE_COLLISION_BOX = true;
+const DEBUG_STAGE_COLLISION_BOX = false;
 /* @tweakable The color of the debug collision box for the stage. */
 const DEBUG_STAGE_COLLISION_BOX_COLOR = 0x00ffff;
 /* @tweakable Set to true to show a visible outline box for debugging stair collision. */
-const DEBUG_STAIR_COLLISION_BOX = true;
+const DEBUG_STAIR_COLLISION_BOX = false;
 /* @tweakable The color of the debug collision box for the stairs. */
 const DEBUG_STAIR_COLLISION_BOX_COLOR = 0x00ff00;
 /* @tweakable Set to true to show a visible outline box for debugging the stage foundation. */
-const DEBUG_FOUNDATION_COLLISION_BOX = true;
+const DEBUG_FOUNDATION_COLLISION_BOX = false;
 /* @tweakable The color of the debug collision box for the stage foundation. */
 const DEBUG_FOUNDATION_COLLISION_BOX_COLOR = 0xff00ff;
+/* @tweakable Set to true to make stairs ascend towards the stage, false to ascend away. */
+const STAIRS_ASCEND_TOWARDS_STAGE = true;
 
 export function createStage(dimensions) {
     const stageGroup = new THREE.Group();
@@ -30,7 +32,9 @@ export function createStage(dimensions) {
     stage.castShadow = true;
     stage.receiveShadow = true;
     if (STAGE_COLLISION_ENABLED) {
-        stage.userData.isBlock = true;
+        stage.userData.isBarrier = true;
+        /* @tweakable Marking the stage as a stair allows the player to step onto it smoothly without jumping. */
+        stage.userData.isStair = true;
     }
     stageGroup.add(stage);
 
@@ -70,37 +74,31 @@ export function createStage(dimensions) {
     stageGroup.add(stairsGroup);
 
     /* @tweakable The number of stairs leading to the stage. */
-    const stairCount = 4;
+    const stairCount = 6;
     const stairHeight = dimensions.height / stairCount;
     /* @tweakable The depth of each individual stair step. */
-    const stairDepth = 0.5;
+    const stairDepth = 0.4;
+    /* @tweakable The width of the stair steps, as a factor of stage width. */
+    const stairWidthFactor = 0.7;
+    const stairWidth = dimensions.width * stairWidthFactor;
 
-    // Build stairs from top to bottom to help with potential z-fighting on overlaps
-    for (let i = stairCount - 1; i >= 0; i--) {
-        /* @tweakable The width of the widest (bottom) stair step, as a factor of stage width. */
-        const baseStairWidthFactor = 0.4;
-        /* @tweakable How much narrower each step gets compared to the one below it, as a factor of stage width. */
-        const stairWidthTaperFactor = 0.05;
-        const stepIndexFromBottom = stairCount - 1 - i;
-        const stairWidth = dimensions.width * (baseStairWidthFactor - stepIndexFromBottom * stairWidthTaperFactor);
+    // Build stairs from bottom to top
+    for (let i = 0; i < stairCount; i++) {
+        const stepGeometry = new THREE.BoxGeometry(stairWidth, stairHeight, stairDepth);
+        const stair = new THREE.Mesh(stepGeometry, stageMaterial);
 
-        const currentStepTotalHeight = (i + 1) * stairHeight;
-        
-        // Use a single geometry for each step, from ground to its top, to create a solid look.
-        const stairGeometry = new THREE.BoxGeometry(stairWidth, currentStepTotalHeight, stairDepth);
-        const stair = new THREE.Mesh(stairGeometry, stageMaterial);
-
-        // Position the step. Y is based on its height from ground. Z is based on its distance from stage.
+        // Position each step on top of the previous one
+        const zOffset = STAIRS_ASCEND_TOWARDS_STAGE ? (stairCount - 1 - i) * stairDepth : i * stairDepth;
         stair.position.set(
             0,
-            currentStepTotalHeight / 2, // Center of the box is at half its total height
-            -dimensions.depth / 2 - stairDepth / 2 - stepIndexFromBottom * stairDepth
+            i * stairHeight + stairHeight / 2,
+            -dimensions.depth / 2 - stairDepth / 2 - zOffset
         );
 
         stair.castShadow = true;
         stair.receiveShadow = true;
         if (STAIRS_COLLISION_ENABLED) {
-            stair.userData.isBlock = true;
+            stair.userData.isBarrier = true;
             stair.userData.isStair = true;
         }
 

@@ -8,32 +8,32 @@
     {
       "type": "image",
       "name": "Ground texture",
-      "url": "assets/ground_textures/ground_texture.png"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/ground_textures/ground_texture.png"
     },
     {
       "type": "image",
       "name": "Sand texture",
-      "url": "assets/ground_textures/ground_texture_sand.png"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/ground_textures/ground_texture_sand.png"
     },
     {
       "type": "image",
       "name": "Dirt texture",
-      "url": "assets/ground_textures/ground_texture_dirt.png"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/ground_textures/ground_texture_dirt.png"
     },
     {
       "type": "image",
       "name": "Stone texture",
-      "url": "assets/ground_textures/ground_texture_stone.png"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/ground_textures/ground_texture_stone.png"
     },
     {
       "type": "image",
       "name": "Snow texture",
-      "url": "assets/ground_textures/ground_texture_snow.png"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/ground_textures/ground_texture_snow.png"
     },
     {
       "type": "image",
       "name": "Forest texture",
-      "url": "assets/ground_textures/ground_texture_forest.png"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/ground_textures/ground_texture_forest.png"
     },
     {
       "type": "script",
@@ -44,8 +44,7 @@
       "type": "script",
       "name": "Input controls",
       "url": "js/controls.js"
-    }
-    ,
+    },
     {
       "type": "model",
       "name": "Player idle animation",
@@ -219,34 +218,33 @@
     {
       "type": "model",
       "name": "Knight Idle Animation",
-      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored%20Knight/Animation_Idle_withSkin.glb"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored Knight/Animation_Idle_withSkin.glb"
     },
     {
       "type": "model",
       "name": "Knight Walking Animation",
-      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored%20Knight/Animation_Walking_withSkin.glb"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored Knight/Animation_Walking_withSkin.glb"
     },
     {
       "type": "model",
       "name": "Knight Running Animation",
-      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored%20Knight/Animation_Running_withSkin.glb"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored Knight/Animation_Running_withSkin.glb"
     },
     {
       "type": "model",
       "name": "Knight Listening Animation",
-      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored%20Knight/Animation_Listening_Gesture_withSkin.glb"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored Knight/Animation_Listening_Gesture_withSkin.glb"
     },
     {
       "type": "model",
       "name": "Knight Cheer with Both Hands Animation",
-      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored%20Knight/Animation_Cheer_with_Both_Hands_withSkin.glb"
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored Knight/Animation_Cheer_with_Both_Hands_withSkin.glb"
     },
     {
       "type": "model",
       "name": "Knight Cheer with Both Hands 1 Animation",
-      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored%20Knight/Animation_Cheer_with_Both_Hands_1_withSkin.glb"
-    }
-    ,
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Armored Knight/Animation_Cheer_with_Both_Hands_1_withSkin.glb"
+    },
     {
       "type": "model",
       "name": "Sprite Idle Animation",

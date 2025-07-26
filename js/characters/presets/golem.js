@@ -32,6 +32,8 @@ export const golemPreset = {
         color: "#7D7C7A",
         position: { x: -0.3, y: 0, z: 0 },
         scale: { x: 0.4, y: 0.8, z: 0.4 },
+        roughness: 0.9,
+        metalness: 0.1,
       },
       {
         type: "box",
@@ -39,6 +41,8 @@ export const golemPreset = {
         color: "#7D7C7A",
         position: { x: 0.3, y: 0, z: 0 },
         scale: { x: 0.4, y: 0.8, z: 0.4 },
+        roughness: 0.9,
+        metalness: 0.1,
       },
       // Arms
       {

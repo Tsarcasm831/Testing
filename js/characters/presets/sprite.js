@@ -1,3 +1,5 @@
+import { createSpectatorSpec } from './spectator.js';
+
 export const spritePreset = {
   id: "sprite",
   name: "Forest Sprite",
@@ -37,6 +39,8 @@ export const spritePreset = {
         color: "#4A3728",
         position: { x: -0.1, y: 0, z: 0 },
         scale: { x: 0.1, y: 0.6, z: 0.1 },
+        roughness: 0.9,
+        metalness: 0.1,
       },
       {
         type: "cylinder",
@@ -44,6 +48,8 @@ export const spritePreset = {
         color: "#4A3728",
         position: { x: 0.1, y: 0, z: 0 },
         scale: { x: 0.1, y: 0.6, z: 0.1 },
+        roughness: 0.9,
+        metalness: 0.1,
       },
       // Leaves
       {
@@ -62,4 +68,5 @@ export const spritePreset = {
       },
     ],
   },
+  spectatorSpec: createSpectatorSpec('#6B8E23') // OliveDrab
 };

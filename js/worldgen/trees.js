@@ -23,8 +23,16 @@ function createPalmTree(rng) {
     /* @tweakable The color of the palm tree leaves. */
     const palmLeavesMaterial = new THREE.MeshStandardMaterial({ color: 0x2E8B57, roughness: 0.8, metalness: 0.0, side: THREE.DoubleSide });
 
-    const trunkHeight = 8 + rng.random() * 4;
-    const trunkRadius = 0.2 + rng.random() * 0.1;
+    /* @tweakable The base height of palm tree trunks. */
+    const baseTrunkHeight = 8;
+    /* @tweakable The random additional height for palm tree trunks. */
+    const randTrunkHeight = 4;
+    const trunkHeight = baseTrunkHeight + rng.random() * randTrunkHeight;
+    /* @tweakable The base radius of palm tree trunks. */
+    const baseTrunkRadius = 0.2;
+    /* @tweakable The random additional radius for palm tree trunks. */
+    const randTrunkRadius = 0.1;
+    const trunkRadius = baseTrunkRadius + rng.random() * randTrunkRadius;
 
     const trunkGeometry = new THREE.CylinderGeometry(trunkRadius * 0.8, trunkRadius, trunkHeight, 8);
     trunkGeometry.translate(0, trunkHeight / 2, 0);
@@ -32,7 +40,9 @@ function createPalmTree(rng) {
     for (let j = 0; j < trunkGeometry.attributes.position.count; j++) {
         const y = trunkGeometry.attributes.position.getY(j);
         const bendFactor = Math.sin((y / trunkHeight) * Math.PI / 2);
-        const bendAmount = bendFactor * trunkRadius * 2;
+        /* @tweakable How much palm tree trunks bend. */
+        const bendAmountMultiplier = 2;
+        const bendAmount = bendFactor * trunkRadius * bendAmountMultiplier;
         trunkGeometry.attributes.position.setX(j, trunkGeometry.attributes.position.getX(j) + bendAmount);
     }
     
@@ -41,12 +51,21 @@ function createPalmTree(rng) {
     trunk.receiveShadow = true;
     tree.add(trunk);
 
-    /* @tweakable The number of leaves on a palm tree. */
-    const numLeaves = 6 + Math.floor(rng.random() * 4);
-    /* @tweakable Length of palm leaves. */
-    const palmLeafLength = 3 + rng.random() * 2;
-    /* @tweakable Width of palm leaves. */
-    const palmLeafWidth = 0.5 + rng.random() * 0.3;
+    /* @tweakable The minimum number of leaves on a palm tree. */
+    const minLeaves = 6;
+    /* @tweakable The random additional number of leaves on a palm tree. */
+    const randLeaves = 4;
+    const numLeaves = minLeaves + Math.floor(rng.random() * randLeaves);
+    /* @tweakable The base length of palm leaves. */
+    const baseLeafLength = 3;
+    /* @tweakable The random additional length for palm leaves. */
+    const randLeafLength = 2;
+    const palmLeafLength = baseLeafLength + rng.random() * randLeafLength;
+    /* @tweakable The base width of palm leaves. */
+    const baseLeafWidth = 0.5;
+    /* @tweakable The random additional width for palm leaves. */
+    const randLeafWidth = 0.3;
+    const palmLeafWidth = baseLeafWidth + rng.random() * randLeafWidth;
 
     for(let i = 0; i < numLeaves; i++) {
         const leafGeom = new THREE.BoxGeometry(palmLeafLength, 0.05, palmLeafWidth);
@@ -83,8 +102,16 @@ function createPineTree(rng, snowy = false) {
     /* @tweakable Color of snow on snowy pine trees. */
     const snowMaterial = new THREE.MeshStandardMaterial({ color: 0xFFFAFA, roughness: 0.9, metalness: 0.0 });
 
-    const trunkHeight = 6 + rng.random() * 8;
-    const trunkRadius = 0.3 + rng.random() * 0.2;
+    /* @tweakable The base height of pine tree trunks. */
+    const baseTrunkHeight = 6;
+    /* @tweakable The random additional height for pine tree trunks. */
+    const randTrunkHeight = 8;
+    const trunkHeight = baseTrunkHeight + rng.random() * randTrunkHeight;
+    /* @tweakable The base radius of pine tree trunks. */
+    const baseTrunkRadius = 0.3;
+    /* @tweakable The random additional radius for pine tree trunks. */
+    const randTrunkRadius = 0.2;
+    const trunkRadius = baseTrunkRadius + rng.random() * randTrunkRadius;
 
     const trunkGeometry = new THREE.CylinderGeometry(trunkRadius * 0.5, trunkRadius, trunkHeight, 8);
     trunkGeometry.translate(0, trunkHeight / 2, 0);
@@ -93,8 +120,11 @@ function createPineTree(rng, snowy = false) {
     trunk.receiveShadow = true;
     tree.add(trunk);
 
-    /* @tweakable The number of foliage layers on a pine tree. */
-    const numLeafLayers = 4 + Math.floor(rng.random() * 3);
+    /* @tweakable The minimum number of foliage layers on a pine tree. */
+    const minLeafLayers = 4;
+    /* @tweakable The random additional number of foliage layers on a pine tree. */
+    const randLeafLayers = 3;
+    const numLeafLayers = minLeafLayers + Math.floor(rng.random() * randLeafLayers);
     /* @tweakable Base radius of the lowest pine tree foliage layer. */
     const baseFoliageRadius = 2.5 + rng.random();
     /* @tweakable Height of each foliage layer on a pine tree. */
@@ -112,7 +142,7 @@ function createPineTree(rng, snowy = false) {
         tree.add(foliage);
 
         if (snowy) {
-             /* @tweakable The amount of snow on snowy trees (0-1). */
+             /* @tweakable The amount of snow on snowy trees (0-1). Higher values mean more snow. */
             const snowCoverage = 0.5 + rng.random() * 0.5;
             if (rng.random() < snowCoverage) {
                 const snowGeom = new THREE.ConeGeometry(radius * 0.95, foliageLayerHeight, 8);
@@ -136,8 +166,16 @@ function createSparseTree(rng) {
     /* @tweakable Color of sparse/dead tree trunks. */
     const sparseTrunkMaterial = new THREE.MeshStandardMaterial({ color: 0x5D5C61, roughness: 0.9, metalness: 0.1 });
 
-    const trunkHeight = 5 + rng.random() * 5;
-    const trunkRadius = 0.2 + rng.random() * 0.2;
+    /* @tweakable The base height of sparse tree trunks. */
+    const baseTrunkHeight = 5;
+    /* @tweakable The random additional height for sparse tree trunks. */
+    const randTrunkHeight = 5;
+    const trunkHeight = baseTrunkHeight + rng.random() * randTrunkHeight;
+    /* @tweakable The base radius of sparse tree trunks. */
+    const baseTrunkRadius = 0.2;
+    /* @tweakable The random additional radius for sparse tree trunks. */
+    const randTrunkRadius = 0.2;
+    const trunkRadius = baseTrunkRadius + rng.random() * randTrunkRadius;
 
     const trunkGeometry = new THREE.CylinderGeometry(trunkRadius * 0.7, trunkRadius, trunkHeight, 6);
     trunkGeometry.translate(0, trunkHeight / 2, 0);
@@ -146,9 +184,12 @@ function createSparseTree(rng) {
     trunk.receiveShadow = true;
     tree.add(trunk);
 
-    /* @tweakable The number of branches on sparse trees. */
-    const numBranches = 4 + Math.floor(rng.random() * 5);
-    /* @tweakable The base length of branches on sparse trees. */
+    /* @tweakable The minimum number of branches on sparse trees. */
+    const minBranches = 4;
+    /* @tweakable The random additional number of branches on sparse trees. */
+    const randBranches = 5;
+    const numBranches = minBranches + Math.floor(rng.random() * randBranches);
+    /* @tweakable The base length of branches on sparse trees, as a multiplier of trunk height. */
     const baseBranchLength = trunkHeight * 0.5;
 
     for (let i = 0; i < numBranches; i++) {
@@ -181,20 +222,36 @@ function createForestTree(rng, materials) {
     const trunkMaterial = materials.trunk[Math.floor(rng.random() * materials.trunk.length)];
     const leavesMaterial = materials.leaves[Math.floor(rng.random() * materials.leaves.length)];
   
+    /* @tweakable The minimum height of forest tree trunks. */
     const MIN_TRUNK_HEIGHT = 5;
+    /* @tweakable The random additional height for forest tree trunks. */
     const RAND_TRUNK_HEIGHT = 7;
+    /* @tweakable The base radius of forest tree trunks. */
     const BASE_TRUNK_RADIUS = 0.3;
+    /* @tweakable The random additional radius for forest tree trunks. */
     const RAND_TRUNK_RADIUS = 0.3;
+    /* @tweakable The number of sides for the trunk geometry. */
     const TRUNK_SEGMENTS = 12;
+    /* @tweakable How much the trunk tapers towards the top (0-1). */
     const TRUNK_TAPER = 0.8;
+    /* @tweakable The minimum number of main branches. */
     const MIN_BRANCHES = 3;
+    /* @tweakable The random additional number of main branches. */
     const RAND_BRANCHES = 4;
+    /* @tweakable The base radius of leaf clusters. */
     const LEAF_CLUSTER_RADIUS = 1.8;
+    /* @tweakable The detail of leaf cluster geometry. */
     const LEAF_CLUSTER_SEGMENTS = 5;
+    /* @tweakable The maximum recursion depth for branches. */
     const MAX_BRANCH_DEPTH = 3;
+    /* @tweakable How much each sub-branch shrinks compared to its parent. */
     const BRANCH_SHRINK_FACTOR = 0.7;
+    /* @tweakable The maximum vertical angle of branches. */
     const BRANCH_ANGLE_Y = Math.PI / 3;
+    /* @tweakable The range of horizontal angles for branches. */
     const BRANCH_ANGLE_XZ = Math.PI * 2;
+    /* @tweakable The amount of bend in the trunk, as a multiplier of trunk radius. */
+    const TRUNK_BEND_AMOUNT = 0.5;
   
     const trunkHeight = MIN_TRUNK_HEIGHT + rng.random() * RAND_TRUNK_HEIGHT;
     const trunkRadius = BASE_TRUNK_RADIUS + rng.random() * RAND_TRUNK_RADIUS;
@@ -205,7 +262,7 @@ function createForestTree(rng, materials) {
     for (let j = 0; j < trunkGeometry.attributes.position.count; j++) {
       const y = trunkGeometry.attributes.position.getY(j);
       const bendFactor = y / trunkHeight;
-      const bendAmount = Math.sin(bendFactor * Math.PI) * trunkRadius * 0.5;
+      const bendAmount = Math.sin(bendFactor * Math.PI) * trunkRadius * TRUNK_BEND_AMOUNT;
       trunkGeometry.attributes.position.setX(j, trunkGeometry.attributes.position.getX(j) + bendAmount);
     }
   
@@ -320,7 +377,11 @@ export function createTrees(scene, getHeight) {
     tree.position.y = getHeight ? getHeight(tree.position.x, tree.position.z) : 0;
 
     tree.rotation.y = rng.random() * Math.PI * 2;
-    const treeScale = 0.8 + rng.random() * 0.5;
+    /* @tweakable The base scale for all trees. */
+    const baseTreeScale = 0.8;
+    /* @tweakable The random additional scale for all trees. */
+    const randTreeScale = 0.5;
+    const treeScale = baseTreeScale + rng.random() * randTreeScale;
     tree.scale.set(treeScale, treeScale, treeScale);
 
     tree.userData.isTree = true;

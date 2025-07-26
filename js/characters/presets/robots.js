@@ -71,13 +71,13 @@ export const robotsPreset = {
       // Legs that will animate
       {
         type: "cylinder",
-        /* @tweakable Color of the robot's legs */
+        name: "leftLeg",
+        /* @tweakable Color of the robot's legs. */
         color: "#555555",
         position: { x: -0.3, y: 0, z: 0 },
         scale: { x: 0.1, y: 0.5, z: 0.1 },
         roughness: 0.7,
-        metalness: 0.6,
-        name: "leftLeg"
+        metalness: 0.6
       },
       {
         type: "cylinder",

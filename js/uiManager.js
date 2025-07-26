@@ -1,126 +1,111 @@
 import { BuildUI } from '../ui/buildUI.js';
 import { AdvancedBuildUI } from '../ui/advancedBuildUI.js';
-import { ChatUI } from '../ui/chatUI.js';
-import { ChangelogUI } from '../ui/changelogUI.js';
 import { CharacterCreatorUI } from '../ui/characterCreatorUI.js';
-import { AdModal } from '../ui/adModal.js';
 import { InventoryUI } from '../ui/inventoryUI.js';
+import { ChatUI } from '../ui/chatUI.js';
 import { MapUI } from '../ui/mapUI.js';
+import { ChangelogUI } from '../ui/changelogUI.js';
+import { MusicUI } from '../ui/musicUI.js';
 import { OptionsUI } from '../ui/optionsUI.js';
 import { CompassUI } from '../ui/compassUI.js';
-import { MusicUI } from '../ui/musicUI.js';
 import { ClockUI } from '../ui/clockUI.js';
 import { BestiaryUI } from '../ui/bestiaryUI.js';
+import { AdModal } from '../ui/adModal.js';
+import { presetCharacters } from '../js/characters/presets.js';
 
 export class UIManager {
     constructor(dependencies) {
         this.dependencies = dependencies;
-        this.inventoryUI = null;
-        this.mapUI = null;
-        this.optionsUI = null;
-        this.chatUI = null;
-        this.compassUI = null;
-        this.clockUI = null;
-        this.bestiaryUI = null;
-        this.tooltipElement = null;
+        this.buildUI = new BuildUI(dependencies);
+        this.advancedBuildUI = new AdvancedBuildUI(dependencies);
+        this.characterCreatorUI = new CharacterCreatorUI(dependencies);
+        this.inventoryUI = new InventoryUI(dependencies);
+        this.chatUI = new ChatUI(dependencies);
+        this.mapUI = new MapUI(dependencies);
+        this.changelogUI = new ChangelogUI(dependencies);
+        this.musicUI = new MusicUI(dependencies);
+        this.optionsUI = new OptionsUI(dependencies);
+        this.compassUI = new CompassUI(dependencies);
+        this.clockUI = new ClockUI(dependencies);
+        this.bestiaryUI = new BestiaryUI({ ...dependencies, presetCharacters });
+        this.adModal = new AdModal(dependencies);
+
+        this.tooltip = null;
     }
 
     init() {
-        new BuildUI(this.dependencies).create();
-        new AdvancedBuildUI(this.dependencies).create();
-        new ChangelogUI(this.dependencies).create();
-        
-        this.chatUI = new ChatUI(this.dependencies);
-        this.chatUI.create();
-        
-        new CharacterCreatorUI(this.dependencies).create();
-        
-        this.optionsUI = new OptionsUI(this.dependencies);
-        this.optionsUI.create();
-        
-        new AdModal(this.dependencies).setup();
-
-        this.inventoryUI = new InventoryUI(this.dependencies);
+        this.buildUI.create();
+        this.advancedBuildUI.create();
+        this.characterCreatorUI.create();
         this.inventoryUI.create();
-
-        this.mapUI = new MapUI(this.dependencies);
+        this.chatUI.create();
         this.mapUI.create();
-
-        this.bestiaryUI = new BestiaryUI(this.dependencies);
-        this.bestiaryUI.create();
-
-        new MusicUI(this.dependencies).create();
-
-        this.compassUI = new CompassUI(this.dependencies);
+        this.changelogUI.create();
+        this.musicUI.create();
+        this.optionsUI.create();
         this.compassUI.create();
-
-        this.clockUI = new ClockUI(this.dependencies);
         this.clockUI.create();
+        this.bestiaryUI.create();
+        this.adModal.setup();
 
-        this.initTooltip();
+        this.createTooltip();
+        this.setupTooltipListeners();
 
-        return {
-            inventoryUI: this.inventoryUI,
-            mapUI: this.mapUI,
-            bestiaryUI: this.bestiaryUI,
-        };
-    }
-
-    initTooltip() {
-        this.tooltipElement = document.createElement('div');
-        this.tooltipElement.className = 'tooltip';
-        document.body.appendChild(this.tooltipElement);
-        
-        document.addEventListener('mouseover', (e) => {
-            const target = e.target.closest('[data-tooltip]');
-            if (target) {
-                this.tooltipElement.textContent = target.getAttribute('data-tooltip');
-                this.tooltipElement.style.opacity = '1';
-                this.updateTooltipPosition(e);
-            }
-        });
-
-        document.addEventListener('mouseout', (e) => {
-            const target = e.target.closest('[data-tooltip]');
-            if (target) {
-                this.tooltipElement.style.opacity = '0';
-            }
-        });
-        
-        document.addEventListener('mousemove', (e) => {
-            if (this.tooltipElement.style.opacity === '1') {
-                this.updateTooltipPosition(e);
-            }
-        });
-    }
-
-    updateTooltipPosition(event) {
-        let x = event.clientX + 15;
-        let y = event.clientY + 15;
-        
-        const tooltipRect = this.tooltipElement.getBoundingClientRect();
-        const bodyRect = document.body.getBoundingClientRect();
-
-        if (x + tooltipRect.width > bodyRect.width) {
-            x = event.clientX - tooltipRect.width - 15;
-        }
-        if (y + tooltipRect.height > bodyRect.height) {
-            y = event.clientY - tooltipRect.height - 15;
-        }
-
-        this.tooltipElement.style.left = `${x}px`;
-        this.tooltipElement.style.top = `${y}px`;
+        return { inventoryUI: this.inventoryUI };
     }
 
     update() {
-        if (this.chatUI) {
-            this.chatUI.update();
+        if (this.mapUI.isOpen) {
+            this.mapUI.update();
         }
-        if (this.compassUI) {
-            this.compassUI.update();
+        this.compassUI.update();
+        this.clockUI.update();
+        this.chatUI.update();
+    }
+
+    createTooltip() {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        document.getElementById('ui-container').appendChild(tooltip);
+        this.tooltip = tooltip;
+    }
+
+    setupTooltipListeners() {
+        document.body.addEventListener('mouseover', (e) => {
+            const target = e.target.closest('[data-tooltip]');
+            if (target) {
+                this.tooltip.textContent = target.getAttribute('data-tooltip');
+                this.tooltip.style.opacity = '1';
+                this.updateTooltipPosition(e);
+            }
+        });
+
+        document.body.addEventListener('mouseout', (e) => {
+            const target = e.target.closest('[data-tooltip]');
+            if (target) {
+                this.tooltip.style.opacity = '0';
+            }
+        });
+
+        document.body.addEventListener('mousemove', (e) => {
+            if (this.tooltip.style.opacity === '1') {
+                this.updateTooltipPosition(e);
+            }
+        });
+    }
+
+    updateTooltipPosition(e) {
+        let x = e.clientX + 10;
+        let y = e.clientY - 30;
+
+        if (x + this.tooltip.offsetWidth > window.innerWidth) {
+            x = e.clientX - this.tooltip.offsetWidth - 10;
         }
-        if (this.clockUI) {
-            this.clockUI.update();
+        if (y < 0) {
+            y = e.clientY + 20;
         }
+
+        this.tooltip.style.left = `${x}px`;
+        this.tooltip.style.top = `${y}px`;
     }
 }

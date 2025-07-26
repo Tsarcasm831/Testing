@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Downloader } from './downloader.js';
 import { setupAnimatedPlayer, setupAnimatedRobot, setupAnimatedChicken, setupAnimatedWireframe, setupAnimatedAlien, setupEyebot, setupAnimatedShopkeeper, setupAnimatedOgre, setupAnimatedKnight, setupAnimatedSprite } from './animationSetup.js';
@@ -10,10 +11,12 @@ export class AssetReplacementManager {
         this.dependencies = dependencies;
         this.downloader = new Downloader();
         this.assets = null;
+        this.assetsDownloaded = false;
         this.statusElement = null;
         this.progressBarElement = null;
         // Optional callback for when the player model is replaced
         this.onPlayerModelReplaced = dependencies.onPlayerModelReplaced || null;
+        this.assetCache = {};
 
         this.modelTypes = {
             'player': {
@@ -86,6 +89,32 @@ export class AssetReplacementManager {
         };
     }
 
+    async preloadAllGameAssets() {
+        this.updateStatus('Loading asset list...', 0);
+        try {
+            const response = await fetch('assets.json');
+            const data = await response.json();
+
+            // All assets in assets.json should be preloaded now
+            this.assets = await this.downloader.preloadAssets(data.assets,
+                (asset, p) => {},
+                (overallProgress) => {
+                    const percent = (overallProgress * 100).toFixed(0);
+                    this.updateStatus(`Downloading assets... ${percent}%`, overallProgress);
+                }
+            );
+
+            this.updateStatus('All assets downloaded.', 1);
+            this.assetsDownloaded = true;
+            return true;
+        } catch (e) {
+            this.updateStatus('Failed to download assets.');
+            this.assetsDownloaded = false;
+            console.error(e);
+            return false;
+        }
+    }
+
     async preloadAndApplyPlayerModel() {
         this.updateStatus('Loading special player model...');
         try {
@@ -150,6 +179,30 @@ export class AssetReplacementManager {
         }
     }
 
+    async getTexture(name) {
+        if (this.assetCache[name]) {
+            return this.assetCache[name];
+        }
+
+        const assetBlob = this.assets[name];
+        if (!assetBlob) {
+            console.warn(`Asset not found in preloaded assets: ${name}`);
+            return new THREE.Texture();
+        }
+
+        const url = URL.createObjectURL(assetBlob);
+        try {
+            const textureLoader = new THREE.TextureLoader();
+            /* @tweakable This helps prevent CORS issues when loading textures. */
+            textureLoader.setCrossOrigin('anonymous');
+            const texture = await textureLoader.loadAsync(url);
+            this.assetCache[name] = texture;
+            return texture;
+        } finally {
+            URL.revokeObjectURL(url);
+        }
+    }
+
     async downloadExternalAssets() {
         this.updateStatus('Loading asset list...');
         try {
@@ -167,9 +220,11 @@ export class AssetReplacementManager {
                 }
             );
             this.updateStatus('All assets downloaded.');
+            this.assetsDownloaded = true;
             return true;
         } catch (e) {
             this.updateStatus('Failed to download assets.');
+            this.assetsDownloaded = false;
             console.error(e);
             return false;
         }

@@ -57,6 +57,8 @@ export const nursePreset = {
         position: { x: 0, y: 0.3, z: 0 },
         /* @tweakable The size of the nurse's collision volume. */
         scale: { x: 0.6, y: 0.6, z: 0.4 },
+        /* @tweakable Set to false if the invisible collision base for the nurse should not be rendered, even if transparent. */
+        visible: false,
         transparent: true,
         opacity: 0,
       },

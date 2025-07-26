@@ -83,6 +83,10 @@ export const eyebotPreset = {
         scale: { x: 0.5, y: 0.1, z: 0.3 },
         roughness: 0.2,
         metalness: 0.8,
+        /* @tweakable Set to false to make the eyebot's collision base invisible in previews. */
+        visible: false,
+        transparent: true,
+        opacity: 0
       },
     ],
     description: "A metallic eyebot character.",

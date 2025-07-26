@@ -40,6 +40,7 @@ export const shopkeeperPreset = {
         color: "#666666",
         position: { x: 0, y: 0, z: 0 },
         scale: { x: 0.5, y: 0.1, z: 0.3 },
+        visible: false,
         transparent: true,
         opacity: 0,
       },

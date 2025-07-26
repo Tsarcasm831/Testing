@@ -2,16 +2,17 @@ import * as THREE from 'three';
 import { createTerrain, createBarriers, createTrees, createClouds, createStarterHouse, createShopkeeper, createAmphitheatre, createHospital, createTavern, createWorkshop, createNurse, createTavernkeep, createGrass } from './worldGeneration.js';
 
 export class World {
-    constructor(scene, npcManager, room, matsData) {
+    constructor(scene, npcManager, room, matsData, assetManager) {
         this.scene = scene;
         this.npcManager = npcManager;
         this.terrain = null;
         this.room = room;
         this.matsData = matsData;
+        this.assetManager = assetManager;
     }
 
-    generate() {
-        this.terrain = createTerrain(this.scene);
+    async generate() {
+        this.terrain = await createTerrain(this.scene, this.assetManager);
         createBarriers(this.scene, this.terrain.userData.getHeight);
         createTrees(this.scene, this.terrain.userData.getHeight);
         createClouds(this.scene);

@@ -16,7 +16,7 @@ export function createTavernkeep(scene, terrain, npcManager, tavernPosition) {
     if (!shouldSpawnTavernkeep) return;
 
     /* @tweakable The relative position of the tavernkeep inside the tavern. Fine-tune to place them correctly. */
-    const tavernkeepRelativePos = new THREE.Vector3(-2, 0, -3);
+    const tavernkeepRelativePos = new THREE.Vector3(-2, 0.4, -3);
     const tavernkeepPosition = new THREE.Vector3().copy(tavernPosition).add(tavernkeepRelativePos);
 
     // Adjust Y position to be on top of the terrain/tavern floor

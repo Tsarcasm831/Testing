@@ -102,7 +102,8 @@ function _createCustomPlayerModel(playerGroup, characterSpec) {
         if (feature.name === "leftLeg" || feature.name === "rightLeg") {
             mesh.name = feature.name;
             const legHeight = feature.scale?.y || 1;
-            mesh.geometry.translate(0, -legHeight / 2, 0); // Set pivot to top of leg
+            // Set pivot to top of leg
+            if(legHeight > 0) mesh.geometry.translate(0, -legHeight / 2, 0); 
         }
         
         mesh.castShadow = true;

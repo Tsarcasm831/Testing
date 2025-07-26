@@ -42,6 +42,17 @@ export const ghostPreset = {
         transparent: true,
         opacity: 0.8,
       },
+       // Base for collision
+      {
+        type: "box",
+        color: "#666666",
+        position: { x: 0, y: 0, z: 0 },
+        scale: { x: 0.5, y: 0.1, z: 0.3 },
+        /* @tweakable Set to false if the invisible collision base for the ghost should not be rendered, even if transparent. */
+        visible: false,
+        transparent: true,
+        opacity: 0,
+      },
     ],
   },
 };

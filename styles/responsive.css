@@ -29,24 +29,30 @@
 /* @tweakable Vertical layout for main UI buttons on mobile */
 .mobile-device #options-button {
     /* @tweakable The bottom position of the options button on mobile. */
-    bottom: 370px;
+    bottom: 300px;
     /* @tweakable The right position of the options button on mobile. */
     right: 20px;
 }
 .mobile-device #map-button {
-    /* @tweakable The bottom position of the map button on mobile. */
+    /* @tweakable The bottom position of the map button on mobile devices. */
     bottom: 160px;
-    /* @tweakable The right position of the map button on mobile. */
+    /* @tweakable The right position of the map button on mobile devices. */
     right: 20px;
 }
 .mobile-device #music-button {
-    /* @tweakable The bottom position of the music button on mobile. */
+    /* @tweakable The bottom position of the music button on mobile devices. */
     bottom: 230px;
-    /* @tweakable The right position of the music button on mobile. */
+    /* @tweakable The right position of the music button on mobile devices. */
+    right: 20px;
+}
+.mobile-device #bestiary-button {
+    /* @tweakable The bottom position of the bestiary button on mobile devices. */
+    bottom: 370px;
+    /* @tweakable The right position of the bestiary button on mobile devices. */
     right: 20px;
 }
 .mobile-device #inventory-button {
-    /* @tweakable The bottom position of the inventory button on mobile. */
+    /* @tweakable The bottom position of the inventory button on mobile devices. */
     bottom: 90px;
     /* @tweakable The right position of the inventory button on mobile. */
     right: 20px;

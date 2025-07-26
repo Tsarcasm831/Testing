@@ -55,6 +55,8 @@ export const ogrePreset = {
         color: "#9E9478",
         position: { x: -0.4, y: 0, z: 0 },
         scale: { x: 0.4, y: 0.8, z: 0.4 },
+        roughness: 0.8,
+        metalness: 0.1,
       },
       {
         type: "cylinder",
@@ -62,6 +64,8 @@ export const ogrePreset = {
         color: "#9E9478",
         position: { x: 0.4, y: 0, z: 0 },
         scale: { x: 0.4, y: 0.8, z: 0.4 },
+        roughness: 0.8,
+        metalness: 0.1,
       },
     ],
   },

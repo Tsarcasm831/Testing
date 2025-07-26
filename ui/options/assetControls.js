@@ -6,7 +6,11 @@ export function setupAssetControls(modal, assetReplacementManager) {
         }
     };
 
-    toggleReplaceButtons(false);
+    if (assetReplacementManager.assetsDownloaded) {
+        toggleReplaceButtons(true);
+    } else {
+        toggleReplaceButtons(false);
+    }
 
     modal.querySelector('#download-assets').addEventListener('click', async () => {
         const success = await assetReplacementManager.downloadExternalAssets();
