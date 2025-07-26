@@ -2,6 +2,13 @@ export const wireframePreset = {
   id: "wireframe",
   name: "Wireframe",
   description: "A walking wireframe character",
+  /* @tweakable The wireframe's conversation chain. */
+  dialogue: [
+    "I am but a construct.",
+    "My form is simple, my purpose... unclear.",
+    "Do you see the world as I do? A series of lines and polygons?",
+    "DATA. PROCESSING. WANDERING."
+  ],
   spec: {
     customMode: true,
     features: [

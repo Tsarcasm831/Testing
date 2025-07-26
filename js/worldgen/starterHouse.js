@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { createMaterial } from '../mats/createMaterial.js';
 
 /* @tweakable The material ID for the house foundation from mats.json. */
 const foundationMaterialID = 'struct_concrete';
@@ -13,7 +14,7 @@ const roofTextureRepeat = [4, 4];
 /* @tweakable Texture repetitions for house foundation. [horizontal, vertical] */
 const foundationTextureRepeat = [4, 4];
 
-function findMaterial(materialID, matsData) {
+function findMaterialInfo(materialID, matsData) {
     for (const category of matsData.materials) {
         const item = category.items.find(i => i.materialID === materialID);
         if (item) return item;
@@ -120,9 +121,9 @@ export function createStarterHouse(scene, getHeight, matsData) {
   /* @tweakable The thickness of the foundation slab. */
   const foundationThickness = 0.2;
 
-  const foundationMatInfo = findMaterial(foundationMaterialID, matsData);
-  const wallMatInfo = findMaterial(wallMaterialID, matsData);
-  const roofMatInfo = findMaterial(roofMaterialID, matsData);
+  const foundationMatInfo = findMaterialInfo(foundationMaterialID, matsData);
+  const wallMatInfo = findMaterialInfo(wallMaterialID, matsData);
+  const roofMatInfo = findMaterialInfo(roofMaterialID, matsData);
 
   const foundationMaterial = createPBRMaterial(foundationMatInfo, foundationTextureRepeat[0], foundationTextureRepeat[1]);
   const wallMaterial = createPBRMaterial(wallMatInfo, wallTextureRepeat[0], wallTextureRepeat[1]);

@@ -2,6 +2,13 @@ export const golemPreset = {
   id: "golem",
   name: "Stone Golem",
   description: "A creature of rock and crystal.",
+  /* @tweakable The golem's conversation chain. */
+  dialogue: [
+    "*rumbling sounds*",
+    "I... protect... this... land.",
+    "My heart is crystal, my will is stone.",
+    "Do not disturb the ancient stones."
+  ],
   spec: {
     customMode: true,
     features: [

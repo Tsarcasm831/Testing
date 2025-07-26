@@ -2,6 +2,13 @@ export const chickenPreset = {
   id: "chicken",
   name: "Chicken",
   description: "A cartoonish chicken",
+  /* @tweakable The chicken's conversation chain. */
+  dialogue: [
+    "Bawk bawk!",
+    "Cluck?",
+    "*pecks at the ground*",
+    "Bawk bawk ba-gawk!"
+  ],
   spec: {
     customMode: true,
     features: [

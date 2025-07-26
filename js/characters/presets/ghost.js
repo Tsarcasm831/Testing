@@ -2,6 +2,13 @@ export const ghostPreset = {
   id: "ghost",
   name: "Wandering Spirit",
   description: "A spectral apparition.",
+  /* @tweakable The ghost's conversation chain. */
+  dialogue: [
+    "Wooooo...",
+    "Have you seen... my spectral form?",
+    "...so cold...",
+    "This world is but a shadow of what it once was."
+  ],
   spec: {
     customMode: true,
     features: [

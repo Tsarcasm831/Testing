@@ -1,8 +1,17 @@
 /* @tweakable The number of assets to download in parallel. */
 const MAX_PARALLEL_DOWNLOADS = 5;
+/* @tweakable The name of the cache storage for downloaded assets. */
+const ASSET_CACHE_NAME = 'game-assets-v1';
 
 export class Downloader {
   async download(url, progressCallback) {
+    const cache = await caches.open(ASSET_CACHE_NAME);
+    const cachedResponse = await cache.match(url);
+    if (cachedResponse) {
+        if (progressCallback) progressCallback(1);
+        return cachedResponse.blob();
+    }
+
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
@@ -39,7 +48,15 @@ export class Downloader {
       }
     }
 
-    return new Blob(chunks);
+    const blob = new Blob(chunks);
+    const responseToCache = new Response(blob, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers
+    });
+    cache.put(url, responseToCache);
+
+    return blob;
   }
 
   async preloadAssets(assets, progressCallback, overallProgressCallback) {

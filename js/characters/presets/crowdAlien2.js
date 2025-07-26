@@ -5,6 +5,13 @@ export const crowdAlien2Preset = {
   id: 'crowd_alien_2',
   name: 'Crowd Alien 2',
   description: 'A generic crowd alien variant 2.',
+  /* @tweakable The conversation chain for this alien spectator. */
+  dialogue: [
+    "Three eyes are better than one for watching this show.",
+    "This is much better than the holo-dramas on my home world.",
+    "I hope they sell snacks. I'm craving a nutrient paste.",
+    "Fascinating... simply fascinating."
+  ],
   spec: {
     customMode: true,
     features: [

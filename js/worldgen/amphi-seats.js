@@ -33,6 +33,11 @@ const DEBUG_INDIVIDUAL_SEAT_BOX = true;
 /* @tweakable The color of the debug collision box for individual seats. */
 const DEBUG_INDIVIDUAL_SEAT_BOX_COLOR = 0xffa500;
 
+/* @tweakable Vertical offset for simplified spectator NPCs to position them in a sitting posture on seats. */
+const spectatorNpcVerticalOffset = -0.4;
+/* @tweakable Vertical offset for full-detail crowd NPCs to position them on seats. May require adjustment if they appear to float or sink. */
+const fullNpcVerticalOffset = 0;
+
 /**
  * Creates stairs leading up to the first row of amphitheater seats.
  * @param {THREE.Group} group The group to add the stairs to.
@@ -100,7 +105,8 @@ function spawnCrowdNPCs(group, presets, transforms, npcManager, terrain, seatBas
         model.rotation.copy(transform.rotation);
         
         // Adjust position to be on top of the seat.
-        model.position.y += seatBaseHeight;
+        const verticalOffset = USE_SPECTATOR_MODELS ? spectatorNpcVerticalOffset : fullNpcVerticalOffset;
+        model.position.y += seatBaseHeight + verticalOffset;
         
         model.userData.isNpc = true;
         model.name = preset.name;

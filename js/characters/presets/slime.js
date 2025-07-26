@@ -2,6 +2,13 @@ export const slimePreset = {
   id: "slime",
   name: "Jiggly Slime",
   description: "A wobbly, translucent slime.",
+  /* @tweakable The slime's conversation chain. */
+  dialogue: [
+    "*bloop*",
+    "*jiggles happily*",
+    "Splish... sploosh...",
+    "*a small bubble rises to the surface and pops*"
+  ],
   spec: {
     customMode: true,
     features: [

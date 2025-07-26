@@ -4,6 +4,13 @@ export const spritePreset = {
   id: "sprite",
   name: "Forest Sprite",
   description: "A being of leaf and vine.",
+  /* @tweakable The sprite's conversation chain. */
+  dialogue: [
+    "Hello there! Isn't the forest lovely today?",
+    "Have you seen the fireflies at dusk? They're magical!",
+    "The whispers of the wind tell many secrets.",
+    "Be kind to the trees, they are ancient and wise."
+  ],
   spec: {
     customMode: true,
     features: [

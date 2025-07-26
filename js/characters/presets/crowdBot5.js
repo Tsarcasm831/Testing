@@ -5,6 +5,13 @@ export const crowdBot5Preset = {
   id: 'crowd_bot_5',
   name: 'Crowd Bot 5',
   description: 'A generic crowd robot variant 5.',
+  /* @tweakable The conversation chain for this robot spectator. */
+  dialogue: [
+    "My optical sensors are fully engaged.",
+    "Processing... this is... fun.",
+    "The performers are operating at peak efficiency.",
+    "Initiating 'wave hands in the air' protocol."
+  ],
   spec: {
     customMode: true,
     features: [

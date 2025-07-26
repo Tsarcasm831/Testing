@@ -259,6 +259,561 @@
       "type": "model",
       "name": "Sprite Listening Animation",
       "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/Sprite/Animation_Listening_Gesture_withSkin.glb"
+    },
+    {
+      "type": "image",
+      "name": "brickVeneer albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/brickVeneer/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "brickVeneer ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/brickVeneer/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "brickVeneer normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/brickVeneer/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "brickVeneer roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/brickVeneer/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "fiberCement albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/fiberCement/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "fiberCement ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/fiberCement/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "fiberCement normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/fiberCement/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "fiberCement roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/fiberCement/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "stucco albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/stucco/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "stucco ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/stucco/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "stucco height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/stucco/height.png"
+    },
+    {
+      "type": "image",
+      "name": "stucco normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/stucco/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "stucco roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/stucco/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "vinylSiding albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/vinylSiding/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "vinylSiding ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/vinylSiding/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "vinylSiding normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/vinylSiding/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "vinylSiding roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/vinylSiding/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "woodSiding albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/woodSiding/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "woodSiding ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/woodSiding/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "woodSiding normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/woodSiding/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "woodSiding roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/claddingAndSiding/woodSiding/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/height.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "carpet roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/carpet/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "ceramicTile albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/ceramicTile/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "ceramicTile ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/ceramicTile/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "ceramicTile normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/ceramicTile/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "ceramicTile roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/ceramicTile/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "hardwood albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/hardwood/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "hardwood ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/hardwood/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "hardwood normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/hardwood/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "hardwood roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/hardwood/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "plaster albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/plaster/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "plaster ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/plaster/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "plaster normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/plaster/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "plaster roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/interior/plaster/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/height.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/height.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "metalPanels albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/metalPanels/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "metalPanels metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/metalPanels/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "metalPanels normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/metalPanels/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "metalPanels roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/metalPanels/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "slate albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/slate/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "slate ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/slate/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "slate normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/slate/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "slate roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/slate/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "brick albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "brick ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "brick height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/height.png"
+    },
+    {
+      "type": "image",
+      "name": "brick metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "brick normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "brick roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "cementBoard albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/cementBoard/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "cementBoard ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/cementBoard/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "cementBoard normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/cementBoard/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "cementBoard roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/cementBoard/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/height.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "steel albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "steel ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "steel height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/height.png"
+    },
+    {
+      "type": "image",
+      "name": "steel metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "steel normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "steel roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "stone albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "stone ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "stone height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/height.png"
+    },
+    {
+      "type": "image",
+      "name": "stone metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "stone normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "stone roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "wood albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/wood/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "wood ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/wood/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "wood normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/wood/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "wood roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/wood/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "drywall albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/drywall/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "drywall ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/drywall/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "drywall normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/drywall/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "drywall roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/drywall/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "glass albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/glass/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "glass ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/glass/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "glass normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/glass/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "glass roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/glass/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "osb albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/osb/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "osb ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/osb/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "osb normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/osb/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "osb roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/osb/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "plywood albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/plywood/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "plywood ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/plywood/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "plywood normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/plywood/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "plywood roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/plywood/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "sip albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/sip/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "sip ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/sip/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "sip normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/sip/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "sip roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/walls/sip/roughness.png"
     }
   ]
 }

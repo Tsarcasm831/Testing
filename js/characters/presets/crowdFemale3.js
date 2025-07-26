@@ -5,6 +5,13 @@ export const crowdFemale3Preset = {
   id: 'crowd_female_3',
   name: 'Crowd Female 3',
   description: 'A generic crowd female variant 3.',
+  /* @tweakable The conversation chain for this female spectator. */
+  dialogue: [
+    "Isn't this just the best?",
+    "I hope it doesn't end soon.",
+    "The performers are so talented.",
+    "I'm having a wonderful time."
+  ],
   spec: {
     customMode: true,
     features: [

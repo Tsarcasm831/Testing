@@ -2,6 +2,13 @@ export const plantCreaturePreset = {
   id: "plant_creature",
   name: "Forest Sprite",
   description: "A being of leaf and vine.",
+  /* @tweakable The plant creature's conversation chain. */
+  dialogue: [
+    "*rustling leaves*",
+    "The forest speaks... do you listen?",
+    "We are all connected... root and branch.",
+    "Feel the life of the world around you."
+  ],
   spec: {
     customMode: true,
     features: [

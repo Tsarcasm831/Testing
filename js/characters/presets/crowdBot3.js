@@ -5,6 +5,13 @@ export const crowdBot3Preset = {
   id: 'crowd_bot_3',
   name: 'Crowd Bot 3',
   description: 'A generic crowd robot variant 3.',
+  /* @tweakable The conversation chain for this robot spectator. */
+  dialogue: [
+    "Logical. The performance is proceeding as anticipated.",
+    "My power levels are stable, but my interest is peaking.",
+    "I have recorded this event for future analysis.",
+    "Statement: This is a satisfactory recreational activity."
+  ],
   spec: {
     customMode: true,
     features: [

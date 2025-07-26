@@ -50,27 +50,19 @@ export async function createTerrain(scene, assetManager) {
 
   const textureLoader = new THREE.TextureLoader();
 
-  const useAssetManager = assetManager && assetManager.assets;
-  const getTex = async (name, path) => {
-      if (useAssetManager && assetManager.assets[name]) {
-          return await assetManager.getTexture(name);
-      }
-      return await textureLoader.loadAsync(path);
-  };
-
   const textures = {
         /* @tweakable The file path for the grass texture used on the terrain. */
-        grass: await getTex('Ground texture', GROUND_TEXTURE_FILENAME),
+        grass: await textureLoader.loadAsync('assets/ground_textures/ground_texture.png'),
         /* @tweakable The file path for the sand texture used on the terrain. */
-        sand: await getTex('Sand texture', 'assets/ground_textures/ground_texture_sand.png'),
+        sand: await textureLoader.loadAsync('assets/ground_textures/ground_texture_sand.png'),
         /* @tweakable The file path for the dirt texture used on the terrain. */
-        dirt: await getTex('Dirt texture', 'assets/ground_textures/ground_texture_dirt.png'),
+        dirt: await textureLoader.loadAsync('assets/ground_textures/ground_texture_dirt.png'),
         /* @tweakable The file path for the stone texture used on the terrain. */
-        stone: await getTex('Stone texture', 'assets/ground_textures/ground_texture_stone.png'),
+        stone: await textureLoader.loadAsync('assets/ground_textures/ground_texture_stone.png'),
         /* @tweakable The file path for the snow texture used on the terrain. */
-        snow: await getTex('Snow texture', 'assets/ground_textures/ground_texture_snow.png'),
+        snow: await textureLoader.loadAsync('assets/ground_textures/ground_texture_snow.png'),
         /* @tweakable The file path for the forest texture used on the terrain. */
-        forest: await getTex('Forest texture', 'assets/ground_textures/ground_texture_forest.png')
+        forest: await textureLoader.loadAsync('assets/ground_textures/ground_texture_forest.png')
     };
 
   const totalZonesSide = ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE;
@@ -125,13 +117,20 @@ export async function createTerrain(scene, assetManager) {
       /* @tweakable The overall scale of the terrain textures. Smaller values make textures larger. */
       shader.uniforms.textureScale = { value: 0.2 };
 
-      shader.vertexShader = 'varying vec3 vWorldPosition;\n' + shader.vertexShader;
+      shader.vertexShader = 'varying vec3 vWorldPosition;\nvarying vec2 vUv;\n' + shader.vertexShader;
       shader.vertexShader = shader.vertexShader.replace(
           '#include <worldpos_vertex>',
           `
           #include <worldpos_vertex>
           vWorldPosition = worldPosition.xyz;
           `
+      );
+      shader.vertexShader = shader.vertexShader.replace(
+        '#include <uv_vertex>',
+        `
+        #include <uv_vertex>
+        vUv = uv;
+        `
       );
 
       shader.fragmentShader = 'varying vec3 vWorldPosition;\n' +
@@ -206,16 +205,16 @@ export async function createTerrain(scene, assetManager) {
           '#include <map_fragment>',
           `
           vec4 defaultColor = vec4(0.5, 0.5, 0.5, 1.0); // Fallback gray
-          vec4 texelColor = texture2D(map, vUv).w > 0.0 ? triplanarTexture(map, vWorldPosition, vNormal) : defaultColor; // Base grass texture
+          vec4 texelColor = triplanarTexture(map, vWorldPosition, vNormal); // Base grass texture
 
           vec2 pos = vWorldPosition.xz;
           float height = vWorldPosition.y;
 
-          vec4 sandColor = texture2D(sandTexture, vUv).w > 0.0 ? triplanarTexture(sandTexture, vWorldPosition, vNormal) : defaultColor;
-          vec4 snowColor = texture2D(snowTexture, vUv).w > 0.0 ? triplanarTexture(snowTexture, vWorldPosition, vNormal) : defaultColor;
-          vec4 forestColor = texture2D(forestTexture, vUv).w > 0.0 ? triplanarTexture(forestTexture, vWorldPosition, vNormal) : defaultColor;
-          vec4 dirtColor = texture2D(dirtTexture, vUv).w > 0.0 ? triplanarTexture(dirtTexture, vWorldPosition, vNormal) : defaultColor;
-          vec4 stoneColor = texture2D(stoneTexture, vUv).w > 0.0 ? triplanarTexture(stoneTexture, vWorldPosition, vNormal) : defaultColor;
+          vec4 sandColor = triplanarTexture(sandTexture, vWorldPosition, vNormal);
+          vec4 snowColor = triplanarTexture(snowTexture, vWorldPosition, vNormal);
+          vec4 forestColor = triplanarTexture(forestTexture, vWorldPosition, vNormal);
+          vec4 dirtColor = triplanarTexture(dirtTexture, vWorldPosition, vNormal);
+          vec4 stoneColor = triplanarTexture(stoneTexture, vWorldPosition, vNormal);
           
           float blendNoise = (fbm(pos * NOISE_SCALE) - 0.25) * blendWidth;
 

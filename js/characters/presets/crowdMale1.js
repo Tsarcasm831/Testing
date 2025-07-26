@@ -5,6 +5,13 @@ export const crowdMale1Preset = {
   id: 'crowd_male_1',
   name: 'Crowd Male 1',
   description: 'A generic crowd male variant 1.',
+  /* @tweakable The conversation chain for this male spectator. */
+  dialogue: [
+    "Pretty good show, huh?",
+    "I've seen them before, they're always great.",
+    "Hope the weather holds up.",
+    "Can you see okay from here?"
+  ],
   spec: {
     customMode: true,
     features: [

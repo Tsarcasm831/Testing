@@ -4,11 +4,12 @@ import { LifespanExtender } from './lifespanExtender.js';
 import { PreviewManager } from './previewManager.js';
 
 export class BuildTool {
-  constructor(scene, camera, controls, terrain) {
+  constructor(scene, camera, controls, terrain, assetManager) {
     this.scene = scene;
     this.camera = camera;
     this.controls = controls;
     this.terrain = terrain;
+    this.assetManager = assetManager;
     this.enabled = false;
     this.lastTapTime = 0;
     this.buildMaterials = this.createBuildMaterials();
@@ -28,6 +29,8 @@ export class BuildTool {
   }
 
   createBuildMaterials() {
+    // This now just creates placeholder materials. The actual materials with textures
+    // will be created on-demand when needed, using the assetManager.
     return [
       new THREE.MeshStandardMaterial({ 
         color: 0xff4444, roughness: 0.7, metalness: 0.3

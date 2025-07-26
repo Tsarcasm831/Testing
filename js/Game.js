@@ -87,7 +87,7 @@ export class Game {
         const progressBar = document.getElementById('progress-bar');
         assetReplacementManager.setStatusElement(loadingStatus, progressBar);
 
-        /* @tweakable Set to true to automatically download all GLB assets on the loading screen. */
+        /* @tweakable Set to true to automatically download all assets on the loading screen. */
         const downloadAllAssetsOnLoad = true;
         if (downloadAllAssetsOnLoad) {
             await assetReplacementManager.preloadAllGameAssets();

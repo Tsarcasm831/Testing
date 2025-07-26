@@ -187,7 +187,7 @@ export class InteractionManager {
             dialogue = preset.dialogue[this.targetNpc.dialogueIndex];
             this.targetNpc.dialogueIndex = (this.targetNpc.dialogueIndex + 1) % preset.dialogue.length;
             this.openModal(dialogue, this.targetNpc);
-        } else {
+        } else if (this.targetNpc.model.userData.characterSpec) {
             // Fallback to AI generation
             this.openModal("Thinking...", this.targetNpc);
             try {

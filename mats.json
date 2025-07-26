@@ -8,6 +8,7 @@
           "materialID": "struct_wood",
           "modelModule": "js/mats/struct_wood.js",
           "textureDir": "assets/textures/structural/wood/",
+          "assetNamePrefix": "wood",
           "textureDesc": "Seamless oak plank boards, warm honey-brown with visible straight grain, scattered knots, light edge wear, matte finish. PBR maps: albedo, packed normal/roughness/AO."
         },
         {
@@ -15,6 +16,7 @@
           "materialID": "struct_concrete",
           "modelModule": "js/mats/struct_concrete.js",
           "textureDir": "assets/textures/structural/concrete/",
+          "assetNamePrefix": "concrete",
           "textureDesc": "Poured gray concrete surface, fine sand aggregate, subtle trowel lines, tiny pockmarks, slight discoloration patches. Include roughness, height, and AO for depth."
         },
         {
@@ -22,6 +24,7 @@
           "materialID": "struct_steel",
           "modelModule": "js/mats/struct_steel.js",
           "textureDir": "assets/textures/structural/steel/",
+          "assetNamePrefix": "steel",
           "textureDesc": "Galvanized structural I-beam steel, cool bluish tint, faint mill scale streaks, light scratches, low-gloss clear coat. Metalness, normal, and roughness maps required."
         },
         {
@@ -29,6 +32,7 @@
           "materialID": "struct_brick",
           "modelModule": "js/mats/struct_brick.js",
           "textureDir": "assets/textures/structural/brick/",
+          "assetNamePrefix": "brick",
           "textureDesc": "Traditional red-orange clay bricks in running bond, sand-cement mortar joints, chipped edges, soot stains near top rows. Provide albedo, height, AO, roughness."
         },
         {
@@ -36,6 +40,7 @@
           "materialID": "struct_stone",
           "modelModule": "js/mats/struct_stone.js",
           "textureDir": "assets/textures/structural/stone/",
+          "assetNamePrefix": "stone",
           "textureDesc": "Random ashlar granite blocks, light gray flecked with mica, deep mortar recesses, lichen speckles. Include high-res normal and height for rugged relief."
         },
         {
@@ -43,6 +48,7 @@
           "materialID": "struct_cementboard",
           "modelModule": "js/mats/struct_cementboard.js",
           "textureDir": "assets/textures/structural/cementBoard/",
+          "assetNamePrefix": "cementBoard",
           "textureDesc": "Fiber-cement sheet, neutral gray, subtle fiber grain pattern, fine surface sand, hairline cracks. PBR: albedo, normal, roughness, AO for realism."
         }
       ]
@@ -55,6 +61,7 @@
           "materialID": "wall_drywall",
           "modelModule": "js/mats/wall_drywall.js",
           "textureDir": "assets/textures/walls/drywall/",
+          "assetNamePrefix": "drywall",
           "textureDesc": "Paint-ready gypsum board, off-white, faint joint compound seams, tiny surface dimples, satin finish. Normal map subtle, roughness low-variance."
         },
         {
@@ -62,6 +69,7 @@
           "materialID": "wall_plywood",
           "modelModule": "js/mats/wall_plywood.js",
           "textureDir": "assets/textures/walls/plywood/",
+          "assetNamePrefix": "plywood",
           "textureDesc": "Construction-grade plywood sheet, alternating veneer grain, occasional football patches, warm tan color, matte. Provide seamless tiling, normal for grain relief."
         },
         {
@@ -69,6 +77,7 @@
           "materialID": "wall_osb",
           "modelModule": "js/mats/wall_osb.js",
           "textureDir": "assets/textures/walls/osb/",
+          "assetNamePrefix": "osb",
           "textureDesc": "Oriented-strand board flakes, yellow-brown resin specks, random strand orientation, rough tactile surface. Height and normal should emphasize chip depth."
         },
         {
@@ -76,6 +85,7 @@
           "materialID": "wall_glass",
           "modelModule": "js/mats/wall_glass.js",
           "textureDir": "assets/textures/walls/glass/",
+          "assetNamePrefix": "glass",
           "textureDesc": "Clear float glass pane, 2 mm grime along edges, micro-scratches, slight green tint at thickness. Roughness map minimal; include thin-film normal for realism."
         },
         {
@@ -83,6 +93,7 @@
           "materialID": "wall_sip",
           "modelModule": "js/mats/wall_sip.js",
           "textureDir": "assets/textures/walls/sip/",
+          "assetNamePrefix": "sip",
           "textureDesc": "SIP cross-section: OSB faces with beveled foam core edge, light nail marks. Texture split: wood exterior, foam interior for cutaway visuals."
         }
       ]
@@ -95,6 +106,7 @@
           "materialID": "roof_asphalt",
           "modelModule": "js/mats/roof_asphalt.js",
           "textureDir": "assets/textures/roofing/asphaltShingles/",
+          "assetNamePrefix": "asphaltShingles",
           "textureDesc": "Architectural asphalt shingles, dark charcoal granules, staggered courses, light moss flecks, granular height variance. Normal and roughness highlight grit."
         },
         {
@@ -102,6 +114,7 @@
           "materialID": "roof_metal",
           "modelModule": "js/mats/roof_metal.js",
           "textureDir": "assets/textures/roofing/metalPanels/",
+          "assetNamePrefix": "metalPanels",
           "textureDesc": "Standing-seam metal roof, faded red paint, subtle panel ribs every 12 in, slight oil-canning waviness, fine rust specks near seams. Metalness workflow."
         },
         {
@@ -109,6 +122,7 @@
           "materialID": "roof_clay",
           "modelModule": "js/mats/roof_clay.js",
           "textureDir": "assets/textures/roofing/clayTiles/",
+          "assetNamePrefix": "clayTiles",
           "textureDesc": "Spanish barrel clay tiles, terracotta orange, weathered edges, scattered lichen, alternating convex rows. Height map for curved profile, roughness varied."
         },
         {
@@ -116,6 +130,7 @@
           "materialID": "roof_slate",
           "modelModule": "js/mats/roof_slate.js",
           "textureDir": "assets/textures/roofing/slate/",
+          "assetNamePrefix": "slate",
           "textureDesc": "Hand-split slate shingles, dark graphite gray, thin chips, overlapping pattern, subtle mica sparkle. Include high-detail normal for layered edges."
         }
       ]
@@ -128,6 +143,7 @@
           "materialID": "siding_wood",
           "modelModule": "js/mats/siding_wood.js",
           "textureDir": "assets/textures/claddingAndSiding/woodSiding/",
+          "assetNamePrefix": "woodSiding",
           "textureDesc": "Horizontal cedar clapboards, semi-transparent stain, visible grain, slight warping, nail heads flush. Provide tiling seamlessness, normal for board overlap."
         },
         {
@@ -135,6 +151,7 @@
           "materialID": "siding_vinyl",
           "modelModule": "js/mats/siding_vinyl.js",
           "textureDir": "assets/textures/siding/vinylSiding/",
+          "assetNamePrefix": "vinylSiding",
           "textureDesc": "Double-lap vinyl panels, light beige, subtle woodgrain emboss, interlocking seams with shadow gaps. Roughness low, normal gentle for emboss depth."
         },
         {
@@ -142,6 +159,7 @@
           "materialID": "siding_fiberCement",
           "modelModule": "js/mats/siding_fiberCement.js",
           "textureDir": "assets/textures/siding/fiberCement/",
+          "assetNamePrefix": "fiberCement",
           "textureDesc": "Fiber-cement planks, factory-primed gray, faint linear fiber striations, beveled drip edge. Include normal and slight speckled roughness variation."
         },
         {
@@ -149,6 +167,7 @@
           "materialID": "siding_stucco",
           "modelModule": "js/mats/siding_stucco.js",
           "textureDir": "assets/textures/siding/stucco/",
+          "assetNamePrefix": "stucco",
           "textureDesc": "Traditional sand-cement stucco, off-white, medium float finish, random trowel swirls, occasional hairline cracks. Height and normal subtle but present."
         },
         {
@@ -156,6 +175,7 @@
           "materialID": "siding_brickVeneer",
           "modelModule": "js/mats/siding_brickVeneer.js",
           "textureDir": "assets/textures/siding/brickVeneer/",
+          "assetNamePrefix": "brickVeneer",
           "textureDesc": "Modular brick veneer, deep red mix, tight mortar joints, occasional soot stains, chips on corners. Provide crisp normal for joint recess depth."
         }
       ]
@@ -168,6 +188,7 @@
           "materialID": "int_hardwood",
           "modelModule": "js/mats/int_hardwood.js",
           "textureDir": "assets/textures/interior/hardwood/",
+          "assetNamePrefix": "hardwood",
           "textureDesc": "Seamless maple floorboards, light amber, tight seams, satin polyurethane gloss, subtle wear scratches near edges. PBR with roughness/gloss variation."
         },
         {
@@ -175,6 +196,7 @@
           "materialID": "int_ceramicTile",
           "modelModule": "js/mats/int_ceramicTile.js",
           "textureDir": "assets/textures/interior/ceramicTile/",
+          "assetNamePrefix": "ceramicTile",
           "textureDesc": "12\"x12\" matte porcelain tiles, cool gray, faint mottled pattern, 1/8\" light-gray grout lines recessed. Normal emphasises grout depth, low roughness."
         },
         {
@@ -182,6 +204,7 @@
           "materialID": "int_carpet",
           "modelModule": "js/mats/int_carpet.js",
           "textureDir": "assets/textures/interior/carpet/",
+          "assetNamePrefix": "carpet",
           "textureDesc": "Short-pile nylon carpet, neutral taupe, uniform fibers, subtle directional shading, no stains. Height map tiny, roughness high for soft feel."
         },
         {
@@ -189,6 +212,7 @@
           "materialID": "int_plaster",
           "modelModule": "js/mats/int_plaster.js",
           "textureDir": "assets/textures/interior/plaster/",
+          "assetNamePrefix": "plaster",
           "textureDesc": "Smooth wall plaster, eggshell white, micro-pitting, faint roller marks, slight sheen. Normal minimal, roughness smooth with tiny variation."
         }
       ]

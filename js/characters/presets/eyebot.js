@@ -2,6 +2,13 @@ export const eyebotPreset = {
   id: "eyebot",
   name: "Eyebot",
   description: "A walking eyebot character.",
+  /* @tweakable The eyebot's conversation chain. */
+  dialogue: [
+    "*electronic whirring*",
+    "Scanning... Subject identified.",
+    "My purpose is observation.",
+    "*focuses lens*"
+  ],
   spec: {
     customMode: true,
     features: [

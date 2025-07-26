@@ -2,6 +2,13 @@ export const robotsPreset = {
   id: "robots",
   name: "Robots",
   description: "A walking robot.",
+  /* @tweakable The robot's conversation chain. */
+  dialogue: [
+    "Beep boop.",
+    "My purpose is to wander.",
+    "Calculating... probability of interesting event: low.",
+    "Does not compute."
+  ],
   spec: {
     customMode: true,
     features: [

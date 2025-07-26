@@ -5,6 +5,13 @@ export const crowdAlien4Preset = {
   id: 'crowd_alien_4',
   name: 'Crowd Alien 4',
   description: 'A generic crowd alien variant 4.',
+  /* @tweakable The conversation chain for this alien spectator. */
+  dialogue: [
+    "My eye stalk gives me the best view!",
+    "I can't believe I'm seeing this live.",
+    "I wonder what the atmospheric composition of this place is.",
+    "Simply out of this world!"
+  ],
   spec: {
     customMode: true,
     features: [
