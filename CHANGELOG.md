@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2025-07-26
+- 0938 Use asset manager when loading terrain textures to fix missing ground textures.
 - 0930 Fix all ground texture paths to use local assets.
 - 0915 Fix all material and ground textures to load from local relative paths instead of external URLs.
 - 0906 Fixed ground textures loading from external URLs causing transparent terrain

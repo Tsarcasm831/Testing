@@ -49,19 +49,28 @@ export async function createTerrain(scene, assetManager) {
   geometry.computeVertexNormals();
 
   const textureLoader = new THREE.TextureLoader();
-    const textures = {
+
+  const useAssetManager = assetManager && assetManager.assets;
+  const getTex = async (name, path) => {
+      if (useAssetManager && assetManager.assets[name]) {
+          return await assetManager.getTexture(name);
+      }
+      return await textureLoader.loadAsync(path);
+  };
+
+  const textures = {
         /* @tweakable The file path for the grass texture used on the terrain. */
-        grass: await textureLoader.loadAsync('assets/ground_textures/ground_texture.png'),
+        grass: await getTex('Ground texture', GROUND_TEXTURE_FILENAME),
         /* @tweakable The file path for the sand texture used on the terrain. */
-        sand: await textureLoader.loadAsync('assets/ground_textures/ground_texture_sand.png'),
+        sand: await getTex('Sand texture', 'assets/ground_textures/ground_texture_sand.png'),
         /* @tweakable The file path for the dirt texture used on the terrain. */
-        dirt: await textureLoader.loadAsync('assets/ground_textures/ground_texture_dirt.png'),
+        dirt: await getTex('Dirt texture', 'assets/ground_textures/ground_texture_dirt.png'),
         /* @tweakable The file path for the stone texture used on the terrain. */
-        stone: await textureLoader.loadAsync('assets/ground_textures/ground_texture_stone.png'),
+        stone: await getTex('Stone texture', 'assets/ground_textures/ground_texture_stone.png'),
         /* @tweakable The file path for the snow texture used on the terrain. */
-        snow: await textureLoader.loadAsync('assets/ground_textures/ground_texture_snow.png'),
+        snow: await getTex('Snow texture', 'assets/ground_textures/ground_texture_snow.png'),
         /* @tweakable The file path for the forest texture used on the terrain. */
-        forest: await textureLoader.loadAsync('assets/ground_textures/ground_texture_forest.png')
+        forest: await getTex('Forest texture', 'assets/ground_textures/ground_texture_forest.png')
     };
 
   const totalZonesSide = ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE;
