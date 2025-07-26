@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const matsData = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'mats.json'), 'utf8'));
+const matsData = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'json', 'mats.json'), 'utf8'));
 
 for (const category of matsData.materials) {
   for (const item of category.items) {

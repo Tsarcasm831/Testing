@@ -92,7 +92,7 @@ export class AssetReplacementManager {
     async preloadAllGameAssets() {
         this.updateStatus('Loading asset list...', 0);
         try {
-            const response = await fetch('assets.json');
+            const response = await fetch('json/assets.json');
             const data = await response.json();
 
             // All assets in assets.json should be preloaded now
@@ -122,7 +122,7 @@ export class AssetReplacementManager {
             const allPlayerAssetsLoaded = this.assets && playerAssetNames.every(name => this.assets[name]);
 
             if (!allPlayerAssetsLoaded) {
-                const response = await fetch('assets.json');
+                const response = await fetch('json/assets.json');
                 const data = await response.json();
                 const playerAssetsToDownload = data.assets.filter(a => playerAssetNames.includes(a.name));
 
@@ -206,7 +206,7 @@ export class AssetReplacementManager {
     async downloadExternalAssets() {
         this.updateStatus('Loading asset list...');
         try {
-            const response = await fetch('assets.json');
+            const response = await fetch('json/assets.json');
             const data = await response.json();
             const external = data.assets.filter(a => /^https?:/.test(a.url));
             this.assets = await this.downloader.preloadAssets(external, 
