@@ -121,12 +121,25 @@ export class CollisionManager {
                     const prevOverlapX = (blockSize.x / 2 + effectivePlayerRadius) - Math.abs(currentPosition.x - blockCenter.x);
                     const prevOverlapZ = (blockSize.z / 2 + effectivePlayerRadius) - Math.abs(currentPosition.z - blockCenter.z);
 
-                    if (prevOverlapX > prevOverlapZ) {
-                        // Was penetrating more on X axis before, so nullify Z movement
-                        finalPosition.z = currentPosition.z;
-                    } else {
+                    // If colliding with an NPC, allow sliding by only restricting movement towards the NPC
+                    if (block.userData.isNpc) {
+                        const pushback = new THREE.Vector3().subVectors(finalPosition, blockCenter);
+                        pushback.y = 0;
+                        if (pushback.lengthSq() > 0) {
+                            pushback.normalize();
+                            const totalRadius = effectivePlayerRadius + Math.max(blockSize.x, blockSize.z) / 2;
+                            const currentDistance = new THREE.Vector2(finalPosition.x - blockCenter.x, finalPosition.z - blockCenter.z).length();
+                            const penetration = totalRadius - currentDistance;
+                            if (penetration > 0) {
+                                finalPosition.addScaledVector(pushback, penetration);
+                            }
+                        }
+                    } else if (prevOverlapX > prevOverlapZ) {
                         // Was penetrating more on Z axis before, so nullify X movement
                         finalPosition.x = currentPosition.x;
+                    } else {
+                        // Was penetrating more on X axis before, so nullify Z movement
+                        finalPosition.z = currentPosition.z;
                     }
                 }
             } else if (result.collided && block.userData.isSeatRow) {

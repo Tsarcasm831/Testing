@@ -1,11 +1,22 @@
 import * as THREE from 'three';
 
+/* @tweakable The hour of day (0-24) to lock to in dev mode. 12 is noon. */
+const DEV_MODE_HOUR = 12;
+
 export function updateDayNightCycle(game) {
     if (!game.sky || !game.dirLight) return;
 
-    const now = new Date();
-    const denverNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Denver' }));
-    const hours = denverNow.getHours() + denverNow.getMinutes() / 60;
+    const isDevMode = localStorage.getItem('devMode') === 'true';
+
+    let hours;
+    if (isDevMode) {
+        hours = DEV_MODE_HOUR;
+    } else {
+        const now = new Date();
+        const denverNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Denver' }));
+        hours = denverNow.getHours() + denverNow.getMinutes() / 60;
+    }
+    
     const angle = ((hours - 6) / 24) * 2 * Math.PI;
     const elevation = Math.sin(angle) * 90;
     const azimuth = (hours / 24) * 360;

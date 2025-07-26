@@ -17,7 +17,7 @@ export class World {
         createClouds(this.scene);
         const house = createStarterHouse(this.scene, this.terrain.userData.getHeight, this.matsData);
         createShopkeeper(this.scene, this.terrain, this.npcManager, house.position);
-        createAmphitheatre(this.scene, this.terrain.userData.getHeight);
+        createAmphitheatre(this.scene, this.terrain.userData.getHeight, this.npcManager, this.terrain);
         const hospital = createHospital(this.scene, this.terrain.userData.getHeight);
         const tavern = createTavern(this.scene, this.terrain.userData.getHeight);
         createWorkshop(this.scene, this.terrain.userData.getHeight);

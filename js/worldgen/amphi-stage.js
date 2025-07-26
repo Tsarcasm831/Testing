@@ -1,7 +1,11 @@
 import * as THREE from 'three';
 
-/* @tweakable Set to true to enable collision for the amphitheater stage, stairs, and foundation. */
-const AMPHITHEATRE_COLLISION_ENABLED = true;
+/* @tweakable Set to true to enable collision for the amphitheater stage platform. */
+const STAGE_COLLISION_ENABLED = true;
+/* @tweakable Set to true to enable collision for the stairs leading to the stage. */
+const STAIRS_COLLISION_ENABLED = false;
+/* @tweakable Set to true to enable collision for the foundation under the stage. */
+const FOUNDATION_COLLISION_ENABLED = false;
 /* @tweakable The color of the stage platform. */
 const stageColor = 0x4a2a0a;
 /* @tweakable Set to true to show a visible outline box for debugging stage collision. */
@@ -25,7 +29,7 @@ export function createStage(dimensions) {
     stage.position.y = dimensions.height / 2;
     stage.castShadow = true;
     stage.receiveShadow = true;
-    if (AMPHITHEATRE_COLLISION_ENABLED) {
+    if (STAGE_COLLISION_ENABLED) {
         stage.userData.isBlock = true;
     }
     stageGroup.add(stage);
@@ -47,7 +51,7 @@ export function createStage(dimensions) {
     foundation.position.y = -foundationHeight / 2;
     foundation.castShadow = true;
     foundation.receiveShadow = true;
-    if (AMPHITHEATRE_COLLISION_ENABLED) {
+    if (FOUNDATION_COLLISION_ENABLED) {
         foundation.userData.isBlock = true;
     }
     stageGroup.add(foundation);
@@ -95,7 +99,7 @@ export function createStage(dimensions) {
 
         stair.castShadow = true;
         stair.receiveShadow = true;
-        if (AMPHITHEATRE_COLLISION_ENABLED) {
+        if (STAIRS_COLLISION_ENABLED) {
             stair.userData.isBlock = true;
             stair.userData.isStair = true;
         }

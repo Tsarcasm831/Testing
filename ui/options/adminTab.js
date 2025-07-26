@@ -26,16 +26,26 @@ export async function addAdminTab(dependencies, modal) {
 
         adminContent.innerHTML = `
             <h3>Admin Controls</h3>
-            <div class="option-item">
-                <label for="youtube-url-input">Video URL:</label>
-                <input type="text" id="youtube-url-input" placeholder="Enter video file URL...">
+            <div class="options-section">
+                <h4>Video Screen</h4>
+                <div class="option-item-vertical">
+                    <label for="youtube-url-input">Video URL:</label>
+                    <input type="text" id="youtube-url-input" placeholder="Enter video file URL...">
+                </div>
+                <button id="save-youtube-url" class="option-button" data-tooltip="Update the video screen for everyone">Set Video</button>
             </div>
-            <button id="save-youtube-url" class="option-button" data-tooltip="Update the video screen for everyone">Set Video</button>
-            <div class="option-item" style="margin-top: 20px; flex-direction: column; align-items: flex-start;">
-                <label>Rigged GLB Characters:</label>
-                <ul id="rigged-characters-list" style="padding-left: 20px; margin-top: 5px;"></ul>
+            <div class="options-section">
+                <h4>Developer Mode</h4>
+                <div class="option-item">
+                     <label for="dev-mode-checkbox">Lock Time to Noon</label>
+                     <input type="checkbox" id="dev-mode-checkbox">
+                </div>
             </div>
-            <div class="option-item" style="margin-top: 20px; flex-direction: column; align-items: flex-start;">
+            <div class="options-section">
+                <h4>Rigged GLB Characters</h4>
+                <div id="rigged-characters-list"></div>
+            </div>
+            <div class="options-section">
                 <h4>${notesTitle}</h4>
                 <textarea id="admin-notes-textarea" style="width: 100%; height: 150px; background-color: #222; color: white; border: 1px solid #555; border-radius: 4px; padding: 5px; margin-top: 5px;" placeholder="${notesPlaceholder}"></textarea>
                 <button id="save-admin-notes" class="option-button" style="margin-top: 10px;">${saveButtonText}</button>
@@ -62,10 +72,12 @@ export async function addAdminTab(dependencies, modal) {
         lyricsContent.className = 'options-tab-content';
         lyricsContent.innerHTML = `
             <h3>${lyricsEditorTitle}</h3>
-            <p style="font-size: 14px; color: var(--white-70); margin-top: -10px; margin-bottom: 10px;">${lyricsEditorInstructions}</p>
-            <textarea id="lyrics-textarea" style="width: 100%; height: 250px; background-color: #222; color: white; border: 1px solid #555; border-radius: 4px; padding: 5px; font-family: monospace; font-size: 12px;"></textarea>
-            <button id="save-lyrics-button" class="option-button" style="margin-top: 10px;">${lyricsSaveButtonText}</button>
-            <div id="lyrics-status" style="margin-top: 5px; color: #4CAF50;"></div>
+            <div class="options-section">
+                <p style="font-size: 14px; color: var(--white-70); margin-top: -10px; margin-bottom: 10px;">${lyricsEditorInstructions}</p>
+                <textarea id="lyrics-textarea" style="width: 100%; height: 250px; background-color: #222; color: white; border: 1px solid #555; border-radius: 4px; padding: 5px; font-family: monospace; font-size: 12px;"></textarea>
+                <button id="save-lyrics-button" class="option-button" style="margin-top: 10px;">${lyricsSaveButtonText}</button>
+                <div id="lyrics-status" style="margin-top: 5px; color: #4CAF50;"></div>
+            </div>
         `;
         contentContainer.appendChild(lyricsContent);
 
@@ -76,6 +88,12 @@ export async function addAdminTab(dependencies, modal) {
             }
         });
 
+        const devModeCheckbox = adminContent.querySelector('#dev-mode-checkbox');
+        devModeCheckbox.checked = localStorage.getItem('devMode') === 'true';
+        devModeCheckbox.addEventListener('change', (e) => {
+            localStorage.setItem('devMode', e.target.checked);
+        });
+
         adminContent.querySelector('#toggle-grid-button')?.addEventListener('click', () => {
             if (dependencies.gridManager && dependencies.playerControls) {
                 const playerPosition = dependencies.playerControls.getPlayerModel().position;
@@ -84,17 +102,14 @@ export async function addAdminTab(dependencies, modal) {
         });
 
         /* @tweakable The list of rigged characters to display in the admin panel. */
-        const riggedCharacters = ['Player', 'Robot', 'Eyebot', 'Chicken', 'Wireframe', 'Alien', 'Shopkeeper', 'Ogre', 'Knight'];
-        const riggedCharactersList = adminContent.querySelector('#rigged-characters-list');
-        
-        /* @tweakable The list style type for the rigged characters list in admin options. */
-        const listStyle = 'disc';
-        riggedCharactersList.style.listStyleType = listStyle;
+        const riggedCharacters = ['Player', 'Robot', 'Eyebot', 'Chicken', 'Wireframe', 'Alien', 'Shopkeeper', 'Ogre', 'Knight', 'Sprite'];
+        const riggedCharactersContainer = adminContent.querySelector('#rigged-characters-list');
         
         riggedCharacters.forEach(charName => {
-            const li = document.createElement('li');
-            li.textContent = charName;
-            riggedCharactersList.appendChild(li);
+            const tag = document.createElement('span');
+            tag.className = 'char-tag';
+            tag.textContent = charName;
+            riggedCharactersContainer.appendChild(tag);
         });
 
         // Notes Feature Logic

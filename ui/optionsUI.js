@@ -51,43 +51,55 @@ export class OptionsUI {
             <div id="options-content">
                 <div id="options-tab-general" class="options-tab-content active">
                     <h3>General Settings</h3>
-                    <div class="option-item">
-                        <label for="performance-mode">Performance Mode</label>
-                        <input type="checkbox" id="performance-mode">
+                    <div class="options-section">
+                        <h4>Performance</h4>
+                        <div class="option-item">
+                            <label for="performance-mode">Performance Mode</label>
+                            <input type="checkbox" id="performance-mode">
+                        </div>
+                        <div class="option-item">
+                            <label for="shadow-quality">Shadow Quality</label>
+                            <select id="shadow-quality">
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                                <option value="off">Off</option>
+                            </select>
+                        </div>
+                        <div class="option-item">
+                            <label for="view-distance">View Distance</label>
+                            <input type="range" id="view-distance" min="50" max="300" value="150" step="10">
+                            <span id="view-distance-value">150</span>
+                        </div>
                     </div>
-                    <div class="option-item">
-                        <label for="shadow-quality">Shadow Quality</label>
-                        <select id="shadow-quality">
-                            <option value="high">High</option>
-                            <option value="medium">Medium</option>
-                            <option value="low">Low</option>
-                            <option value="off">Off</option>
-                        </select>
+                    <div class="options-section">
+                        <h4>Gameplay</h4>
+                        <button id="toggle-mobile-controls-button" class="option-button" data-tooltip="Toggle on-screen controls.">Toggle Mobile Controls</button>
+                        <button id="respawn-button" class="option-button" data-tooltip="Return to the starting area">Respawn</button>
                     </div>
-                     <div class="option-item">
-                        <label for="view-distance">View Distance</label>
-                        <input type="range" id="view-distance" min="50" max="300" value="150" step="10">
-                        <span id="view-distance-value">150</span>
-                    </div>
-                    <button id="toggle-mobile-controls-button" class="option-button" data-tooltip="Toggle on-screen controls.">Toggle Mobile Controls</button>
-                    <button id="respawn-button" class="option-button" data-tooltip="Return to the starting area">Respawn</button>
                 </div>
                 <div id="options-tab-assets" class="options-tab-content">
-                    <h3>Asset Replacement</h3>
-                    <button id="download-assets" class="option-button" data-tooltip="Download assets for animated models">Download All Assets</button>
-                    <div id="download-status"></div>
-                    <div id="asset-replacement-buttons">
-                        <button class="option-button" id="use-all-assets-button" style="grid-column: 1 / -1; background-color: #4CAF50;" data-tooltip="Replace all characters with animated versions">Use All Animated Models</button>
-                        <button class="option-button" id="replace-player-button" data-tooltip="Use an animated model for your player">Use Animated Player</button>
-                        <button class="option-button" id="replace-robots-button" data-tooltip="Replace robot NPCs with animated models">Use Animated Robots</button>
-                        <button class="option-button" id="replace-eyebots-button" data-tooltip="Replace eyebot NPCs with models">Use Eyebots</button>
-                        <button class="option-button" id="replace-chickens-button" data-tooltip="Replace chicken NPCs with animated models">Use Animated Chickens</button>
-                        <button class="option-button" id="replace-wireframes-button" data-tooltip="Replace wireframe NPCs with animated models">Use Animated Wireframes</button>
-                        <button class="option-button" id="replace-aliens-button" data-tooltip="Replace alien NPCs with animated models">Use Animated Aliens</button>
-                        <button class="option-button" id="replace-shopkeeper-button" data-tooltip="Replace shopkeeper NPC with an animated model">Use Animated Shopkeeper</button>
-                        <button class="option-button" id="replace-sprites-button" data-tooltip="Replace sprite NPCs with animated models">Use Animated Sprites</button>
-                        <button class="option-button" id="replace-ogres-button" data-tooltip="Replace ogre NPCs with animated models">Use Animated Ogres</button>
-                        <button class="option-button" id="replace-knights-button" data-tooltip="Replace knight NPCs with animated models">Use Animated Knights</button>
+                    <h3>Asset Management</h3>
+                    <div class="options-section">
+                        <h4>Asset Packs</h4>
+                        <button id="download-assets" class="option-button" data-tooltip="Download assets for animated models">Download All Assets</button>
+                        <div id="download-status"></div>
+                    </div>
+                    <div class="options-section" id="asset-replacement-buttons">
+                        <h4>Animated Models</h4>
+                        <button class="option-button" id="use-all-assets-button" data-tooltip="Replace all characters with animated versions">Use All Animated Models</button>
+                        <div id="asset-buttons-grid">
+                            <button class="option-button" id="replace-player-button" data-tooltip="Use an animated model for your player">Animated Player</button>
+                            <button class="option-button" id="replace-robots-button" data-tooltip="Replace robot NPCs with animated models">Animated Robots</button>
+                            <button class="option-button" id="replace-eyebots-button" data-tooltip="Replace eyebot NPCs with models">Eyebots</button>
+                            <button class="option-button" id="replace-chickens-button" data-tooltip="Replace chicken NPCs with animated models">Animated Chickens</button>
+                            <button class="option-button" id="replace-wireframes-button" data-tooltip="Replace wireframe NPCs with animated models">Animated Wireframes</button>
+                            <button class="option-button" id="replace-aliens-button" data-tooltip="Replace alien NPCs with animated models">Animated Aliens</button>
+                            <button class="option-button" id="replace-shopkeeper-button" data-tooltip="Replace shopkeeper NPC with an animated model">Animated Shopkeeper</button>
+                            <button class="option-button" id="replace-sprites-button" data-tooltip="Replace sprite NPCs with animated models">Animated Sprites</button>
+                            <button class="option-button" id="replace-ogres-button" data-tooltip="Replace ogre NPCs with animated models">Animated Ogres</button>
+                            <button class="option-button" id="replace-knights-button" data-tooltip="Replace knight NPCs with animated models">Animated Knights</button>
+                        </div>
                     </div>
                 </div>
                 <div id="options-tab-items" class="options-tab-content">
@@ -98,10 +110,15 @@ export class OptionsUI {
                     </div>
                 </div>
                 <div id="options-tab-about" class="options-tab-content">
-                    <h3>About</h3>
-                    <p>3D Overworld Template v1.9</p>
-                    <p>Created with Websim for educational purposes.</p>
-                    <p>Models from Mixamo. Project by LordTsarcasm.</p>
+                    <div class="options-section">
+                      <h3>About this Project</h3>
+                      <p>3D Overworld Template v1.9</p>
+                      <p>Created with Websim for educational purposes.</p>
+                    </div>
+                    <div class="options-section">
+                        <h3>Credits</h3>
+                        <p>Models from Mixamo. Project by LordTsarcasm.</p>
+                    </div>
                 </div>
             </div>
         `;

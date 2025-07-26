@@ -11,6 +11,7 @@ export class AssetReplacementManager {
         this.downloader = new Downloader();
         this.assets = null;
         this.statusElement = null;
+        this.progressBarElement = null;
         // Optional callback for when the player model is replaced
         this.onPlayerModelReplaced = dependencies.onPlayerModelReplaced || null;
 
@@ -88,21 +89,25 @@ export class AssetReplacementManager {
     async preloadAndApplyPlayerModel() {
         this.updateStatus('Loading special player model...');
         try {
-            const response = await fetch('assets.json');
-            const data = await response.json();
             const playerAssetNames = this.modelTypes['player'].assetNames;
-            const playerAssetsToDownload = data.assets.filter(a => playerAssetNames.includes(a.name));
+            const allPlayerAssetsLoaded = this.assets && playerAssetNames.every(name => this.assets[name]);
 
-            if (playerAssetsToDownload.length !== playerAssetNames.length) {
-                console.error("Missing some player assets in assets.json");
-                this.updateStatus('Failed to load player assets.');
-                return;
+            if (!allPlayerAssetsLoaded) {
+                const response = await fetch('assets.json');
+                const data = await response.json();
+                const playerAssetsToDownload = data.assets.filter(a => playerAssetNames.includes(a.name));
+
+                if (playerAssetsToDownload.length !== playerAssetNames.length) {
+                    console.error("Missing some player assets in assets.json");
+                    this.updateStatus('Failed to load player assets.');
+                    return;
+                }
+
+                const downloadedAssets = await this.downloader.preloadAssets(playerAssetsToDownload, null, (progress) => {
+                     this.updateStatus(`Downloading player model... ${(progress * 100).toFixed(0)}%`, progress);
+                });
+                this.assets = { ...(this.assets || {}), ...downloadedAssets };
             }
-
-            const downloadedAssets = await this.downloader.preloadAssets(playerAssetsToDownload, null, (progress) => {
-                 this.updateStatus(`Downloading player model... ${(progress * 100).toFixed(0)}%`, progress);
-            });
-            this.assets = { ...(this.assets || {}), ...downloadedAssets };
 
             const modelData = await this.prepareModelData('player');
             if (modelData) {
@@ -117,12 +122,21 @@ export class AssetReplacementManager {
         }
     }
 
-    setStatusElement(element) {
-        this.statusElement = element;
+    setStatusElement(statusElement, progressBarElement = null) {
+        this.statusElement = statusElement;
+        this.progressBarElement = progressBarElement;
     }
 
     updateStatus(message, progress = null) {
         if (this.statusElement) {
+            // Logic for main loading screen with separate progress bar
+            if (this.progressBarElement && progress !== null) {
+                this.statusElement.textContent = message;
+                this.progressBarElement.style.width = `${progress * 100}%`;
+                return;
+            }
+            
+            // Logic for options menu and special user load status (where progress bar is inside status element)
             if (progress !== null) {
                  this.statusElement.innerHTML = `
                     <div style="margin-bottom: 5px;">${message}</div>

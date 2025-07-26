@@ -117,6 +117,14 @@ function _createCustomPlayerModel(playerGroup, characterSpec) {
         const hitbox = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
         hitbox.position.y = 0;
         playerGroup.add(hitbox);
+    } else {
+        // Case where minY is 0 or Infinity (no objects with position/scale)
+        // Add a small invisible base to ensure the model is grounded for collision checks
+        const hitboxGeometry = new THREE.BoxGeometry(0.5, 0.1, 0.5);
+        const hitboxMaterial = new THREE.MeshBasicMaterial({ visible: false, transparent: true, opacity: 0 });
+        const hitbox = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+        hitbox.position.y = 0;
+        playerGroup.add(hitbox);
     }
     
     if (animatedFeatures.length > 0) {

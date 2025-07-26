@@ -27,49 +27,57 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: var(--black-95);
-  color: #fff;
+  /* @tweakable The background color of the options modal. */
+  background-color: #1a1a1d;
+  /* @tweakable The main text color in the options modal. */
+  color: #f0f0f0;
   padding: 0;
-  border-radius: 10px;
-  /* @tweakable The z-index for the options modal. */
+  /* @tweakable The border radius of the options modal. */
+  border-radius: 12px;
   z-index: 2100;
   width: 90%;
-  max-width: 450px;
+  /* @tweakable The maximum width of the options modal. */
+  max-width: 500px;
   display: none;
-  box-shadow: 0 0 20px var(--black-50);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
   font-size: 16px;
-  border: 1px solid var(--white-20);
+  border: 1px solid var(--white-10);
   pointer-events: auto;
+  flex-direction: column;
+  max-height: 90vh;
 }
 
 #options-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid var(--white-20);
+    padding: 15px 25px;
+    border-bottom: 1px solid var(--white-10);
 }
 
 #options-header h2 {
     margin: 0;
-    font-size: 22px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 #close-options {
-  width: 24px;
-  height: 24px;
-  background-color: var(--white-20);
+  width: 28px;
+  height: 28px;
+  background-color: var(--white-10);
   border-radius: 50%;
   text-align: center;
-  line-height: 24px;
+  line-height: 28px;
   font-weight: bold;
-  color: #fff;
+  font-size: 16px;
+  color: var(--white-80);
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 #close-options:hover {
-  background-color: var(--white-30);
+  background-color: var(--white-20);
+  transform: rotate(90deg);
 }
 
 #download-status {
@@ -107,35 +115,41 @@
 
 #options-tabs {
     display: flex;
-    padding: 0 10px;
-    border-bottom: 1px solid var(--white-20);
+    padding: 0 15px;
+    border-bottom: 1px solid var(--white-10);
+    flex-shrink: 0;
 }
 
 .options-tab {
     flex: 1;
-    padding: 12px 10px;
+    padding: 14px 10px;
     background-color: transparent;
     border: none;
     color: var(--white-70);
     cursor: pointer;
-    font-size: 16px;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
+    font-size: 15px;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-color 0.2s, background-color 0.2s;
+    text-align: center;
 }
 
 .options-tab:hover {
     color: var(--white-full);
+    background-color: var(--white-05);
 }
 
 .options-tab.active {
-    color: var(--white-full);
-    border-bottom: 2px solid #2196F3;
-    font-weight: bold;
+    /* @tweakable The color of the active tab indicator. */
+    color: #4dabf7;
+    border-bottom: 3px solid #4dabf7;
+    font-weight: 600;
 }
 
 #options-content {
-    padding: 20px;
-    min-height: 250px;
+    padding: 20px 25px;
+    overflow-y: auto;
+    flex-grow: 1;
 }
 
 .options-tab-content {
@@ -143,74 +157,197 @@
 }
 
 .options-tab-content.active {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.options-tab-content h3 {
+.options-section {
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--white-10);
+}
+.options-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.options-section h3, .options-section h4 {
     margin-top: 0;
-    color: #4CAF50;
-    border-bottom: 1px solid var(--white-20);
-    padding-bottom: 8px;
     margin-bottom: 15px;
+    font-size: 14px;
+    color: var(--white-70);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#options-content > .options-tab-content > h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: var(--white-full);
+    font-weight: 600;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--white-10);
 }
 
 .option-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
-.option-item input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
+.option-item:last-child {
+    margin-bottom: 0;
 }
 
 .option-item label {
-    font-weight: bold;
+    font-weight: 500;
+    color: var(--white-90);
+    padding-right: 15px;
 }
 
-.option-item select, .option-item input[type="range"] {
+/* Custom Checkbox */
+.option-item input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 40px;
+    height: 22px;
     background-color: var(--white-20);
+    border-radius: 11px;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+.option-item input[type="checkbox"]::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s;
+}
+.option-item input[type="checkbox"]:checked {
+    background-color: #4dabf7;
+}
+.option-item input[type="checkbox"]:checked::before {
+    transform: translateX(18px);
+}
+
+.option-item select {
+    background-color: var(--white-10);
     color: white;
-    border: 1px solid var(--white-30);
-    padding: 5px;
-    border-radius: 4px;
+    border: 1px solid var(--white-20);
+    padding: 8px 10px;
+    border-radius: 6px;
+    /* @tweakable The width of dropdowns in the options modal. */
+    width: 120px;
 }
 
 .option-item input[type="range"] {
     flex-grow: 1;
     margin: 0 10px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: var(--white-20);
+    border-radius: 3px;
+    padding: 0;
+}
+.option-item input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4dabf7;
+  cursor: pointer;
+}
+.option-item input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4dabf7;
+  cursor: pointer;
 }
 
 .option-button {
     display: block;
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
+    border: 1px solid var(--white-20);
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 15px;
     cursor: pointer;
     text-align: center;
-    background-color: var(--white-20);
-    color: white;
-    transition: background-color 0.2s;
+    background-color: var(--white-10);
+    color: var(--white-90);
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
 }
 .option-button:hover {
-    background-color: var(--white-30);
+    /* @tweakable Hover background color for option buttons. */
+    background-color: var(--white-20);
+    /* @tweakable Hover border color for option buttons. */
+    border-color: #4dabf7;
+    /* @tweakable Hover text color for option buttons. */
+    color: white;
+}
+.option-button:disabled {
+    background-color: var(--white-05);
+    border-color: var(--white-10);
+    color: var(--white-50);
+    cursor: not-allowed;
 }
 
 #download-assets {
-    background-color: #2196F3;
+    background-color: #228be6;
+    border-color: #228be6;
+    color: white;
 }
+#download-assets:hover {
+    background-color: #1c7ed6;
+    border-color: #1c7ed6;
+}
+
 #respawn-button {
-    background-color: #f44336;
+    background-color: #fa5252;
+    border-color: #fa5252;
+    color: white;
+}
+#respawn-button:hover {
+    background-color: #f03e3e;
+    border-color: #f03e3e;
 }
 
 #asset-replacement-buttons {
     display: none;
+}
+
+#asset-replacement-buttons .option-button {
+    margin-top: 0;
+    padding: 10px;
+    font-size: 14px;
+}
+
+#use-all-assets-button {
+    background-color: #40c057;
+    border-color: #40c057;
+    color: white;
+}
+#use-all-assets-button:hover {
+    background-color: #37b24d;
+    border-color: #37b24d;
+}
+
+#asset-buttons-grid {
+    display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-top: 15px;
@@ -218,7 +355,7 @@
 
 #options-tab-about p {
     margin: 5px 0;
-    line-height: 1.4;
+    line-height: 1.5;
     color: var(--white-80);
 }
 

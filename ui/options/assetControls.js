@@ -2,7 +2,7 @@ export function setupAssetControls(modal, assetReplacementManager) {
     const toggleReplaceButtons = (show) => {
         const container = modal.querySelector('#asset-replacement-buttons');
         if (container) {
-            container.style.display = show ? 'grid' : 'none';
+            container.style.display = show ? 'block' : 'none';
         }
     };
 

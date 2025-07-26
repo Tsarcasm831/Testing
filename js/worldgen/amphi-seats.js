@@ -1,5 +1,9 @@
 import * as THREE from 'three';
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { createPlayerModel } from '../playerModel.js';
+import { NPC } from '../npc/NPC.js';
+import { presetCharacters } from '../characters/presets.js';
+import { createSpectatorSpec } from '../characters/presets/spectator.js';
 
 /**
  * Creates and adds amphitheater seating to a group.
@@ -8,6 +12,10 @@ import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
  */
 /* @tweakable Set to true to enable collision for amphitheater seats. */
 const SEAT_COLLISION_ENABLED = false;
+/* @tweakable Set to true to spawn crowd NPCs in the amphitheater seats. NOTE: This may contribute to loading timeouts on some platforms. */
+const SPAWN_CROWD_NPCS = false;
+/* @tweakable Set to true to use simplified, low-poly models for crowd NPCs to improve performance. */
+const USE_SPECTATOR_MODELS = true;
 /* @tweakable Set to true to enable collision for the foundation under the seats. */
 const SEAT_FOUNDATION_COLLISION_ENABLED = false;
 /* @tweakable Set to true to show a visible outline box for debugging seat row collision. */
@@ -68,7 +76,48 @@ function createStairsToSeats(group, options) {
     group.add(stairsGroup);
 }
 
-export function createAmphitheatreSeating(group, stoneColor) {
+function spawnCrowdNPCs(group, presets, transforms, npcManager, terrain, seatBaseHeight) {
+    // Shuffle transforms for random seating
+    for (let i = transforms.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [transforms[i], transforms[j]] = [transforms[j], transforms[i]];
+    }
+
+    const numToSpawn = Math.min(presets.length, transforms.length);
+
+    for (let i = 0; i < numToSpawn; i++) {
+        const preset = presets[i];
+        const transform = transforms[i];
+
+        const specToUse = USE_SPECTATOR_MODELS && preset.spectatorSpec ? preset.spectatorSpec : preset.spec;
+        const model = createPlayerModel(THREE, preset.name, specToUse);
+        
+        model.position.copy(transform.position);
+        model.rotation.copy(transform.rotation);
+        
+        // Adjust position to be on top of the seat.
+        model.position.y += seatBaseHeight;
+        
+        model.userData.isNpc = true;
+        model.name = preset.name;
+        group.add(model);
+
+        const npc = new NPC(model, preset.id, 'amphitheatre_crowd', false, model.position.clone(), terrain);
+        
+        // Override update to make them stationary
+        npc.update = () => {
+             // The base NPC update handles animation, we just need to prevent movement
+             if (model.userData.isAnimatedGLB && model.userData.mixer) {
+                const delta = (performance.now() - (model.userData.lastMixerUpdate || performance.now())) / 1000;
+                model.userData.mixer.update(delta);
+                model.userData.lastMixerUpdate = performance.now();
+            }
+        };
+        npcManager.addNpc(npc);
+    }
+}
+
+export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain) {
     /* @tweakable The rotation of the amphitheater seats in degrees. */
     const seatingRotation = 90;
     const seatingGroup = new THREE.Group();
@@ -162,6 +211,8 @@ export function createAmphitheatreSeating(group, stoneColor) {
     /* @tweakable The target point for all seats to face. */
     const targetPoint = new THREE.Vector3(55.625, 0, -63.125); // Corresponds to grid IK200
 
+    const seatTransforms = [];
+
     for (let i = 0; i < numRows; i++) {
         const innerRadius = startRadius + i * (rowDepth + radiusStep);
         const outerRadius = innerRadius + rowDepth;
@@ -241,6 +292,8 @@ export function createAmphitheatreSeating(group, stoneColor) {
             const seatRotationOffset = 180;
             seat.rotation.y = angleToCenter + THREE.MathUtils.degToRad(seatRotationOffset);
             
+            seatTransforms.push({ position: seat.position.clone(), rotation: seat.rotation.clone() });
+
             const seatBase = new THREE.Mesh(seatBaseGeom, seatMaterial);
             seatBase.position.y = seatBaseHeight / 2;
             seatBase.castShadow = true;
@@ -286,6 +339,11 @@ export function createAmphitheatreSeating(group, stoneColor) {
                 seat.add(seatLabel);
             }
         }
+    }
+
+    if (SPAWN_CROWD_NPCS && npcManager && terrain) {
+        const crowdPresets = presetCharacters.filter(p => p.id.startsWith('crowd_'));
+        spawnCrowdNPCs(seatingGroup, crowdPresets, seatTransforms, npcManager, terrain, seatBaseHeight);
     }
 
     createStairsToSeats(seatingGroup, { startRadius, rowHeight, material });

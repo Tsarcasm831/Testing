@@ -28,6 +28,7 @@ import { crowdAlien1Preset } from "./presets/crowdAlien1.js";
 import { crowdAlien2Preset } from "./presets/crowdAlien2.js";
 import { crowdAlien3Preset } from "./presets/crowdAlien3.js";
 import { crowdAlien4Preset } from "./presets/crowdAlien4.js";
+import { createSpectatorSpec } from "./presets/spectator.js";
 
 export const presetCharacters = [
   spritePreset,

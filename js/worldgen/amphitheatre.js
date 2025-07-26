@@ -12,7 +12,7 @@ const stoneColor = 0x888888;
 let videoElement;
 let videoTexture;
 
-export function createAmphitheatre(scene, getHeight) {
+export function createAmphitheatre(scene, getHeight, npcManager, terrain) {
     /* @tweakable Position of the amphitheater. */
     const amphitheatrePosition = new THREE.Vector3(55.5, 0, -12.5);
     const baseHeight = getHeight(amphitheatrePosition.x, amphitheatrePosition.z);
@@ -92,7 +92,7 @@ export function createAmphitheatre(scene, getHeight) {
     group.add(spotLight2);
 
     if (enableSeating) {
-        createAmphitheatreSeating(group, stoneColor);
+        createAmphitheatreSeating(group, stoneColor, npcManager, terrain);
     }
 
     return group;
