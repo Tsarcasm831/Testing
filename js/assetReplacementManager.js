@@ -17,6 +17,15 @@ export class AssetReplacementManager {
         // Optional callback for when the player model is replaced
         this.onPlayerModelReplaced = dependencies.onPlayerModelReplaced || null;
         this.assetCache = {};
+        this.assetListUrls = [
+            'json/assets.json',
+            'assets/external_lists/claddingAndSiding.json',
+            'assets/external_lists/interior.json',
+            'assets/external_lists/roofing.json',
+            'assets/external_lists/structural.json',
+            'assets/external_lists/walls.json'
+        ];
+        this.combinedAssetList = null;
 
         this.modelTypes = {
             'player': {
@@ -89,14 +98,27 @@ export class AssetReplacementManager {
         };
     }
 
+    async loadCombinedAssetList() {
+        if (this.combinedAssetList) return this.combinedAssetList;
+        const lists = [];
+        for (const url of this.assetListUrls) {
+            const resp = await fetch(url);
+            const data = await resp.json();
+            if (Array.isArray(data.assets)) {
+                lists.push(...data.assets);
+            }
+        }
+        this.combinedAssetList = lists;
+        return lists;
+    }
+
     async preloadAllGameAssets() {
         this.updateStatus('Loading asset list...', 0);
         try {
-            const response = await fetch('json/assets.json');
-            const data = await response.json();
+            const assets = await this.loadCombinedAssetList();
 
-            // All assets in assets.json should be preloaded now
-            this.assets = await this.downloader.preloadAssets(data.assets,
+            // All assets from lists should be preloaded now
+            this.assets = await this.downloader.preloadAssets(assets,
                 (asset, p) => {},
                 (overallProgress) => {
                     const percent = (overallProgress * 100).toFixed(0);
@@ -122,12 +144,11 @@ export class AssetReplacementManager {
             const allPlayerAssetsLoaded = this.assets && playerAssetNames.every(name => this.assets[name]);
 
             if (!allPlayerAssetsLoaded) {
-                const response = await fetch('json/assets.json');
-                const data = await response.json();
-                const playerAssetsToDownload = data.assets.filter(a => playerAssetNames.includes(a.name));
+                const assets = await this.loadCombinedAssetList();
+                const playerAssetsToDownload = assets.filter(a => playerAssetNames.includes(a.name));
 
                 if (playerAssetsToDownload.length !== playerAssetNames.length) {
-                    console.error("Missing some player assets in assets.json");
+                    console.error("Missing some player assets in asset lists");
                     this.updateStatus('Failed to load player assets.');
                     return;
                 }
@@ -206,9 +227,8 @@ export class AssetReplacementManager {
     async downloadExternalAssets() {
         this.updateStatus('Loading asset list...');
         try {
-            const response = await fetch('json/assets.json');
-            const data = await response.json();
-            const external = data.assets.filter(a => /^https?:/.test(a.url));
+            const assets = await this.loadCombinedAssetList();
+            const external = assets.filter(a => /^https?:/.test(a.url));
             this.assets = await this.downloader.preloadAssets(external, 
                 (asset, p) => {
                     // Per-asset progress callback (optional, currently unused to avoid spam)
