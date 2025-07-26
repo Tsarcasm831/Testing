@@ -2,6 +2,13 @@ export const knightPreset = {
   id: "knight",
   name: "Armored Knight",
   description: "A knight in shining armor.",
+  /* @tweakable The knight's conversation chain. */
+  dialogue: [
+    "Halt! State your business, citizen.",
+    "The roads are dangerous. Keep your wits about you.",
+    "I've sworn an oath to protect the innocent. A noble calling, wouldn't you say?",
+    "Justice will prevail!"
+  ],
   spec: {
     customMode: true,
     features: [

@@ -2,6 +2,13 @@ export const shopkeeperPreset = {
   id: "shopkeeper",
   name: "Shopkeeper",
   description: "A friendly shopkeeper.",
+  /* @tweakable The shopkeeper's conversation chain. */
+  dialogue: [
+    "Welcome to my humble shop! Feel free to browse my wares.",
+    "Looking for anything in particular? I've got a bit of everything.",
+    "Some say my prices are high, but quality has its cost, wouldn't you agree?",
+    "Come back anytime!"
+  ],
   spec: {
     customMode: true,
     features: [

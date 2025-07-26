@@ -38,6 +38,7 @@ export class NPC {
         this.idleTimer = 0;
         this.velocity = new THREE.Vector3();
         this.npcManager = null; // Will be set by NPCManager
+        this.dialogueIndex = 0;
         this.avoidTimer = 0;
         this.avoidDirection = new THREE.Vector3();
         this.currentSpeed = 0;

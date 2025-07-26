@@ -2,6 +2,13 @@ export const alienPreset = {
   id: "alien",
   name: "Alien",
   description: "A colorful alien character",
+  /* @tweakable The alien's conversation chain. */
+  dialogue: [
+    "Greetings, Earthling. Your planet's gravitational pull is... quaint.",
+    "*Bleep bloop* Do you understand me? My universal translator is on the fritz.",
+    "I come in peace. Mostly.",
+    "Take me to your leader. Or at least to your best data-stream."
+  ],
   spec: {
     customMode: true,
     features: [

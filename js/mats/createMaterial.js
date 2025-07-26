@@ -1,11 +1,10 @@
 import * as THREE from 'three';
 
-/* @tweakable The base URL for downloading PBR texture assets. This is now a fallback, as textures are loaded via AssetManager. */
-const TEXTURE_BASE_URL = 'https://file.garden/Zy7B0LkdIVpGyzA1/Public/';
+/* @tweakable The base URL for PBR texture assets. Set to "" to use local relative paths. */
+const TEXTURE_BASE_URL = '';
 
 export function createMaterial(textureDir, repeatU = 1, repeatV = 1, assetManager = null) {
   const loader = new THREE.TextureLoader();
-  loader.setCrossOrigin('anonymous');
   const fullTextureDir = `${TEXTURE_BASE_URL}${textureDir}`;
   
   const onLoad = () => {};

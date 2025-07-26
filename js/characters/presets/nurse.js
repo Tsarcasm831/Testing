@@ -2,6 +2,13 @@ export const nursePreset = {
   id: "nurse",
   name: "Nurse",
   description: "A helpful nurse.",
+  /* @tweakable The nurse's conversation chain. */
+  dialogue: [
+    "Feeling under the weather? You've come to the right place.",
+    "Remember to stay hydrated out there. The world can be draining.",
+    "If you see anyone injured, send them my way. I'll patch them right up.",
+    "Take care of yourself!"
+  ],
   spec: {
     customMode: true,
     features: [

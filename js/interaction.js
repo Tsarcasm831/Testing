@@ -17,6 +17,7 @@ export class InteractionManager {
         this.npcManager = dependencies.npcManager;
         this.camera = dependencies.camera;
         this.renderer = dependencies.renderer;
+        this.presetCharacters = dependencies.presetCharacters;
         
         this.isDesktop = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -179,16 +180,25 @@ export class InteractionManager {
 
         this.npcManager.setInteracting(this.targetNpc, true);
 
-        this.openModal("Thinking...", this.targetNpc);
-        
-        try {
-            const dialogue = await this.generateDialogue(this.targetNpc);
-            const dialogueTextEl = this.conversationModal.querySelector('#npc-dialogue');
-            dialogueTextEl.innerText = dialogue;
-        } catch(e) {
-            console.error("Failed to generate NPC dialogue:", e);
-            const dialogueTextEl = this.conversationModal.querySelector('#npc-dialogue');
-            dialogueTextEl.innerText = "I... don't have much to say right now.";
+        const preset = this.presetCharacters.find(p => p.id === this.targetNpc.presetId);
+        let dialogue;
+
+        if (preset && preset.dialogue && preset.dialogue.length > 0) {
+            dialogue = preset.dialogue[this.targetNpc.dialogueIndex];
+            this.targetNpc.dialogueIndex = (this.targetNpc.dialogueIndex + 1) % preset.dialogue.length;
+            this.openModal(dialogue, this.targetNpc);
+        } else {
+            // Fallback to AI generation
+            this.openModal("Thinking...", this.targetNpc);
+            try {
+                dialogue = await this.generateDialogue(this.targetNpc);
+                const dialogueTextEl = this.conversationModal.querySelector('#npc-dialogue');
+                dialogueTextEl.innerText = dialogue; // Update text after generation
+            } catch(e) {
+                console.error("Failed to generate NPC dialogue:", e);
+                const dialogueTextEl = this.conversationModal.querySelector('#npc-dialogue');
+                dialogueTextEl.innerText = "I... don't have much to say right now.";
+            }
         }
     }
 

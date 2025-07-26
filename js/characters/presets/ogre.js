@@ -2,6 +2,13 @@ export const ogrePreset = {
   id: "ogre",
   name: "Ogre",
   description: "A big, burly ogre.",
+  /* @tweakable The ogre's conversation chain. */
+  dialogue: [
+    "GRR. What you want?",
+    "Me hungry. You got food?",
+    "This my swamp. You go now.",
+    "Ogres are like onions. We have layers."
+  ],
   spec: {
     customMode: true,
     features: [

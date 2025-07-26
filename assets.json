@@ -41,11 +41,6 @@
       "url": "js/app.js"
     },
     {
-      "type": "script",
-      "name": "Input controls",
-      "url": "js/controls.js"
-    },
-    {
       "type": "model",
       "name": "Player idle animation",
       "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Z1/player/Animation_Idle_withSkin.glb"

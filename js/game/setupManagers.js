@@ -1,5 +1,6 @@
 import { NPCManager } from '../npcManager.js';
 import { InteractionManager } from '../interaction.js';
+import { presetCharacters } from '../characters/presets.js';
 
 export function setupManagers(game) {
     game.npcManager = new NPCManager(game.scene, null, game.playerControls);
@@ -9,7 +10,9 @@ export function setupManagers(game) {
         playerControls: game.playerControls,
         npcManager: game.npcManager,
         camera: game.camera,
-        renderer: game.renderer
+        renderer: game.renderer,
+        presetCharacters: presetCharacters
     });
     game.interactionManager.init();
 }
+

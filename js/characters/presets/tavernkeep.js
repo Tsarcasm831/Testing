@@ -2,6 +2,13 @@ export const tavernkeepPreset = {
   id: "tavernkeep",
   name: "Tavernkeep",
   description: "A friendly tavernkeep.",
+  /* @tweakable The tavernkeep's conversation chain. */
+  dialogue: [
+    "Welcome, traveler! Pull up a chair and rest your weary feet.",
+    "What can I get for you? We've got the best digital grog this side of the server!",
+    "Heard any interesting tales on your travels? This old tavern has heard them all.",
+    "Don't cause any trouble, now. We like to keep things peaceful here."
+  ],
   spec: {
     customMode: true,
     features: [

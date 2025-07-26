@@ -50,12 +50,18 @@ export async function createTerrain(scene, assetManager) {
 
   const textureLoader = new THREE.TextureLoader();
     const textures = {
-        grass: await assetManager.getTexture('Ground texture'),
-        sand: await assetManager.getTexture('Sand texture'),
-        dirt: await assetManager.getTexture('Dirt texture'),
-        stone: await assetManager.getTexture('Stone texture'),
-        snow: await assetManager.getTexture('Snow texture'),
-        forest: await assetManager.getTexture('Forest texture')
+        /* @tweakable The file path for the grass texture used on the terrain. */
+        grass: await textureLoader.loadAsync('assets/ground_textures/ground_texture.png'),
+        /* @tweakable The file path for the sand texture used on the terrain. */
+        sand: await textureLoader.loadAsync('assets/ground_textures/ground_texture_sand.png'),
+        /* @tweakable The file path for the dirt texture used on the terrain. */
+        dirt: await textureLoader.loadAsync('assets/ground_textures/ground_texture_dirt.png'),
+        /* @tweakable The file path for the stone texture used on the terrain. */
+        stone: await textureLoader.loadAsync('assets/ground_textures/ground_texture_stone.png'),
+        /* @tweakable The file path for the snow texture used on the terrain. */
+        snow: await textureLoader.loadAsync('assets/ground_textures/ground_texture_snow.png'),
+        /* @tweakable The file path for the forest texture used on the terrain. */
+        forest: await textureLoader.loadAsync('assets/ground_textures/ground_texture_forest.png')
     };
 
   const totalZonesSide = ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE;
