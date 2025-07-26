@@ -118,7 +118,7 @@ export class Game {
         this.gridManager = new GridManager(this.scene);
         this.videoManager = new VideoManager(this.scene, this.camera, this.playerModel, this.room);
 
-        const matsResponse = await fetch('mats.json');
+        const matsResponse = await fetch('json/mats.json');
         const matsData = await matsResponse.json();
         const world = new World(this.scene, this.npcManager, this.room, matsData, assetReplacementManager);
         const worldObjects = await world.generate();
