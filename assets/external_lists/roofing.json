@@ -1,0 +1,109 @@
+{
+  "schema": {
+    "type": "string - category of asset such as image, model, audio or script",
+    "name": "string - human friendly asset name",
+    "url": "string - relative path or remote URL to download the asset"
+  },
+  "assets": [
+    {
+      "type": "image",
+      "name": "asphaltShingles albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/height.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "asphaltShingles roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/asphaltShingles/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/height.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "clayTiles roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/clayTiles/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "metalPanels albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/metalPanels/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "metalPanels metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/metalPanels/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "metalPanels normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/metalPanels/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "metalPanels roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/metalPanels/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "slate albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/slate/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "slate ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/slate/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "slate normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/slate/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "slate roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/roofing/slate/roughness.png"
+    }
+  ]
+}

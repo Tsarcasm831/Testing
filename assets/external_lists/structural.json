@@ -1,0 +1,169 @@
+{
+  "schema": {
+    "type": "string - category of asset such as image, model, audio or script",
+    "name": "string - human friendly asset name",
+    "url": "string - relative path or remote URL to download the asset"
+  },
+  "assets": [
+    {
+      "type": "image",
+      "name": "brick albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "brick ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "brick height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/height.png"
+    },
+    {
+      "type": "image",
+      "name": "brick metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "brick normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "brick roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/brick/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "cementBoard albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/cementBoard/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "cementBoard ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/cementBoard/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "cementBoard normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/cementBoard/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "cementBoard roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/cementBoard/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/height.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "concrete roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/concrete/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "steel albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "steel ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "steel height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/height.png"
+    },
+    {
+      "type": "image",
+      "name": "steel metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "steel normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "steel roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/steel/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "stone albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "stone ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "stone height texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/height.png"
+    },
+    {
+      "type": "image",
+      "name": "stone metalness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/metalness.png"
+    },
+    {
+      "type": "image",
+      "name": "stone normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "stone roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/stone/roughness.png"
+    },
+    {
+      "type": "image",
+      "name": "wood albedo texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/wood/albedo.png"
+    },
+    {
+      "type": "image",
+      "name": "wood ao texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/wood/ao.png"
+    },
+    {
+      "type": "image",
+      "name": "wood normal texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/wood/normal.png"
+    },
+    {
+      "type": "image",
+      "name": "wood roughness texture",
+      "url": "https://file.garden/Zy7B0LkdIVpGyzA1/Public/assets/textures/structural/wood/roughness.png"
+    }
+  ]
+}
