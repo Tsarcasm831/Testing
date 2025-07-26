@@ -4,6 +4,7 @@
 - 1522 Split assets2.json into categorized lists and cache them during load
 - 1450 Expanded README with project overview, features and run instructions
 - 1446 Added crowd NPC presets for robots, humans and aliens
+- 1759 Added bestiary modal with B keybind listing current NPCs
 
 
 ## Guidelines for future updates

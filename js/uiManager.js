@@ -10,6 +10,7 @@ import { OptionsUI } from '../ui/optionsUI.js';
 import { CompassUI } from '../ui/compassUI.js';
 import { MusicUI } from '../ui/musicUI.js';
 import { ClockUI } from '../ui/clockUI.js';
+import { BestiaryUI } from '../ui/bestiaryUI.js';
 
 export class UIManager {
     constructor(dependencies) {
@@ -20,6 +21,7 @@ export class UIManager {
         this.chatUI = null;
         this.compassUI = null;
         this.clockUI = null;
+        this.bestiaryUI = null;
         this.tooltipElement = null;
     }
 
@@ -44,6 +46,9 @@ export class UIManager {
         this.mapUI = new MapUI(this.dependencies);
         this.mapUI.create();
 
+        this.bestiaryUI = new BestiaryUI(this.dependencies);
+        this.bestiaryUI.create();
+
         new MusicUI(this.dependencies).create();
 
         this.compassUI = new CompassUI(this.dependencies);
@@ -57,6 +62,7 @@ export class UIManager {
         return {
             inventoryUI: this.inventoryUI,
             mapUI: this.mapUI,
+            bestiaryUI: this.bestiaryUI,
         };
     }
 
