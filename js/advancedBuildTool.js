@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { CLUSTER_SIZE } from './worldgen/constants.js';
+import { ColorManager } from './advancedBuild/colorManager.js';
 
 export class AdvancedBuildTool {
   constructor(scene, camera, renderer, buildTool, objectCreator) {
@@ -24,11 +25,11 @@ export class AdvancedBuildTool {
     });
     scene.add(this.transformControl);
     
-    this.transformMode = 'translate'; 
+    this.transformMode = 'translate';
     this.advancedBuildObjects = [];
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
-    this.colorPickerActive = false;
+    this.colorManager = new ColorManager(this);
     
     this.boundOnPointerDown = this.onPointerDown.bind(this);
     this.boundOnKeyDown = this.onKeyDown.bind(this);
@@ -81,7 +82,7 @@ export class AdvancedBuildTool {
     const intersects = this.raycaster.intersectObjects([...this.buildTool.buildObjects, ...this.advancedBuildObjects], false);
     
     // Check if color picker is active
-    if (this.colorPickerActive && intersects.length > 0) {
+    if (this.colorManager.active && intersects.length > 0) {
       this.pickColorFromObject(intersects[0].object);
       return;
     }
@@ -341,7 +342,7 @@ export class AdvancedBuildTool {
       const message = document.getElementById('color-picker-message');
       if (message) message.remove();
       
-      this.colorPickerActive = false;
+      this.colorManager.active = false;
       this.deselectObject();
       
       this.transformControl.removeEventListener('objectChange', this.onTransformChanged.bind(this));
@@ -402,131 +403,22 @@ export class AdvancedBuildTool {
   }
   
   toggleColorPicker() {
-    this.colorPickerActive = !this.colorPickerActive;
-    document.getElementById('color-pick-button').classList.toggle('active', this.colorPickerActive);
-    
-    if (this.colorPickerActive) {
-      // Show instruction message
-      const message = document.createElement('div');
-      message.id = 'color-picker-message';
-      message.textContent = 'Click on any object to copy its color';
-      message.style.position = 'fixed';
-      message.style.top = '100px';
-      message.style.left = '50%';
-      message.style.transform = 'translateX(-50%)';
-      message.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-      message.style.color = 'white';
-      message.style.padding = '10px';
-      message.style.borderRadius = '5px';
-      message.style.zIndex = '2000';
-      document.getElementById('game-container').appendChild(message);
-    } else {
-      // Remove instruction message
-      const message = document.getElementById('color-picker-message');
-      if (message) message.remove();
-    }
+    this.colorManager.toggleColorPicker();
   }
 
   pickColorFromObject(object) {
-    if (!this.selectedObject) {
-      this.colorPickerActive = false;
-      document.getElementById('color-pick-button').classList.remove('active');
-      const message = document.getElementById('color-picker-message');
-      if (message) message.remove();
-      return;
-    }
-    
-    // Get color from object
-    const color = object.material.color.clone();
-    
-    // Apply to selected object
-    this.changeObjectColor(color);
-    
-    // Update color picker inputs
-    const r = Math.round(color.r * 255);
-    const g = Math.round(color.g * 255);
-    const b = Math.round(color.b * 255);
-    
-    document.getElementById('color-r').value = r;
-    document.getElementById('color-g').value = g;
-    document.getElementById('color-b').value = b;
-    document.getElementById('color-preview').style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-    
-    // Exit color picker mode
-    this.colorPickerActive = false;
-    document.getElementById('color-pick-button').classList.remove('active');
-    const message = document.getElementById('color-picker-message');
-    if (message) message.remove();
+    this.colorManager.pickColorFromObject(object);
   }
 
   changeObjectColor(color) {
-    if (!this.selectedObject) return;
-    
-    // Clone the material to avoid affecting other objects with the same material
-    if (!this.selectedObject.userData.originalMaterial) {
-      this.selectedObject.userData.originalMaterial = this.selectedObject.material.clone();
-    }
-    
-    const newMaterial = this.selectedObject.material.clone();
-    newMaterial.color.copy(color);
-    this.selectedObject.material = newMaterial;
-    
-    // Sync color change with other players
-    if (this.room) {
-      const colorData = {
-        type: 'color_object',
-        objectId: this.selectedObject.userData.id,
-        color: {
-          r: color.r,
-          g: color.g,
-          b: color.b
-        }
-      };
-      
-      this.room.send(colorData);
-      
-      // Update in room state
-      if (this.room.roomState.buildObjects && this.selectedObject.userData.id) {
-        const updatedBuildObjects = { ...(this.room.roomState.buildObjects) };
-        if (updatedBuildObjects[this.selectedObject.userData.id]) {
-          updatedBuildObjects[this.selectedObject.userData.id] = {
-            ...updatedBuildObjects[this.selectedObject.userData.id],
-            color: {
-              r: color.r,
-              g: color.g,
-              b: color.b
-            }
-          };
-          this.room.updateRoomState({
-            buildObjects: updatedBuildObjects
-          });
-        }
-      }
-    }
+    this.colorManager.changeObjectColor(color);
   }
 
   receiveObjectColor(colorData) {
-    if (!colorData || !colorData.objectId) return;
-    
-    const object = [...this.buildTool.buildObjects, ...this.advancedBuildObjects].find(
-      obj => obj.userData.id === colorData.objectId
-    );
-    
-    if (object) {
-      const newMaterial = object.material.clone();
-      newMaterial.color.setRGB(
-        colorData.color.r,
-        colorData.color.g,
-        colorData.color.b
-      );
-      object.material = newMaterial;
-    }
+    this.colorManager.receiveObjectColor(colorData);
   }
-  
+
   updateColorPreview() {
-    const r = document.getElementById('color-r').value;
-    const g = document.getElementById('color-g').value;
-    const b = document.getElementById('color-b').value;
-    document.getElementById('color-preview').style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+    this.colorManager.updateColorPreview();
   }
 }

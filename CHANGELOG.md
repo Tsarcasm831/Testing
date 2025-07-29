@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2025-07-29
+
+- 1611 Refactor advancedBuildTool.js into ColorManager module
 - 1610 Add billboard audio selection and Who Are You lyrics
 - 1400 Expand world size to 2000x2000 and adjust grid/object density to prevent lag.
 - 1357 Break up amphi-seats.js into smaller modules
