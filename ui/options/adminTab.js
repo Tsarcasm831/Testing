@@ -50,6 +50,18 @@ export async function addAdminTab(dependencies, modal, optionsUI) {
                     <button id="save-youtube-url" class="option-button" data-tooltip="Update the video screen for everyone">Set Video</button>
                 </div>
                 <div class="options-section">
+                    <h4>Billboard Song</h4>
+                    <div class="option-item-vertical">
+                        <label for="billboard-song-select">Choose Song:</label>
+                        <select id="billboard-song-select">
+                            <option value="">Select...</option>
+                            <option value="whoareyou">Who Are You</option>
+                            <option value="none">Video Only</option>
+                        </select>
+                    </div>
+                    <button id="set-billboard-song" class="option-button" data-tooltip="Play selected song for everyone">Set Song</button>
+                </div>
+                <div class="options-section">
                     <h4>Developer Mode</h4>
                     <div class="option-item">
                         <label for="dev-mode-checkbox">Lock Time to Noon</label>
@@ -117,6 +129,26 @@ export async function addAdminTab(dependencies, modal, optionsUI) {
             const url = adminContent.querySelector('#youtube-url-input').value;
             if (dependencies.room) {
                 dependencies.room.updateRoomState({ youtubeUrl: url });
+            }
+        });
+
+        adminContent.querySelector('#set-billboard-song').addEventListener('click', async () => {
+            const choice = adminContent.querySelector('#billboard-song-select').value;
+            if (!dependencies.room) return;
+            if (choice === 'whoareyou') {
+                const audioUrl = 'https://file.garden/Zy7B0LkdIVpGyzA1/Songs/Who%20Are%20You.mp3';
+                const resp = await fetch('lyrics/whoareyou.lyrics');
+                const lyricsData = await resp.json();
+                const lyricsCollection = dependencies.room.collection('lyrics');
+                const current = lyricsCollection.getList()[0];
+                if (current) {
+                    await lyricsCollection.update(current.id, { content: lyricsData });
+                } else {
+                    await lyricsCollection.create({ content: lyricsData });
+                }
+                dependencies.room.updateRoomState({ billboardAudioUrl: audioUrl, billboardSongTitle: 'Who Are You' });
+            } else if (choice === 'none') {
+                dependencies.room.updateRoomState({ billboardAudioUrl: null, billboardSongTitle: null });
             }
         });
 
