@@ -225,7 +225,8 @@ export class NPC {
                                 proposedPosition,
                                 new THREE.Vector3(), // Velocity is not used for simple NPC movement
                                 this.collisionRadius,
-                                this.collisionHeight
+                                this.collisionHeight,
+                                this.model
                             );
                             finalPosition = result.finalPosition;
                         }

@@ -62,14 +62,15 @@ export class CollisionManager {
      *  standingOnBlock: boolean
      * }}
      */
-    checkCollisions(currentPosition, proposedPosition, velocity, playerRadius, playerHeight) {
+    checkCollisions(currentPosition, proposedPosition, velocity, playerRadius, playerHeight, selfObject = null) {
         const blockMeshes = [];
         const worldPosition = new THREE.Vector3();
 
         this.scene.traverse(child => {
             // This is a more robust way of collecting collidable objects,
             // as it checks the entire scene graph, not just direct children.
-            if ((child.userData.isBlock || child.userData.isBarrier || (child.type === "Group" && child.userData.isTree) || child.userData.isNpc) && child.userData.isCollidable !== false) {
+            if (child === selfObject) return;
+            if ((child.userData.isBlock || child.userData.isBarrier || (child.type === "Group" && child.userData.isTree) || child.userData.isNpc || child.userData.isPlayer) && child.userData.isCollidable !== false) {
                 child.getWorldPosition(worldPosition);
                 /* @tweakable The distance from the player to check for collidable objects. Lowering may improve performance but can cause missed collisions with large objects. */
                 const effectiveCollisionRadius = COLLISION_CHECK_RADIUS + (child.geometry?.boundingSphere?.radius || 0);

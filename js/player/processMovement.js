@@ -172,7 +172,8 @@ export function processMovement(pc, delta) {
           new THREE.Vector3(newX, newY, newZ),
           pc.velocity,
           PLAYER_COLLISION_RADIUS,
-          PLAYER_COLLISION_HEIGHT
+          PLAYER_COLLISION_HEIGHT,
+          pc.playerModel
       );
       
       newX = finalPosition.x;
