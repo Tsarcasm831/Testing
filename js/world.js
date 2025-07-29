@@ -13,7 +13,7 @@ export class World {
 
     async generate(sun) {
         this.terrain = await createTerrain(this.scene, this.assetManager);
-        createWater(this.scene, sun);
+        createWater(this.scene, sun, this.terrain);
         createBarriers(this.scene, this.terrain);
         createTrees(this.scene, this.terrain);
         createClouds(this.scene);
