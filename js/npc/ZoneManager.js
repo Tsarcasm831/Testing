@@ -1,8 +1,8 @@
 import { ACTIVE_ZONE_RADIUS } from './constants.js';
-import { ZONE_SIZE } from '../worldGeneration.js';
+import { ZONE_SIZE } from '../worldgen/constants.js';
 
 /* @tweakable Adjusts how many NPC zones are loaded based on view distance. Lower values load fewer zones. 1.0 is a direct relationship. A lower value is better for performance. */
-const NPC_ZONE_VIEW_DISTANCE_RATIO = 0.8;
+const NPC_ZONE_VIEW_DISTANCE_RATIO = 0.5;
 
 export class ZoneManager {
     constructor(playerControls, onActivate, onDeactivate) {

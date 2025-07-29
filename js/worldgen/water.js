@@ -3,7 +3,9 @@ import { Water } from 'three/addons/objects/Water.js';
 import { CLUSTER_SIZE, WATER_LEVEL } from './constants.js';
 
 export function createWater(scene, sun) {
-    const waterGeometry = new THREE.PlaneGeometry(CLUSTER_SIZE * 2, CLUSTER_SIZE * 2);
+    /* @tweakable The size of the water plane. Should be large enough to cover the world. */
+    const waterPlaneSize = CLUSTER_SIZE;
+    const waterGeometry = new THREE.PlaneGeometry(waterPlaneSize, waterPlaneSize);
 
     const water = new Water(
         waterGeometry,
@@ -29,4 +31,3 @@ export function createWater(scene, sun) {
     scene.add(water);
     return water;
 }
-

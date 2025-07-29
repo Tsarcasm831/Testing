@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { CLUSTER_SIZE } from '../worldgen/constants.js';
 import {
     NPC_SPEED,
     MIN_WANDER_WAIT_SECONDS,
@@ -90,8 +91,12 @@ export class NPC {
         const angle = Math.random() * Math.PI * 2;
         const distance = Math.random() * WANDER_RADIUS;
         
-        const targetX = this.startPosition.x + Math.cos(angle) * distance;
-        const targetZ = this.startPosition.z + Math.sin(angle) * distance;
+        /* @tweakable Padding from world edge to keep wandering NPCs away from the boundary. */
+        const npcBoundaryPadding = 5.0;
+        const halfSize = CLUSTER_SIZE / 2 - npcBoundaryPadding;
+
+        const targetX = Math.max(-halfSize, Math.min(halfSize, this.startPosition.x + Math.cos(angle) * distance));
+        const targetZ = Math.max(-halfSize, Math.min(halfSize, this.startPosition.z + Math.sin(angle) * distance));
         let targetY;
 
         if (this.isEyebot) {

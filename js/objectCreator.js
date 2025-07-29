@@ -1,4 +1,8 @@
 import * as THREE from 'three';
+import { CLUSTER_SIZE } from './worldgen/constants.js';
+
+/* @tweakable The padding from the edge of the world where object placement is disallowed. */
+const buildBoundaryPadding = 1.0;
 
 export class ObjectCreator {
     constructor(scene, camera, room) {
@@ -34,6 +38,12 @@ export class ObjectCreator {
         const vector = new THREE.Vector3(0, 0, -distance);
         vector.applyQuaternion(this.camera.quaternion);
         vector.add(this.camera.position);
+        
+        // Clamp to world boundaries
+        const halfSize = CLUSTER_SIZE / 2;
+        vector.x = Math.max(-halfSize + buildBoundaryPadding, Math.min(halfSize - buildBoundaryPadding, vector.x));
+        vector.z = Math.max(-halfSize + buildBoundaryPadding, Math.min(halfSize - buildBoundaryPadding, vector.z));
+        
         mesh.position.copy(vector);
 
         if (this.buildTool.isLocationOccupiedByPlayer(mesh.position)) return null;
@@ -53,6 +63,12 @@ export class ObjectCreator {
         const duplicatedObject = new THREE.Mesh(geometry, material);
 
         duplicatedObject.position.copy(objectToDuplicate.position).add(new THREE.Vector3(0.5, 0, 0.5));
+        
+        // Clamp to world boundaries
+        const halfSize = CLUSTER_SIZE / 2;
+        duplicatedObject.position.x = Math.max(-halfSize + buildBoundaryPadding, Math.min(halfSize - buildBoundaryPadding, duplicatedObject.position.x));
+        duplicatedObject.position.z = Math.max(-halfSize + buildBoundaryPadding, Math.min(halfSize - buildBoundaryPadding, duplicatedObject.position.z));
+        
         duplicatedObject.rotation.copy(objectToDuplicate.rotation);
         duplicatedObject.scale.copy(objectToDuplicate.scale);
 

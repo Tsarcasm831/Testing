@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { MathRandom } from '../js/worldgen/random.js';
-import { WATER_LEVEL, CLUSTER_SIZE } from '../js/worldgen/constants.js';
+import { WATER_LEVEL, CLUSTER_SIZE, GRASS_RADIUS } from '../js/worldgen/constants.js';
 
 /* @tweakable The number of grass instances to generate. Higher numbers can impact performance. */
-const GRASS_COUNT = 100000;
+const GRASS_COUNT = 5000000;
 /* @tweakable The base color of the grass blades. */
 const GRASS_BASE_COLOR = 0x338833;
 /* @tweakable How much color can vary. A value of 0.4 means lightness can vary by +/- 20%. */
@@ -45,6 +45,15 @@ const GRASS_IN_SNOW_BIOME = false;
 const GRASS_IN_FOREST_BIOME = true;
 /* @tweakable Enable grass generation in the dirt/stone biome (x>0, z<0). */
 const GRASS_IN_DIRT_BIOME = false;
+
+/* @tweakable Density multiplier for grass in the sand biome (x>0, z>0). 0 is none, 1 is normal. */
+const DENSITY_SAND_BIOME = 0.0;
+/* @tweakable Density multiplier for grass in the snow biome (x<0, z>0). */
+const DENSITY_SNOW_BIOME = 0.0;
+/* @tweakable Density multiplier for grass in the forest biome (x<0, z<0). */
+const DENSITY_FOREST_BIOME = 1.0;
+/* @tweakable Density multiplier for grass in the dirt/stone biome (x>0, z<0). */
+const DENSITY_DIRT_BIOME = 0.25;
 
 // Simple noise for clumping.
 function createDensityNoise() {
@@ -185,11 +194,18 @@ export function createGrass(scene, terrain) {
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
 
-        // Biome check for grass placement
-        if (x > 0 && z > 0 && !GRASS_IN_SAND_BIOME) continue; // Sand
-        if (x < 0 && z > 0 && !GRASS_IN_SNOW_BIOME) continue; // Snow
-        if (x < 0 && z < 0 && !GRASS_IN_FOREST_BIOME) continue; // Forest
-        if (x > 0 && z < 0 && !GRASS_IN_DIRT_BIOME) continue; // Dirt/Stone
+        // Biome density check
+        const distFromCenter = Math.sqrt(x*x + z*z);
+        let biomeDensity = 1.0; // Default for central grass area
+
+        if (distFromCenter > GRASS_RADIUS) {
+            if (x > 0 && z > 0) biomeDensity = DENSITY_SAND_BIOME;       // Sand
+            else if (x < 0 && z > 0) biomeDensity = DENSITY_SNOW_BIOME;  // Snow
+            else if (x < 0 && z < 0) biomeDensity = DENSITY_FOREST_BIOME;// Forest
+            else if (x > 0 && z < 0) biomeDensity = DENSITY_DIRT_BIOME;  // Dirt/Stone
+        }
+
+        if (biomeDensity <= 0) continue;
 
         if (terrain.userData.isWater && terrain.userData.isWater(x, z)) {
             continue;
@@ -205,7 +221,7 @@ export function createGrass(scene, terrain) {
 
         /* @tweakable Controls how clumpy the grass is. Higher values create denser, more separated clumps. */
         const CLUMPINESS = 2.0;
-        const spawnProbability = Math.pow((density - COVERAGE_THRESHOLD) / (1.0 - COVERAGE_THRESHOLD), CLUMPINESS);
+        const spawnProbability = Math.pow((density - COVERAGE_THRESHOLD) / (1.0 - COVERAGE_THRESHOLD), CLUMPINESS) * biomeDensity;
         
         if (rng.random() > spawnProbability) {
             continue;

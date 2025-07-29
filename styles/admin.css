@@ -8,6 +8,33 @@
     --white-full: white;
 }
 
+/* @tweakable The width of the admin modal as a percentage of viewport width. */
+#options-modal.admin-view {
+    /* @tweakable The width of the admin modal as a percentage of viewport width. */
+    width: 80vw;
+    /* @tweakable The height of the admin modal as a percentage of viewport height. */
+    height: 80vh;
+    /* @tweakable The maximum width of the admin modal in pixels. */
+    max-width: 1400px;
+    /* @tweakable The maximum height of the admin modal in pixels. */
+    max-height: 900px;
+}
+
+#admin-sections-grid {
+    display: grid;
+    /* @tweakable The minimum width of an admin section before columns wrap. */
+    --admin-section-min-width: 350px;
+    grid-template-columns: repeat(auto-fit, minmax(var(--admin-section-min-width), 1fr));
+    /* @tweakable The gap between columns and rows in the admin panel grid. */
+    gap: 20px;
+}
+
+@media (max-width: 900px) {
+    #admin-sections-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .options-tab.admin-tab {
     border-bottom: 2px solid transparent;
     /* @tweakable The text color for inactive admin tabs. */

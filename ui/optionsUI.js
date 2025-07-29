@@ -161,7 +161,7 @@ export class OptionsUI {
         });
 
         // Add admin tab if user is lordtsarcasm
-        addAdminTab(this.dependencies, modal);
+        addAdminTab(this.dependencies, modal, this);
 
         // Respawn logic
         modal.querySelector('#respawn-button').addEventListener('click', () => {

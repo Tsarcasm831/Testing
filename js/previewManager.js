@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { CLUSTER_SIZE } from './worldgen/constants.js';
 
 export class PreviewManager {
     constructor(scene, camera, buildMaterials, terrain) {
@@ -57,10 +58,17 @@ export class PreviewManager {
             }
 
             const point = intersects[i].point;
+            const halfSize = CLUSTER_SIZE / 2;
 
             const gridSize = 1;
             point.x = Math.round(point.x / gridSize) * gridSize;
             point.z = Math.round(point.z / gridSize) * gridSize;
+
+            // Clamp position to world boundaries
+            /* @tweakable The padding from the edge of the world where object placement is disallowed. */
+            const buildBoundaryPadding = 1.0;
+            point.x = Math.max(-halfSize + buildBoundaryPadding, Math.min(halfSize - buildBoundaryPadding, point.x));
+            point.z = Math.max(-halfSize + buildBoundaryPadding, Math.min(halfSize - buildBoundaryPadding, point.z));
 
             if (!this.previewMesh.userData.heightAdjusted) {
                 const terrainHeight = this.terrain ? this.terrain.userData.getHeight(point.x, point.z) : 0;

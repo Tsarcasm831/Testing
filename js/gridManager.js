@@ -10,6 +10,8 @@ export const GRID_LABEL_LOD_STEP = 10;
 export const LABEL_UPDATE_INTERVAL = 10;
 /* @tweakable Set to true to link debug border visibility to grid visibility. */
 const TOGGLE_DEBUG_BORDERS_WITH_GRID = true;
+/* @tweakable The size of each grid cell. Larger cells mean fewer grid lines and better performance. A value of 25 makes cells 25x25 units. */
+const GRID_CELL_SIZE = 50;
 
 export class GridManager {
     constructor(scene) {
@@ -19,8 +21,8 @@ export class GridManager {
     }
 
     create(terrain) {
-        /* @tweakable The number of divisions in the grid helper. More divisions create a finer grid but can impact performance. */
-        const gridHelperDivisions = CLUSTER_SIZE;
+        /* @tweakable The number of divisions in the grid helper, calculated from world size and cell size. A lower number means better performance. */
+        const gridHelperDivisions = CLUSTER_SIZE / GRID_CELL_SIZE;
         /* @tweakable The size of the grid helper. Should match the world size. */
         const gridHelperSize = CLUSTER_SIZE;
         const gridHelperColorCenterLine = 0xffffff;

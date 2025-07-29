@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { CLUSTER_SIZE } from './worldgen/constants.js';
 
 /* @tweakable The radius around the player to check for collisions. Lower values can improve performance but may cause missed collisions with distant objects. */
 const COLLISION_CHECK_RADIUS = 10;

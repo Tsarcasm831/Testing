@@ -7,19 +7,13 @@ import {
   TERRAIN_AMPLITUDE,
   TERRAIN_SCALE,
   GROUND_TEXTURE_FILENAME,
-  WATER_LEVEL
+  WATER_LEVEL,
+  BIOME_BLEND_WIDTH,
+  STONE_START_HEIGHT,
+  STONE_TRANSITION_HEIGHT,
+  GRASS_RADIUS,
+  GRASS_BLEND_WIDTH
 } from './constants.js';
-
-/* @tweakable The width of the blend between biomes. Higher values create a smoother transition. */
-const BIOME_BLEND_WIDTH = 40.0;
-/* @tweakable The starting height for stone to appear in the dirt/stone biome. */
-const STONE_START_HEIGHT = 2.0;
-/* @tweakable The height range over which stone fully replaces dirt. */
-const STONE_TRANSITION_HEIGHT = 8.0;
-/* @tweakable The radius of the central grass biome before it starts blending into other biomes. */
-const GRASS_RADIUS = 80.0;
-/* @tweakable The width of the blend from the central grass biome to other biomes. */
-const GRASS_BLEND_WIDTH = 20.0;
 
 /* @tweakable Threshold for water generation. Higher values mean less water. Range 0-1. */
 const WATER_THRESHOLD = 0.5;

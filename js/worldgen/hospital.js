@@ -8,7 +8,7 @@ import * as THREE from 'three';
  */
 export function createHospital(scene, getHeight) {
     /* @tweakable The position of the hospital. */
-    const hospitalPosition = new THREE.Vector3(-26.875, 0, 0.625);
+    const hospitalPosition = new THREE.Vector3(448.75, 0, 1186.25);
     const hospitalY = getHeight(hospitalPosition.x, hospitalPosition.z);
     hospitalPosition.y = hospitalY;
 

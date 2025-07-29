@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2025-07-29
+- 1400 Expand world size to 2000x2000 and adjust grid/object density to prevent lag.
 - 1357 Break up amphi-seats.js into smaller modules
 - 1013 Make collision detection include players and ignore self-object
 - 0953 Break up trees.js into separate tree modules

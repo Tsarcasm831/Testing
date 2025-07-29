@@ -1,9 +1,23 @@
-export async function addAdminTab(dependencies, modal) {
+/* @tweakable The title for the admin teleport section */
+const teleportTitle = "Teleport";
+/* @tweakable The label for the X coordinate input */
+const xLabel = "X Coordinate:";
+/* @tweakable The label for the Y coordinate input */
+const yLabel = "Y Coordinate:";
+/* @tweakable The label for the Z coordinate input */
+const zLabel = "Z Coordinate:";
+/* @tweakable The text for the teleport button */
+const teleportButtonText = "Teleport";
+/* @tweakable The tooltip for the teleport button */
+const teleportButtonTooltip = "Teleport to specified coordinates";
+
+export async function addAdminTab(dependencies, modal, optionsUI) {
     const currentUser = await window.websim.getCurrentUser();
     /* @tweakable The username that has access to the admin panel. */
     const adminUsername = 'lordtsarcasm';
 
     if (currentUser && currentUser.username === adminUsername) {
+        modal.classList.add('admin-view');
         const tabsContainer = modal.querySelector('#options-tabs');
         const contentContainer = modal.querySelector('#options-content');
 
@@ -26,30 +40,48 @@ export async function addAdminTab(dependencies, modal) {
 
         adminContent.innerHTML = `
             <h3>Admin Controls</h3>
-            <div class="options-section">
-                <h4>Video Screen</h4>
-                <div class="option-item-vertical">
-                    <label for="youtube-url-input">Video URL:</label>
-                    <input type="text" id="youtube-url-input" placeholder="Enter video file URL...">
+            <div id="admin-sections-grid">
+                <div class="options-section">
+                    <h4>Video Screen</h4>
+                    <div class="option-item-vertical">
+                        <label for="youtube-url-input">Video URL:</label>
+                        <input type="text" id="youtube-url-input" placeholder="Enter video file URL...">
+                    </div>
+                    <button id="save-youtube-url" class="option-button" data-tooltip="Update the video screen for everyone">Set Video</button>
                 </div>
-                <button id="save-youtube-url" class="option-button" data-tooltip="Update the video screen for everyone">Set Video</button>
-            </div>
-            <div class="options-section">
-                <h4>Developer Mode</h4>
-                <div class="option-item">
-                     <label for="dev-mode-checkbox">Lock Time to Noon</label>
-                     <input type="checkbox" id="dev-mode-checkbox">
+                <div class="options-section">
+                    <h4>Developer Mode</h4>
+                    <div class="option-item">
+                        <label for="dev-mode-checkbox">Lock Time to Noon</label>
+                        <input type="checkbox" id="dev-mode-checkbox">
+                    </div>
                 </div>
-            </div>
-            <div class="options-section">
-                <h4>Rigged GLB Characters</h4>
-                <div id="rigged-characters-list"></div>
-            </div>
-            <div class="options-section">
-                <h4>${notesTitle}</h4>
-                <textarea id="admin-notes-textarea" style="width: 100%; height: 150px; background-color: #222; color: white; border: 1px solid #555; border-radius: 4px; padding: 5px; margin-top: 5px;" placeholder="${notesPlaceholder}"></textarea>
-                <button id="save-admin-notes" class="option-button" style="margin-top: 10px;">${saveButtonText}</button>
-                <div id="admin-notes-status" style="margin-top: 5px; color: #4CAF50;"></div>
+                <div class="options-section">
+                    <h4>${teleportTitle}</h4>
+                    <div class="option-item-vertical">
+                        <label for="teleport-x">${xLabel}</label>
+                        <input type="number" id="teleport-x" placeholder="Enter X coordinate...">
+                    </div>
+                    <div class="option-item-vertical">
+                        <label for="teleport-y">${yLabel}</label>
+                        <input type="number" id="teleport-y" placeholder="Enter Y coordinate...">
+                    </div>
+                    <div class="option-item-vertical">
+                        <label for="teleport-z">${zLabel}</label>
+                        <input type="number" id="teleport-z" placeholder="Enter Z coordinate...">
+                    </div>
+                    <button id="teleport-button" class="option-button" data-tooltip="${teleportButtonTooltip}">${teleportButtonText}</button>
+                </div>
+                <div class="options-section">
+                    <h4>${notesTitle}</h4>
+                    <textarea id="admin-notes-textarea" style="width: 100%; height: 150px; background-color: #222; color: white; border: 1px solid #555; border-radius: 4px; padding: 5px; margin-top: 5px;" placeholder="${notesPlaceholder}"></textarea>
+                    <button id="save-admin-notes" class="option-button" style="margin-top: 10px;">${saveButtonText}</button>
+                    <div id="admin-notes-status" style="margin-top: 5px; color: #4CAF50;"></div>
+                </div>
+                <div class="options-section" style="grid-column: 1 / -1;">
+                    <h4>Rigged GLB Characters</h4>
+                    <div id="rigged-characters-list"></div>
+                </div>
             </div>
         `;
         contentContainer.appendChild(adminContent);
@@ -162,6 +194,28 @@ export async function addAdminTab(dependencies, modal) {
                 }
             });
         }
+
+        // Teleport Logic
+        adminContent.querySelector('#teleport-button').addEventListener('click', () => {
+            const x = parseFloat(adminContent.querySelector('#teleport-x').value);
+            const y = parseFloat(adminContent.querySelector('#teleport-y').value);
+            const z = parseFloat(adminContent.querySelector('#teleport-z').value);
+
+            if (isNaN(x) || isNaN(y) || isNaN(z)) {
+                alert('Please enter valid coordinates for X, Y, and Z.');
+                return;
+            }
+
+            const { playerControls } = dependencies;
+            if (playerControls) {
+                const playerModel = playerControls.getPlayerModel();
+                playerModel.position.set(x, y, z);
+                playerControls.velocity.set(0, 0, 0);
+                if (optionsUI) {
+                    optionsUI.toggleModal();
+                }
+            }
+        });
 
         // Lyrics Feature Logic
         if (room) {

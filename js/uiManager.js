@@ -31,6 +31,10 @@ export class UIManager {
         this.adModal = new AdModal(dependencies);
 
         this.tooltip = null;
+
+        this.boundOnTooltipMouseOver = this.onTooltipMouseOver.bind(this);
+        this.boundOnTooltipMouseOut = this.onTooltipMouseOut.bind(this);
+        this.boundOnTooltipMouseMove = this.onTooltipMouseMove.bind(this);
     }
 
     init() {
@@ -71,27 +75,31 @@ export class UIManager {
     }
 
     setupTooltipListeners() {
-        document.body.addEventListener('mouseover', (e) => {
-            const target = e.target.closest('[data-tooltip]');
-            if (target) {
-                this.tooltip.textContent = target.getAttribute('data-tooltip');
-                this.tooltip.style.opacity = '1';
-                this.updateTooltipPosition(e);
-            }
-        });
+        document.body.addEventListener('mouseover', this.boundOnTooltipMouseOver);
+        document.body.addEventListener('mouseout', this.boundOnTooltipMouseOut);
+        document.body.addEventListener('mousemove', this.boundOnTooltipMouseMove);
+    }
 
-        document.body.addEventListener('mouseout', (e) => {
-            const target = e.target.closest('[data-tooltip]');
-            if (target) {
-                this.tooltip.style.opacity = '0';
-            }
-        });
+    onTooltipMouseOver(e) {
+        const target = e.target.closest('[data-tooltip]');
+        if (target) {
+            this.tooltip.textContent = target.getAttribute('data-tooltip');
+            this.tooltip.style.opacity = '1';
+            this.updateTooltipPosition(e);
+        }
+    }
 
-        document.body.addEventListener('mousemove', (e) => {
-            if (this.tooltip.style.opacity === '1') {
-                this.updateTooltipPosition(e);
-            }
-        });
+    onTooltipMouseOut(e) {
+        const target = e.target.closest('[data-tooltip]');
+        if (target) {
+            this.tooltip.style.opacity = '0';
+        }
+    }
+
+    onTooltipMouseMove(e) {
+        if (this.tooltip.style.opacity === '1') {
+            this.updateTooltipPosition(e);
+        }
     }
 
     updateTooltipPosition(e) {
@@ -107,5 +115,14 @@ export class UIManager {
 
         this.tooltip.style.left = `${x}px`;
         this.tooltip.style.top = `${y}px`;
+    }
+
+    destroy() {
+        document.body.removeEventListener('mouseover', this.boundOnTooltipMouseOver);
+        document.body.removeEventListener('mouseout', this.boundOnTooltipMouseOut);
+        document.body.removeEventListener('mousemove', this.boundOnTooltipMouseMove);
+        
+        // Add destroy calls for child UI components if they have destroy methods.
+        // For now, this is a placeholder for good practice.
     }
 }

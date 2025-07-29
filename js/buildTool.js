@@ -24,6 +24,16 @@ export class BuildTool {
     this.aiBuilder = new AIBuilder(this);
     this.lifespanExtender = new LifespanExtender(scene, this);
 
+    // Bind event handlers
+    /* @tweakable The number of milliseconds to wait between clicks/taps to register a double-click/tap for placing an object. */
+    this.doubleTapThreshold = 300;
+    this.boundOnMouseMove = this.onMouseMove.bind(this);
+    this.boundOnClick = this.onClick.bind(this);
+    this.boundOnTouchStart = this.onTouchStart.bind(this);
+    this.boundOnTouchMove = this.onTouchMove.bind(this);
+    this.boundOnTouchEnd = this.onTouchEnd.bind(this);
+    this.boundOnMouseDown = this.onMouseDown.bind(this);
+
     // Setup event listeners
     this.setupEventListeners();
   }
@@ -55,16 +65,30 @@ export class BuildTool {
 
   setupEventListeners() {
     // Mouse events for desktop
-    document.addEventListener('mousemove', this.onMouseMove.bind(this));
-    document.addEventListener('click', this.onClick.bind(this));
+    document.addEventListener('mousemove', this.boundOnMouseMove);
+    document.addEventListener('click', this.boundOnClick);
 
     // Touch events for mobile
-    document.addEventListener('touchstart', this.onTouchStart.bind(this));
-    document.addEventListener('touchmove', this.onTouchMove.bind(this));
-    document.addEventListener('touchend', this.onTouchEnd.bind(this));
+    document.addEventListener('touchstart', this.boundOnTouchStart);
+    document.addEventListener('touchmove', this.boundOnTouchMove);
+    document.addEventListener('touchend', this.boundOnTouchEnd);
 
     // Listen for shift+click for height adjustment
-    document.addEventListener('mousedown', this.onMouseDown.bind(this));
+    document.addEventListener('mousedown', this.boundOnMouseDown);
+  }
+
+  destroy() {
+    document.removeEventListener('mousemove', this.boundOnMouseMove);
+    document.removeEventListener('click', this.boundOnClick);
+    document.removeEventListener('touchstart', this.boundOnTouchStart);
+    document.removeEventListener('touchmove', this.boundOnTouchMove);
+    document.removeEventListener('touchend', this.boundOnTouchEnd);
+    document.removeEventListener('mousedown', this.boundOnMouseDown);
+    
+    if (this.previewMesh) {
+        this.scene.remove(this.previewMesh);
+        this.previewMesh = null;
+    }
   }
 
   onMouseMove(event) {
@@ -89,7 +113,7 @@ export class BuildTool {
     const now = performance.now();
     const timeSinceLastTap = now - this.lastTapTime;
 
-    if (timeSinceLastTap < 300) { // Double click threshold (300ms)
+    if (timeSinceLastTap < this.doubleTapThreshold) { // Double click threshold (300ms)
       this.placeBuildObject();
     }
 
@@ -117,7 +141,7 @@ export class BuildTool {
     const now = performance.now();
     const timeSinceLastTap = now - this.lastTapTime;
 
-    if (timeSinceLastTap < 300) { // Double tap threshold (300ms)
+    if (timeSinceLastTap < this.doubleTapThreshold) { // Double tap threshold (300ms)
       this.placeBuildObject();
     }
 

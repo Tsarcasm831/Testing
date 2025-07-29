@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
+import { CLUSTER_SIZE } from './worldgen/constants.js';
 
 export class AdvancedBuildTool {
   constructor(scene, camera, renderer, buildTool, objectCreator) {
@@ -29,12 +30,24 @@ export class AdvancedBuildTool {
     this.mouse = new THREE.Vector2();
     this.colorPickerActive = false;
     
+    this.boundOnPointerDown = this.onPointerDown.bind(this);
+    this.boundOnKeyDown = this.onKeyDown.bind(this);
+
     this.setupEventListeners();
   }
   
   setupEventListeners() {
-    this.renderer.domElement.addEventListener('pointerdown', this.onPointerDown.bind(this));
-    window.addEventListener('keydown', this.onKeyDown.bind(this));
+    this.renderer.domElement.addEventListener('pointerdown', this.boundOnPointerDown);
+    window.addEventListener('keydown', this.boundOnKeyDown);
+  }
+
+  destroy() {
+    this.renderer.domElement.removeEventListener('pointerdown', this.boundOnPointerDown);
+    window.removeEventListener('keydown', this.boundOnKeyDown);
+    if(this.transformControl) {
+        this.transformControl.dispose();
+        this.scene.remove(this.transformControl);
+    }
   }
   
   onKeyDown(event) {
@@ -338,6 +351,13 @@ export class AdvancedBuildTool {
   }
   
   onTransformChanged() {
+    if (this.selectedObject) {
+        /* @tweakable The padding from the edge of the world where object placement is disallowed during transformation. */
+        const transformBoundaryPadding = 1.0;
+        const halfSize = CLUSTER_SIZE / 2;
+        this.selectedObject.position.x = Math.max(-halfSize + transformBoundaryPadding, Math.min(halfSize - transformBoundaryPadding, this.selectedObject.position.x));
+        this.selectedObject.position.z = Math.max(-halfSize + transformBoundaryPadding, Math.min(halfSize - transformBoundaryPadding, this.selectedObject.position.z));
+    }
     this.updateObjectTransform();
   }
   

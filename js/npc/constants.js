@@ -23,7 +23,7 @@ export const KNIGHT_SPAWN_CHANCE = 0.15;
 export const SPRITE_SPAWN_CHANCE = 0.2;
 export const NPC_ADJECTIVES = ["Wandering", "Mysterious", "Lost", "Curious", "Silent", "Ancient", "Jolly", "Grumpy"];
 /* @tweakable Min NPCs per zone. */
-export const MIN_NPCS_PER_ZONE = 1;
+export const MIN_NPCS_PER_ZONE = 0;
 /* @tweakable Max NPCs per zone. This has a large impact on performance. */
 export const MAX_NPCS_PER_ZONE = 1;
 /* @tweakable Radius of active zones around player (in zones). 0 = 1x1 grid, 1 = 3x3 grid. A lower number improves performance by having fewer active NPCs. */
