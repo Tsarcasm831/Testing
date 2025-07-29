@@ -2,6 +2,7 @@
 
 ## 2025-07-29
 - 0953 Break up trees.js into separate tree modules
+- 1012 Convert global water plane to local pools with 1m recess
 
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).
