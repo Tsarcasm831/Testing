@@ -5,7 +5,7 @@ const STAGE_COLLISION_ENABLED = true;
 /* @tweakable Set to true to enable collision for the stairs leading to the stage. */
 const STAIRS_COLLISION_ENABLED = true;
 /* @tweakable Set to true to enable collision for the foundation under the stage. */
-const FOUNDATION_COLLISION_ENABLED = false;
+const FOUNDATION_COLLISION_ENABLED = true;
 /* @tweakable The color of the stage platform. */
 const stageColor = 0x4a2a0a;
 /* @tweakable Set to true to show a visible outline box for debugging stage collision. */
@@ -33,7 +33,7 @@ export function createStage(dimensions) {
     stage.receiveShadow = true;
     if (STAGE_COLLISION_ENABLED) {
         stage.userData.isBarrier = true;
-        /* @tweakable Marking the stage as a stair allows the player to step onto it smoothly without jumping. */
+        /* @tweakable Marking the stage as a stair allows the player to step onto it smoothly without jumping. Adjust STEP_HEIGHT in collisionManager.js if players can't get on stage. */
         stage.userData.isStair = true;
     }
     stageGroup.add(stage);

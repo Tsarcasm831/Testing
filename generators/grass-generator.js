@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import { MathRandom } from '../js/worldgen/random.js';
-import { WATER_LEVEL } from '../js/worldgen/constants.js';
+import { WATER_LEVEL, CLUSTER_SIZE } from '../js/worldgen/constants.js';
 
 /* @tweakable The number of grass instances to generate. Higher numbers can impact performance. */
-const GRASS_COUNT = 50000;
+const GRASS_COUNT = 100000;
 /* @tweakable The base color of the grass blades. */
 const GRASS_BASE_COLOR = 0x338833;
 /* @tweakable How much color can vary. A value of 0.4 means lightness can vary by +/- 20%. */
@@ -37,6 +37,14 @@ const MAX_X = 51.25;
 const MIN_Z = 23.75;
 /* @tweakable The maximum Z coordinate for grass generation. */
 const MAX_Z = 26.25;
+/* @tweakable Enable grass generation in the sand biome (x>0, z>0). */
+const GRASS_IN_SAND_BIOME = false;
+/* @tweakable Enable grass generation in the snow biome (x<0, z>0). */
+const GRASS_IN_SNOW_BIOME = false;
+/* @tweakable Enable grass generation in the forest biome (x<0, z<0). */
+const GRASS_IN_FOREST_BIOME = true;
+/* @tweakable Enable grass generation in the dirt/stone biome (x>0, z<0). */
+const GRASS_IN_DIRT_BIOME = false;
 
 // Simple noise for clumping.
 function createDensityNoise() {
@@ -164,7 +172,7 @@ export function createGrass(scene, terrain) {
     const densityNoise = createDensityNoise();
 
     /* @tweakable The radius of the main grassland area where grass can grow. */
-    const GRASS_AREA_RADIUS = 80.0;
+    const GRASS_AREA_RADIUS = CLUSTER_SIZE / 2;
     
     let placedCount = 0;
     const dummy = new THREE.Object3D();
@@ -176,6 +184,12 @@ export function createGrass(scene, terrain) {
         const radius = Math.sqrt(rng.random()) * GRASS_AREA_RADIUS; // Uniform distribution in a circle
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
+
+        // Biome check for grass placement
+        if (x > 0 && z > 0 && !GRASS_IN_SAND_BIOME) continue; // Sand
+        if (x < 0 && z > 0 && !GRASS_IN_SNOW_BIOME) continue; // Snow
+        if (x < 0 && z < 0 && !GRASS_IN_FOREST_BIOME) continue; // Forest
+        if (x > 0 && z < 0 && !GRASS_IN_DIRT_BIOME) continue; // Dirt/Stone
 
         if (terrain.userData.isWater && terrain.userData.isWater(x, z)) {
             continue;

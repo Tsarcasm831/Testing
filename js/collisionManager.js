@@ -3,7 +3,7 @@ import * as THREE from 'three';
 /* @tweakable The radius around the player to check for collisions. Lower values can improve performance but may cause missed collisions with distant objects. */
 const COLLISION_CHECK_RADIUS = 10;
 /* @tweakable Maximum height the player can step onto without jumping. This also affects amphitheater seats. */
-const STEP_HEIGHT = 1.0;
+const STEP_HEIGHT = 1.6;
 /* @tweakable Additional padding around NPCs for collision detection. */
 const NPC_COLLISION_PADDING = 0.2;
 /* @tweakable Additional padding around Ogres for collision detection. */
@@ -88,7 +88,12 @@ export class CollisionManager {
         const movementVector = new THREE.Vector3().subVectors(proposedPosition, currentPosition);
 
         blockMeshes.forEach(block => {
-            let result = this._checkCollisionWithBlock(currentPosition, finalPosition, finalVelocity, playerRadius, playerHeight, block);
+            let result;
+            if (block.userData.isSeatRow) {
+                result = this._checkCollisionWithSeatRow(currentPosition, finalPosition, finalVelocity, playerRadius, playerHeight, block);
+            } else {
+                result = this._checkCollisionWithBlock(currentPosition, finalPosition, finalVelocity, playerRadius, playerHeight, block);
+            }
             
             if(result.standingOnBlock) {
                 standingOnBlock = true;
@@ -96,8 +101,6 @@ export class CollisionManager {
                 finalVelocity.y = 0;
                 canJump = true;
             } else if (result.collided) {
-                // When colliding, revert the player's position to the last known non-colliding state
-                // and then adjust based on which axis has less overlap to simulate sliding.
                 const boundingBox = new THREE.Box3().setFromObject(block);
                 const blockCenter = new THREE.Vector3();
                 boundingBox.getCenter(blockCenter);
@@ -113,11 +116,7 @@ export class CollisionManager {
                 const overlapZ = (blockSize.z / 2 + effectivePlayerRadius) - Math.abs(proposedPosition.z - blockCenter.z);
 
                 if (overlapX > 0 && overlapZ > 0) {
-                     // Determine which axis had less penetration *before* this frame's movement
-                    const prevOverlapX = (blockSize.x / 2 + effectivePlayerRadius) - Math.abs(currentPosition.x - blockCenter.x);
-                    const prevOverlapZ = (blockSize.z / 2 + effectivePlayerRadius) - Math.abs(currentPosition.z - blockCenter.z);
-
-                    // If colliding with an NPC, allow sliding by only restricting movement towards the NPC
+                     // If colliding with an NPC, use a simple pushback for smoother interaction
                     if (block.userData.isNpc) {
                         const pushback = new THREE.Vector3().subVectors(finalPosition, blockCenter);
                         pushback.y = 0;
@@ -130,12 +129,15 @@ export class CollisionManager {
                                 finalPosition.addScaledVector(pushback, penetration);
                             }
                         }
-                    } else if (prevOverlapX > prevOverlapZ) {
-                        // Was penetrating more on Z axis before, so nullify X movement
-                        finalPosition.x = currentPosition.x;
                     } else {
-                        // Was penetrating more on X axis before, so nullify Z movement
-                        finalPosition.z = currentPosition.z;
+                        // For static objects, resolve collision by sliding along the axis of least penetration
+                        if (overlapX < overlapZ) {
+                            const sign = Math.sign(proposedPosition.x - blockCenter.x);
+                            finalPosition.x = blockCenter.x + sign * (blockSize.x / 2 + effectivePlayerRadius);
+                        } else {
+                            const sign = Math.sign(proposedPosition.z - blockCenter.z);
+                            finalPosition.z = blockCenter.z + sign * (blockSize.z / 2 + effectivePlayerRadius);
+                        }
                     }
                 }
             }
@@ -202,35 +204,37 @@ export class CollisionManager {
 
         // Check if player is landing on top of the block
         if (
-            !block.userData.isNpc && // Prevent standing on NPCs
-            velocity.y <= 0 &&
-            currentPosition.y >= blockTop - 0.2 &&
-            newPosition.y <= (blockTop + SEAT_LANDING_TOLERANCE) &&
-            Math.abs(newPosition.x - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
-            Math.abs(newPosition.z - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius)
+            (!block.userData.isNpc &&
+             velocity.y <= 0 &&
+             currentPosition.y >= blockTop - 0.2 &&
+             newPosition.y <= (blockTop + SEAT_LANDING_TOLERANCE) &&
+             Math.abs(newPosition.x - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
+             Math.abs(newPosition.z - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius))
+            ||
+            (block.userData.isStair &&
+             velocity.y <= 0 &&
+             currentPosition.y >= blockTop - STEP_HEIGHT &&
+             newPosition.y <= blockTop + SEAT_LANDING_TOLERANCE &&
+             Math.abs(newPosition.x - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
+             Math.abs(newPosition.z - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius))
         ) {
-            standingOnBlock = true;
-            newY = blockTop; // Player's feet height
-        } else if (
-            block.userData.isStair &&
-            velocity.y <= 0 &&
-            currentPosition.y >= blockTop - STEP_HEIGHT &&
-            newPosition.y <= blockTop + SEAT_LANDING_TOLERANCE &&
-            Math.abs(newPosition.x - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
-            Math.abs(newPosition.z - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius)
-        ) {
-            // Allow stepping onto stairs and seat rows without jumping
             standingOnBlock = true;
             newY = blockTop;
         }
-        // Check for side collision
-        else if (
+
+        // Check for side collision, regardless of whether we are standing on the block or not.
+        // This prevents clipping through edges of stairs/platforms.
+        if (
             Math.abs(newPosition.x - blockCenter.x) < (blockWidth / 2 + effectivePlayerRadius) &&
             Math.abs(newPosition.z - blockCenter.z) < (blockDepth / 2 + effectivePlayerRadius) &&
             newPosition.y < (blockTop + 0.1) && // Bottom of player is below top of block
             newPosition.y + playerHeight > (blockCenter.y - blockHeight / 2) // Top of player is above bottom of block
         ) {
-            collided = true;
+            // If we are standing on top, don't register a side collision.
+            // This prevents getting stuck on edges.
+            if (!standingOnBlock) {
+                collided = true;
+            }
         }
 
         return { collided, standingOnBlock, newY };

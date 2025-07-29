@@ -12,10 +12,12 @@ import { createSpectatorSpec } from '../characters/presets/spectator.js';
  */
 /* @tweakable Set to true to enable collision for amphitheater seats. */
 const SEAT_COLLISION_ENABLED = true;
+/* @tweakable Set to true to spawn crowd NPCs in the amphitheater seats. NOTE: This may contribute to loading timeouts on some platforms. */
+const SPAWN_CROWD_NPCS = false;
 /* @tweakable The number of segments to approximate the curve of each seat row. More segments are more accurate but less performant. */
 const SEAT_ROW_SEGMENTS = 20;
 /* @tweakable Set to true to spawn crowd NPCs in the amphitheater seats. NOTE: This may contribute to loading timeouts on some platforms. */
-const SPAWN_CROWD_NPCS = true;
+const SPAWN_CROWD_NPCS_DEPRECATED = true;
 /* @tweakable Set to true to use simplified, low-poly models for crowd NPCs to improve performance. */
 const USE_SPECTATOR_MODELS = true;
 /* @tweakable Set to true to enable collision for the foundation under the seats. */
@@ -250,7 +252,10 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
 
             if (SEAT_COLLISION_ENABLED) {
                 segmentMesh.userData.isBarrier = true;
+                /* @tweakable Marking the seat rows as isStair allows players to walk up them without jumping. Adjust STEP_HEIGHT in collisionManager.js if players get stuck. */
                 segmentMesh.userData.isStair = true;
+                /* @tweakable This custom flag helps the collision manager identify these meshes and use the specialized seat collision logic. */
+                segmentMesh.userData.isSeatRow = true; 
             }
             seatingGroup.add(segmentMesh);
 

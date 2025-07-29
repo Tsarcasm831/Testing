@@ -143,4 +143,37 @@ export function createBarriers(scene, terrain) {
 
     scene.add(pillar);
   }
+
+  // Add boundary walls to prevent player from falling off the world
+  const boundarySize = CLUSTER_SIZE;
+  const halfBoundary = boundarySize / 2;
+  /* @tweakable The height of the invisible walls at the edge of the world. */
+  const wallHeight = 50; 
+  const wallThickness = 2;
+
+  /* @tweakable The opacity of the boundary walls. Set to 0.0 for fully invisible, or a higher value for debugging. */
+  const wallOpacity = 0.0;
+  const boundaryMaterial = new THREE.MeshStandardMaterial({
+    color: 0x444444,
+    roughness: 0.9,
+    transparent: wallOpacity < 1.0,
+    opacity: wallOpacity
+  });
+
+  const wallPositions = [
+    { x: 0, z: -halfBoundary, width: boundarySize, depth: wallThickness }, // North
+    { x: 0, z: halfBoundary, width: boundarySize, depth: wallThickness },  // South
+    { x: -halfBoundary, z: 0, width: wallThickness, depth: boundarySize }, // West
+    { x: halfBoundary, z: 0, width: wallThickness, depth: boundarySize }   // East
+  ];
+
+  wallPositions.forEach(pos => {
+    const wallGeo = new THREE.BoxGeometry(pos.width, wallHeight, pos.depth);
+    const wall = new THREE.Mesh(wallGeo, boundaryMaterial);
+    // Use a fixed height for walls to avoid them dipping with terrain at edges
+    wall.position.set(pos.x, wallHeight / 2 - 5, pos.z); 
+    wall.userData.isBarrier = true;
+    wall.visible = wallOpacity > 0; // Only make visible if not fully transparent
+    scene.add(wall);
+  });
 }

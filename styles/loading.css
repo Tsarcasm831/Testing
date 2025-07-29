@@ -1,11 +1,62 @@
+#start-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* @tweakable The opacity of the dark overlay on the start screen background image. 0 is transparent, 1 is fully black. */
+    --start-menu-overlay-opacity: 0.7;
+    background-image: linear-gradient(rgba(0, 0, 0, var(--start-menu-overlay-opacity)), rgba(0, 0, 0, var(--start-menu-overlay-opacity))), url('/splash.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#start-menu h1 {
+    /* @tweakable The font size of the start menu title. */
+    font-size: 3em;
+    /* @tweakable The bottom margin of the start menu title. */
+    margin-bottom: 30px;
+}
+
+#start-menu #start-button {
+    padding: 12px 25px;
+    /* @tweakable The font size of the start button. */
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffffff;
+    /* @tweakable The background color of the start button. */
+    background-color: #2196F3;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#start-menu #start-button:hover {
+    background-color: #1976D2;
+}
+
 #loading-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* @tweakable The background color of the loading screen. Use rgba for transparency. */
-    background-color: rgba(0, 0, 0, 0.85);
+    /* @tweakable The opacity of the dark overlay on the loading screen background image. 0 is transparent, 1 is fully black. */
+    --loading-overlay-opacity: 0.5;
+    background-image: linear-gradient(rgba(0, 0, 0, var(--loading-overlay-opacity)), rgba(0, 0, 0, var(--loading-overlay-opacity))), url('/splash.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: #ffffff;
     display: flex;
     justify-content: center;
@@ -50,20 +101,4 @@
     height: 100%;
     background-color: #4caf50;
     transition: width 0.2s ease-in-out;
-}
-
-#start-button {
-    padding: 12px 25px;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: #2196F3;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#start-button:hover {
-    background-color: #1976D2;
 }

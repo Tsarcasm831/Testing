@@ -2,7 +2,9 @@ import * as THREE from 'three';
 import { setYoutubePlayerUrl, getPlayer } from './youtubePlayer.js';
 
 export const OCCLUSION_BUFFER = 1.0;
+/* @tweakable How many frames to wait between checking if the video screen is occluded. Higher values improve performance. */
 export const VIDEO_OCCLUSION_CHECK_INTERVAL = 10;
+/* @tweakable How many frames to wait between updating video volume based on distance. Higher values improve performance. */
 export const VIDEO_AUDIO_UPDATE_INTERVAL = 10;
 /* @tweakable Set to true to hide the video and mute audio when it's blocked by other objects. Set to false to ensure it's always playing. */
 const ENABLE_VIDEO_OCCLUSION = false;

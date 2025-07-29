@@ -73,6 +73,8 @@ export function applyShadowQuality(ui, quality) {
             ui.dirLight.castShadow = true;
             ui.dirLight.shadow.mapSize.width = 512;
             ui.dirLight.shadow.mapSize.height = 512;
+            /* @tweakable The blur radius for low-quality shadows. */
+            ui.dirLight.shadow.radius = 1.0;
             /* @tweakable Shadow bias for low quality. */
             ui.dirLight.shadow.bias = -0.001;
             break;

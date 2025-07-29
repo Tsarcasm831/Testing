@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>3D Overworld Template v1.9.9.8.2</title>
+  <title>3D Overworld Template v1.9.9.8.3</title>
   <script>
     // Suppress specific cookie-related console errors and warnings
     /* @tweakable List of phrases to filter from console error/warning messages. */
@@ -59,7 +59,11 @@
   <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.10.1/dist/nipplejs.min.js"></script>
 </head>
 <body oncontextmenu="return false;">
-  <div id="loading-screen">
+  <div id="start-menu">
+    <h1>3D Overworld</h1>
+    <button id="start-button">Click to Start</button>
+  </div>
+  <div id="loading-screen" style="display: none;">
     <div id="loading-container">
       <h1>Loading World...</h1>
       <div id="progress-bar-container">

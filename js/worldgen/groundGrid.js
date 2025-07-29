@@ -35,7 +35,7 @@ export function createGroundGrid(terrain, size, divisions, colorCenterLine, colo
     /* @tweakable The vertical offset of the grid from the ground to prevent z-fighting. */
     const gridOffsetY = 0.05;
     /* @tweakable Number of subdivisions per grid line for better terrain conformity. Higher is more accurate but less performant. */
-    const lineSubdivisions = 4;
+    const lineSubdivisions = 1;
 
     const colorCenter = new THREE.Color(colorCenterLine);
     const colorGridLines = new THREE.Color(colorGrid);

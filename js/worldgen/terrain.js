@@ -270,7 +270,9 @@ export async function createTerrain(scene, assetManager) {
 
           // Blend with grass in the center
           float center_dist = length(pos);
-          float grass_weight = 1.0 - smoothstep(grassRadius - blendNoise, grassRadius + grassBlendWidth + blendNoise, center_dist);
+          /* @tweakable The radius of the central grass area. Set to 0 to disable. */
+          float grass_radius_override = grassRadius;
+          float grass_weight = 1.0 - smoothstep(grass_radius_override - blendNoise, grass_radius_override + grassBlendWidth + blendNoise, center_dist);
           
           vec4 final_color = mix(biome_color, texelColor, pow(grass_weight, BLEND_SHARPNESS));
 

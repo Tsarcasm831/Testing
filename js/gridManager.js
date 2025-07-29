@@ -1,8 +1,12 @@
 import { createGroundGrid, CLUSTER_SIZE } from './worldGeneration.js';
 
+/* @tweakable The maximum distance from the player at which grid labels are fully visible. */
 export const GRID_LABEL_VISIBILITY_DISTANCE = 7;
+/* @tweakable The distance at which grid labels begin to thin out (Level of Detail). */
 export const GRID_LABEL_LOD_DISTANCE = 30;
+/* @tweakable The step interval for thinning out labels at a distance (e.g., a value of 10 shows every 10th label). */
 export const GRID_LABEL_LOD_STEP = 10;
+/* @tweakable How many frames to wait before updating grid labels. Higher values improve performance but reduce responsiveness. */
 export const LABEL_UPDATE_INTERVAL = 10;
 /* @tweakable Set to true to link debug border visibility to grid visibility. */
 const TOGGLE_DEBUG_BORDERS_WITH_GRID = true;
@@ -15,10 +19,10 @@ export class GridManager {
     }
 
     create(terrain) {
+        /* @tweakable The number of divisions in the grid helper. More divisions create a finer grid but can impact performance. */
+        const gridHelperDivisions = CLUSTER_SIZE;
         /* @tweakable The size of the grid helper. Should match the world size. */
         const gridHelperSize = CLUSTER_SIZE;
-        /* @tweakable The number of divisions in the grid helper. More divisions create a finer grid. */
-        const gridHelperDivisions = 400;
         const gridHelperColorCenterLine = 0xffffff;
         const gridHelperColorGrid = 0xcccccc;
         this.gridHelper = createGroundGrid(

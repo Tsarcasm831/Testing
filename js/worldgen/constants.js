@@ -3,7 +3,7 @@ export const ZONE_SIZE = 50;
 /* @tweakable Number of zones along one side of a chunk. Reload required. */
 export const ZONES_PER_CHUNK_SIDE = 5;
 /* @tweakable Number of chunks along one side of a cluster. Affects total world size. Reload required. */
-export const CHUNKS_PER_CLUSTER_SIDE = 2;
+export const CHUNKS_PER_CLUSTER_SIDE = 4;
 
 export const CHUNK_SIZE = ZONE_SIZE * ZONES_PER_CHUNK_SIDE;
 export const CLUSTER_SIZE = CHUNK_SIZE * CHUNKS_PER_CLUSTER_SIDE;
@@ -14,13 +14,13 @@ export const TERRAIN_SCALE = 80;
 /* @tweakable The number of times the ground texture repeats within a zone. Lower values increase perceived texture resolution but may show tiling. Higher values decrease resolution. */
 export const TERRAIN_TEXTURE_REPEAT_PER_ZONE = 50;
 /* @tweakable Number of segments for the terrain geometry. Lower for better performance. A reload is required for this to take effect. */
-export const TERRAIN_SEGMENTS = 100;
+export const TERRAIN_SEGMENTS = 200;
 /* @tweakable The number of barriers generated per zone. Lower for better performance. Reload required. */
-export const BARRIERS_PER_ZONE = 0.1;
+export const BARRIERS_PER_ZONE = 0.05;
 /* @tweakable The number of pillars generated per zone. Lower for better performance. Reload required. */
-export const PILLARS_PER_ZONE = 0.05;
+export const PILLARS_PER_ZONE = 0.025;
 /* @tweakable The number of trees generated per zone. Lower for better performance. Reload required. */
-export const TREES_PER_ZONE = 0.2;
+export const TREES_PER_ZONE = 0.1;
 /* @tweakable The total number of cloud groups to generate. Lower for better performance. A reload is required for this to take effect. */
 export const CLOUD_COUNT = 15;
 
