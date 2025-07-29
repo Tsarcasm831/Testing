@@ -1,4 +1,6 @@
 # Changelog Archive
+## 2025-07-30
+- 1100 Expand grass generation to cover the entire world within biome-specific rules, removing the central grass-only circle.
 ## 2025-07-26
 - 1042 Split assets.json into external category lists and update loader
 - 1008 Move assets.json and mats.json into json directory and update paths.

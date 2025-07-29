@@ -1,134 +1,26 @@
 import * as THREE from 'three';
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
-import { createPlayerModel } from '../playerModel.js';
-import { NPC } from '../npc/NPC.js';
 import { presetCharacters } from '../characters/presets.js';
-import { createSpectatorSpec } from '../characters/presets/spectator.js';
 
+import {
+    SEAT_COLLISION_ENABLED,
+    SPAWN_CROWD_NPCS,
+    SEAT_ROW_SEGMENTS,
+    SEAT_FOUNDATION_COLLISION_ENABLED,
+    DEBUG_SEAT_COLLISION_BOX,
+    DEBUG_SEAT_COLLISION_BOX_COLOR,
+    DEBUG_FOUNDATION_COLLISION_BOX,
+    DEBUG_FOUNDATION_COLLISION_BOX_COLOR,
+    DEBUG_INDIVIDUAL_SEAT_BOX,
+    DEBUG_INDIVIDUAL_SEAT_BOX_COLOR
+} from "./amphi-seat-config.js";
+import { createStairsToSeats } from "./amphi-seat-stairs.js";
+import { spawnCrowdNPCs } from "./amphi-seat-npcs.js";
 /**
  * Creates and adds amphitheater seating to a group.
  * @param {THREE.Group} group The group to add seating to.
  * @param {THREE.Color | number} stoneColor The color of the seats.
  */
-/* @tweakable Set to true to enable collision for amphitheater seats. */
-const SEAT_COLLISION_ENABLED = true;
-/* @tweakable Set to true to spawn crowd NPCs in the amphitheater seats. NOTE: This may contribute to loading timeouts on some platforms. */
-const SPAWN_CROWD_NPCS = false;
-/* @tweakable The number of segments to approximate the curve of each seat row. More segments are more accurate but less performant. */
-const SEAT_ROW_SEGMENTS = 20;
-/* @tweakable Set to true to spawn crowd NPCs in the amphitheater seats. NOTE: This may contribute to loading timeouts on some platforms. */
-const SPAWN_CROWD_NPCS_DEPRECATED = true;
-/* @tweakable Set to true to use simplified, low-poly models for crowd NPCs to improve performance. */
-const USE_SPECTATOR_MODELS = true;
-/* @tweakable Set to true to enable collision for the foundation under the seats. */
-const SEAT_FOUNDATION_COLLISION_ENABLED = false;
-/* @tweakable Set to true to show a visible outline box for debugging seat row collision. */
-const DEBUG_SEAT_COLLISION_BOX = true;
-/* @tweakable The color of the debug collision box for seat rows. */
-const DEBUG_SEAT_COLLISION_BOX_COLOR = 0xffff00;
-/* @tweakable Set to true to show a visible outline box for debugging the seat foundation collision. */
-const DEBUG_FOUNDATION_COLLISION_BOX = true;
-/* @tweakable The color of the debug collision box for the seat foundation. */
-const DEBUG_FOUNDATION_COLLISION_BOX_COLOR = 0xff00ff;
-/* @tweakable Set to true to show a visible outline box for debugging individual seats. */
-const DEBUG_INDIVIDUAL_SEAT_BOX = true;
-/* @tweakable The color of the debug collision box for individual seats. */
-const DEBUG_INDIVIDUAL_SEAT_BOX_COLOR = 0xffa500;
-
-/* @tweakable Vertical offset for simplified spectator NPCs to position them in a sitting posture on seats. */
-const spectatorNpcVerticalOffset = -0.4;
-/* @tweakable Vertical offset for full-detail crowd NPCs to position them on seats. May require adjustment if they appear to float or sink. */
-const fullNpcVerticalOffset = 0;
-
-/**
- * Creates stairs leading up to the first row of amphitheater seats.
- * @param {THREE.Group} group The group to add the stairs to.
- * @param {object} options Options for stairs creation.
- * @param {number} options.startRadius The starting radius of the seats.
- * @param {number} options.rowHeight The height of one seating tier.
- * @param {THREE.Material} options.material The material for the stairs.
- */
-/* @tweakable Set to true to add stairs leading to the amphitheater seats. */
-const ENABLE_SEATING_STAIRS = true;
-/* @tweakable Set to true to enable collision on the amphitheater stairs. */
-const SEATING_STAIRS_COLLISION_ENABLED = true;
-function createStairsToSeats(group, options) {
-    if (!ENABLE_SEATING_STAIRS) return;
-
-    const { startRadius, rowHeight, material } = options;
-    const stairsGroup = new THREE.Group();
-
-    /* @tweakable The number of steps for the amphitheater seating stairs. */
-    const stairCount = 10;
-    /* @tweakable The width of the amphitheater seating stairs. */
-    const stairWidth = 8;
-    /* @tweakable The total depth of the amphitheater seating staircase. */
-    const totalStairDepth = 8;
-    
-    const stairHeight = rowHeight / stairCount;
-    const stairDepth = totalStairDepth / stairCount;
-
-    for (let i = 0; i < stairCount; i++) {
-        const stepGeo = new THREE.BoxGeometry(stairWidth, stairHeight, stairDepth);
-        const step = new THREE.Mesh(stepGeo, material);
-        step.position.set(
-            0,
-            i * stairHeight + stairHeight / 2,
-            -startRadius + totalStairDepth / 2 - i * stairDepth - stairDepth / 2
-        );
-
-        step.castShadow = true;
-        step.receiveShadow = true;
-        step.userData.isBarrier = SEATING_STAIRS_COLLISION_ENABLED;
-        step.userData.isStair = SEATING_STAIRS_COLLISION_ENABLED;
-        stairsGroup.add(step);
-    }
-
-    group.add(stairsGroup);
-}
-
-function spawnCrowdNPCs(group, presets, transforms, npcManager, terrain, seatBaseHeight) {
-    // Shuffle transforms for random seating
-    for (let i = transforms.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [transforms[i], transforms[j]] = [transforms[j], transforms[i]];
-    }
-
-    const numToSpawn = Math.min(presets.length, transforms.length);
-
-    for (let i = 0; i < numToSpawn; i++) {
-        const preset = presets[i];
-        const transform = transforms[i];
-
-        const specToUse = USE_SPECTATOR_MODELS && preset.spectatorSpec ? preset.spectatorSpec : preset.spec;
-        const model = createPlayerModel(THREE, preset.name, specToUse);
-        
-        model.position.copy(transform.position);
-        model.rotation.copy(transform.rotation);
-        
-        // Adjust position to be on top of the seat.
-        /* @tweakable Vertical offset for spectator NPCs to position them correctly on seats. Negative values move them down, positive values move them up. This is added to the seat base height. */
-        const verticalOffset = USE_SPECTATOR_MODELS ? spectatorNpcVerticalOffset : fullNpcVerticalOffset;
-        model.position.y += seatBaseHeight + verticalOffset;
-        
-        model.userData.isNpc = true;
-        model.name = preset.name;
-        group.add(model);
-
-        const npc = new NPC(model, preset.id, 'amphitheatre_crowd', false, model.position.clone(), terrain);
-        
-        // Override update to make them stationary
-        npc.update = () => {
-             // The base NPC update handles animation, we just need to prevent movement
-             if (model.userData.isAnimatedGLB && model.userData.mixer) {
-                const delta = (performance.now() - (model.userData.lastMixerUpdate || performance.now())) / 1000;
-                model.userData.mixer.update(delta);
-                model.userData.lastMixerUpdate = performance.now();
-            }
-        };
-        npcManager.addNpc(npc);
-    }
-}
 
 export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain) {
     /* @tweakable The rotation of the amphitheater seats in degrees. */
