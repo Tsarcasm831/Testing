@@ -87,6 +87,14 @@ export class VideoManager {
         this.videoOcclusionCheckCounter = 0;
         this.videoAudioUpdateCounter = 0;
         this.currentYoutubeUrl = null;
+        this.currentAudioUrl = null;
+        this.currentSongTitle = '';
+        this.audioElement = document.createElement('audio');
+        this.audioElement.id = 'billboard-audio';
+        this.audioElement.loop = true;
+        this.audioElement.crossOrigin = 'anonymous';
+        this.audioElement.style.display = 'none';
+        document.body.appendChild(this.audioElement);
         this.currentLyricIndex = -1;
         this.lyrics = [];
         this.initLyrics();
@@ -125,6 +133,22 @@ export class VideoManager {
     }
 
     handleRoomStateChange(roomState) {
+        if (roomState && Object.prototype.hasOwnProperty.call(roomState, 'billboardAudioUrl')) {
+            if (roomState.billboardAudioUrl !== this.currentAudioUrl) {
+                this.currentAudioUrl = roomState.billboardAudioUrl;
+                this.currentSongTitle = roomState.billboardSongTitle || '';
+                if (this.currentAudioUrl) {
+                    this.audioElement.src = this.currentAudioUrl;
+                    this.audioElement.play().catch(e => console.error('Audio playback error:', e));
+                    const videoMesh = this.scene.getObjectByName('amphitheatre-video-screen');
+                    if (videoMesh) videoMesh.visible = false;
+                } else {
+                    this.audioElement.pause();
+                    const videoMesh = this.scene.getObjectByName('amphitheatre-video-screen');
+                    if (videoMesh) videoMesh.visible = true;
+                }
+            }
+        }
         if (roomState && roomState.youtubeUrl && roomState.youtubeUrl !== this.currentYoutubeUrl) {
             this.currentYoutubeUrl = roomState.youtubeUrl;
             setYoutubePlayerUrl(this.currentYoutubeUrl);
@@ -186,7 +210,7 @@ export class VideoManager {
     }
 
     updateLyrics() {
-        const videoEl = getPlayer();
+        const videoEl = this.currentAudioUrl ? this.audioElement : getPlayer();
         const lyricsCanvas = document.getElementById('lyrics-display');
 
         if (videoEl && lyricsCanvas && !videoEl.paused && this.lyrics && this.lyrics.length > 0) {
@@ -203,28 +227,30 @@ export class VideoManager {
             
             if (newLyricIndex !== this.currentLyricIndex) {
                 this.currentLyricIndex = newLyricIndex;
-                const lyricText = this.currentLyricIndex !== -1 ? this.lyrics[this.currentLyricIndex].text : "";
-                const ctx = lyricsCanvas.getContext('2d');
-                ctx.clearRect(0, 0, lyricsCanvas.width, lyricsCanvas.height);
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-                ctx.fillRect(0, 0, lyricsCanvas.width, lyricsCanvas.height);
-                ctx.fillStyle = 'white';
-                ctx.font = 'bold 64px Arial';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(lyricText, lyricsCanvas.width / 2, lyricsCanvas.height / 2);
-                if (lyricsCanvas.texture) {
-                    lyricsCanvas.texture.needsUpdate = true;
-                }
+            }
+            const firstLyricTime = this.lyrics[0]?.time ?? 0;
+            const displayText = this.currentLyricIndex !== -1 ? this.lyrics[this.currentLyricIndex].text :
+                (this.currentSongTitle && currentTime < firstLyricTime ? `Now Playing: ${this.currentSongTitle}` : "");
+            const ctx = lyricsCanvas.getContext('2d');
+            ctx.clearRect(0, 0, lyricsCanvas.width, lyricsCanvas.height);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+            ctx.fillRect(0, 0, lyricsCanvas.width, lyricsCanvas.height);
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 64px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(displayText, lyricsCanvas.width / 2, lyricsCanvas.height / 2);
+            if (lyricsCanvas.texture) {
+                lyricsCanvas.texture.needsUpdate = true;
             }
         }
     }
 
     updateVideoAudio() {
         const videoMesh = this.scene.getObjectByName('amphitheatre-video-screen');
-        const videoEl = getPlayer();
+        const mediaEl = this.currentAudioUrl ? this.audioElement : getPlayer();
 
-        if (videoMesh && videoEl && this.playerModel) {
+        if (videoMesh && mediaEl && this.playerModel) {
             const screenCenter = new THREE.Vector3();
             videoMesh.getWorldPosition(screenCenter);
 
@@ -236,12 +262,12 @@ export class VideoManager {
 
             // Play audio if within range AND (video is visible OR occlusion check is disabled)
             if (distance < maxAudioDistance && (!ENABLE_VIDEO_OCCLUSION || (videoMesh.parent && videoMesh.parent.visible))) {
-                videoEl.muted = false;
+                mediaEl.muted = false;
                 const volume = 1.0 - THREE.MathUtils.smoothstep(distance, minAudioDistance, maxAudioDistance);
-                const globalVideoVolume = 0.5;
-                videoEl.volume = Math.pow(volume, 2) * globalVideoVolume;
+                const globalVolume = 0.5;
+                mediaEl.volume = Math.pow(volume, 2) * globalVolume;
             } else {
-                videoEl.volume = 0;
+                mediaEl.volume = 0;
             }
         }
     }
