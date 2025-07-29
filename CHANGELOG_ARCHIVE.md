@@ -1,4 +1,10 @@
 # Changelog Archive
+## 2025-07-26
+- 1042 Split assets.json into external category lists and update loader
+- 1008 Move assets.json and mats.json into json directory and update paths.
+- 0930 Fix all ground texture paths to use local assets.
+- 0915 Fix all material and ground textures to load from local relative paths instead of external URLs.
+- 0906 Fixed ground textures loading from external URLs causing transparent terrain
 ## 2025-07-25
 - 1900 Rewrite bestiary modal with a list/detail view for improved performance and UI.
 - 1800 Spawn one of each crowd NPC type (bot, male, female, alien) in amphitheater seats.
