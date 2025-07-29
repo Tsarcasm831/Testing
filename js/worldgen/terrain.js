@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 import {
   CLUSTER_SIZE,
-  ZONES_PER_CHUNK_SIDE,
-  CHUNKS_PER_CLUSTER_SIDE,
+  ZONE_SIZE,
   TERRAIN_SEGMENTS,
   TERRAIN_TEXTURE_REPEAT_PER_ZONE,
   TERRAIN_AMPLITUDE,
@@ -101,9 +100,6 @@ export async function createTerrain(scene, assetManager) {
         forest: await textureLoader.loadAsync('assets/ground_textures/ground_texture_forest.png')
     };
 
-  const totalZonesSide = ZONES_PER_CHUNK_SIDE * CHUNKS_PER_CLUSTER_SIDE;
-  const repeatValue = TERRAIN_TEXTURE_REPEAT_PER_ZONE * totalZonesSide;
-
   for (const key in textures) {
       if (!textures[key] || !textures[key].image) {
         console.warn(`Texture for ${key} failed to load, will be black.`);
@@ -124,7 +120,6 @@ export async function createTerrain(scene, assetManager) {
       }
       textures[key].wrapS = THREE.RepeatWrapping;
       textures[key].wrapT = THREE.RepeatWrapping;
-      textures[key].repeat.set(repeatValue, repeatValue);
   }
 
   const material = new THREE.MeshStandardMaterial({
@@ -151,7 +146,7 @@ export async function createTerrain(scene, assetManager) {
       /* @tweakable The width of the blend from the central grass biome to other biomes. */
       shader.uniforms.grassBlendWidth = { value: GRASS_BLEND_WIDTH };
       /* @tweakable The overall scale of the terrain textures. Smaller values make textures larger. */
-      shader.uniforms.textureScale = { value: 0.2 };
+      shader.uniforms.textureScale = { value: TERRAIN_TEXTURE_REPEAT_PER_ZONE / ZONE_SIZE };
 
       shader.vertexShader = 'varying vec3 vWorldPosition;\nvarying vec2 vUv;\n' + shader.vertexShader;
       shader.vertexShader = shader.vertexShader.replace(
