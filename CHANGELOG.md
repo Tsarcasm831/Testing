@@ -4,6 +4,7 @@
 - 1013 Make collision detection include players and ignore self-object
 - 0953 Break up trees.js into separate tree modules
 - 1012 Convert global water plane to local pools with 1m recess
+- 1051 Revert to single water plane to reduce performance lag
 
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).

@@ -70,8 +70,14 @@ export async function createTerrain(scene, assetManager) {
     const z = vertices[j + 2];
     let height = simpleNoise(x, z);
 
-    if (waterNoise(x, z) > WATER_THRESHOLD) {
-        height -= 1.0;
+    // Recede terrain for water
+    const waterValue = waterNoise(x, z);
+    const waterFactor = THREE.MathUtils.smoothstep(WATER_THRESHOLD, WATER_THRESHOLD + WATER_SMOOTHNESS, waterValue);
+
+    if (waterFactor > 0) {
+        const originalHeight = height;
+        const recessedHeight = WATER_LEVEL - WATER_DEPTH;
+        height = THREE.MathUtils.lerp(originalHeight, recessedHeight, waterFactor);
     }
 
     vertices[j + 1] = height;
@@ -283,18 +289,14 @@ export async function createTerrain(scene, assetManager) {
   terrain.userData.isTerrain = true;
   scene.add(terrain);
 
-  const isWater = (x, z) => {
-    return waterNoise(x, z) > WATER_THRESHOLD;
-  };
-
   const getHeight = (x, z) => {
     const clampedX = Math.max(-terrainSize / 2, Math.min(terrainSize / 2, x));
     const clampedZ = Math.max(-terrainSize / 2, Math.min(terrainSize / 2, z));
-    let h = simpleNoise(clampedX, clampedZ);
-    if (isWater(clampedX, clampedZ)) {
-      h -= 1.0;
-    }
-    return h;
+    return simpleNoise(clampedX, clampedZ);
+  };
+
+  const isWater = (x, z) => {
+    return waterNoise(x, z) > WATER_THRESHOLD;
   };
 
   terrain.userData.getHeight = getHeight;
