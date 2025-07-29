@@ -121,7 +121,7 @@ export class Game {
         const matsResponse = await fetch('json/mats.json');
         const matsData = await matsResponse.json();
         const world = new World(this.scene, this.npcManager, this.room, matsData, assetReplacementManager);
-        const worldObjects = await world.generate();
+        const worldObjects = await world.generate(this.sun);
         const terrain = worldObjects.terrain;
         this.grass = worldObjects.grass;
 

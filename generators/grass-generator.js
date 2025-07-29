@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { MathRandom } from '../js/worldgen/random.js';
+import { WATER_LEVEL } from '../js/worldgen/constants.js';
 
 /* @tweakable The number of grass instances to generate. Higher numbers can impact performance. */
 const GRASS_COUNT = 50000;
@@ -175,6 +176,10 @@ export function createGrass(scene, terrain) {
         const radius = Math.sqrt(rng.random()) * GRASS_AREA_RADIUS; // Uniform distribution in a circle
         const x = Math.cos(angle) * radius;
         const z = Math.sin(angle) * radius;
+
+        if (terrain.userData.isWater && terrain.userData.isWater(x, z)) {
+            continue;
+        }
 
         const density = densityNoise(x, z);
 

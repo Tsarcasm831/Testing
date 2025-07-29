@@ -22,28 +22,9 @@ function findMaterialInfo(materialID, matsData) {
     return null;
 }
 
-const textureLoader = new THREE.TextureLoader();
-
-function createPBRMaterial(matInfo, repeatU, repeatV) {
+async function createPBRMaterial(assetManager, matInfo, repeatU, repeatV) {
     if (!matInfo) return new THREE.MeshStandardMaterial({ color: 0xcccccc });
-
-    const textureDir = matInfo.textureDir;
-    
-    const props = {
-        map: textureLoader.load(`${textureDir}albedo.png`),
-        normalMap: textureLoader.load(`${textureDir}normal.png`),
-        roughnessMap: textureLoader.load(`${textureDir}roughness.png`),
-        aoMap: textureLoader.load(`${textureDir}ao.png`),
-    };
-    
-    for (const tex of Object.values(props)) {
-        if (tex) {
-            tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-            tex.repeat.set(repeatU, repeatV);
-        }
-    }
-    
-    return new THREE.MeshStandardMaterial(props);
+    return await createMaterial(matInfo.assetNamePrefix, repeatU, repeatV, assetManager);
 }
 
 /* =========================================================================
@@ -100,7 +81,7 @@ const HouseBlocks = (() => {
 })();
 
 
-export function createStarterHouse(scene, getHeight, matsData) {
+export async function createStarterHouse(scene, getHeight, matsData, assetManager) {
   /* @tweakable The position of the starter house. You may need to reload if you move it far. */
   const housePosition = new THREE.Vector3(-0.5, 0, 40.5);
   const houseY = getHeight(housePosition.x, housePosition.z);
@@ -125,9 +106,9 @@ export function createStarterHouse(scene, getHeight, matsData) {
   const wallMatInfo = findMaterialInfo(wallMaterialID, matsData);
   const roofMatInfo = findMaterialInfo(roofMaterialID, matsData);
 
-  const foundationMaterial = createPBRMaterial(foundationMatInfo, foundationTextureRepeat[0], foundationTextureRepeat[1]);
-  const wallMaterial = createPBRMaterial(wallMatInfo, wallTextureRepeat[0], wallTextureRepeat[1]);
-  const roofMaterial = createPBRMaterial(roofMatInfo, roofTextureRepeat[0], roofTextureRepeat[1]);
+  const foundationMaterial = await createPBRMaterial(assetManager, foundationMatInfo, foundationTextureRepeat[0], foundationTextureRepeat[1]);
+  const wallMaterial = await createPBRMaterial(assetManager, wallMatInfo, wallTextureRepeat[0], wallTextureRepeat[1]);
+  const roofMaterial = await createPBRMaterial(assetManager, roofMatInfo, roofTextureRepeat[0], roofTextureRepeat[1]);
 
   const houseGroup = new THREE.Group();
   houseGroup.position.copy(housePosition);

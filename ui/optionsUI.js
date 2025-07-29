@@ -269,11 +269,11 @@ export class OptionsUI {
         }
     }
 
-    showItemInPreview(itemName) {
+    async showItemInPreview(itemName) {
         if (this.itemPreviewModel) {
             this.itemPreviewScene.remove(this.itemPreviewModel);
         }
-        this.itemPreviewModel = houseItems[itemName]();
+        this.itemPreviewModel = await houseItems[itemName](this.assetReplacementManager);
 
         const box = new THREE.Box3().setFromObject(this.itemPreviewModel);
         const size = box.getSize(new THREE.Vector3());

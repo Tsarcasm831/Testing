@@ -105,6 +105,7 @@ function spawnCrowdNPCs(group, presets, transforms, npcManager, terrain, seatBas
         model.rotation.copy(transform.rotation);
         
         // Adjust position to be on top of the seat.
+        /* @tweakable Vertical offset for spectator NPCs to position them correctly on seats. Negative values move them down, positive values move them up. This is added to the seat base height. */
         const verticalOffset = USE_SPECTATOR_MODELS ? spectatorNpcVerticalOffset : fullNpcVerticalOffset;
         model.position.y += seatBaseHeight + verticalOffset;
         

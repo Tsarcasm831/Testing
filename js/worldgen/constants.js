@@ -27,6 +27,9 @@ export const CLOUD_COUNT = 15;
 /* @tweakable The radius around the amphitheater to keep clear of trees and barriers. Reload required on change. */
 export const AMPHITHEATRE_CLEARING_RADIUS = 60;
 
+/* @tweakable The water level (y-coordinate) for bodies of water. Terrain below this level will be submerged. */
+export const WATER_LEVEL = -2.0;
+
 /* @tweakable The filename of the ground texture to use. Files live in
    `assets/ground_textures/`. Options: ground_texture.png,
    ground_texture_sand.png, ground_texture_dirt.png, ground_texture_stone.png,

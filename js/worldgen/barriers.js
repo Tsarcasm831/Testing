@@ -13,7 +13,10 @@ import { createAmphitheatre } from './amphitheatre.js';
 
 let amphitheatrePosition = null;
 
-export function createBarriers(scene, getHeight) {
+export function createBarriers(scene, terrain) {
+  const getHeight = terrain.userData.getHeight;
+  const isWater = terrain.userData.isWater;
+
   // We get the position from the created amphitheater instance to avoid circular dependency issues
   // and ensure we're using the same position data.
   if (!amphitheatrePosition) {
@@ -47,6 +50,10 @@ export function createBarriers(scene, getHeight) {
     const x = Math.cos(angle) * distance;
     const z = Math.sin(angle) * distance;
 
+    if (isWater && isWater(x, z)) {
+        continue;
+    }
+
     if (amphitheatrePosition) {
       const distToAmphitheatre = Math.sqrt(Math.pow(x - amphitheatrePosition.x, 2) + Math.pow(z - amphitheatrePosition.z, 2));
       if (distToAmphitheatre < AMPHITHEATRE_CLEARING_RADIUS) {
@@ -72,6 +79,10 @@ export function createBarriers(scene, getHeight) {
     const distance = SPAWN_SAFE_RADIUS + rng.random() * (worldRadius - SPAWN_SAFE_RADIUS);
     const x = Math.cos(angle) * distance;
     const z = Math.sin(angle) * distance;
+
+    if (isWater && isWater(x, z)) {
+        continue;
+    }
 
     if (amphitheatrePosition) {
       const distToAmphitheatre = Math.sqrt(Math.pow(x - amphitheatrePosition.x, 2) + Math.pow(z - amphitheatrePosition.z, 2));

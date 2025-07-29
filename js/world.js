@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { createTerrain, createBarriers, createTrees, createClouds, createStarterHouse, createShopkeeper, createAmphitheatre, createHospital, createTavern, createWorkshop, createNurse, createTavernkeep, createGrass } from './worldGeneration.js';
+import { createTerrain, createBarriers, createTrees, createClouds, createStarterHouse, createShopkeeper, createAmphitheatre, createHospital, createTavern, createWorkshop, createNurse, createTavernkeep, createGrass, createWater } from './worldGeneration.js';
 
 export class World {
     constructor(scene, npcManager, room, matsData, assetManager) {
@@ -11,12 +11,13 @@ export class World {
         this.assetManager = assetManager;
     }
 
-    async generate() {
+    async generate(sun) {
         this.terrain = await createTerrain(this.scene, this.assetManager);
-        createBarriers(this.scene, this.terrain.userData.getHeight);
-        createTrees(this.scene, this.terrain.userData.getHeight);
+        createWater(this.scene, sun);
+        createBarriers(this.scene, this.terrain);
+        createTrees(this.scene, this.terrain);
         createClouds(this.scene);
-        const house = createStarterHouse(this.scene, this.terrain.userData.getHeight, this.matsData);
+        const house = await createStarterHouse(this.scene, this.terrain.userData.getHeight, this.matsData, this.assetManager);
         createShopkeeper(this.scene, this.terrain, this.npcManager, house.position);
         createAmphitheatre(this.scene, this.terrain.userData.getHeight, this.npcManager, this.terrain);
         const hospital = createHospital(this.scene, this.terrain.userData.getHeight);

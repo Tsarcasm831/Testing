@@ -7,7 +7,8 @@ import {
   TERRAIN_TEXTURE_REPEAT_PER_ZONE,
   TERRAIN_AMPLITUDE,
   TERRAIN_SCALE,
-  GROUND_TEXTURE_FILENAME
+  GROUND_TEXTURE_FILENAME,
+  WATER_LEVEL
 } from './constants.js';
 
 /* @tweakable The width of the blend between biomes. Higher values create a smoother transition. */
@@ -21,6 +22,15 @@ const GRASS_RADIUS = 80.0;
 /* @tweakable The width of the blend from the central grass biome to other biomes. */
 const GRASS_BLEND_WIDTH = 20.0;
 
+/* @tweakable Threshold for water generation. Higher values mean less water. Range 0-1. */
+const WATER_THRESHOLD = 0.5;
+/* @tweakable How deep the water is. This is the distance from water level to the bottom. */
+const WATER_DEPTH = 3.0;
+/* @tweakable The smoothness of the transition from land to water bed. */
+const WATER_SMOOTHNESS = 0.05;
+/* @tweakable Scale for the noise function that generates water bodies. Smaller values create larger bodies of water. */
+const WATER_NOISE_SCALE = 150;
+
 function simpleNoise(x, z) {
   let a = TERRAIN_AMPLITUDE;
   let f = 1 / TERRAIN_SCALE;
@@ -31,6 +41,20 @@ function simpleNoise(x, z) {
     f *= 2.0;
   }
   return y;
+}
+
+function waterNoise(x, z) {
+    let a = 1;
+    let f = 1 / WATER_NOISE_SCALE;
+    let y = 0;
+    // Using different prime numbers to vary the noise pattern
+    for (let i = 0; i < 3; i++) {
+        y += a * Math.sin(f * x + (i+1)*5) * Math.cos(f * z - (i+1)*7);
+        a *= 0.5;
+        f *= 2.0;
+    }
+    // Normalize to roughly 0-1 range
+    return (y + 1.5) / 3.0; 
 }
 
 export async function createTerrain(scene, assetManager) {
@@ -44,7 +68,19 @@ export async function createTerrain(scene, assetManager) {
   for (let i = 0, j = 0; i < vertices.length; i++, j += 3) {
     const x = vertices[j];
     const z = vertices[j + 2];
-    vertices[j + 1] = simpleNoise(x, z);
+    let height = simpleNoise(x, z);
+
+    // Recede terrain for water
+    const waterValue = waterNoise(x, z);
+    const waterFactor = THREE.MathUtils.smoothstep(WATER_THRESHOLD, WATER_THRESHOLD + WATER_SMOOTHNESS, waterValue);
+    
+    if (waterFactor > 0) {
+        const originalHeight = height;
+        const recessedHeight = WATER_LEVEL - WATER_DEPTH;
+        height = THREE.MathUtils.lerp(originalHeight, recessedHeight, waterFactor);
+    }
+
+    vertices[j + 1] = height;
   }
   geometry.computeVertexNormals();
 
@@ -123,6 +159,7 @@ export async function createTerrain(scene, assetManager) {
           `
           #include <worldpos_vertex>
           vWorldPosition = worldPosition.xyz;
+          vUv = uv;
           `
       );
       shader.vertexShader = shader.vertexShader.replace(
@@ -257,7 +294,12 @@ export async function createTerrain(scene, assetManager) {
     const clampedZ = Math.max(-terrainSize / 2, Math.min(terrainSize / 2, z));
     return simpleNoise(clampedX, clampedZ);
   };
+  
+  const isWater = (x, z) => {
+    return waterNoise(x, z) > WATER_THRESHOLD;
+  };
 
   terrain.userData.getHeight = getHeight;
+  terrain.userData.isWater = isWater;
   return terrain;
 }

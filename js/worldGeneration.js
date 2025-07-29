@@ -12,4 +12,5 @@ export { createTavern } from './worldgen/tavern.js';
 export { createWorkshop } from './worldgen/workshop.js';
 export { createNurse } from './worldgen/nurse.js';
 export { createTavernkeep } from './worldgen/tavernkeep.js';
+export { createWater } from './worldgen/water.js';
 export { createGrass } from '../generators/grass-generator.js';

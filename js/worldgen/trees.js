@@ -311,7 +311,9 @@ function createForestTree(rng, materials) {
     return tree;
 }
 
-export function createTrees(scene, getHeight) {
+export function createTrees(scene, terrain) {
+  const getHeight = terrain.userData.getHeight;
+  const isWater = terrain.userData.isWater;
   // We get the position from the created amphitheater instance to avoid circular dependency issues
   // and ensure we're using the same position data.
   if (!amphitheatrePosition) {
@@ -345,6 +347,10 @@ export function createTrees(scene, getHeight) {
     const distance = SPAWN_SAFE_RADIUS + rng.random() * (worldRadius - SPAWN_SAFE_RADIUS);
     const x = Math.cos(angle) * distance;
     const z = Math.sin(angle) * distance;
+    
+    if (isWater && isWater(x, z)) {
+        continue;
+    }
     
     let tree;
 
