@@ -217,5 +217,31 @@
         }
       ]
     }
+,
+    {
+      "category": "StageAssets",
+      "items": [
+        { "name": "Stage Light", "materialID": "stage_light", "modelModule": "js/mats/stage_light.js", "textureDir": "assets/textures/stage/light/", "assetNamePrefix": "stageLight", "textureDesc": "Black metal light housing with frosted lens and minor surface scratches." },
+        { "name": "Spotlight", "materialID": "stage_spotlight", "modelModule": "js/mats/stage_spotlight.js", "textureDir": "assets/textures/stage/spotlight/", "assetNamePrefix": "stageSpotlight", "textureDesc": "Theatrical spotlight with barn doors and slightly worn paint around edges." },
+        { "name": "Floodlight", "materialID": "stage_floodlight", "modelModule": "js/mats/stage_floodlight.js", "textureDir": "assets/textures/stage/floodlight/", "assetNamePrefix": "stageFloodlight", "textureDesc": "Wide-beam fixture showing powder coated gray metal and a dented grill." },
+        { "name": "Curtain", "materialID": "stage_curtain", "modelModule": "js/mats/stage_curtain.js", "textureDir": "assets/textures/stage/curtain/", "assetNamePrefix": "stageCurtain", "textureDesc": "Deep red velour fabric with soft folds and subtle highlights." },
+        { "name": "Backdrop", "materialID": "stage_backdrop", "modelModule": "js/mats/stage_backdrop.js", "textureDir": "assets/textures/stage/backdrop/", "assetNamePrefix": "stageBackdrop", "textureDesc": "Painted canvas backdrop showing faint seams and mild cracking." },
+        { "name": "Spotlight Stand", "materialID": "stage_spotlightStand", "modelModule": "js/mats/stage_spotlightStand.js", "textureDir": "assets/textures/stage/spotlightStand/", "assetNamePrefix": "spotlightStand", "textureDesc": "Adjustable tripod stand with telescoping sections and plastic knobs." },
+        { "name": "Camera", "materialID": "stage_camera", "modelModule": "js/mats/stage_camera.js", "textureDir": "assets/textures/stage/camera/", "assetNamePrefix": "stageCamera", "textureDesc": "Broadcast camera body with rubber grips and subtle wear on corners." },
+        { "name": "Video Camera", "materialID": "stage_videoCamera", "modelModule": "js/mats/stage_videoCamera.js", "textureDir": "assets/textures/stage/videoCamera/", "assetNamePrefix": "videoCamera", "textureDesc": "Compact recording camera with flip screen and finger smudges." },
+        { "name": "Tripod", "materialID": "stage_tripod", "modelModule": "js/mats/stage_tripod.js", "textureDir": "assets/textures/stage/tripod/", "assetNamePrefix": "stageTripod", "textureDesc": "Aluminum tripod legs with scratched paint and quick-release head." },
+        { "name": "Rigging", "materialID": "stage_rigging", "modelModule": "js/mats/stage_rigging.js", "textureDir": "assets/textures/stage/rigging/", "assetNamePrefix": "stageRigging", "textureDesc": "Steel truss section with bolts and light oxidation at joints." },
+        { "name": "Monitor", "materialID": "stage_monitor", "modelModule": "js/mats/stage_monitor.js", "textureDir": "assets/textures/stage/monitor/", "assetNamePrefix": "stageMonitor", "textureDesc": "Floor wedge speaker with fabric grille and gaffer tape residue." },
+        { "name": "Speaker", "materialID": "stage_speaker", "modelModule": "js/mats/stage_speaker.js", "textureDir": "assets/textures/stage/speaker/", "assetNamePrefix": "stageSpeaker", "textureDesc": "Large PA speaker cabinet wrapped in black tolex with scuffed edges." },
+        { "name": "Microphone", "materialID": "stage_microphone", "modelModule": "js/mats/stage_microphone.js", "textureDir": "assets/textures/stage/microphone/", "assetNamePrefix": "stageMicrophone", "textureDesc": "Handheld microphone with metal grille showing small dents." },
+        { "name": "Microphone Stand", "materialID": "stage_microphoneStand", "modelModule": "js/mats/stage_microphoneStand.js", "textureDir": "assets/textures/stage/microphoneStand/", "assetNamePrefix": "microphoneStand", "textureDesc": "Boom stand with tripod base and chipped black paint on tubes." },
+        { "name": "Control Panel", "materialID": "stage_controlPanel", "modelModule": "js/mats/stage_controlPanel.js", "textureDir": "assets/textures/stage/controlPanel/", "assetNamePrefix": "controlPanel", "textureDesc": "Lighting control console with sliders and worn labeling." },
+        { "name": "Projector", "materialID": "stage_projector", "modelModule": "js/mats/stage_projector.js", "textureDir": "assets/textures/stage/projector/", "assetNamePrefix": "stageProjector", "textureDesc": "Compact digital projector with vent grilles and dusty lens." },
+        { "name": "Projection Screen", "materialID": "stage_projectionScreen", "modelModule": "js/mats/stage_projectionScreen.js", "textureDir": "assets/textures/stage/projectionScreen/", "assetNamePrefix": "projectionScreen", "textureDesc": "White screen fabric with slight wrinkles and metal frame." },
+        { "name": "Curtain Rod", "materialID": "stage_curtainRod", "modelModule": "js/mats/stage_curtainRod.js", "textureDir": "assets/textures/stage/curtainRod/", "assetNamePrefix": "curtainRod", "textureDesc": "Metal rod system with pulleys showing greasy finger marks." },
+        { "name": "Stage Cable", "materialID": "stage_cable", "modelModule": "js/mats/stage_cable.js", "textureDir": "assets/textures/stage/cable/", "assetNamePrefix": "stageCable", "textureDesc": "Coiled black cable with connectors and slight dirt buildup." },
+        { "name": "Stage Floor", "materialID": "stage_floor", "modelModule": "js/mats/stage_floor.js", "textureDir": "assets/textures/stage/floor/", "assetNamePrefix": "stageFloor", "textureDesc": "Hardwood stage boards with worn varnish and tape residue." }
+      ]
+    }
   ]
 }
