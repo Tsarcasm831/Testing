@@ -9,7 +9,7 @@ Read them all before contributing:
 
 Key points:
 
-- Update `CHANGELOG.md` for every change using UTC-7 dates and an `HHMM` prefix for each bullet.
+- Update `CHANGELOG.md` for every change using UTC-7 dates and an `HHMM` prefix for each bullet. Each bullet must contain at least five hundred characters so that context, motivation and implications are clear.
 - `CHANGELOG.md` should contain only entries from the current UTC day. Move all older entries to `CHANGELOG_ARCHIVE.md`.
 - Run `npm test` or any project-specific tests before committing. Document test issues caused by environment limits in the pull request.
 
