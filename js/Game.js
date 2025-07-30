@@ -20,6 +20,9 @@ import { setupEventListeners } from './game/setupEventListeners.js';
 import { updateDayNightCycle } from './game/updateDayNightCycle.js';
 import { cacheAssetLists } from './assetListCache.js';
 
+/* @tweakable The lifespan of built objects in milliseconds. Default is 50 minutes. */
+const OBJECT_EXPIRATION_MS = 50 * 60 * 1000;
+
 export class Game {
     constructor() {
         this.room = null;
@@ -46,7 +49,7 @@ export class Game {
         this.ambientLight = null;
     }
 
-    async init() {
+    async init(shouldPreloadAssets = true) {
         this.room = new WebsimSocket();
         await this.room.initialize();
 
@@ -87,9 +90,8 @@ export class Game {
         const progressBar = document.getElementById('progress-bar');
         assetReplacementManager.setStatusElement(loadingStatus, progressBar);
 
-        /* @tweakable Set to true to automatically download all assets on the loading screen. */
-        const downloadAllAssetsOnLoad = true;
-        if (downloadAllAssetsOnLoad) {
+        /* @tweakable This is now controlled by a checkbox on the start screen. */
+        if (shouldPreloadAssets) {
             await assetReplacementManager.preloadAllGameAssets();
         }
 
@@ -124,6 +126,7 @@ export class Game {
         const worldObjects = await world.generate(this.sun);
         const terrain = worldObjects.terrain;
         this.grass = worldObjects.grass;
+        const interactableSeats = worldObjects.interactableSeats;
 
         this.playerControls.terrain = terrain;
         this.collisionManager.setTerrain(terrain);
@@ -133,6 +136,16 @@ export class Game {
         this.setupBuildTools(terrain);
         this.setupMultiplayer();
         this.setupUI(assetReplacementManager);
+
+        if (interactableSeats) {
+            interactableSeats.forEach(seatBase => {
+                const worldPosition = new THREE.Vector3();
+                seatBase.getWorldPosition(worldPosition);
+                seatBase.userData.seatCoordinates = worldPosition;
+                this.interactionManager.addInteractableObject(seatBase);
+            });
+        }
+
         this.setupEventListeners();
         initYoutubePlayer();
         
@@ -232,9 +245,8 @@ export class Game {
             this.dirLight.shadow.camera.updateProjectionMatrix();
         }
         
-        const expirationTime = 50 * 60 * 1000;
-        this.buildTool.checkExpiredObjects(currentTime, expirationTime);
-        this.advancedBuildTool.checkExpiredObjects(currentTime, expirationTime);
+        this.buildTool.checkExpiredObjects(currentTime, OBJECT_EXPIRATION_MS);
+        this.advancedBuildTool.checkExpiredObjects(currentTime, OBJECT_EXPIRATION_MS);
         
         this.videoManager.update();
 

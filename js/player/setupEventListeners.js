@@ -14,6 +14,9 @@ export function setupEventListeners(pc) {
             pc.lastSpacebarTime = now;
         }
       }
+      if (e.key.toLowerCase() === 'c') {
+        pc.toggleFirstPersonView();
+      }
     });
     
     // Handle window resize
@@ -24,5 +27,20 @@ export function setupEventListeners(pc) {
         pc.renderer.setSize(window.innerWidth, window.innerHeight);
       }
     });
+
+    // Handle click for pointer lock
+    pc.domElement.addEventListener('click', () => {
+        if (pc.isFirstPerson && document.pointerLockElement !== pc.domElement) {
+            pc.domElement.requestPointerLock();
+        }
+    });
+
+    // Handle pointer lock change
+    document.addEventListener('pointerlockchange', () => {
+        if (document.pointerLockElement === pc.domElement) {
+            // Pointer is locked
+        } else {
+            // Pointer is unlocked
+        }
+    }, false);
   }
-  

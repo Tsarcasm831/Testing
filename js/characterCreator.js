@@ -25,6 +25,25 @@ export class CharacterCreator {
         window.referenceImageUrl = null;
     }
 
+    updateStatus(message, progress) {
+        if (!this.statusEl) return;
+        
+        /* @tweakable The height of the progress bar in pixels. */
+        const progressBarHeight = "8px";
+        /* @tweakable The background color of the progress bar track. */
+        const progressBarTrackColor = "rgba(255, 255, 255, 0.2)";
+        /* @tweakable The color of the progress bar fill. */
+        const progressBarFillColor = "#2196F3";
+
+        const progressHtml = `
+            <div style="margin-bottom: 8px;">${message}</div>
+            <div class="character-progress" style="height: ${progressBarHeight}; background-color: ${progressBarTrackColor};">
+                <div class="character-progress-bar" style="width: ${progress}%; background-color: ${progressBarFillColor};"></div>
+            </div>
+        `;
+        this.statusEl.innerHTML = progressHtml;
+    }
+
     open() {
         this.modal = document.getElementById('character-creator-modal');
         this.previewContainer = document.getElementById('character-preview');
@@ -152,44 +171,30 @@ export class CharacterCreator {
             return;
         }
 
-        this.statusEl.textContent = 'Generating your character...';
+        this.statusEl.innerHTML = '';
         document.getElementById('generate-character-button').disabled = true;
+        document.getElementById('apply-character-button').style.display = 'none';
+        window.tempCharacterSpec = null;
 
         try {
-            // System prompt for AI character generation.
-            // Encourages humanoid proportions when appropriate and uses
-            // individual primitives for head, torso and limbs.
-            // All shapes must stay within a 3x3x3 area for consistent collision.
+            /* @tweakable The system prompt for the AI character generator. Defines the expected JSON structure and detail level. */
+            const systemPrompt = `Based on the user's character description, generate a highly detailed and structured 3D character model description. If the description indicates a humanoid character, break it down into the following individual body parts: head, nose, eyes, hair, ears, mouth, neck, torso, shoulders, upper arm right, lower arm right, upper arm left, lower arm left, hand left, hand right, waist, upper leg left, lower leg left, ankle left, foot left, upper leg right, lower leg right, ankle right, and foot right.
+
+For each body part, provide a description that is at least 800 characters long, focusing on anatomical accuracy, textures, colors, and any unique features mentioned in the user's description. Ensure that the descriptions are consistent with each other and form a coherent whole, with all parts assembled correctly in their appropriate anatomical locations. If the user's description is vague or lacks specifics for certain parts, use realistic and appropriate defaults to fill in the details.
+
+Additionally, ensure that at least one component, such as the feet, extends to Y=0 or below to serve as a ground anchor for the 3D model.
+
+Be creative in interpreting the user's description, but stay true to the details provided. The output should be a JSON object with each body part as a key and its detailed description as the value.
+
+**CRITICAL:** Each body part description must be a minimum of 800 characters to ensure the 3D model is as realistic and detailed as possible.`;
+            
+            /* @tweakable Text for the first step of character generation. */
+            const step1Text = "Generating detailed description... (Step 1/2)";
+            this.updateStatus(step1Text, 10);
+            
             const messages = [{
                 role: "system",
-                content: `Convert the user's character description into a structured 3D character model description.
-                The model should reflect what they describe. When a humanoid form is implied, keep roughly human proportions and use separate primitives for the head, torso and each limb.
-                SIZE CONSTRAINT: No dimension should exceed 3x3 units. Keep all features within a 3x3x3 cube for more detailed shapes.
-                Respond with ONLY JSON, following this schema:
-                {
-                  "customMode": true,
-                  "features": [
-                    {
-                      "type": "box|sphere|cylinder|cone|torus", 
-                      "color": "hexcolor",
-                      "position": {"x": number, "y": number, "z": number},
-                      "scale": {"x": number, "y": number, "z": number},
-                      "rotation": {"x": number, "y": number, "z": number},
-                      "roughness": number, "metalness": number, "transparent": boolean, "opacity": number,
-                      "name": "string",
-                      "texture": { "id": "brick|wood|skin|metal|water|glass", "textureUrl": "url" },
-                      "animation": { "type": "jiggly|bobUpDown|spinY|spinX|spinZ|pulse" }
-                    }
-                  ],
-                  "description": "brief description of the character"
-                }
-                Create a fully custom design using multiple primitive shapes.
-                Place at least one feature near Y=0 as the 'base' for proper collision.
-                IMPORTANT: Keep all shapes within a 3x3x3 area centered on the character.
-                Use textures and colors that closely match the description for realism.
-                If legs should animate, name them "leftLeg" and "rightLeg".
-                CRITICAL: Ensure at least one component extends to Y=0 or below for ground anchor.
-                Be creative and interpret the user's description freely while respecting size constraints.`
+                content: systemPrompt
             }];
 
             const userMessage = { role: "user", content: [] };
@@ -200,16 +205,57 @@ export class CharacterCreator {
             messages.push(userMessage);
 
             const completion = await websim.chat.completions.create({ messages, json: true });
-            const characterSpec = JSON.parse(completion.content);
+            
+            // The new prompt doesn't return a spec that can be rendered with primitives.
+            // We need to call another AI to convert the descriptive JSON to a renderable spec.
+            const descriptiveSpec = JSON.parse(completion.content);
+
+            /* @tweakable Text for the second step of character generation. */
+            const step2Text = "Converting description to 3D model... (Step 2/2)";
+            this.updateStatus(step2Text, 50);
+
+            const conversionMessages = [{
+                role: "system",
+                content: `You are an AI assistant that converts detailed, descriptive JSON about a character into a renderable JSON format using 3D primitives. The user will provide a JSON object with body parts as keys and long text descriptions as values. Your task is to translate this into a "features" array.
+                Each object in the "features" array must have:
+                - "type": "box|sphere|cylinder|cone|torus"
+                - "color": "hexcolor"
+                - "position": {"x": number, "y": number, "z": number}
+                - "scale": {"x": number, "y": number, "z": number}
+                - "rotation": {"x": number, "y": number, "z": number} (in radians)
+                - "name": (optional) "leftLeg" or "rightLeg" for animation.
+                
+                IMPORTANT CONSTRAINTS:
+                - The entire character must fit within a 3x3x3 unit space.
+                - At least one component must be at or extend below Y=0 to ground the model.
+                - Create a coherent, visually appealing character based on the descriptions.
+                - Use multiple primitives to represent complex parts.
+                - Respond ONLY with the final JSON object in the format:
+                {
+                  "customMode": true,
+                  "features": [ ... ],
+                  "description": "A brief summary of the character."
+                }`
+            }, {
+                role: "user",
+                content: JSON.stringify(descriptiveSpec)
+            }];
+
+            const conversionCompletion = await websim.chat.completions.create({ messages: conversionMessages, json: true });
+            const characterSpec = JSON.parse(conversionCompletion.content);
 
             this.currentCharacterDescription = description;
             this.updatePreviewModel(characterSpec);
-            this.statusEl.textContent = 'Ready to apply!';
+            /* @tweakable Message displayed when character generation is successful. */
+            const successMessage = 'Ready to apply!';
+            this.statusEl.innerHTML = `<span style="color: lightgreen;">${successMessage}</span>`;
             document.getElementById('apply-character-button').style.display = 'block';
             window.tempCharacterSpec = characterSpec;
         } catch (error) {
             console.error('Error generating character:', error);
-            this.statusEl.textContent = 'Error generating character. Please try again.';
+            /* @tweakable Message displayed when character generation fails. */
+            const errorMessage = 'Error generating character. Please try again.';
+            this.statusEl.innerHTML = `<span style="color: #ff5555;">${errorMessage}</span>`;
         } finally {
             document.getElementById('generate-character-button').disabled = false;
         }

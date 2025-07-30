@@ -349,22 +349,39 @@
     color: var(--white-80);
 }
 
-#options-tab-items h3 {
-    margin-top: 0;
-    color: #4CAF50;
-    border-bottom: 1px solid var(--white-20);
-    padding-bottom: 8px;
-    margin-bottom: 15px;
+/* @tweakable The background color for item list buttons. */
+:root {
+    --item-list-item-bg: rgba(255, 255, 255, 0.08);
+    --item-list-item-hover-bg: rgba(255, 255, 255, 0.15);
+    --item-list-item-active-bg: #228be6;
+    --item-preview-bg: rgba(0, 0, 0, 0.25);
+    --item-preview-border-color: rgba(255, 255, 255, 0.1);
+    --item-preview-hint-color: rgba(255, 255, 255, 0.4);
 }
 
-.item-catalog-body {
-  display: flex;
-  gap: 20px;
+#options-tab-items .item-catalog-body {
+    display: flex;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+#item-list-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 180px;
+}
+
+#item-list-container h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: var(--white-70);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .item-list {
-  flex: 1;
-  max-height: 300px;
+  flex-grow: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -377,15 +394,58 @@
   text-align: left;
 }
 
-.item-preview {
-  flex: 1;
+.item-list-entry {
+  width: 100%;
+  padding: 10px 15px;
+  text-align: left;
+  background-color: var(--item-list-item-bg);
+  color: var(--white-80);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.item-list-entry:hover {
+    background-color: var(--item-list-item-hover-bg);
+    color: var(--white-full);
+    transform: translateX(2px);
+}
+
+.item-list-entry.active {
+    background-color: var(--item-list-item-active-bg);
+    color: var(--white-full);
+    font-weight: bold;
+    border-color: var(--item-list-item-active-bg);
+}
+
+#item-preview-container {
+  flex: 2;
   min-height: 250px;
-  background-color: var(--white-05);
+  background-color: var(--item-preview-bg);
   border-radius: 8px;
-  border: 1px solid var(--white-20);
+  border: 1px solid var(--item-preview-border-color);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+}
+
+#item-preview-container:active {
+    cursor: grabbing;
+}
+
+.item-preview-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: var(--item-preview-hint-color);
+    pointer-events: none;
 }
 
 .item-list::-webkit-scrollbar {

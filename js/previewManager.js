@@ -1,6 +1,11 @@
 import * as THREE from 'three';
 import { CLUSTER_SIZE } from './worldgen/constants.js';
 
+/* @tweakable Opacity of the preview object in build mode. */
+const PREVIEW_OPACITY = 0.6;
+/* @tweakable The size of the grid snap for object placement. */
+const GRID_SNAP_SIZE = 1.0;
+
 export class PreviewManager {
     constructor(scene, camera, buildMaterials, terrain) {
         this.scene = scene;
@@ -21,11 +26,21 @@ export class PreviewManager {
             { geometry: new THREE.ConeGeometry(0.5, 1, 4), name: 'Pyramid' }
         ];
         this.currentShapeIndex = 0;
+        this.staticIntersectableObjects = [];
 
         this.raycaster = new THREE.Raycaster();
         this.mousePosition = new THREE.Vector2();
 
         this.createPreviewMesh();
+    }
+
+    rebuildIntersectionList() {
+        this.staticIntersectableObjects = [];
+        this.scene.traverse(child => {
+            if (child.isMesh && (child.userData.isTerrain || (child.userData.isBarrier && !child.userData.isPlayer && !child.userData.isNpc))) {
+                this.staticIntersectableObjects.push(child);
+            }
+        });
     }
 
     createPreviewMesh() {
@@ -35,7 +50,7 @@ export class PreviewManager {
         const geometry = this.shapes[this.currentShapeIndex].geometry.clone();
         const material = this.buildMaterials[this.currentMaterialIndex].clone();
         material.transparent = true;
-        material.opacity = 0.5;
+        material.opacity = PREVIEW_OPACITY;
 
         this.previewMesh = new THREE.Mesh(geometry, material);
         this.previewMesh.castShadow = false;
@@ -50,19 +65,19 @@ export class PreviewManager {
 
         this.mousePosition.copy(mousePosition);
         this.raycaster.setFromCamera(this.mousePosition, this.camera);
-        const intersects = this.raycaster.intersectObjects([...this.scene.children], true);
+        const allIntersectable = [...this.staticIntersectableObjects, ...buildObjects];
+        const intersects = this.raycaster.intersectObjects(allIntersectable, false);
 
         for (let i = 0; i < intersects.length; i++) {
-            if (intersects[i].object === this.previewMesh || buildObjects.includes(intersects[i].object)) {
+            if (intersects[i].object === this.previewMesh) {
                 continue;
             }
 
             const point = intersects[i].point;
             const halfSize = CLUSTER_SIZE / 2;
 
-            const gridSize = 1;
-            point.x = Math.round(point.x / gridSize) * gridSize;
-            point.z = Math.round(point.z / gridSize) * gridSize;
+            point.x = Math.round(point.x / GRID_SNAP_SIZE) * GRID_SNAP_SIZE;
+            point.z = Math.round(point.z / GRID_SNAP_SIZE) * GRID_SNAP_SIZE;
 
             // Clamp position to world boundaries
             /* @tweakable The padding from the edge of the world where object placement is disallowed. */
@@ -87,6 +102,12 @@ export class PreviewManager {
 
     changeShape() {
         if (!this.previewMesh) return;
+
+        const oldPosition = this.previewMesh.position.clone();
+        const oldRotation = this.previewMesh.rotation.clone();
+        const oldScale = this.previewMesh.scale.clone();
+        const oldHeightAdjusted = this.previewMesh.userData.heightAdjusted;
+
         this.scene.remove(this.previewMesh);
 
         this.currentShapeIndex = (this.currentShapeIndex + 1) % this.shapes.length;
@@ -94,8 +115,13 @@ export class PreviewManager {
         const geometry = this.shapes[this.currentShapeIndex].geometry.clone();
         const material = this.buildMaterials[this.currentMaterialIndex].clone();
         material.transparent = true;
-        material.opacity = 0.5;
+        material.opacity = PREVIEW_OPACITY;
         this.previewMesh = new THREE.Mesh(geometry, material);
+
+        this.previewMesh.position.copy(oldPosition);
+        this.previewMesh.rotation.copy(oldRotation);
+        this.previewMesh.scale.copy(oldScale);
+        this.previewMesh.userData.heightAdjusted = oldHeightAdjusted;
         this.previewMesh.castShadow = false;
         this.previewMesh.receiveShadow = false;
         this.previewMesh.userData.shapeName = this.shapes[this.currentShapeIndex].name;
@@ -107,7 +133,7 @@ export class PreviewManager {
         this.currentMaterialIndex = (this.currentMaterialIndex + 1) % this.buildMaterials.length;
         const material = this.buildMaterials[this.currentMaterialIndex].clone();
         material.transparent = true;
-        material.opacity = 0.5;
+        material.opacity = PREVIEW_OPACITY;
         this.previewMesh.material = material;
     }
 

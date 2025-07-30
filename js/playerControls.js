@@ -96,9 +96,20 @@ export class PlayerControls {
     this.cameraOffset = new THREE.Vector3();
     this.cameraOffset.copy(this.camera.position).sub(new THREE.Vector3(this.playerX, targetY, this.playerZ));
     
+    this.isFirstPerson = false;
+    /* @tweakable The vertical offset of the camera from the player's position in first-person view. */
+    this.firstPersonVerticalOffset = 1.6;
+    this.thirdPersonCameraOffset = this.cameraOffset.clone(); // Store original offset
+
+    // Bind mouse move handler
+    this.boundHandleMouseMove = this.handleMouseMove.bind(this);
+
     // Initialize controls
     this.initializeControls();
     
+    this.originalMinDistance = this.controls.minDistance;
+    this.originalMaxDistance = this.controls.maxDistance;
+
     // Setup event listeners
     this.setupEventListeners();
     
@@ -123,6 +134,78 @@ export class PlayerControls {
     this.enabled = true; // Add enabled flag for chat input
   }
   
+  handleMouseMove(event) {
+    if (document.pointerLockElement !== this.domElement || !this.isFirstPerson) {
+        return;
+    }
+
+    const movementX = event.movementX || 0;
+    const movementY = event.movementY || 0;
+
+    const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+    euler.setFromQuaternion(this.camera.quaternion);
+
+    /* @tweakable Mouse sensitivity for looking around in first-person view. */
+    const lookSensitivity = 0.002;
+    euler.y -= movementX * lookSensitivity;
+    euler.x -= movementY * lookSensitivity;
+    
+    /* @tweakable The maximum vertical angle (in degrees) the player can look up in first-person view. */
+    const maxLookUpAngle = 89;
+    /* @tweakable The maximum vertical angle (in degrees) the player can look down in first-person view. */
+    const maxLookDownAngle = -89;
+    euler.x = Math.max(THREE.MathUtils.degToRad(maxLookDownAngle), Math.min(THREE.MathUtils.degToRad(maxLookUpAngle), euler.x));
+
+    this.camera.quaternion.setFromEuler(euler);
+  }
+
+  toggleFirstPersonView() {
+    // The state is changing, so the check `!this.isFirstPerson` means "we are currently in 3rd person and switching to 1st"
+    if (!this.isFirstPerson) {
+        // Store current 3p settings before switching to 1st person
+        this.thirdPersonCameraOffset.copy(this.cameraOffset);
+        this.originalMinDistance = this.controls.minDistance;
+        this.originalMaxDistance = this.controls.maxDistance;
+    }
+    
+    this.isFirstPerson = !this.isFirstPerson;
+
+    if (this.isFirstPerson) {
+        document.body.classList.add('first-person-view');
+        
+        /* @tweakable The username that can see their body in first person. */
+        const seeBodyUsername = 'lordtsarcasm';
+        if (this.currentUser && this.currentUser.username === seeBodyUsername) {
+            this.playerModel.visible = true;
+        } else {
+            this.playerModel.visible = false;
+        }
+        
+        // Lock camera distance to target
+        this.controls.minDistance = 0;
+        /* @tweakable The maximum zoom out distance in first-person view. Set to 0 to lock zoom completely. */
+        this.controls.maxDistance = 0;
+
+        this.controls.enabled = false;
+        document.addEventListener('mousemove', this.boundHandleMouseMove, false);
+
+    } else {
+        document.body.classList.remove('first-person-view');
+        this.playerModel.visible = true;
+
+        // Restore original values
+        this.controls.minDistance = this.originalMinDistance;
+        this.controls.maxDistance = this.originalMaxDistance;
+        
+        // Restore camera offset
+        this.cameraOffset.copy(this.thirdPersonCameraOffset);
+        
+        this.controls.enabled = true;
+        document.removeEventListener('mousemove', this.boundHandleMouseMove, false);
+        document.exitPointerLock();
+    }
+  }
+
   toggleFlightMode() {
     this.isFlying = !this.isFlying;
     if (this.isFlying) {

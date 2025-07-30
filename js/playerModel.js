@@ -110,21 +110,27 @@ function _createCustomPlayerModel(playerGroup, characterSpec) {
         playerGroup.add(mesh);
     });
 
-    if (minY !== Infinity && minY < 0) {
-        playerGroup.position.y = -minY;
-    } else if (minY > 0) {
+    if (minY !== Infinity && minY !== 0) {
+        /* @tweakable An offset to apply to the character's vertical position to fine-tune grounding. */
+        const verticalOffset = 0.0;
+        const yShift = -minY + verticalOffset;
+        
+        playerGroup.children.forEach(child => {
+            child.position.y += yShift;
+        });
+        animatedFeatures.forEach(feature => {
+            if (feature.initialPosition) {
+                feature.initialPosition.y += yShift;
+            }
+        });
+    }
+
+    // Add a hitbox if character is empty, to ensure it has a ground presence.
+    if (minY === Infinity) {
         const hitboxGeometry = new THREE.BoxGeometry(0.5, 0.1, 0.5);
         const hitboxMaterial = new THREE.MeshBasicMaterial({ visible: false, transparent: true, opacity: 0 });
         const hitbox = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
-        hitbox.position.y = 0;
-        playerGroup.add(hitbox);
-    } else {
-        // Case where minY is 0 or Infinity (no objects with position/scale)
-        // Add a small invisible base to ensure the model is grounded for collision checks
-        const hitboxGeometry = new THREE.BoxGeometry(0.5, 0.1, 0.5);
-        const hitboxMaterial = new THREE.MeshBasicMaterial({ visible: false, transparent: true, opacity: 0 });
-        const hitbox = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
-        hitbox.position.y = 0;
+        hitbox.position.y = 0; // Position it at the group's origin
         playerGroup.add(hitbox);
     }
     

@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 
+/* @tweakable The smoothing factor for remote player rotation. Lower is smoother but has more latency. */
+const REMOTE_PLAYER_ROTATION_SMOOTHING = 0.1;
+
 export class MultiplayerManager {
     constructor(dependencies) {
         this.room = dependencies.room;
@@ -130,9 +133,10 @@ export class MultiplayerManager {
             this.addPlayer(clientId, playerData);
         } else {
             playerModel.position.set(playerData.x, playerData.y || 0, playerData.z);
-            if (playerData.rotation) {
+            if (playerData.rotation !== undefined) {
                 const offset = playerModel.userData.isAnimatedGLB ? (playerModel.userData.rotationOffset || 0) : 0;
-                playerModel.rotation.y = playerData.rotation - offset; 
+                const targetQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), playerData.rotation - offset);
+                playerModel.quaternion.slerp(targetQuaternion, REMOTE_PLAYER_ROTATION_SMOOTHING);
             }
         }
 

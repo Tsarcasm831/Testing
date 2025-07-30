@@ -16,6 +16,8 @@ export class BuildTool {
     this.buildObjects = [];
     this.mousePosition = new THREE.Vector2();
     this.touchStarted = false;
+    this.touchStartTime = 0;
+    this.touchStartPos = { x: 0, y: 0 };
     this.room = null; // Will be set from app.js
     this.aiBuilding = false; // Track if AI is currently building
     this.extendingLifespan = false; // Track if lifespan extender is active
@@ -109,15 +111,9 @@ export class BuildTool {
         document.getElementById('advanced-build-controls').style.display === 'flex') {
       return;
     }
-
-    const now = performance.now();
-    const timeSinceLastTap = now - this.lastTapTime;
-
-    if (timeSinceLastTap < this.doubleTapThreshold) { // Double click threshold (300ms)
-      this.placeBuildObject();
-    }
-
-    this.lastTapTime = now;
+    
+    // Place object on single click instead of double click
+    this.placeBuildObject();
   }
 
   onTouchStart(event) {
@@ -130,22 +126,15 @@ export class BuildTool {
     }
 
     this.touchStarted = true;
+    this.touchStartTime = performance.now();
     const touch = event.touches[0];
+    this.touchStartPos = { x: touch.clientX, y: touch.clientY };
 
     // Calculate touch position in normalized device coordinates (-1 to +1)
     this.mousePosition.x = (touch.clientX / window.innerWidth) * 2 - 1;
     this.mousePosition.y = - (touch.clientY / window.innerHeight) * 2 + 1;
 
     this.previewManager.updatePosition(this.mousePosition, this.buildObjects);
-
-    const now = performance.now();
-    const timeSinceLastTap = now - this.lastTapTime;
-
-    if (timeSinceLastTap < this.doubleTapThreshold) { // Double tap threshold (300ms)
-      this.placeBuildObject();
-    }
-
-    this.lastTapTime = now;
   }
 
   onTouchMove(event) {
@@ -160,7 +149,25 @@ export class BuildTool {
     this.previewManager.updatePosition(this.mousePosition, this.buildObjects);
   }
 
-  onTouchEnd() {
+  onTouchEnd(event) {
+    if (!this.enabled || !this.touchStarted) return;
+        
+    const touchDuration = performance.now() - this.touchStartTime;
+    const touch = event.changedTouches[0];
+    const dist = Math.sqrt(
+        Math.pow(touch.clientX - this.touchStartPos.x, 2) +
+        Math.pow(touch.clientY - this.touchStartPos.y, 2)
+    );
+    
+    /* @tweakable Max duration in ms for a touch to be considered a tap. */
+    const TAP_DURATION_THRESHOLD = 200;
+    /* @tweakable Max distance in pixels for a touch to be considered a tap. */
+    const TAP_DISTANCE_THRESHOLD = 10;
+    
+    if (touchDuration < TAP_DURATION_THRESHOLD && dist < TAP_DISTANCE_THRESHOLD) {
+        this.placeBuildObject();
+    }
+
     this.touchStarted = false;
   }
 
@@ -367,6 +374,7 @@ export class BuildTool {
 
   changeShape() {
     this.previewManager.changeShape();
+    this.previewManager.updatePosition(this.mousePosition, this.buildObjects);
   }
 
   changeMaterial() {
@@ -375,6 +383,7 @@ export class BuildTool {
 
   changeSize() {
     this.previewManager.changeSize();
+    this.previewManager.updatePosition(this.mousePosition, this.buildObjects);
   }
 
   rotatePreview() {

@@ -131,6 +131,10 @@ body {
   display: none; /* Hide crosshair for third-person view */
 }
 
+.first-person-view .crosshair {
+    display: block;
+}
+
 .crosshair::before,
 .crosshair::after {
   content: "";

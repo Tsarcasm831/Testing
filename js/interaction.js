@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 
-/* @tweakable The distance in world units within which player can interact with an NPC. */
+/* @tweakable The distance in world units within which player can interact with an object via proximity. */
 const INTERACTION_RADIUS = 3;
+/* @tweakable The distance in world units within which player can interact with an object by looking at it in first-person mode. */
+const FIRST_PERSON_INTERACTION_RADIUS = 4.5;
 /* @tweakable The vertical offset for the interaction prompt above the NPC's head. */
 const PROMPT_VERTICAL_OFFSET = 2.5;
 /* @tweakable Font size for the NPC's name in the interaction prompt. */
@@ -24,8 +26,10 @@ export class InteractionManager {
         this.interactionPrompt = null;
         this.mobileInteractionButton = null;
         this.conversationModal = null;
-        this.targetNpc = null;
+        this.targetObject = null;
         this.lastCheckTime = 0;
+        this.interactableObjects = [];
+        this.raycaster = new THREE.Raycaster();
     }
 
     init() {
@@ -72,6 +76,10 @@ export class InteractionManager {
         modalEl.querySelector('#close-conversation').addEventListener('click', this.closeModal.bind(this));
     }
 
+    addInteractableObject(object) {
+        this.interactableObjects.push(object);
+    }
+
     update() {
         const now = performance.now();
         if (this.conversationModal && this.conversationModal.style.display === 'flex') {
@@ -81,7 +89,7 @@ export class InteractionManager {
             if (this.mobileInteractionButton && this.mobileInteractionButton.style.display !== 'none') {
                 this.mobileInteractionButton.style.display = 'none';
             }
-            this.targetNpc = null;
+            this.targetObject = null;
             return;
         }
         
@@ -92,20 +100,68 @@ export class InteractionManager {
         this.lastCheckTime = now;
 
         const playerPos = this.playerControls.getPlayerModel().position;
-        let closestNpc = null;
-        let minDistance = INTERACTION_RADIUS;
+        let newTargetObject = null;
 
-        this.npcManager.npcs.forEach(npc => {
-            const distance = playerPos.distanceTo(npc.model.position);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestNpc = npc;
+        if (this.playerControls.isFirstPerson) {
+            this.raycaster.setFromCamera({ x: 0, y: 0 }, this.camera);
+            
+            const allInteractableMeshes = [
+                ...this.npcManager.npcs.map(npc => npc.model),
+                ...this.interactableObjects
+            ];
+
+            const intersects = this.raycaster.intersectObjects(allInteractableMeshes, true);
+
+            for (const intersect of intersects) {
+                if (intersect.distance <= FIRST_PERSON_INTERACTION_RADIUS) {
+                    let foundObject = null;
+                    let current = intersect.object;
+                    while (current && !foundObject) {
+                        const npc = this.npcManager.npcs.find(n => n.model === current);
+                        if (npc) {
+                            foundObject = npc;
+                        } else if (this.interactableObjects.includes(current)) {
+                            foundObject = current;
+                        }
+                        current = current.parent;
+                    }
+
+                    if (foundObject) {
+                        newTargetObject = foundObject;
+                        break;
+                    }
+                }
             }
-        });
+        }
+        
+        // If not in FPS mode, or if raycast didn't find anything, use proximity
+        if (!newTargetObject) {
+            let closestInteractable = null;
+            let minDistance = INTERACTION_RADIUS;
 
-        this.targetNpc = closestNpc;
+            this.npcManager.npcs.forEach(npc => {
+                const distance = playerPos.distanceTo(npc.model.position);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestInteractable = npc;
+                }
+            });
+    
+            this.interactableObjects.forEach(obj => {
+                const worldPosition = new THREE.Vector3();
+                obj.getWorldPosition(worldPosition);
+                const distance = playerPos.distanceTo(worldPosition);
+                 if (distance < minDistance) {
+                    minDistance = distance;
+                    closestInteractable = obj;
+                }
+            });
+            newTargetObject = closestInteractable;
+        }
 
-        if (this.targetNpc) {
+        this.targetObject = newTargetObject;
+
+        if (this.targetObject) {
             if (this.isDesktop) {
                 this.updatePromptPosition();
             } else if (this.mobileInteractionButton) {
@@ -122,9 +178,13 @@ export class InteractionManager {
     }
 
     updatePromptPosition() {
-        if (!this.targetNpc || !this.interactionPrompt) return;
+        if (!this.targetObject || !this.interactionPrompt) return;
 
-        const pos = this.targetNpc.model.position.clone();
+        const isNpc = !!this.targetObject.model;
+        const targetMesh = isNpc ? this.targetObject.model : this.targetObject;
+
+        const pos = new THREE.Vector3();
+        targetMesh.getWorldPosition(pos);
         pos.y += PROMPT_VERTICAL_OFFSET;
 
         const screenPos = this._getScreenPosition(pos);
@@ -137,8 +197,13 @@ export class InteractionManager {
             const nameEl = this.interactionPrompt.querySelector('.interaction-npc-name');
             const instructionEl = this.interactionPrompt.querySelector('.interaction-instruction');
             
-            nameEl.innerText = this.targetNpc.model.name || 'NPC';
-            instructionEl.innerText = 'Press F to talk';
+            if (isNpc) {
+                nameEl.innerText = targetMesh.name || 'NPC';
+                instructionEl.innerText = 'Press F to talk';
+            } else {
+                nameEl.innerText = targetMesh.userData.seatLabel || 'Interactable';
+                instructionEl.innerText = targetMesh.userData.interactionPrompt || 'Press F to interact';
+            }
             
             nameEl.style.fontSize = NPC_NAME_FONT_SIZE;
             instructionEl.style.fontSize = INSTRUCTION_FONT_SIZE;
@@ -164,34 +229,42 @@ export class InteractionManager {
     }
 
     handleKeyDown(event) {
-        if (event.key.toLowerCase() === 'f' && this.targetNpc && this.conversationModal.style.display === 'none') {
-            this.startConversation();
+        if (event.key.toLowerCase() === 'f' && this.targetObject && this.conversationModal.style.display === 'none') {
+            if (this.targetObject.model) { // Is an NPC object
+                this.startConversation();
+            } else if (this.targetObject.userData.interactionType === 'seat') {
+                this.showSeatCoordinates();
+            }
         }
     }
 
     handleMobileInteraction() {
-        if (this.targetNpc && this.conversationModal.style.display === 'none') {
-            this.startConversation();
+        if (this.targetObject && this.conversationModal.style.display === 'none') {
+            if (this.targetObject.model) { // Is an NPC object
+                this.startConversation();
+            } else if (this.targetObject.userData.interactionType === 'seat') {
+                this.showSeatCoordinates();
+            }
         }
     }
 
     async startConversation() {
-        if (!this.targetNpc) return;
+        if (!this.targetObject) return;
 
-        this.npcManager.setInteracting(this.targetNpc, true);
+        this.npcManager.setInteracting(this.targetObject, true);
 
-        const preset = this.presetCharacters.find(p => p.id === this.targetNpc.presetId);
+        const preset = this.presetCharacters.find(p => p.id === this.targetObject.presetId);
         let dialogue;
 
         if (preset && preset.dialogue && preset.dialogue.length > 0) {
-            dialogue = preset.dialogue[this.targetNpc.dialogueIndex];
-            this.targetNpc.dialogueIndex = (this.targetNpc.dialogueIndex + 1) % preset.dialogue.length;
-            this.openModal(dialogue, this.targetNpc);
-        } else if (this.targetNpc.model.userData.characterSpec) {
+            dialogue = preset.dialogue[this.targetObject.dialogueIndex];
+            this.targetObject.dialogueIndex = (this.targetObject.dialogueIndex + 1) % preset.dialogue.length;
+            this.openModal(dialogue, this.targetObject);
+        } else if (this.targetObject.model.userData.characterSpec) {
             // Fallback to AI generation
-            this.openModal("Thinking...", this.targetNpc);
+            this.openModal("Thinking...", this.targetObject);
             try {
-                dialogue = await this.generateDialogue(this.targetNpc);
+                dialogue = await this.generateDialogue(this.targetObject);
                 const dialogueTextEl = this.conversationModal.querySelector('#npc-dialogue');
                 dialogueTextEl.innerText = dialogue; // Update text after generation
             } catch(e) {
@@ -221,20 +294,42 @@ export class InteractionManager {
         return completion.content;
     }
 
-    openModal(text, npc) {
-        this.conversationModal.querySelector('#npc-name').innerText = npc.model.name || 'NPC';
-        this.conversationModal.querySelector('#npc-dialogue').innerText = text;
+    showSeatCoordinates() {
+        if (!this.targetObject) return;
+        
+        const coords = this.targetObject.userData.seatCoordinates;
+        if (!coords) return;
+
+        /* @tweakable The precision for displaying seat coordinates. */
+        const seatCoordinatePrecision = 2;
+
+        const text = `Coordinates:<br>X: ${coords.x.toFixed(seatCoordinatePrecision)}<br>Y: ${coords.y.toFixed(seatCoordinatePrecision)}<br>Z: ${coords.z.toFixed(seatCoordinatePrecision)}`;
+        
+        /* @tweakable The title of the modal that shows seat coordinate information. */
+        const title = this.targetObject.userData.seatLabel || "Seat Information";
+        
+        this.openModal(text, { model: { name: title } }, true);
+    }
+
+    openModal(text, npc, isInfo = false) {
+        this.conversationModal.querySelector('#npc-name').innerText = npc.model.name || 'Info';
+        this.conversationModal.querySelector('#npc-dialogue').innerHTML = text;
         this.conversationModal.style.display = 'flex';
         this.playerControls.enabled = false;
         if (this.interactionPrompt) this.interactionPrompt.style.display = 'none';
         if (this.mobileInteractionButton) this.mobileInteractionButton.style.display = 'none';
+
+        if (!isInfo) {
+            this.npcManager.setInteracting(npc, true);
+        }
     }
 
     closeModal() {
         this.conversationModal.style.display = 'none';
         this.playerControls.enabled = true;
-        if (this.targetNpc) {
-            this.npcManager.setInteracting(this.targetNpc, false);
+        if (this.targetObject && this.targetObject.model) {
+            this.npcManager.setInteracting(this.targetObject, false);
         }
+        this.targetObject = null;
     }
 }

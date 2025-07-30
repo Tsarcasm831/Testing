@@ -117,6 +117,7 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
     const targetPoint = new THREE.Vector3(55.625, 0, -63.125); // Corresponds to grid IK200
 
     const seatTransforms = [];
+    const interactableSeatBases = [];
 
     for (let i = 0; i < numRows; i++) {
         const innerRadius = startRadius + i * (rowDepth + radiusStep);
@@ -192,6 +193,18 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
             seatBase.position.y = seatBaseHeight / 2;
             seatBase.castShadow = true;
             seat.add(seatBase);
+
+            /* @tweakable A flag to make seat bases interactable. */
+            const isSeatInteractable = true;
+            if(isSeatInteractable) {
+                seatBase.userData.isInteractable = true;
+                seatBase.userData.interactionType = 'seat';
+                seatBase.userData.seatLabel = `R${i + 1}-S${j + 1}`;
+                /* @tweakable The prompt text shown when near an interactable seat. */
+                seatBase.userData.interactionPrompt = 'Press F to view coordinates';
+                interactableSeatBases.push(seatBase);
+            }
+
             if (DEBUG_INDIVIDUAL_SEAT_BOX) {
                 const seatBaseHelper = new THREE.BoxHelper(seatBase, DEBUG_INDIVIDUAL_SEAT_BOX_COLOR);
                 seatBaseHelper.userData.isDebugBorder = true;
@@ -219,6 +232,18 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
                 const labelDiv = document.createElement('div');
                 labelDiv.className = 'seat-label';
                 labelDiv.textContent = `R${i + 1}-S${j + 1}`;
+
+                /* @tweakable Set to true to store seat coordinates in a hidden element for later use. */
+                const storeSeatCoordinates = true;
+                if (storeSeatCoordinates) {
+                    const coordsElement = document.createElement('div');
+                    coordsElement.className = 'seat-coordinates';
+                    coordsElement.style.display = 'none'; // Not visible to user
+                    /* @tweakable Precision for stored seat coordinates. */
+                    const coordPrecision = 2;
+                    coordsElement.textContent = `X:${seat.position.x.toFixed(coordPrecision)},Y:${seat.position.y.toFixed(coordPrecision)},Z:${seat.position.z.toFixed(coordPrecision)}`;
+                    labelDiv.appendChild(coordsElement);
+                }
                 
                 const seatLabel = new CSS2DObject(labelDiv);
                 seatLabel.userData.isSeatLabel = true;
@@ -253,4 +278,5 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
     }
 
     createStairsToSeats(seatingGroup, { startRadius, rowHeight, material });
+    return interactableSeatBases;
 }

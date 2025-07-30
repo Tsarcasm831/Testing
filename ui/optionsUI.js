@@ -19,6 +19,8 @@ export class OptionsUI {
         this.itemPreviewModel = null;
         this.itemPreviewAnimationId = null;
         this.itemPreviewContainer = null;
+        this.isDraggingItem = false;
+        this.previousMousePosition = { x: 0, y: 0 };
     }
 
     create() {
@@ -103,10 +105,14 @@ export class OptionsUI {
                     </div>
                 </div>
                 <div id="options-tab-items" class="options-tab-content">
-                    <h3>Item Catalog</h3>
                     <div class="item-catalog-body">
-                        <div id="item-list-container" class="item-list"></div>
-                        <div id="item-preview-container" class="item-preview"></div>
+                        <div id="item-list-container">
+                            <h4>Item List</h4>
+                            <div class="item-list"></div>
+                        </div>
+                        <div id="item-preview-container">
+                             <div class="item-preview-hint">Drag to rotate</div>
+                        </div>
                     </div>
                 </div>
                 <div id="options-tab-about" class="options-tab-content">
@@ -253,20 +259,60 @@ export class OptionsUI {
 
         this.populateItemList();
         this.animateItemPreview();
+        this.setupPreviewEventListeners();
+    }
+
+    setupPreviewEventListeners() {
+        this.itemPreviewContainer.addEventListener('mousedown', (e) => {
+            this.isDraggingItem = true;
+            this.previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        this.itemPreviewContainer.addEventListener('mousemove', (e) => {
+            if (!this.isDraggingItem || !this.itemPreviewModel) return;
+
+            /* @tweakable The sensitivity of the mouse drag rotation for item previews. */
+            const rotationSpeed = 0.01;
+            const deltaX = e.clientX - this.previousMousePosition.x;
+            const deltaY = e.clientY - this.previousMousePosition.y;
+
+            this.itemPreviewModel.rotation.y += deltaX * rotationSpeed;
+            this.itemPreviewModel.rotation.x += deltaY * rotationSpeed;
+
+            this.previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        this.itemPreviewContainer.addEventListener('mouseup', () => {
+            this.isDraggingItem = false;
+        });
+        
+        this.itemPreviewContainer.addEventListener('mouseleave', () => {
+            this.isDraggingItem = false;
+        });
     }
 
     populateItemList() {
-        const listContainer = this.modal.querySelector('#item-list-container');
+        const listContainer = this.modal.querySelector('.item-list');
         listContainer.innerHTML = '';
-        for (const itemName in houseItems) {
+        Object.keys(houseItems).forEach((itemName, index) => {
             if (typeof houseItems[itemName] === 'function') {
                 const button = document.createElement('button');
-                button.className = 'option-button';
+                button.className = 'item-list-entry';
                 button.textContent = itemName.replace('create', '').replace(/([A-Z])/g, ' $1').trim();
-                button.addEventListener('click', () => this.showItemInPreview(itemName));
+                button.addEventListener('click', (e) => {
+                    this.showItemInPreview(itemName);
+                    // Update active state
+                    listContainer.querySelectorAll('.item-list-entry').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                });
                 listContainer.appendChild(button);
+                // Select the first item by default
+                if (index === 0) {
+                    button.classList.add('active');
+                    this.showItemInPreview(itemName);
+                }
             }
-        }
+        });
     }
 
     async showItemInPreview(itemName) {
@@ -291,10 +337,10 @@ export class OptionsUI {
     
     animateItemPreview() {
         this.itemPreviewAnimationId = requestAnimationFrame(this.animateItemPreview.bind(this));
-        if (this.itemPreviewModel) {
-            /* @tweakable The rotation speed of the item in the preview window. */
-            const rotationSpeed = 0.01;
-            this.itemPreviewModel.rotation.y += rotationSpeed;
+        if (this.itemPreviewModel && !this.isDraggingItem) {
+            /* @tweakable The automatic idle rotation speed of the item in the preview window. Set to 0 to disable. */
+            const idleRotationSpeed = 0.005;
+            this.itemPreviewModel.rotation.y += idleRotationSpeed;
         }
         if(this.itemPreviewRenderer) {
             this.itemPreviewRenderer.render(this.itemPreviewScene, this.itemPreviewCamera);

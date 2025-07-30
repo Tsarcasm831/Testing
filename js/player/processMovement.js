@@ -12,6 +12,9 @@ import {
   PLAYER_COLLISION_HEIGHT
 } from './constants.js';
 
+/* @tweakable The speed at which the player model rotates to face the movement direction. */
+const PLAYER_ROTATION_SPEED = 15;
+
 export function processMovement(pc, delta) {
     // Skip movement processing if controls are disabled
     if (!pc.enabled) return;
@@ -49,10 +52,13 @@ export function processMovement(pc, delta) {
 
         if (pc.playerModel) {
             if (moveDir.lengthSq() > 0.001) {
-                const horizontalMovement = new THREE.Vector3(cameraDirection.x, 0, cameraDirection.z).normalize();
+                const horizontalMovement = new THREE.Vector3(movement.x, 0, movement.z).normalize();
                 const angle = Math.atan2(horizontalMovement.x, horizontalMovement.z);
                 const offset = pc.playerModel.userData.isAnimatedGLB ? (pc.playerModel.userData.rotationOffset || 0) : 0;
-                pc.playerModel.rotation.y = angle - offset;
+                
+                const targetQuaternion = new THREE.Quaternion();
+                targetQuaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle - offset);
+                pc.playerModel.quaternion.slerp(targetQuaternion, delta * PLAYER_ROTATION_SPEED);
             }
 
             if (pc.playerModel.userData.isAnimatedGLB) {
@@ -82,9 +88,36 @@ export function processMovement(pc, delta) {
                 }
             }
             
-            const newTarget = new THREE.Vector3(pc.playerModel.position.x, pc.playerModel.position.y + 1, pc.playerModel.position.z);
-            if (pc.controls) pc.controls.target.copy(newTarget);
-            pc.camera.position.copy(newTarget).add(pc.cameraOffset);
+            if (isMovingNow) {
+                if (pc.playerModel) {
+                    if (moveDir.lengthSq() > 0.001) {
+                        const horizontalMovement = new THREE.Vector3(movement.x, 0, movement.z).normalize();
+                        const angle = Math.atan2(horizontalMovement.x, horizontalMovement.z);
+                        const offset = pc.playerModel.userData.isAnimatedGLB ? (pc.playerModel.userData.rotationOffset || 0) : 0;
+                        
+                        const targetQuaternion = new THREE.Quaternion();
+                        targetQuaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle - offset);
+                        pc.playerModel.quaternion.slerp(targetQuaternion, delta * PLAYER_ROTATION_SPEED);
+                    }
+                }
+            }
+            
+            if (pc.isFirstPerson) {
+                const headPosition = new THREE.Vector3(pc.playerModel.position.x, pc.playerModel.position.y + pc.firstPersonVerticalOffset, pc.playerModel.position.z);
+                pc.camera.position.copy(headPosition);
+                
+                /* @tweakable The username that can see their body in first person. */
+                const seeBodyUsername = 'lordtsarcasm';
+                if (pc.currentUser && pc.currentUser.username === seeBodyUsername) {
+                    // Don't change target for this user to allow looking down at body
+                } else {
+                    pc.controls.target.copy(headPosition);
+                }
+            } else {
+                const newTarget = new THREE.Vector3(pc.playerModel.position.x, pc.playerModel.position.y + 1, pc.playerModel.position.z);
+                if (pc.controls) pc.controls.target.copy(newTarget);
+                pc.camera.position.copy(newTarget).add(pc.cameraOffset);
+            }
             
             if (pc.room && (
                 pc.lastPosition.distanceTo(pc.playerModel.position) > 0.01 ||
@@ -93,11 +126,12 @@ export function processMovement(pc, delta) {
               )) {
               
               const offset = pc.playerModel.userData.rotationOffset || 0;
+              const euler = new THREE.Euler().setFromQuaternion(pc.playerModel.quaternion, 'YXZ');
               const presenceData = {
                 x: pc.playerModel.position.x,
                 y: pc.playerModel.position.y,
                 z: pc.playerModel.position.z,
-                rotation: pc.playerModel.rotation.y - offset,
+                rotation: euler.y,
                 moving: pc.isMoving,
                 running: false,
                 sprinting: false,
@@ -222,7 +256,10 @@ export function processMovement(pc, delta) {
         if (isMovingNow) {
           const angle = Math.atan2(movement.x, movement.z);
           const offset = pc.playerModel.userData.isAnimatedGLB ? (pc.playerModel.userData.rotationOffset || 0) : 0;
-          pc.playerModel.rotation.y = angle - offset; 
+          
+          const targetQuaternion = new THREE.Quaternion();
+          targetQuaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle - offset);
+          pc.playerModel.quaternion.slerp(targetQuaternion, delta * PLAYER_ROTATION_SPEED);
         }
         
         // Handle animations
@@ -268,9 +305,22 @@ export function processMovement(pc, delta) {
           }
         }
         
-        const newTarget = new THREE.Vector3(pc.playerModel.position.x, pc.playerModel.position.y + 1, pc.playerModel.position.z);
-        if (pc.controls) pc.controls.target.copy(newTarget);
-        pc.camera.position.copy(newTarget).add(pc.cameraOffset);
+        if (pc.isFirstPerson) {
+            const headPosition = new THREE.Vector3(pc.playerModel.position.x, pc.playerModel.position.y + pc.firstPersonVerticalOffset, pc.playerModel.position.z);
+            pc.camera.position.copy(headPosition);
+            
+            /* @tweakable The username that can see their body in first person. */
+            const seeBodyUsername = 'lordtsarcasm';
+            if (pc.currentUser && pc.currentUser.username === seeBodyUsername) {
+                // Don't change target for this user to allow looking down at body
+            } else {
+                pc.controls.target.copy(headPosition);
+            }
+        } else {
+            const newTarget = new THREE.Vector3(pc.playerModel.position.x, pc.playerModel.position.y + 1, pc.playerModel.position.z);
+            if (pc.controls) pc.controls.target.copy(newTarget);
+            pc.camera.position.copy(newTarget).add(pc.cameraOffset);
+        }
         
         if (pc.room && (
             Math.abs(pc.lastPosition.x - newX) > 0.01 ||
@@ -283,11 +333,12 @@ export function processMovement(pc, delta) {
           )) {
           
           const offset = pc.playerModel.userData.rotationOffset || 0;
+          const euler = new THREE.Euler().setFromQuaternion(pc.playerModel.quaternion, 'YXZ');
           const presenceData = {
             x: newX,
             y: newY,
             z: newZ,
-            rotation: pc.playerModel.rotation.y - offset,
+            rotation: euler.y,
             moving: pc.isMoving,
             running: pc.isRunning,
             sprinting: pc.isSprinting,
@@ -311,7 +362,7 @@ export function processMovement(pc, delta) {
       }
       
       // Still update controls for camera movement when player movement is disabled
-      if (pc.controls) {
+      if (pc.controls && !pc.isFirstPerson) {
           // Mobile camera rotation is now handled by OrbitControls directly.
           pc.controls.update();
       }

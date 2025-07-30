@@ -180,6 +180,18 @@
   min-height: 20px;
 }
 
+/* @tweakable Styles for the character creation progress bar. */
+.character-progress {
+    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.character-progress-bar {
+    height: 100%;
+    transition: width 0.3s ease-in-out;
+}
+
 .creator-actions {
   display: flex;
   gap: 10px;

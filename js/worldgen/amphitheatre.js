@@ -91,9 +91,10 @@ export function createAmphitheatre(scene, getHeight, npcManager, terrain) {
     spotLight2.castShadow = true;
     group.add(spotLight2);
 
+    let interactableSeats = [];
     if (enableSeating) {
-        createAmphitheatreSeating(group, stoneColor, npcManager, terrain);
+        interactableSeats = createAmphitheatreSeating(group, stoneColor, npcManager, terrain);
     }
 
-    return group;
+    return { group, interactableSeats };
 }

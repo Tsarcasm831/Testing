@@ -6,7 +6,7 @@ export function setupEventListeners(game) {
 
         const key = event.key.toLowerCase();
 
-        if (key === 'g' && !game.advancedBuildTool.enabled) {
+        if (key === 'g' && game.advancedBuildTool && !game.advancedBuildTool.enabled) {
             game.gridManager.toggle(game.playerModel.position);
         }
 
@@ -15,3 +15,4 @@ export function setupEventListeners(game) {
         }
     });
 }
+
