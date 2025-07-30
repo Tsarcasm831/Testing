@@ -2,7 +2,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const matsData = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'mats.json'), 'utf8'));
+// mats.json moved under the json directory in 2025-07-26 update
+const matsData = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '..', 'json', 'mats.json'), 'utf8')
+);
 
 for (const category of matsData.materials) {
   for (const item of category.items) {
