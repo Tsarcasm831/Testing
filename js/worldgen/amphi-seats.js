@@ -148,7 +148,17 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
                 /* @tweakable Marking the seat rows as isStair allows players to walk up them without jumping. Adjust STEP_HEIGHT in collisionManager.js if players get stuck. */
                 segmentMesh.userData.isStair = true;
                 /* @tweakable This custom flag helps the collision manager identify these meshes and use the specialized seat collision logic. */
-                segmentMesh.userData.isSeatRow = true; 
+                segmentMesh.userData.isSeatRow = true;
+                /*
+                 * Attach the collision parameters for this seat row segment so
+                 * the CollisionManager can perform radial collision checks.
+                 */
+                segmentMesh.userData.seatRowData = {
+                    innerRadius: innerRadius,
+                    outerRadius: innerRadius + rowDepth,
+                    startAngle: startAngle + j * segmentAngleStep,
+                    endAngle: startAngle + (j + 1) * segmentAngleStep,
+                };
             }
             seatingGroup.add(segmentMesh);
 
@@ -192,6 +202,14 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
             const seatBase = new THREE.Mesh(seatBaseGeom, seatMaterial);
             seatBase.position.y = seatBaseHeight / 2;
             seatBase.castShadow = true;
+            if (SEAT_COLLISION_ENABLED) {
+                seatBase.userData.isBarrier = true;
+                /*
+                 * Marking seat bases as stairs allows players to smoothly step
+                 * onto them, similar to the stage platform.
+                 */
+                seatBase.userData.isStair = true;
+            }
             seat.add(seatBase);
 
             /* @tweakable A flag to make seat bases interactable. */

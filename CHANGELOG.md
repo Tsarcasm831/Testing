@@ -1,16 +1,9 @@
 # Changelog
 
-## 2025-07-29
+## 2025-07-30
 
-- 1613 Added first person view, toggled with 'C' key.
-- 1612 Seat labels now show grid location of the seat base.
-- 1611 Refactor advancedBuildTool.js into ColorManager module
-- 1610 Add billboard audio selection and Who Are You lyrics
-- 1400 Expand world size to 2000x2000 and adjust grid/object density to prevent lag.
-- 1357 Break up amphi-seats.js into smaller modules
-- 1013 Make collision detection include players and ignore self-object
-- 0953 Break up trees.js into separate tree modules
-- 1012 Convert global water plane to local pools with 1m recess
+- 1418 Updated amphitheater seating collisions so that each seat row segment is fully collidable and matches the stage platform's solidity. Added radial collision parameters to individual segments to correctly handle walking on curved tiers, preventing the player from falling through or clipping when traversing seats. Seat bases now register as barriers with stair properties so characters can smoothly step onto them while still interacting with prompts. These changes align seating behavior with the stage and provide a more consistent exploration experience throughout the amphitheater.
+
 
 ## Guidelines for future updates
 - List changes in reverse chronological order (newest first).
