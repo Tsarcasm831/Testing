@@ -1,6 +1,14 @@
 # Changelog Archive
 ## 2025-07-30
 - 1100 Expand grass generation to cover the entire world within biome-specific rules, removing the central grass-only circle.
+## 2025-07-29
+- 1611 Refactor advancedBuildTool.js into ColorManager module
+- 1610 Add billboard audio selection and Who Are You lyrics
+- 1400 Expand world size to 2000x2000 and adjust grid/object density to prevent lag.
+- 1357 Break up amphi-seats.js into smaller modules
+- 1013 Make collision detection include players and ignore self-object
+- 0953 Break up trees.js into separate tree modules
+- 1012 Convert global water plane to local pools with 1m recess
 ## 2025-07-26
 - 1042 Split assets.json into external category lists and update loader
 - 1008 Move assets.json and mats.json into json directory and update paths.
