@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import * as houseItems from '../../js/items/houseItems.js';
+import * as stageItems from '../../js/items/stageItems.js';
 
 export class ItemPreview {
     constructor(ui) {
@@ -81,35 +82,51 @@ export class ItemPreview {
     populateItemList() {
         const listContainer = this.ui.modal.querySelector('.item-list');
         listContainer.innerHTML = '';
-        Object.keys(houseItems).forEach((itemName, index) => {
-            if (typeof houseItems[itemName] === 'function') {
-                const button = document.createElement('button');
-                button.className = 'item-list-entry';
-                button.textContent = itemName
-                    .replace('create', '')
-                    .replace(/([A-Z])/g, ' $1')
-                    .trim();
-                button.addEventListener('click', (e) => {
-                    this.showItemInPreview(itemName);
-                    listContainer.querySelectorAll('.item-list-entry').forEach((btn) =>
-                        btn.classList.remove('active')
-                    );
-                    e.target.classList.add('active');
-                });
-                listContainer.appendChild(button);
-                if (index === 0) {
-                    button.classList.add('active');
-                    this.showItemInPreview(itemName);
+
+        const categories = [
+            { label: 'House Items', items: houseItems },
+            { label: 'Stage Items', items: stageItems }
+        ];
+
+        let index = 0;
+        categories.forEach(category => {
+            const heading = document.createElement('div');
+            heading.className = 'item-category-heading';
+            heading.textContent = category.label;
+            listContainer.appendChild(heading);
+
+            Object.keys(category.items).forEach((itemName) => {
+                const itemFunc = category.items[itemName];
+                if (typeof itemFunc === 'function') {
+                    const button = document.createElement('button');
+                    button.className = 'item-list-entry';
+                    button.textContent = itemName
+                        .replace('create', '')
+                        .replace(/([A-Z])/g, ' $1')
+                        .trim();
+                    button.addEventListener('click', (e) => {
+                        this.showItemInPreview(itemFunc);
+                        listContainer.querySelectorAll('.item-list-entry').forEach((btn) =>
+                            btn.classList.remove('active')
+                        );
+                        e.target.classList.add('active');
+                    });
+                    listContainer.appendChild(button);
+                    if (index === 0) {
+                        button.classList.add('active');
+                        this.showItemInPreview(itemFunc);
+                    }
+                    index++;
                 }
-            }
+            });
         });
     }
 
-    async showItemInPreview(itemName) {
+    async showItemInPreview(itemFunc) {
         if (this.itemPreviewModel) {
             this.itemPreviewScene.remove(this.itemPreviewModel);
         }
-        this.itemPreviewModel = await houseItems[itemName](this.ui.assetReplacementManager);
+        this.itemPreviewModel = await itemFunc(this.ui.assetReplacementManager);
         const box = new THREE.Box3().setFromObject(this.itemPreviewModel);
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
