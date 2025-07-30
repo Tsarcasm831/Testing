@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { addAdminTab } from './options/adminTab.js';
 import { setupAssetControls } from './options/assetControls.js';
 import { applyPerformanceMode, applyShadowQuality } from './options/performance.js';
-import * as houseItems from '../js/items/houseItems.js';
+import { ItemPreview } from './options/itemPreview.js';
 
 export class OptionsUI {
     constructor(dependencies) {
@@ -13,14 +13,7 @@ export class OptionsUI {
         this.dirLight = dependencies.dirLight;
         this.scene = dependencies.scene;
         this.modal = null;
-        this.itemPreviewScene = null;
-        this.itemPreviewCamera = null;
-        this.itemPreviewRenderer = null;
-        this.itemPreviewModel = null;
-        this.itemPreviewAnimationId = null;
-        this.itemPreviewContainer = null;
-        this.isDraggingItem = false;
-        this.previousMousePosition = { x: 0, y: 0 };
+        this.itemPreview = new ItemPreview(this);
     }
 
     create() {
@@ -160,9 +153,9 @@ export class OptionsUI {
             });
         });
 
-        modal.querySelector('.options-tab[data-tab="items"]').addEventListener('click', (e) => {
-            if (!this.itemPreviewRenderer) {
-                this.setupItemPreview();
+        modal.querySelector('.options-tab[data-tab="items"]').addEventListener('click', () => {
+            if (!this.itemPreview.initialized) {
+                this.itemPreview.init();
             }
         });
 
@@ -230,129 +223,6 @@ export class OptionsUI {
         setupAssetControls(modal, this.assetReplacementManager);
     }
 
-    setupItemPreview() {
-        this.itemPreviewContainer = this.modal.querySelector('#item-preview-container');
-        this.itemPreviewScene = new THREE.Scene();
-        
-        /* @tweakable The background color of the item preview scene. */
-        const previewBackgroundColor = 0x2a2a2a;
-        this.itemPreviewScene.background = new THREE.Color(previewBackgroundColor);
-
-        this.itemPreviewCamera = new THREE.PerspectiveCamera(50, this.itemPreviewContainer.clientWidth / this.itemPreviewContainer.clientHeight, 0.1, 1000);
-        this.itemPreviewCamera.position.set(0, 1.5, 3);
-        this.itemPreviewCamera.lookAt(0, 0.5, 0);
-
-        this.itemPreviewRenderer = new THREE.WebGLRenderer({ antialias: true });
-        this.itemPreviewRenderer.setSize(this.itemPreviewContainer.clientWidth, this.itemPreviewContainer.clientHeight);
-        this.itemPreviewContainer.appendChild(this.itemPreviewRenderer.domElement);
-        
-        /* @tweakable The intensity of the ambient light in the item preview. */
-        const ambientLightIntensity = 0.8;
-        const ambLight = new THREE.AmbientLight(0xffffff, ambientLightIntensity);
-        this.itemPreviewScene.add(ambLight);
-
-        /* @tweakable The intensity of the directional light in the item preview. */
-        const directionalLightIntensity = 1.5;
-        const dirLight = new THREE.DirectionalLight(0xffffff, directionalLightIntensity);
-        dirLight.position.set(5, 10, 7.5);
-        this.itemPreviewScene.add(dirLight);
-
-        this.populateItemList();
-        this.animateItemPreview();
-        this.setupPreviewEventListeners();
-    }
-
-    setupPreviewEventListeners() {
-        this.itemPreviewContainer.addEventListener('mousedown', (e) => {
-            this.isDraggingItem = true;
-            this.previousMousePosition = { x: e.clientX, y: e.clientY };
-        });
-
-        this.itemPreviewContainer.addEventListener('mousemove', (e) => {
-            if (!this.isDraggingItem || !this.itemPreviewModel) return;
-
-            /* @tweakable The sensitivity of the mouse drag rotation for item previews. */
-            const rotationSpeed = 0.01;
-            const deltaX = e.clientX - this.previousMousePosition.x;
-            const deltaY = e.clientY - this.previousMousePosition.y;
-
-            this.itemPreviewModel.rotation.y += deltaX * rotationSpeed;
-            this.itemPreviewModel.rotation.x += deltaY * rotationSpeed;
-
-            this.previousMousePosition = { x: e.clientX, y: e.clientY };
-        });
-
-        this.itemPreviewContainer.addEventListener('mouseup', () => {
-            this.isDraggingItem = false;
-        });
-        
-        this.itemPreviewContainer.addEventListener('mouseleave', () => {
-            this.isDraggingItem = false;
-        });
-    }
-
-    populateItemList() {
-        const listContainer = this.modal.querySelector('.item-list');
-        listContainer.innerHTML = '';
-        Object.keys(houseItems).forEach((itemName, index) => {
-            if (typeof houseItems[itemName] === 'function') {
-                const button = document.createElement('button');
-                button.className = 'item-list-entry';
-                button.textContent = itemName.replace('create', '').replace(/([A-Z])/g, ' $1').trim();
-                button.addEventListener('click', (e) => {
-                    this.showItemInPreview(itemName);
-                    // Update active state
-                    listContainer.querySelectorAll('.item-list-entry').forEach(btn => btn.classList.remove('active'));
-                    e.target.classList.add('active');
-                });
-                listContainer.appendChild(button);
-                // Select the first item by default
-                if (index === 0) {
-                    button.classList.add('active');
-                    this.showItemInPreview(itemName);
-                }
-            }
-        });
-    }
-
-    async showItemInPreview(itemName) {
-        if (this.itemPreviewModel) {
-            this.itemPreviewScene.remove(this.itemPreviewModel);
-        }
-        this.itemPreviewModel = await houseItems[itemName](this.assetReplacementManager);
-
-        const box = new THREE.Box3().setFromObject(this.itemPreviewModel);
-        const size = box.getSize(new THREE.Vector3());
-        const center = box.getCenter(new THREE.Vector3());
-        const maxSize = Math.max(size.x, size.y, size.z);
-        
-        /* @tweakable The scaling factor for items in the preview window to fit them in view. */
-        const scale = 1.5 / maxSize;
-        
-        this.itemPreviewModel.scale.set(scale, scale, scale);
-        this.itemPreviewModel.position.sub(center.multiplyScalar(scale));
-        
-        this.itemPreviewScene.add(this.itemPreviewModel);
-    }
-    
-    animateItemPreview() {
-        this.itemPreviewAnimationId = requestAnimationFrame(this.animateItemPreview.bind(this));
-        if (this.itemPreviewModel && !this.isDraggingItem) {
-            /* @tweakable The automatic idle rotation speed of the item in the preview window. Set to 0 to disable. */
-            const idleRotationSpeed = 0.005;
-            this.itemPreviewModel.rotation.y += idleRotationSpeed;
-        }
-        if(this.itemPreviewRenderer) {
-            this.itemPreviewRenderer.render(this.itemPreviewScene, this.itemPreviewCamera);
-        }
-    }
-
-    stopItemPreviewAnimation() {
-        if (this.itemPreviewAnimationId) {
-            cancelAnimationFrame(this.itemPreviewAnimationId);
-            this.itemPreviewAnimationId = null;
-        }
-    }
 
     toggleModal() {
         if (!this.modal) return;
@@ -361,7 +231,7 @@ export class OptionsUI {
         if (isVisible) {
             this.modal.style.display = 'none';
             this.playerControls.enabled = true;
-            this.stopItemPreviewAnimation();
+            this.itemPreview.stopAnimation();
         } else {
             this.modal.style.display = 'block';
             this.playerControls.enabled = false;
