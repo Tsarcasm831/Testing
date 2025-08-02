@@ -15,6 +15,8 @@ export class BestiaryUI {
         this.previewModel = null;
         this.previewRenderer = null;
         this.previewAnimationId = null;
+        this.isDragging = false;
+        this.previousPointer = { x: 0, y: 0 };
     }
 
     create() {
@@ -114,6 +116,25 @@ export class BestiaryUI {
         this.previewRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         this.previewRenderer.setSize(container.clientWidth, container.clientHeight);
         container.appendChild(this.previewRenderer.domElement);
+
+        container.addEventListener('pointerdown', (e) => {
+            this.isDragging = true;
+            this.previousPointer = { x: e.clientX, y: e.clientY };
+        });
+
+        window.addEventListener('pointerup', () => {
+            this.isDragging = false;
+        });
+
+        container.addEventListener('pointermove', (e) => {
+            if (!this.isDragging || !this.previewModel) return;
+            const deltaX = e.clientX - this.previousPointer.x;
+            const deltaY = e.clientY - this.previousPointer.y;
+            const rotationSpeed = 0.01;
+            this.previewModel.rotation.y += deltaX * rotationSpeed;
+            this.previewModel.rotation.x += deltaY * rotationSpeed;
+            this.previousPointer = { x: e.clientX, y: e.clientY };
+        });
     }
 
     populate() {
@@ -201,14 +222,19 @@ export class BestiaryUI {
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
         const maxSize = Math.max(size.x, size.y, size.z);
-        
+
         /* @tweakable The scaling factor for models in the bestiary preview to fit them in view. */
         const scaleFactor = 1.5;
+        let scale = 1;
         if (maxSize > 0) {
-            const scale = scaleFactor / maxSize;
+            scale = scaleFactor / maxSize;
             model.scale.set(scale, scale, scale);
             model.position.sub(center.multiplyScalar(scale));
         }
+
+        const centeredBox = new THREE.Box3().setFromObject(model);
+        const centeredCenter = centeredBox.getCenter(new THREE.Vector3());
+        this.previewCamera.lookAt(centeredCenter);
 
         this.previewModel = model;
         this.previewScene.add(this.previewModel);
@@ -226,7 +252,9 @@ export class BestiaryUI {
             const modelRotationSpeed = 0.01;
 
             if (this.previewModel) {
-                this.previewModel.rotation.y += modelRotationSpeed;
+                if (!this.isDragging) {
+                    this.previewModel.rotation.y += modelRotationSpeed;
+                }
                 if (this.previewModel.userData.mixer) {
                     const delta = (performance.now() - (this.previewModel.userData.lastMixerUpdate || performance.now())) / 1000;
                     this.previewModel.userData.mixer.update(delta);
