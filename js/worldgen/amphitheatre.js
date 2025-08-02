@@ -47,6 +47,9 @@ export async function createAmphitheatre(scene, getHeight, npcManager, terrain, 
         // Lighting rig
         const riggingMaterial = await riggingMat(assetManager);
         const trussGroup = new THREE.Group();
+        /* @tweakable Rotation of the entire lighting rig in radians. Set to Math.PI to flip north/south. */
+        const rigRotationY = Math.PI;
+        trussGroup.rotation.y = rigRotationY;
         /* @tweakable Height of the lighting rig above the stage */
         const rigHeight = 8;
         /* @tweakable Thickness of the truss beams */
