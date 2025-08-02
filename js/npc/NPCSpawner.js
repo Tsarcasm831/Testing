@@ -17,6 +17,7 @@ import {
     ROBOT_NPC_SCALE,
     CHICKEN_NPC_SCALE,
     WIREFRAME_NPC_SCALE,
+    WIREFRAME_Y_OFFSET,
     ALIEN_NPC_SCALE,
     SHOPKEEPER_NPC_SCALE,
     OGRE_NPC_SCALE,
@@ -197,7 +198,15 @@ export class NPCSpawner {
             
             const startX = zoneCenterX + offsetX;
             const startZ = zoneCenterZ + offsetZ;
-            const startY = this.terrain.userData.getHeight(startX, startZ) + (isEyebot ? EYEBOT_FLY_HEIGHT : 0.2);
+
+            const terrainHeight = this.terrain.userData.getHeight(startX, startZ);
+            let yOffset = 0.2;
+            if(isEyebot) {
+                yOffset = EYEBOT_FLY_HEIGHT;
+            } else if (preset.id === 'wireframe') {
+                yOffset = WIREFRAME_Y_OFFSET;
+            }
+            const startY = terrainHeight + yOffset;
 
             npcModel.position.set(startX, startY, startZ);
 

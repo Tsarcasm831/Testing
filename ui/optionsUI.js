@@ -100,11 +100,14 @@ export class OptionsUI {
                 <div id="options-tab-items" class="options-tab-content">
                     <div class="item-catalog-body">
                         <div id="item-list-container">
-                            <h4>Item List</h4>
+                            <div class="item-list-header">
+                                <h4>Item List</h4>
+                                <input type="text" id="item-search" placeholder="Search items...">
+                            </div>
                             <div class="item-list"></div>
                         </div>
                         <div id="item-preview-container">
-                             <div class="item-preview-hint">Drag to rotate</div>
+                             <div class="item-preview-hint">L-Click/Drag: Rotate | R-Click/Drag: Pan | Scroll: Zoom</div>
                         </div>
                     </div>
                 </div>

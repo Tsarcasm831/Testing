@@ -163,10 +163,18 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
             seatingGroup.add(segmentMesh);
 
             if (DEBUG_SEAT_COLLISION_BOX) {
-                const segmentHelper = new THREE.BoxHelper(segmentMesh, DEBUG_SEAT_COLLISION_BOX_COLOR);
-                segmentHelper.userData.isDebugBorder = true;
-                segmentHelper.visible = false;
-                seatingGroup.add(segmentHelper);
+                const wireframeGeo = new THREE.WireframeGeometry(segmentMesh.geometry);
+                const line = new THREE.LineSegments(wireframeGeo);
+                line.material.color.set(DEBUG_SEAT_COLLISION_BOX_COLOR);
+                line.material.depthTest = false;
+                /* @tweakable The opacity of the seat row debug wireframe. */
+                line.material.opacity = 0.75;
+                line.material.transparent = true;
+                line.position.copy(segmentMesh.position);
+                line.rotation.copy(segmentMesh.rotation);
+                line.userData.isDebugBorder = true;
+                line.visible = false;
+                seatingGroup.add(line);
             }
         }
         

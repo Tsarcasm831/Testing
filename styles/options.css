@@ -26,8 +26,8 @@
   border-radius: 12px;
   z-index: 2100;
   width: 90%;
-  /* @tweakable The maximum width of the options modal. */
-  max-width: 500px;
+  /* @tweakable The maximum width of the options modal. A larger width helps prevent item catalog content from overflowing. */
+  max-width: 750px;
   display: none;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
   font-size: 16px;
@@ -140,6 +140,7 @@
     padding: 20px 25px;
     overflow-y: auto;
     flex-grow: 1;
+    min-height: 0; /* Add this to ensure flex-grow works correctly in all browsers */
 }
 
 .options-tab-content {
@@ -356,20 +357,38 @@
     --item-list-item-active-bg: #228be6;
     --item-preview-bg: rgba(0, 0, 0, 0.25);
     --item-preview-border-color: rgba(255, 255, 255, 0.1);
+    /* @tweakable The color of the hint text in the item preview. */
     --item-preview-hint-color: rgba(255, 255, 255, 0.4);
+    /* @tweakable The background color of the item search input field. */
+    --item-search-bg: rgba(0, 0, 0, 0.2);
+    /* @tweakable The border color of the item search input field. */
+    --item-search-border: rgba(255, 255, 255, 0.1);
+     /* @tweakable The background color for item category headers. */
+    --item-category-bg: rgba(255, 255, 255, 0.1);
+    /* @tweakable The background color for item category headers on hover. */
+    --item-category-hover-bg: rgba(255, 255, 255, 0.15);
 }
 
 #options-tab-items .item-catalog-body {
     display: flex;
     gap: 20px;
     flex-grow: 1;
+    /* @tweakable Allows the item list and preview to stack vertically on smaller screens. */
+    flex-wrap: wrap;
+    min-height: 0; /* Add this to ensure flex-grow works correctly in all browsers */
 }
 
 #item-list-container {
-    flex: 1;
+    /* @tweakable The flex properties for the item list. grow, shrink, basis. */
+    flex: 1 1 200px;
     display: flex;
     flex-direction: column;
     min-width: 180px;
+    gap: 10px;
+}
+
+.item-list-header {
+    flex-shrink: 0;
 }
 
 #item-list-container h4 {
@@ -380,13 +399,78 @@
     letter-spacing: 0.5px;
 }
 
+#item-search {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: var(--item-search-bg);
+    border: 1px solid var(--item-search-border);
+    color: var(--white-90);
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+#item-search:focus {
+    outline: none;
+    border-color: #4dabf7;
+}
+
 .item-list {
   flex-grow: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   padding-right: 10px;
+  min-height: 150px; /* @tweakable The minimum height for the scrollable item list area. */
+}
+
+.item-category {
+    background-color: transparent;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.item-category-header {
+    background-color: var(--item-category-bg);
+    padding: 10px 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    position: relative;
+    user-select: none;
+}
+
+.item-category-header:hover {
+    background-color: var(--item-category-hover-bg);
+}
+
+.item-category-header::after {
+    content: '▾';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.2s ease;
+}
+
+.item-category.collapsed .item-category-header::after {
+    transform: translateY(-50%) rotate(-90deg);
+}
+
+.item-category.collapsed .item-category-content {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.item-category-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 5px 10px 10px;
+    max-height: 500px;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    overflow: hidden;
 }
 
 .item-list button {
@@ -405,6 +489,8 @@
   font-size: 15px;
   cursor: pointer;
   transition: all 0.2s ease;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .item-list-entry:hover {
@@ -421,7 +507,8 @@
 }
 
 #item-preview-container {
-  flex: 2;
+  /* @tweakable The flex properties for the item preview container. grow, shrink, basis. */
+  flex: 2 1 300px;
   min-height: 250px;
   background-color: var(--item-preview-bg);
   border-radius: 8px;

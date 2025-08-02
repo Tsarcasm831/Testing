@@ -3,6 +3,10 @@ import { createAmphitheatreSeating } from './amphi-seats.js';
 import { createMicrophoneStand } from './amphi-microphone.js';
 import { createStage } from './amphi-stage.js';
 import { createBackdropWall, BACKDROP_WALL_HEIGHT } from './amphi-backdrop.js';
+import riggingMat from '../mats/stage_rigging.js';
+import spotlightMat from '../mats/stage_spotlight.js';
+import speakerMat from '../mats/stage_speaker.js';
+import monitorMat from '../mats/stage_monitor.js';
 
 /* @tweakable Set to true to re-enable amphitheater seating. A page reload is required for this change to take effect. */
 const enableSeating = true;
@@ -12,7 +16,7 @@ const stoneColor = 0x888888;
 let videoElement;
 let videoTexture;
 
-export function createAmphitheatre(scene, getHeight, npcManager, terrain) {
+export async function createAmphitheatre(scene, getHeight, npcManager, terrain, assetManager) {
     /* @tweakable Position of the amphitheater. */
     const amphitheatrePosition = new THREE.Vector3(55.5, 0, -12.5);
     const baseHeight = getHeight(amphitheatrePosition.x, amphitheatrePosition.z);
@@ -37,6 +41,93 @@ export function createAmphitheatre(scene, getHeight, npcManager, terrain) {
     const micStand = createMicrophoneStand();
     micStand.position.set(micStandPosition.x, micStandPosition.y, micStandPosition.z);
     stage.add(micStand);
+
+    // Lighting Rig, Lights, Speakers, and Monitors
+    if (assetManager) {
+        // Lighting rig
+        const riggingMaterial = await riggingMat(assetManager);
+        const trussGroup = new THREE.Group();
+        /* @tweakable Height of the lighting rig above the stage */
+        const rigHeight = 8;
+        /* @tweakable Thickness of the truss beams */
+        const trussRadius = 0.2;
+        /* @tweakable Z-position of the lighting rig on the stage */
+        const rigZPosition = -stageDimensions.depth / 2 + 3;
+
+        const verticalTrussGeo = new THREE.CylinderGeometry(trussRadius, trussRadius, rigHeight, 8);
+        const horizontalTrussGeo = new THREE.CylinderGeometry(trussRadius, trussRadius, stageDimensions.width * 0.9, 8);
+
+        const leftSupport = new THREE.Mesh(verticalTrussGeo, riggingMaterial);
+        leftSupport.position.set(-stageDimensions.width / 2 * 0.9, stageDimensions.height + rigHeight / 2, rigZPosition);
+        trussGroup.add(leftSupport);
+
+        const rightSupport = leftSupport.clone();
+        rightSupport.position.x = stageDimensions.width / 2 * 0.9;
+        trussGroup.add(rightSupport);
+
+        const topBeam = new THREE.Mesh(horizontalTrussGeo, riggingMaterial);
+        topBeam.rotation.z = Math.PI / 2;
+        topBeam.position.set(0, stageDimensions.height + rigHeight, rigZPosition);
+        trussGroup.add(topBeam);
+        
+        // Add spotlights to the rig
+        const spotlightMaterial = await spotlightMat(assetManager);
+        const spotlightGeo = new THREE.CylinderGeometry(0.2, 0.4, 0.5, 12);
+        /* @tweakable Number of spotlights on the rig */
+        const numSpotlights = 5;
+        /* @tweakable Spacing between spotlights on the rig */
+        const spotlightSpacing = 4;
+        for (let i = 0; i < numSpotlights; i++) {
+            const spotlight = new THREE.Mesh(spotlightGeo, spotlightMaterial);
+            const xPos = (i - (numSpotlights - 1) / 2) * spotlightSpacing;
+            spotlight.position.set(xPos, stageDimensions.height + rigHeight - 0.5, rigZPosition);
+            /* @tweakable Downward angle of spotlights in radians. A positive value points them toward the audience. */
+            spotlight.rotation.x = Math.PI / 4;
+            /* @tweakable Forward/backward rotation of spotlights in radians. Set to Math.PI to face south toward the audience. */
+            spotlight.rotation.y = Math.PI;
+            trussGroup.add(spotlight);
+        }
+        
+        stage.add(trussGroup);
+
+        // Speakers
+        const speakerMaterial = await speakerMat(assetManager);
+        /* @tweakable Dimensions of the speakers on stage */
+        const speakerSize = { x: 1, y: 1.5, z: 0.8 };
+        const speakerGeo = new THREE.BoxGeometry(speakerSize.x, speakerSize.y, speakerSize.z);
+
+        const leftSpeaker = new THREE.Mesh(speakerGeo, speakerMaterial);
+        /* @tweakable Position of the left speaker stack */
+        const leftSpeakerPos = { x: -stageDimensions.width/2 + 1.5, y: stageDimensions.height + speakerSize.y/2, z: -stageDimensions.depth/2 + 2.5 };
+        leftSpeaker.position.set(leftSpeakerPos.x, leftSpeakerPos.y, leftSpeakerPos.z);
+        stage.add(leftSpeaker);
+
+        const rightSpeaker = leftSpeaker.clone();
+        /* @tweakable Position of the right speaker stack */
+        const rightSpeakerPos = { x: stageDimensions.width/2 - 1.5, y: stageDimensions.height + speakerSize.y/2, z: -stageDimensions.depth/2 + 2.5 };
+        rightSpeaker.position.set(rightSpeakerPos.x, rightSpeakerPos.y, rightSpeakerPos.z);
+        stage.add(rightSpeaker);
+
+        // Monitors
+        const monitorMaterial = await monitorMat(assetManager);
+        /* @tweakable Dimensions of the stage monitors */
+        const monitorSize = { x: 0.8, y: 0.5, z: 0.6 };
+        const monitorGeo = new THREE.BoxGeometry(monitorSize.x, monitorSize.y, monitorSize.z);
+
+        const leftMonitor = new THREE.Mesh(monitorGeo, monitorMaterial);
+        /* @tweakable Position of the left stage monitor */
+        const leftMonitorPos = { x: -2.5, y: stageDimensions.height + monitorSize.y/2, z: -2 };
+        leftMonitor.position.set(leftMonitorPos.x, leftMonitorPos.y, leftMonitorPos.z);
+        /* @tweakable Upward angle of stage monitors in radians */
+        leftMonitor.rotation.x = -Math.PI / 6;
+        stage.add(leftMonitor);
+
+        const rightMonitor = leftMonitor.clone();
+        /* @tweakable Position of the right stage monitor */
+        const rightMonitorPos = { x: 2.5, y: stageDimensions.height + monitorSize.y/2, z: -2 };
+        rightMonitor.position.set(rightMonitorPos.x, rightMonitorPos.y, rightMonitorPos.z);
+        stage.add(rightMonitor);
+    }
 
     // Backdrop
     /* @tweakable The default video source file for the amphitheater screen. Can be overridden by admin. */

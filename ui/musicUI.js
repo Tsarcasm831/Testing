@@ -3,7 +3,7 @@ export class MusicUI {
         this.playerControls = dependencies.playerControls;
         /* @tweakable The list of songs available in the music player. */
         this.songs = [
-            { title: "Who Are You", artist: "Kronowski", url: "https://file.garden/Zy7B0LkdIVpGyzA1/Songs/Who%20Are%20You.mp3" },
+            { title: "Who Are You", /* @tweakable The artist for the song 'Who Are You'. */ artist: "Lord Tsarcasm", url: "https://file.garden/Zy7B0LkdIVpGyzA1/Songs/Who%20Are%20You.mp3" },
             { title: "The Weight", artist: "Kronowski", url: "https://file.garden/Zy7B0LkdIVpGyzA1/Videos/The%20Weight%20-%20Kronowski%20(AI%20Music%20Video).mp4" },
             { title: "Placeholder Song", artist: "TBD", url: null },
         ];

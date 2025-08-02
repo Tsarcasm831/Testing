@@ -7,7 +7,8 @@ import {
     WANDER_RADIUS,
     POST_INTERACTION_IDLE_SECONDS,
     EYEBOT_HEIGHT_VARIATION,
-    MIN_FLY_HEIGHT
+    MIN_FLY_HEIGHT,
+    WIREFRAME_Y_OFFSET
 } from './constants.js';
 
 /* @tweakable The acceleration of the NPC in units per second squared. Higher is more responsive, lower is smoother. */
@@ -279,8 +280,12 @@ export class NPC {
                         }
 
                         // Update position
-                        const terrainHeight = this.terrain.userData.getHeight(finalPosition.x, finalPosition.z) + 0.2;
-                        this.model.position.set(finalPosition.x, terrainHeight, finalPosition.z);
+                        const terrainHeight = this.terrain.userData.getHeight(finalPosition.x, finalPosition.z);
+                        let yOffset = 0.2;
+                        if (this.presetId === 'wireframe') {
+                            yOffset = WIREFRAME_Y_OFFSET;
+                        }
+                        this.model.position.set(finalPosition.x, terrainHeight + yOffset, finalPosition.z);
         
                         if (!this.isEyebot) {
                             const angle = Math.atan2(direction.x, direction.z);
@@ -299,9 +304,13 @@ export class NPC {
                 // No collision check while actively avoiding to prevent getting stuck
                 this.model.position.copy(proposedPosition);
                 this.model.userData.baseY = proposedPosition.y;
-            } else {
-                const terrainHeight = this.terrain.userData.getHeight(proposedPosition.x, proposedPosition.z) + 0.2;
-                this.model.position.set(proposedPosition.x, terrainHeight, proposedPosition.z);
+            } else { // Ground NPC
+                const terrainHeight = this.terrain.userData.getHeight(proposedPosition.x, proposedPosition.z);
+                let yOffset = 0.2;
+                if (this.presetId === 'wireframe') {
+                    yOffset = WIREFRAME_Y_OFFSET;
+                }
+                this.model.position.set(proposedPosition.x, terrainHeight + yOffset, proposedPosition.z);
             }
 
             if (!this.isEyebot) {

@@ -1,5 +1,5 @@
-/* @tweakable The number of assets to download in parallel. */
-const MAX_PARALLEL_DOWNLOADS = 17;
+/* @tweakable The number of assets to download in parallel. Higher values may cause timeouts on slower connections. */
+const MAX_PARALLEL_DOWNLOADS = 5;
 /* @tweakable The name of the cache storage for downloaded assets. */
 const ASSET_CACHE_NAME = 'game-assets-v1';
 

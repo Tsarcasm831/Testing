@@ -36,6 +36,8 @@ export const ROBOT_NPC_SCALE = 0.3;
 export const CHICKEN_NPC_SCALE = 1.0;
 /* @tweakable The scale of the animated wireframe NPCs. */
 export const WIREFRAME_NPC_SCALE = 0.8;
+/* @tweakable The vertical offset for wireframe NPCs to adjust their grounding. Negative values lower them. */
+export const WIREFRAME_Y_OFFSET = -0.3;
 /* @tweakable The scale of the animated alien NPCs. */
 export const ALIEN_NPC_SCALE = 1.0;
 /* @tweakable The scale of the animated shopkeeper NPC. */

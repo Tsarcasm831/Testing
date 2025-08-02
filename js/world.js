@@ -19,7 +19,7 @@ export class World {
         createClouds(this.scene);
         const house = await createStarterHouse(this.scene, this.terrain.userData.getHeight, this.matsData, this.assetManager);
         createShopkeeper(this.scene, this.terrain, this.npcManager, house.position);
-        const amphiData = createAmphitheatre(this.scene, this.terrain.userData.getHeight, this.npcManager, this.terrain);
+        const amphiData = await createAmphitheatre(this.scene, this.terrain.userData.getHeight, this.npcManager, this.terrain, this.assetManager);
         const interactableSeats = amphiData.interactableSeats;
         const hospital = createHospital(this.scene, this.terrain.userData.getHeight);
         const tavern = createTavern(this.scene, this.terrain.userData.getHeight);

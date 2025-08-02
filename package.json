@@ -6,6 +6,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "echo \"No tests specified\" && exit 0"
+    "test": "echo \"No tests specified\" && exit 0",
+    "build": "node mats-generator.js"
   }
 }

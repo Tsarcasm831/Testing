@@ -178,15 +178,13 @@ export class CharacterCreator {
 
         try {
             /* @tweakable The system prompt for the AI character generator. Defines the expected JSON structure and detail level. */
-            const systemPrompt = `Based on the user's character description, generate a highly detailed and structured 3D character model description. If the description indicates a humanoid character, break it down into the following individual body parts: head, nose, eyes, hair, ears, mouth, neck, torso, shoulders, upper arm right, lower arm right, upper arm left, lower arm left, hand left, hand right, waist, upper leg left, lower leg left, ankle left, foot left, upper leg right, lower leg right, ankle right, and foot right.
+            const systemPrompt = `Based on the user's character description, generate a detailed and structured 3D character model description. If the description indicates a humanoid character, break it down into the following individual body parts: head, nose, eyes, hair, ears, mouth, neck, torso, shoulders, upper arm right, lower arm right, upper arm left, lower arm left, hand left, hand right, waist, upper leg left, lower leg left, ankle left, foot left, upper leg right, lower leg right, ankle right, and foot right.
 
-For each body part, provide a description that is at least 800 characters long, focusing on anatomical accuracy, textures, colors, and any unique features mentioned in the user's description. Ensure that the descriptions are consistent with each other and form a coherent whole, with all parts assembled correctly in their appropriate anatomical locations. If the user's description is vague or lacks specifics for certain parts, use realistic and appropriate defaults to fill in the details.
+For each body part, provide a concise but descriptive summary focusing on shape, texture, and color. Ensure that the descriptions are consistent with each other and form a coherent whole, with all parts assembled correctly in their appropriate anatomical locations. If the user's description is vague or lacks specifics for certain parts, use realistic and appropriate defaults to fill in the details.
 
 Additionally, ensure that at least one component, such as the feet, extends to Y=0 or below to serve as a ground anchor for the 3D model.
 
-Be creative in interpreting the user's description, but stay true to the details provided. The output should be a JSON object with each body part as a key and its detailed description as the value.
-
-**CRITICAL:** Each body part description must be a minimum of 800 characters to ensure the 3D model is as realistic and detailed as possible.`;
+Be creative in interpreting the user's description, but stay true to the details provided. The output should be a JSON object with each body part as a key and its detailed description as the value.`;
             
             /* @tweakable Text for the first step of character generation. */
             const step1Text = "Generating detailed description... (Step 1/2)";
