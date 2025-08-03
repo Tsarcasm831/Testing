@@ -42,14 +42,6 @@ export async function addAdminTab(dependencies, modal, optionsUI) {
             <h3>Admin Controls</h3>
             <div id="admin-sections-grid">
                 <div class="options-section">
-                    <h4>Video Screen</h4>
-                    <div class="option-item-vertical">
-                        <label for="youtube-url-input">Video URL:</label>
-                        <input type="text" id="youtube-url-input" placeholder="Enter video file URL...">
-                    </div>
-                    <button id="save-youtube-url" class="option-button" data-tooltip="Update the video screen for everyone">Set Video</button>
-                </div>
-                <div class="options-section">
                     <h4>Billboard Song</h4>
                     <div class="option-item-vertical">
                         <label for="billboard-song-select">Choose Song:</label>
@@ -124,13 +116,6 @@ export async function addAdminTab(dependencies, modal, optionsUI) {
             </div>
         `;
         contentContainer.appendChild(lyricsContent);
-
-        adminContent.querySelector('#save-youtube-url').addEventListener('click', () => {
-            const url = adminContent.querySelector('#youtube-url-input').value;
-            if (dependencies.room) {
-                dependencies.room.updateRoomState({ youtubeUrl: url });
-            }
-        });
 
         adminContent.querySelector('#set-billboard-song').addEventListener('click', async () => {
             const choice = adminContent.querySelector('#billboard-song-select').value;

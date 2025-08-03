@@ -130,7 +130,6 @@
     border: 1px solid var(--admin-input-border);
 }
 
-#save-youtube-url,
 #save-admin-notes,
 #save-lyrics-button {
     /* @tweakable The background color for primary action buttons in the admin panel. */
@@ -139,7 +138,6 @@
     color: white;
 }
 
-#save-youtube-url:hover,
 #save-admin-notes:hover,
 #save-lyrics-button:hover {
     background-color: var(--admin-primary-color);

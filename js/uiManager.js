@@ -11,6 +11,7 @@ import { CompassUI } from '../ui/compassUI.js';
 import { ClockUI } from '../ui/clockUI.js';
 import { BestiaryUI } from '../ui/bestiaryUI.js';
 import { AdModal } from '../ui/adModal.js';
+import { VideoSettings } from '../ui/videoSettings.js';
 import { presetCharacters } from '../js/characters/presets.js';
 
 export class UIManager {
@@ -29,6 +30,7 @@ export class UIManager {
         this.clockUI = new ClockUI(dependencies);
         this.bestiaryUI = new BestiaryUI({ ...dependencies, presetCharacters });
         this.adModal = new AdModal(dependencies);
+        this.videoSettings = new VideoSettings(dependencies);
 
         this.tooltip = null;
         this.tooltipTarget = null;
@@ -48,6 +50,7 @@ export class UIManager {
         this.changelogUI.create();
         this.musicUI.create();
         this.optionsUI.create();
+        this.videoSettings.create();
         this.compassUI.create();
         this.clockUI.create();
         this.bestiaryUI.create();
