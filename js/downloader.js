@@ -73,7 +73,11 @@ export class Downloader {
             const blob = await this.download(asset.url, (p) => {
               if (progressCallback) progressCallback(asset, p);
             });
-            results[asset.name] = blob;
+            results[asset.name] = {
+              type: asset.type,
+              url: asset.url,
+              blob
+            };
           } catch (error) {
             console.error(`Failed to download ${asset.name}:`, error);
             // Optionally, handle the error, e.g., by pushing it to an errors array
