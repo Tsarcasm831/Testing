@@ -11,7 +11,7 @@ export const SPAWN_CROWD_NPCS_DEPRECATED = true;
 /* @tweakable Set to true to use simplified, low-poly models for crowd NPCs to improve performance. */
 export const USE_SPECTATOR_MODELS = true;
 /* @tweakable Set to true to enable collision for the foundation under the seats. */
-export const SEAT_FOUNDATION_COLLISION_ENABLED = false;
+export const SEAT_FOUNDATION_COLLISION_ENABLED = true;
 /* @tweakable Set to true to show a visible outline box for debugging seat row collision. */
 export const DEBUG_SEAT_COLLISION_BOX = true;
 /* @tweakable The color of the debug collision box for seat rows. */
@@ -34,3 +34,5 @@ export const fullNpcVerticalOffset = 0;
 export const ENABLE_SEATING_STAIRS = true;
 /* @tweakable Set to true to enable collision on the amphitheater stairs. */
 export const SEATING_STAIRS_COLLISION_ENABLED = true;
+/* @tweakable The number of segments for the seating foundation's collision mesh. Higher values are more accurate but less performant. */
+export const SEAT_FOUNDATION_COLLISION_SEGMENTS = 40;

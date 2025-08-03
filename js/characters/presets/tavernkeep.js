@@ -33,7 +33,8 @@ export const tavernkeepPreset = {
         type: "sphere",
         /* @tweakable Color of the tavernkeep's skin. */
         color: "#f2d6b5",
-        position: { x: 0, y: 1.3, z: 0 },
+        /* @tweakable The vertical position of the character's head. */
+        position: { x: 0, y: 1.8, z: 0 },
         scale: { x: 0.4, y: 0.4, z: 0.4 },
       },
       // Legs (trousers)

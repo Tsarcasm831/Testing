@@ -33,7 +33,8 @@ export const crowdFemale2Preset = {
         type: "sphere",
         /* @tweakable The skin color of the character */
         color: "#8B4513", // SaddleBrown
-        position: { x: 0, y: 1.4, z: 0 },
+        /* @tweakable The vertical position of the character's head. */
+        position: { x: 0, y: 1.9, z: 0 },
         scale: { x: 0.4, y: 0.4, z: 0.4 },
       },
       { // Left Leg

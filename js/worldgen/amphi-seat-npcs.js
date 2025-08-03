@@ -3,6 +3,55 @@ import { createPlayerModel } from '../playerModel.js';
 import { NPC } from '../npc/NPC.js';
 import { USE_SPECTATOR_MODELS, spectatorNpcVerticalOffset, fullNpcVerticalOffset } from './amphi-seat-config.js';
 
+/* @tweakable A list of specific NPCs to place in designated seats. Format: { seatId: 'R#-S#', npcId: 'npc_preset_id' } */
+const specificNpcPlacements = [
+    { seatId: 'R1-S1', npcId: 'crowd_male_1' }
+];
+
+function spawnSingleNpc(group, preset, transform, npcManager, terrain, seatBaseHeight) {
+    const specToUse = USE_SPECTATOR_MODELS && preset.spectatorSpec ? preset.spectatorSpec : preset.spec;
+    const model = createPlayerModel(THREE, preset.name, specToUse);
+
+    model.position.copy(transform.position);
+    model.rotation.copy(transform.rotation);
+
+    const verticalOffset = USE_SPECTATOR_MODELS ? spectatorNpcVerticalOffset : fullNpcVerticalOffset;
+    model.position.y += seatBaseHeight + verticalOffset;
+
+    model.userData.isNpc = true;
+    model.name = preset.name;
+    group.add(model);
+
+    const npc = new NPC(model, preset.id, 'amphitheatre_crowd', false, model.position.clone(), terrain);
+
+    npc.update = () => {
+        if (model.userData.isAnimatedGLB && model.userData.mixer) {
+            const delta = (performance.now() - (model.userData.lastMixerUpdate || performance.now())) / 1000;
+            model.userData.mixer.update(delta);
+            model.userData.lastMixerUpdate = performance.now();
+        }
+    };
+    npcManager.addNpc(npc);
+}
+
+export function spawnSpecificNPCs(group, presets, seatTransformsById, npcManager, terrain, seatBaseHeight) {
+    const usedSeatIds = new Set();
+
+    specificNpcPlacements.forEach(placement => {
+        const preset = presets.find(p => p.id === placement.npcId);
+        const transform = seatTransformsById[placement.seatId];
+
+        if (preset && transform) {
+            spawnSingleNpc(group, preset, transform, npcManager, terrain, seatBaseHeight);
+            usedSeatIds.add(placement.seatId);
+        } else {
+            console.warn(`Could not fulfill specific placement for seat ${placement.seatId} or NPC ${placement.npcId}`);
+        }
+    });
+
+    return usedSeatIds;
+}
+
 export function spawnCrowdNPCs(group, presets, transforms, npcManager, terrain, seatBaseHeight) {
     // Shuffle transforms for random seating
     for (let i = transforms.length - 1; i > 0; i--) {

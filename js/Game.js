@@ -122,11 +122,21 @@ export class Game {
 
         const matsResponse = await fetch('json/mats.json');
         const matsData = await matsResponse.json();
-        const world = new World(this.scene, this.npcManager, this.room, matsData, assetReplacementManager);
+        const assetManager = new AssetReplacementManager({
+            playerControls: this.playerControls,
+            npcManager: this.npcManager,
+            onPlayerModelReplaced: (model) => {
+                this.playerModel = model;
+                if(this.videoManager) this.videoManager.setPlayerModel(model);
+            }
+        });
+
+        const world = new World(this.scene, this.npcManager, this.room, matsData, assetManager);
         const worldObjects = await world.generate(this.sun);
         const terrain = worldObjects.terrain;
         this.grass = worldObjects.grass;
         const interactableSeats = worldObjects.interactableSeats;
+        const interactableStageObjects = worldObjects.interactableStageObjects;
 
         this.playerControls.terrain = terrain;
         this.collisionManager.setTerrain(terrain);
@@ -143,6 +153,13 @@ export class Game {
                 seatBase.getWorldPosition(worldPosition);
                 seatBase.userData.seatCoordinates = worldPosition;
                 this.interactionManager.addInteractableObject(seatBase);
+            });
+        }
+
+        if (interactableStageObjects) {
+            interactableStageObjects.forEach(obj => {
+                obj.userData.interactionType = 'prop';
+                this.interactionManager.addInteractableObject(obj);
             });
         }
 

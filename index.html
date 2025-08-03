@@ -2,7 +2,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>3D Overworld Template v1.9.9.9.5</title>
+  <title>3D Overworld Template v1.9.9.9.7</title>
   <script>
     // Suppress specific cookie-related console errors and warnings
     /* @tweakable List of phrases to filter from console error/warning messages. */
@@ -50,8 +50,8 @@
   <script type="importmap">
     {
       "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.161.0/examples/jsm/"
       }
     }
   </script>
@@ -62,6 +62,7 @@
   <div id="start-menu">
     <h1>3D Overworld</h1>
     <button id="start-button">Click to Start</button>
+    <button id="readme-button">Readme</button>
     <div id="start-options">
         <label for="preload-assets-checkbox">
             <input type="checkbox" id="preload-assets-checkbox">
@@ -76,6 +77,12 @@
         <div id="progress-bar"></div>
       </div>
       <div id="loading-status">Initializing...</div>
+    </div>
+  </div>
+  <div id="readme-modal" style="display: none;">
+    <div class="modal-content">
+        <span class="modal-close-button">&times;</span>
+        <p>The point of my concerthall is to host virtual concerts directly on my website where people can join in real-time. They'll be able to log in early, pick their seats, and be part of a live audience. If seats aren't taken, I'll have a system that fills them with NPCs based on my actual follower counts, so it always looks like a full house.</p>
     </div>
   </div>
   <div id="joystick"></div>

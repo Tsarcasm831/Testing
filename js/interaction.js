@@ -122,6 +122,9 @@ export class InteractionManager {
                             foundObject = npc;
                         } else if (this.interactableObjects.includes(current)) {
                             foundObject = current;
+                        } else if (this.interactableObjects.includes(current.parent) && current.parent.isGroup) {
+                            // Check parent if it's a group, for things like the mic stand
+                            foundObject = current.parent;
                         }
                         current = current.parent;
                     }
@@ -234,6 +237,9 @@ export class InteractionManager {
                 this.startConversation();
             } else if (this.targetObject.userData.interactionType === 'seat') {
                 this.showSeatCoordinates();
+            } else if (this.targetObject.userData.interactionType === 'prop') {
+                // For now, props only show their name via the prompt, no 'F' key action.
+                // This block can be expanded if props need functionality.
             }
         }
     }
@@ -244,6 +250,8 @@ export class InteractionManager {
                 this.startConversation();
             } else if (this.targetObject.userData.interactionType === 'seat') {
                 this.showSeatCoordinates();
+            } else if (this.targetObject.userData.interactionType === 'prop') {
+                // No action on mobile for props yet.
             }
         }
     }

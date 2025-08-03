@@ -7,6 +7,8 @@ import riggingMat from '../mats/stage_rigging.js';
 import spotlightMat from '../mats/stage_spotlight.js';
 import speakerMat from '../mats/stage_speaker.js';
 import monitorMat from '../mats/stage_monitor.js';
+import { worldToGrid } from '../gridManager.js';
+import { CLUSTER_SIZE, GRID_CELL_SIZE } from './constants.js';
 
 /* @tweakable Set to true to re-enable amphitheater seating. A page reload is required for this change to take effect. */
 const enableSeating = true;
@@ -42,6 +44,13 @@ export async function createAmphitheatre(scene, getHeight, npcManager, terrain, 
     micStand.position.set(micStandPosition.x, micStandPosition.y, micStandPosition.z);
     stage.add(micStand);
 
+    const interactableStageObjects = [];
+    /* @tweakable Tooltip text for the stage platform. */
+    stage.userData.seatLabel = "Stage";
+    /* @tweakable Tooltip text for the microphone stand. */
+    micStand.userData.seatLabel = "Microphone Stand";
+    interactableStageObjects.push(stage, micStand);
+
     // Lighting Rig, Lights, Speakers, and Monitors
     if (assetManager) {
         // Lighting rig
@@ -68,10 +77,19 @@ export async function createAmphitheatre(scene, getHeight, npcManager, terrain, 
         rightSupport.position.x = stageDimensions.width / 2 * 0.9;
         trussGroup.add(rightSupport);
 
+        /* @tweakable Tooltip text for the lighting rig supports. */
+        const rigSupportTooltip = "Lighting Rig Support";
+        leftSupport.userData.seatLabel = rigSupportTooltip;
+        rightSupport.userData.seatLabel = rigSupportTooltip;
+        interactableStageObjects.push(leftSupport, rightSupport);
+
         const topBeam = new THREE.Mesh(horizontalTrussGeo, riggingMaterial);
         topBeam.rotation.z = Math.PI / 2;
         topBeam.position.set(0, stageDimensions.height + rigHeight, rigZPosition);
         trussGroup.add(topBeam);
+        /* @tweakable Tooltip text for the top beam of the lighting rig. */
+        topBeam.userData.seatLabel = "Lighting Rig Beam";
+        interactableStageObjects.push(topBeam);
         
         // Add spotlights to the rig
         const spotlightMaterial = await spotlightMat(assetManager);
@@ -89,6 +107,9 @@ export async function createAmphitheatre(scene, getHeight, npcManager, terrain, 
             /* @tweakable Forward/backward rotation of spotlights in radians. Set to Math.PI to face south toward the audience. */
             spotlight.rotation.y = Math.PI;
             trussGroup.add(spotlight);
+            /* @tweakable Tooltip text for the spotlights. */
+            spotlight.userData.seatLabel = "Spotlight";
+            interactableStageObjects.push(spotlight);
         }
         
         stage.add(trussGroup);
@@ -104,12 +125,17 @@ export async function createAmphitheatre(scene, getHeight, npcManager, terrain, 
         const leftSpeakerPos = { x: -stageDimensions.width/2 + 1.5, y: stageDimensions.height + speakerSize.y/2, z: -stageDimensions.depth/2 + 2.5 };
         leftSpeaker.position.set(leftSpeakerPos.x, leftSpeakerPos.y, leftSpeakerPos.z);
         stage.add(leftSpeaker);
+        /* @tweakable Tooltip text for the stage speakers. */
+        leftSpeaker.userData.seatLabel = "PA Speaker";
+        interactableStageObjects.push(leftSpeaker);
 
         const rightSpeaker = leftSpeaker.clone();
         /* @tweakable Position of the right speaker stack */
         const rightSpeakerPos = { x: stageDimensions.width/2 - 1.5, y: stageDimensions.height + speakerSize.y/2, z: -stageDimensions.depth/2 + 2.5 };
         rightSpeaker.position.set(rightSpeakerPos.x, rightSpeakerPos.y, rightSpeakerPos.z);
         stage.add(rightSpeaker);
+        rightSpeaker.userData.seatLabel = leftSpeaker.userData.seatLabel;
+        interactableStageObjects.push(rightSpeaker);
 
         // Monitors
         const monitorMaterial = await monitorMat(assetManager);
@@ -124,12 +150,17 @@ export async function createAmphitheatre(scene, getHeight, npcManager, terrain, 
         /* @tweakable Upward angle of stage monitors in radians */
         leftMonitor.rotation.x = -Math.PI / 6;
         stage.add(leftMonitor);
+        /* @tweakable Tooltip text for the stage monitors. */
+        leftMonitor.userData.seatLabel = "Stage Monitor";
+        interactableStageObjects.push(leftMonitor);
 
         const rightMonitor = leftMonitor.clone();
         /* @tweakable Position of the right stage monitor */
         const rightMonitorPos = { x: 2.5, y: stageDimensions.height + monitorSize.y/2, z: -2 };
         rightMonitor.position.set(rightMonitorPos.x, rightMonitorPos.y, rightMonitorPos.z);
         stage.add(rightMonitor);
+        rightMonitor.userData.seatLabel = leftMonitor.userData.seatLabel;
+        interactableStageObjects.push(rightMonitor);
     }
 
     // Backdrop
@@ -189,6 +220,16 @@ export async function createAmphitheatre(scene, getHeight, npcManager, terrain, 
     if (enableSeating) {
         interactableSeats = createAmphitheatreSeating(group, stoneColor, npcManager, terrain);
     }
+    
+    // Add grid locations to tooltips
+    const tempWorldPos = new THREE.Vector3();
+    interactableStageObjects.forEach(obj => {
+        obj.getWorldPosition(tempWorldPos);
+        const gridLoc = worldToGrid(tempWorldPos, CLUSTER_SIZE, GRID_CELL_SIZE);
+        /* @tweakable A format string for displaying grid locations in tooltips. */
+        const gridLocationFormat = ` (%GRID%)`;
+        obj.userData.seatLabel += gridLocationFormat.replace('%GRID%', gridLoc);
+    });
 
-    return { group, interactableSeats };
+    return { group, interactableSeats, interactableStageObjects };
 }

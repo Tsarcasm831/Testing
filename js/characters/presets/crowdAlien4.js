@@ -25,19 +25,22 @@ export const crowdAlien4Preset = {
       { // Head
         type: "sphere",
         color: "#8A63D2",
-        position: { x: 0, y: 1.6, z: 0 },
+        /* @tweakable The vertical position of the character's head. */
+        position: { x: 0, y: 2.1, z: 0 },
         scale: { x: 0.5, y: 0.5, z: 0.5 },
       },
       { // Eye Stalk
         type: "cylinder",
         color: "#8A63D2",
-        position: { x: 0, y: 1.9, z: 0 },
+        /* @tweakable The vertical position of the character's eye stalk. */
+        position: { x: 0, y: 2.4, z: 0 },
         scale: { x: 0.1, y: 0.4, z: 0.1 },
       },
        { // Eye on Stalk
         type: "sphere",
         color: "#FFFFFF",
-        position: { x: 0, y: 2.1, z: 0 },
+        /* @tweakable The vertical position of the character's eye. */
+        position: { x: 0, y: 2.6, z: 0 },
         scale: { x: 0.2, y: 0.2, z: 0.2 },
       },
       { // Left Leg

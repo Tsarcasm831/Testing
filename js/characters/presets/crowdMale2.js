@@ -26,7 +26,8 @@ export const crowdMale2Preset = {
         type: "sphere",
         /* @tweakable The skin color of the character */
         color: "#C68642",
-        position: { x: 0, y: 1.4, z: 0 },
+        /* @tweakable The vertical position of the character's head. */
+        position: { x: 0, y: 1.9, z: 0 },
         scale: { x: 0.45, y: 0.45, z: 0.45 },
       },
       { // Left Leg

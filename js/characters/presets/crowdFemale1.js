@@ -33,7 +33,8 @@ export const crowdFemale1Preset = {
         type: "sphere",
         /* @tweakable The skin color of the character */
         color: "#F5DEB3", // Wheat
-        position: { x: 0, y: 1.35, z: 0 },
+        /* @tweakable The vertical position of the character's head. */
+        position: { x: 0, y: 1.85, z: 0 },
         scale: { x: 0.4, y: 0.4, z: 0.4 },
       },
       { // Left Leg

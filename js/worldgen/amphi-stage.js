@@ -4,7 +4,7 @@ import * as THREE from 'three';
 const STAGE_COLLISION_ENABLED = true;
 /* @tweakable Set to true to enable collision for the stairs leading to the stage. */
 const STAIRS_COLLISION_ENABLED = true;
-/* @tweakable Set to true to enable collision for the foundation under the stage. */
+/* @tweakable Set to true to enable collision for the foundation under the stage. When enabled, a simplified collision box is created to match the pink debug box. */
 const FOUNDATION_COLLISION_ENABLED = true;
 /* @tweakable The color of the stage platform. */
 const stageColor = 0x4a2a0a;
@@ -16,7 +16,7 @@ const DEBUG_STAGE_COLLISION_BOX_COLOR = 0x00ffff;
 const DEBUG_STAIR_COLLISION_BOX = false;
 /* @tweakable The color of the debug collision box for the stairs. */
 const DEBUG_STAIR_COLLISION_BOX_COLOR = 0x00ff00;
-/* @tweakable Set to true to show a visible outline box for debugging the stage foundation. */
+/* @tweakable Set to true to show a visible outline box for debugging the stage foundation. This box represents the actual collision shape. */
 const DEBUG_FOUNDATION_COLLISION_BOX = false;
 /* @tweakable The color of the debug collision box for the stage foundation. */
 const DEBUG_FOUNDATION_COLLISION_BOX_COLOR = 0xff00ff;
@@ -45,25 +45,83 @@ export function createStage(dimensions) {
         stageGroup.add(stageHelper);
     }
 
-    /* @tweakable The height of the foundation under the stage. */
+    /* @tweakable The height of the foundation under the stage. This affects both the visual mesh and its collision box. */
     const foundationHeight = 2.0;
     /* @tweakable The color of the stage foundation. */
     const foundationColor = 0x331a00;
     const foundationMaterial = new THREE.MeshStandardMaterial({ color: foundationColor, roughness: 0.9, metalness: 0.1 });
-    const foundationGeometry = new THREE.BoxGeometry(dimensions.width, foundationHeight, dimensions.depth);
+    
+    /* @tweakable The inner radius of the curved front of the stage foundation. */
+    const foundationInnerRadius = 18;
+    /* @tweakable The angle of the curve for the stage foundation, in degrees. */
+    const foundationAngle = 160;
+    const angleRad = THREE.MathUtils.degToRad(foundationAngle);
+    const startAngle = -angleRad / 2;
+    const endAngle = angleRad / 2;
+
+    const foundationShape = new THREE.Shape();
+    foundationShape.moveTo(foundationInnerRadius * Math.cos(startAngle), foundationInnerRadius * Math.sin(startAngle));
+    foundationShape.absarc(0, 0, foundationInnerRadius, startAngle, endAngle, false);
+    foundationShape.lineTo(dimensions.width / 2, 0);
+    foundationShape.lineTo(dimensions.width / 2, -dimensions.depth);
+    foundationShape.lineTo(-dimensions.width / 2, -dimensions.depth);
+    foundationShape.lineTo(-dimensions.width / 2, 0);
+    foundationShape.lineTo(foundationInnerRadius * Math.cos(startAngle), foundationInnerRadius * Math.sin(startAngle));
+    
+    const extrudeSettings = {
+        steps: 1,
+        depth: foundationHeight,
+        bevelEnabled: false,
+    };
+
+    const foundationGeometry = new THREE.ExtrudeGeometry(foundationShape, extrudeSettings);
+    foundationGeometry.translate(0, 0, -foundationHeight);
+    foundationGeometry.rotateX(-Math.PI / 2);
+
     const foundation = new THREE.Mesh(foundationGeometry, foundationMaterial);
-    foundation.position.y = -foundationHeight / 2;
+    foundation.position.y = 0;
     foundation.castShadow = true;
     foundation.receiveShadow = true;
-    if (FOUNDATION_COLLISION_ENABLED) {
-        foundation.userData.isBlock = true;
-    }
     stageGroup.add(foundation);
-    if (DEBUG_FOUNDATION_COLLISION_BOX) {
-        const foundationHelper = new THREE.BoxHelper(foundation, DEBUG_FOUNDATION_COLLISION_BOX_COLOR);
-        foundationHelper.userData.isDebugBorder = true;
-        foundationHelper.visible = false;
-        stageGroup.add(foundationHelper);
+    
+    // Create segmented collision boxes for the curved part.
+    if (FOUNDATION_COLLISION_ENABLED) {
+        /* @tweakable The number of segments used for the curved part of the stage foundation collision. More segments improve accuracy but may reduce performance. */
+        const foundationCollisionSegments = 16;
+        const segmentAngleStep = angleRad / foundationCollisionSegments;
+        /* @tweakable The thickness of the collision segments for the curved foundation. This should approximate the depth of the foundation. */
+        const segmentDepth = 1.0; 
+
+        for (let j = 0; j < foundationCollisionSegments; j++) {
+            const currentAngle = startAngle + (j + 0.5) * segmentAngleStep;
+            const segmentWidth = segmentAngleStep * foundationInnerRadius;
+
+            const x = (foundationInnerRadius - segmentDepth / 2) * Math.cos(currentAngle);
+            const z = (foundationInnerRadius - segmentDepth / 2) * Math.sin(currentAngle);
+
+            const collisionGeo = new THREE.BoxGeometry(segmentWidth, foundationHeight, segmentDepth);
+            const collisionMesh = new THREE.Mesh(collisionGeo, new THREE.MeshBasicMaterial({ visible: false, wireframe: true, color: DEBUG_FOUNDATION_COLLISION_BOX_COLOR, transparent: true, opacity: 0.5 }));
+            collisionMesh.position.set(x, -foundationHeight / 2, z);
+            collisionMesh.lookAt(0, -foundationHeight/2, 0);
+            collisionMesh.userData.isBarrier = true;
+            if(DEBUG_FOUNDATION_COLLISION_BOX){
+                collisionMesh.userData.isDebugBorder = true;
+                collisionMesh.visible = false;
+            }
+            stageGroup.add(collisionMesh);
+        }
+
+        // Add box colliders for the rectangular parts of the foundation.
+        const backPartDepth = dimensions.depth;
+        const backCollisionGeo = new THREE.BoxGeometry(dimensions.width, foundationHeight, backPartDepth);
+        const backCollisionMesh = new THREE.Mesh(backCollisionGeo, new THREE.MeshBasicMaterial({ visible: false, wireframe: true, color: DEBUG_FOUNDATION_COLLISION_BOX_COLOR }));
+        backCollisionMesh.position.set(0, -foundationHeight / 2, -backPartDepth / 2);
+        backCollisionMesh.userData.isBarrier = true;
+         if(DEBUG_FOUNDATION_COLLISION_BOX){
+                backCollisionMesh.userData.isDebugBorder = true;
+                backCollisionMesh.visible = false;
+        }
+        stageGroup.add(backCollisionMesh);
     }
 
     // Add stairs

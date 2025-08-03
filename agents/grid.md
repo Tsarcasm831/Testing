@@ -25,9 +25,9 @@ The world is a large, square area with defined limits to ensure performance and 
 
 To aid in navigation and object placement, a grid overlay can be toggled by pressing the **'G' key**.
 
--   **Cell Naming**: The grid uses a spreadsheet-style naming convention. Columns are identified by letters (A, B, ..., Z, AA, AB, ...), and rows are identified by numbers. For example, `A1`, `DH41`.
--   **Cell Size**: Each grid cell is **50x50** world units. This value can be adjusted via the `GRID_CELL_SIZE` constant in `js/gridManager.js`.
--   **Grid Dimensions**: The entire world is covered by an **80x80** grid of these cells (4000 units / 50 units per cell = 80 divisions).
+-   **Cell Naming**: The grid uses a spreadsheet-style naming convention. Columns are identified by letters (A, B, ..., Z, AA, AB, ...), and rows are identified by numbers. For example, `A1`, `VVI801`.
+-   **Cell Size**: Each grid cell is **2.5x2.5** world units. This value can be adjusted via the `GRID_CELL_SIZE` constant in `js/worldgen/constants.js`.
+-   **Grid Dimensions**: The entire world is covered by a **1600x1600** grid of these cells (4000 units / 2.5 units per cell = 1600 divisions).
 
 ## Coordinate Conversion
 
@@ -38,8 +38,7 @@ It's often useful to convert between world coordinates (X, Z) and grid cell iden
 To find the grid cell for a given world coordinate `(x, z)`:
 
 ```javascript
-import { CLUSTER_SIZE } from './js/worldgen/constants.js';
-import { GRID_CELL_SIZE } from './js/gridManager.js';
+import { CLUSTER_SIZE, GRID_CELL_SIZE } from './js/worldgen/constants.js';
 
 function toBase26(num) {
     let result = '';
@@ -59,6 +58,6 @@ function worldToGrid(x, z) {
 }
 
 // Example:
-console.log(worldToGrid(0, 0)); // "DH41" - Center of the world
+console.log(worldToGrid(0, 0)); // "VVI801" - Center of the world
 console.log(worldToGrid(-2000, -2000)); // "A1" - Top-left corner
-
+```

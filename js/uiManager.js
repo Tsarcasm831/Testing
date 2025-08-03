@@ -31,6 +31,7 @@ export class UIManager {
         this.adModal = new AdModal(dependencies);
 
         this.tooltip = null;
+        this.tooltipTarget = null;
 
         this.boundOnTooltipMouseOver = this.onTooltipMouseOver.bind(this);
         this.boundOnTooltipMouseOut = this.onTooltipMouseOut.bind(this);
@@ -83,9 +84,10 @@ export class UIManager {
     onTooltipMouseOver(e) {
         const target = e.target.closest('[data-tooltip]');
         if (target) {
+            this.tooltipTarget = target;
             this.tooltip.textContent = target.getAttribute('data-tooltip');
             this.tooltip.style.opacity = '1';
-            this.updateTooltipPosition(e);
+            this.updateTooltipPosition(target);
         }
     }
 
@@ -93,24 +95,38 @@ export class UIManager {
         const target = e.target.closest('[data-tooltip]');
         if (target) {
             this.tooltip.style.opacity = '0';
+            this.tooltipTarget = null;
         }
     }
 
     onTooltipMouseMove(e) {
-        if (this.tooltip.style.opacity === '1') {
-            this.updateTooltipPosition(e);
+        if (this.tooltip.style.opacity === '1' && this.tooltipTarget) {
+            this.updateTooltipPosition(this.tooltipTarget);
         }
     }
 
-    updateTooltipPosition(e) {
-        let x = e.clientX + 10;
-        let y = e.clientY - 30;
+    updateTooltipPosition(target) {
+        if (!target) return;
 
-        if (x + this.tooltip.offsetWidth > window.innerWidth) {
-            x = e.clientX - this.tooltip.offsetWidth - 10;
-        }
+        const rect = target.getBoundingClientRect();
+        const tooltipRect = this.tooltip.getBoundingClientRect();
+
+        /* @tweakable The vertical offset of the tooltip from the element. */
+        const tooltipVerticalOffset = 10;
+        /* @tweakable The horizontal padding for tooltips from the edge of the screen. */
+        const tooltipScreenEdgePadding = 5;
+
+        let x = rect.left + rect.width / 2 - tooltipRect.width / 2;
+        let y = rect.top - tooltipRect.height - tooltipVerticalOffset;
+
         if (y < 0) {
-            y = e.clientY + 20;
+            y = rect.bottom + tooltipVerticalOffset;
+        }
+        if (x < tooltipScreenEdgePadding) {
+            x = tooltipScreenEdgePadding;
+        }
+        if (x + tooltipRect.width > window.innerWidth - tooltipScreenEdgePadding) {
+            x = window.innerWidth - tooltipRect.width - tooltipScreenEdgePadding;
         }
 
         this.tooltip.style.left = `${x}px`;

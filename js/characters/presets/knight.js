@@ -26,7 +26,8 @@ export const knightPreset = {
       {
         type: "sphere",
         color: "#C0C0C0",
-        position: { x: 0, y: 1.5, z: 0 },
+        /* @tweakable The vertical position of the character's head. */
+        position: { x: 0, y: 2.0, z: 0 },
         scale: { x: 0.5, y: 0.5, z: 0.5 },
         roughness: 0.2,
         metalness: 0.9,
@@ -36,7 +37,8 @@ export const knightPreset = {
         type: "cone",
         /* @tweakable The color of the knight's helmet plume. */
         color: "#FF0000",
-        position: { x: 0, y: 1.8, z: 0 },
+        /* @tweakable The vertical position of the character's helmet plume. */
+        position: { x: 0, y: 2.3, z: 0 },
         scale: { x: 0.1, y: 0.4, z: 0.1 },
       },
       // Legs

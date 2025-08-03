@@ -17,6 +17,8 @@ const SEAT_OUTER_RADIUS_PADDING = 0.1;
 const SEAT_LANDING_TOLERANCE = 0.25;
 /* @tweakable Additional padding around the player for side collisions with seats to prevent clipping through. */
 const SEAT_SIDE_COLLISION_PADDING = 0.1;
+/* @tweakable Padding for player collision to prevent clipping into static objects. */
+const STATIC_OBJECT_COLLISION_PADDING = 0.0;
 
 export class CollisionManager {
     constructor(scene) {
@@ -108,9 +110,12 @@ export class CollisionManager {
                 const blockSize = new THREE.Vector3();
                 boundingBox.getSize(blockSize);
 
-                /* @tweakable Padding for player collision to prevent clipping into objects. */
-                const collisionPadding = 0.05;
-                const effectivePlayerRadius = playerRadius + (block.userData.isNpc ? NPC_COLLISION_PADDING : 0) + collisionPadding;
+                let collisionPadding = STATIC_OBJECT_COLLISION_PADDING;
+                if(block.userData.isNpc) {
+                    collisionPadding = NPC_COLLISION_PADDING;
+                }
+
+                const effectivePlayerRadius = playerRadius + collisionPadding;
 
                 // Check overlap based on proposed position
                 const overlapX = (blockSize.x / 2 + effectivePlayerRadius) - Math.abs(proposedPosition.x - blockCenter.x);

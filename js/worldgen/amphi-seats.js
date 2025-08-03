@@ -12,10 +12,11 @@ import {
     DEBUG_FOUNDATION_COLLISION_BOX,
     DEBUG_FOUNDATION_COLLISION_BOX_COLOR,
     DEBUG_INDIVIDUAL_SEAT_BOX,
-    DEBUG_INDIVIDUAL_SEAT_BOX_COLOR
+    DEBUG_INDIVIDUAL_SEAT_BOX_COLOR,
+    SEAT_FOUNDATION_COLLISION_SEGMENTS
 } from "./amphi-seat-config.js";
 import { createStairsToSeats } from "./amphi-seat-stairs.js";
-import { spawnCrowdNPCs } from "./amphi-seat-npcs.js";
+import { spawnCrowdNPCs, spawnSpecificNPCs } from "./amphi-seat-npcs.js";
 /**
  * Creates and adds amphitheater seating to a group.
  * @param {THREE.Group} group The group to add seating to.
@@ -77,10 +78,33 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
     const foundationMesh = new THREE.Mesh(foundationGeometry, foundationMaterial);
     foundationMesh.castShadow = true;
     foundationMesh.receiveShadow = true;
-    if (SEAT_FOUNDATION_COLLISION_ENABLED) {
-        foundationMesh.userData.isBarrier = true;
-    }
     seatingGroup.add(foundationMesh);
+
+    if (SEAT_FOUNDATION_COLLISION_ENABLED) {
+        // The complex foundation mesh is for visuals only.
+        // We add a series of simpler, invisible boxes for more accurate collision.
+        const collisionSegments = SEAT_FOUNDATION_COLLISION_SEGMENTS;
+        const segmentAngleStep = angleRad / collisionSegments;
+        const foundationDepth = lastRowOuterRadius - firstRowInnerRadius;
+        const midRadius = firstRowInnerRadius + foundationDepth / 2;
+
+        for (let j = 0; j < collisionSegments; j++) {
+            const currentAngle = startAngle + (j + 0.5) * segmentAngleStep;
+            
+            const x = midRadius * Math.cos(currentAngle);
+            const z = midRadius * Math.sin(currentAngle);
+
+            const segmentWidth = segmentAngleStep * midRadius;
+
+            const collisionGeo = new THREE.BoxGeometry(segmentWidth, foundationThickness, foundationDepth);
+            const collisionMesh = new THREE.Mesh(collisionGeo, new THREE.MeshBasicMaterial({ visible: false, transparent: true, opacity: 0 }));
+
+            collisionMesh.position.set(x, -foundationThickness / 2, z);
+            collisionMesh.lookAt(0, -foundationThickness / 2, 0); 
+            collisionMesh.userData.isBarrier = true;
+            seatingGroup.add(collisionMesh);
+        }
+    }
 
     if (DEBUG_FOUNDATION_COLLISION_BOX) {
         const wireframeGeometry = new THREE.WireframeGeometry(foundationGeometry);
@@ -117,6 +141,7 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
     const targetPoint = new THREE.Vector3(55.625, 0, -63.125); // Corresponds to grid IK200
 
     const seatTransforms = [];
+    const seatTransformsById = {};
     const interactableSeatBases = [];
 
     for (let i = 0; i < numRows; i++) {
@@ -205,7 +230,10 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
             const seatRotationOffset = 180;
             seat.rotation.y = angleToCenter + THREE.MathUtils.degToRad(seatRotationOffset);
             
-            seatTransforms.push({ position: seat.position.clone(), rotation: seat.rotation.clone() });
+            const transform = { position: seat.position.clone(), rotation: seat.rotation.clone() };
+            const seatId = `R${i + 1}-S${j + 1}`;
+            seatTransforms.push(transform);
+            seatTransformsById[seatId] = transform;
 
             const seatBase = new THREE.Mesh(seatBaseGeom, seatMaterial);
             seatBase.position.y = seatBaseHeight / 2;
@@ -287,6 +315,17 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
     }
 
     if (SPAWN_CROWD_NPCS && npcManager && terrain) {
+        // Handle specific, non-random placements first
+        const usedSeatIds = spawnSpecificNPCs(seatingGroup, presetCharacters, seatTransformsById, npcManager, terrain, seatBaseHeight);
+
+        // Filter out used transforms for random placement
+        const availableTransforms = [];
+        for (const seatId in seatTransformsById) {
+            if (!usedSeatIds.has(seatId)) {
+                availableTransforms.push(seatTransformsById[seatId]);
+            }
+        }
+
         /* @tweakable The types of crowd NPCs to spawn, one of each will be chosen randomly. */
         const crowdTypesToSpawn = ['bot', 'male', 'female', 'alien'];
         const allCrowdPresets = presetCharacters.filter(p => p.id.startsWith('crowd_'));
@@ -300,7 +339,7 @@ export function createAmphitheatreSeating(group, stoneColor, npcManager, terrain
             }
         });
 
-        spawnCrowdNPCs(seatingGroup, presetsToSpawn, seatTransforms, npcManager, terrain, seatBaseHeight);
+        spawnCrowdNPCs(seatingGroup, presetsToSpawn, availableTransforms, npcManager, terrain, seatBaseHeight);
     }
 
     createStairsToSeats(seatingGroup, { startRadius, rowHeight, material });

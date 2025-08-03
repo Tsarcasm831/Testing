@@ -62,7 +62,7 @@ const HouseBlocks = (() => {
  */
 export function createTavern(scene, getHeight) {
   /* @tweakable The position of the tavern. */
-  const tavernPosition = new THREE.Vector3(-20, 0, 20);
+  const tavernPosition = new THREE.Vector3(-1.25, 0, 81.25);
   const tavernY = getHeight(tavernPosition.x, tavernPosition.z);
   tavernPosition.y = tavernY;
   

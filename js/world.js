@@ -21,12 +21,14 @@ export class World {
         createShopkeeper(this.scene, this.terrain, this.npcManager, house.position);
         const amphiData = await createAmphitheatre(this.scene, this.terrain.userData.getHeight, this.npcManager, this.terrain, this.assetManager);
         const interactableSeats = amphiData.interactableSeats;
+        const interactableStageObjects = amphiData.interactableStageObjects;
         const hospital = createHospital(this.scene, this.terrain.userData.getHeight);
         const tavern = createTavern(this.scene, this.terrain.userData.getHeight);
         createWorkshop(this.scene, this.terrain.userData.getHeight);
         createNurse(this.scene, this.terrain, this.npcManager, hospital.position);
         createTavernkeep(this.scene, this.terrain, this.npcManager, tavern.position);
         const grass = createGrass(this.scene, this.terrain);
-        return { terrain: this.terrain, grass: grass, interactableSeats };
+        return { terrain: this.terrain, grass: grass, interactableSeats, interactableStageObjects };
     }
 }
+

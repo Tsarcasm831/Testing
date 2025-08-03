@@ -2,8 +2,10 @@
 export const ZONE_SIZE = 50;
 /* @tweakable Number of zones along one side of a chunk. Affects total world size. Reload required. */
 export const ZONES_PER_CHUNK_SIDE = 5;
-/* @tweakable Number of chunks along one side of a cluster. Affects total world size. Reload required. */
+/* @tweakable The number of chunks along one side of a cluster. Affects total world size. Reload required. */
 export const CHUNKS_PER_CLUSTER_SIDE = 16;
+/* @tweakable The size of each grid cell. Larger cells mean fewer grid lines and better performance. A value of 2.5 makes cells 2.5x2.5 units. */
+export const GRID_CELL_SIZE = 2.5;
 
 export const CHUNK_SIZE = ZONE_SIZE * ZONES_PER_CHUNK_SIDE;
 export const CLUSTER_SIZE = CHUNK_SIZE * CHUNKS_PER_CLUSTER_SIDE;

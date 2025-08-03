@@ -33,7 +33,8 @@ export const crowdFemale3Preset = {
         type: "sphere",
         /* @tweakable The skin color of the character */
         color: "#FAEBD7", // AntiqueWhite
-        position: { x: 0, y: 1.35, z: 0 },
+        /* @tweakable The vertical position of the character's head. */
+        position: { x: 0, y: 1.85, z: 0 },
         scale: { x: 0.35, y: 0.35, z: 0.35 },
       },
       { // Left Leg

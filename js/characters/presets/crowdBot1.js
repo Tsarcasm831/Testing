@@ -28,7 +28,8 @@ export const crowdBot1Preset = {
         type: "sphere",
         /* @tweakable The color of the bot's head */
         color: "#777777",
-        position: { x: 0, y: 1.4, z: 0 },
+        /* @tweakable The vertical position of the character's head. */
+        position: { x: 0, y: 1.9, z: 0 },
         scale: { x: 0.5, y: 0.5, z: 0.5 },
         roughness: 0.3,
         metalness: 0.7,

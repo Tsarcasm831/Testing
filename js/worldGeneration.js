@@ -4,7 +4,6 @@ export { createBarriers } from './worldgen/barriers.js';
 export { createTrees } from './worldgen/trees.js';
 export { createClouds } from './worldgen/clouds.js';
 export { createStarterHouse } from './worldgen/starterHouse.js';
-export { createGroundGrid } from './worldgen/groundGrid.js';
 export { createShopkeeper } from './worldgen/shopkeeper.js';
 export { createAmphitheatre } from './worldgen/amphitheatre.js';
 export { createHospital } from './worldgen/hospital.js';

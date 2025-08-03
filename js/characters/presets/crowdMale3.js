@@ -26,7 +26,8 @@ export const crowdMale3Preset = {
         type: "sphere",
         /* @tweakable The skin color of the character */
         color: "#FFE4C4", // Bisque
-        position: { x: 0, y: 1.4, z: 0 },
+        /* @tweakable The vertical position of the character's head. */
+        position: { x: 0, y: 1.9, z: 0 },
         scale: { x: 0.4, y: 0.4, z: 0.4 },
       },
       { // Left Leg

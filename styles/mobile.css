@@ -26,6 +26,8 @@
   z-index: 99;
   touch-action: none;
   display: none;
+  /* @tweakable Background color for the look pad for debugging purposes. */
+  background-color: transparent;
 }
 
 /* @tweakable Position and size of the camera joystick on mobile. */

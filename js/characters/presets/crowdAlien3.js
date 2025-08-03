@@ -25,7 +25,8 @@ export const crowdAlien3Preset = {
       { // Head
         type: "sphere",
         color: "#D02090",
-        position: { x: 0, y: 1.2, z: 0 },
+        /* @tweakable The vertical position of the character's head. */
+        position: { x: 0, y: 1.7, z: 0 },
         scale: { x: 0.5, y: 0.5, z: 0.5 },
       },
       { // Antennae
