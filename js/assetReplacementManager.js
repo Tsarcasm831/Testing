@@ -141,8 +141,7 @@ export class AssetReplacementManager {
         this.updateStatus('Loading special player model...');
         try {
             const playerAssetNames = this.modelTypes['player'].assetNames;
-            const allPlayerAssetsLoaded = this.assets &&
-                playerAssetNames.every(name => this.assets[name] && this.assets[name].blob);
+            const allPlayerAssetsLoaded = this.assets && playerAssetNames.every(name => this.assets[name]);
 
             if (!allPlayerAssetsLoaded) {
                 const assets = await this.loadCombinedAssetList();
@@ -206,13 +205,13 @@ export class AssetReplacementManager {
             return this.assetCache[name];
         }
 
-        const assetEntry = this.assets[name];
-        if (!assetEntry || !assetEntry.blob) {
+        const assetBlob = this.assets[name];
+        if (!assetBlob) {
             console.warn(`Asset not found in preloaded assets: ${name}`);
             return new THREE.Texture();
         }
 
-        const url = URL.createObjectURL(assetEntry.blob);
+        const url = URL.createObjectURL(assetBlob);
         try {
             const textureLoader = new THREE.TextureLoader();
             /* @tweakable This helps prevent CORS issues when loading textures. */
@@ -264,16 +263,16 @@ export class AssetReplacementManager {
 
         const requiredAssets = {};
         for (const name of modelInfo.assetNames) {
-            if (!this.assets[name] || !this.assets[name].blob) {
+            if (!this.assets[name]) {
                 this.updateStatus(`${name} asset missing.`);
                 console.error(`${name} asset is missing.`);
                 return null;
             }
-            requiredAssets[name] = this.assets[name].blob;
+            requiredAssets[name] = this.assets[name];
         }
 
         const loader = new GLTFLoader();
-        const assetUrls = Object.values(requiredAssets).map(blob => URL.createObjectURL(blob));
+        const assetUrls = Object.values(requiredAssets).map(asset => URL.createObjectURL(asset));
 
         try {
             const gltfResults = await Promise.all(assetUrls.map(url => loader.loadAsync(url)));
