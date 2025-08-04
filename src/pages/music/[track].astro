@@ -1,0 +1,9 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import MusicPlayer from '../../components/MusicPlayer.astro';
+const { track } = Astro.params;
+---
+<BaseLayout title={track}>
+  <h1>{track}</h1>
+  <MusicPlayer src="/assets/sample.mp3" title={track} />
+</BaseLayout>

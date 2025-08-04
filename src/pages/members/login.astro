@@ -1,0 +1,9 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LoginForm from '../../components/LoginForm.astro';
+---
+<BaseLayout title="Login">
+  <h1>Member Login</h1>
+  <LoginForm mode="login" />
+  <p>No account? <a href="/members/signup">Sign up</a>.</p>
+</BaseLayout>

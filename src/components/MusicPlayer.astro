@@ -1,0 +1,7 @@
+---
+const { src, title } = Astro.props;
+---
+<figure>
+  {title && <figcaption>{title}</figcaption>}
+  <audio src={src} controls></audio>
+</figure>
