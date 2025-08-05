@@ -1,8 +1,0 @@
----
-import supabase from '../utils/supabaseClient.js';
-const { data } = await supabase.auth.getSession();
-if (!data.session) {
-  return Astro.redirect('/members/login');
-}
----
-<slot />
