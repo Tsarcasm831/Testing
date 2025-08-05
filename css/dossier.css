@@ -1,18 +1,4 @@
-/* Base styles for the Lord Tsarcasm terminal interface */
-#datastream {
-  font-family:
-    JetBrains Mono,
-    monospace;
-  color: hsl(var(--primary));
-  text-align: center;
-  margin-top: 6rem;
-  min-height: 200px;
-  transition: opacity 1s ease;
-  position: relative;
-}
-#datastream.fade-out {
-  opacity: 0;
-}
+/* Dossier container and progress bar styles */
 .dossier-container {
   max-width: 800px;
   margin: 0 auto;
@@ -56,26 +42,6 @@
 .dossier-item {
   padding-left: 1rem;
   line-height: 1.4;
-}
-.typewriter {
-  white-space: pre-line;
-}
-.cursor {
-  display: inline-block;
-  width: 1ch;
-  background: hsl(var(--primary));
-  margin-left: 2px;
-  animation: blink 1s step-end infinite;
-}
-@keyframes blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  50.1%,
-  to {
-    opacity: 0;
-  }
 }
 .redacted {
   color: hsl(var(--destructive));
