@@ -30,51 +30,48 @@ export const Home = () => {
       <section className="flex-1 flex items-center justify-center px-4 py-20">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           {/* Terminal Header */}
-          <div className="cyber-border bg-card/50 p-6 rounded-lg backdrop-blur-sm">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <Terminal className="w-6 h-6 text-primary animate-flicker" />
-              <span className="terminal-text text-primary text-sm">BARD_TERMINAL_v2.7.3</span>
-            </div>
-            
-            <div className="terminal-text text-left">
-              <div className="text-terminal-green mb-2 w-[30ch] min-h-[1.25rem] whitespace-nowrap">
-                {terminalText}
-                <span className="animate-flicker">|</span>
+          {!showPrompt && (
+            <div className="cyber-border bg-card/50 p-6 rounded-lg backdrop-blur-sm">
+              <div className="flex items-center justify-center space-x-2 mb-4">
+                <Terminal className="w-6 h-6 text-primary animate-flicker" />
+                <span className="terminal-text text-primary text-sm">BARD_TERMINAL_v2.7.3</span>
               </div>
 
-              {showPrompt && (
-                <div className="space-y-2 animate-fade-in">
-                  <div className="text-muted-foreground text-sm">
-                    Welcome to the digital archives of Lord Tsarcasm
-                  </div>
+              <div className="terminal-text text-left">
+                <div className="text-terminal-green mb-2 w-[30ch] min-h-[1.25rem] whitespace-nowrap">
+                  {terminalText}
+                  <span className="animate-flicker">|</span>
                 </div>
-              )}
+
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Main Title */}
-          <div className="space-y-4">
-            <h1 className="title-text text-4xl md:text-7xl font-black glow-text">
-              LORD TSARCASM
-            </h1>
-            <div className="text-xl md:text-2xl text-secondary-bright terminal-text">
-              Chronicler of Far Haven
+          {showPrompt && (
+            <div className="space-y-4 animate-fade-in">
+              <h1 className="title-text text-4xl md:text-7xl font-black glow-text">
+                LORD TSARCASM
+              </h1>
+              <div className="text-xl md:text-2xl text-secondary-bright terminal-text">
+                Chronicler of Far Haven
+              </div>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                In the ashes of the old world, stories survive. Music echoes through the ruins.
+                Welcome to the digital grimoire of a post-apocalyptic bard.
+              </p>
             </div>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              In the ashes of the old world, stories survive. Music echoes through the ruins. 
-              Welcome to the digital grimoire of a post-apocalyptic bard.
-            </p>
-          </div>
+          )}
 
           {/* Action Buttons */}
           {showPrompt && (
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in">
-              <Button 
-                asChild 
-                size="lg" 
+              <Button
+                asChild
+                size="lg"
                 className="
-                  bg-primary/20 hover:bg-primary/30 
-                  text-primary border border-primary/50 
+                  bg-primary/20 hover:bg-primary/30
+                  text-primary border border-primary/50
                   holo-hover terminal-text font-bold
                   px-8 py-3
                 "
@@ -84,13 +81,13 @@ export const Home = () => {
                   <span>Enter the Vault</span>
                 </Link>
               </Button>
-              
-              <Button 
-                asChild 
-                variant="outline" 
+
+              <Button
+                asChild
+                variant="outline"
                 size="lg"
                 className="
-                  border-secondary/50 text-secondary-bright 
+                  border-secondary/50 text-secondary-bright
                   hover:bg-secondary/10 hover:border-secondary
                   holo-hover terminal-text
                   px-8 py-3
