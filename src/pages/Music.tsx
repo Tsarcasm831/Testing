@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Play, Pause, ExternalLink, Download, Heart, Share2 } from "lucide-react";
 import { SongCatalogSection } from "@/components/SongCatalogSection";
+import "../music.css";
 
 interface Track {
   id: string;
@@ -95,7 +96,7 @@ export const Music = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-8">
+    <div className="music-page container mx-auto px-4 py-8 space-y-8">
       {/* Header */}
       <div className="text-center space-y-4">
         <h1 className="title-text text-4xl md:text-6xl font-black glow-text">
@@ -183,7 +184,7 @@ export const Music = () => {
                     </div>
                   </div>
 
-                  <div className="terminal-text text-primary text-lg font-mono tracking-wider">
+                  <div className="waveform terminal-text text-primary text-lg font-mono tracking-wider">
                     {track.waveform}
                   </div>
                 </div>

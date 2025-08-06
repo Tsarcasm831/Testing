@@ -1,0 +1,19 @@
+.music-page dialog {
+  z-index: 50;
+}
+
+.music-page dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.music-page .waveform {
+  overflow: hidden;
+}
+
+.music-page .waveform img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
