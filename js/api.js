@@ -51,21 +51,31 @@ import { app } from './app.js';
     };
 
     const getCreator = async () => {
-        // Replace the values below with your own websim profile information.
+        // Attempt to use the websim API if it's available. If not, fall back to a
+        // static profile so the rest of the site can render without errors.
+        try {
+            if (window.websim?.getCreator) {
+                return await window.websim.getCreator();
+            }
+            console.warn('Websim API failed to initialize in time. Falling back.');
+        } catch (e) {
+            console.warn('Websim API failed to initialize in time. Falling back.');
+        }
+
         // The username will be used to fetch projects and likes automatically.
         const myProfile = {
-            _type: "user",
+            _type: 'user',
             // You can find your user ID in the URL of your websim profile page.
-            id: "LordTsarcasm",
-            username: "LordTsarcasm",
+            id: 'LordTsarcasm',
+            username: 'LordTsarcasm',
             // This can be a link to your avatar or left as null.
-            avatar_url: "https://images.websim.com/avatar/LordTsarcasm",
+            avatar_url: 'https://images.websim.com/avatar/LordTsarcasm',
             // This description supports Markdown.
-            description: "This is a sample description. I create amazing things with code and sound. Welcome to my digital domain.",
-            is_admin: false,
+            description: 'This is a sample description. I create amazing things with code and sound. Welcome to my digital domain.',
+            is_admin: false
         };
 
-        return Promise.resolve(myProfile);
+        return myProfile;
     };
 
     const fetchProjects = async (username, after = null) => {
