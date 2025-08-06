@@ -45,7 +45,7 @@ const projects: Project[] = [
   },
   {
     id: "far-haven-map",
-    title: "3D Overworld",
+    title: "3D Concerts",
     description: "Explore the ruined megacity through an interactive, lore-rich digital map.",
     longDescription: "Navigate the districts of Far Haven, from the gleaming Corporate Spires to the shadowy Undercity. Each location contains hidden stories, faction territories, and secrets waiting to be discovered.",
     category: "Web",
