@@ -45,6 +45,8 @@ export const Aliens = () => {
   const [imageMap, setImageMap] = useState<Record<string, string[]>>({});
   const [searchTerm, setSearchTerm] = useState("");
 
+  const normalize = (str: string) => str.toLowerCase().replace(/\s+/g, "_");
+
   const filteredAliens = aliens.filter(alien =>
     alien.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -191,7 +193,7 @@ export const Aliens = () => {
               <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 max-h-[60vh] overflow-auto p-2">
                 {selectedAlien.data.troops?.map(troop => {
                   const imgs = imageMap[selectedAlien.name] || [];
-                  const search = `${troop.name}_${troop.version}`.toLowerCase();
+                  const search = `${normalize(troop.name)}_${normalize(troop.version)}`;
                   const img = imgs.find(u => u.toLowerCase().includes(search));
                   return (
                     <Card key={`${troop.name}-${troop.version}`} className="cyber-border bg-card/30">
