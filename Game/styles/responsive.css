@@ -1,0 +1,130 @@
+.mobile-device #joystick-container {
+  display: block;
+  width: 90%;
+  height: 60%;
+}
+
+.mobile-device #right-side-touch-area {
+  display: block;
+}
+
+.mobile-device #joystick {
+  display: block;
+}
+
+.mobile-device #lookPad {
+  display: block;
+}
+
+.mobile-device #jump-button {
+  display: block;
+}
+
+.mobile-device .instructions {
+  display: none !important;
+  width: 90%;
+  height: 60%;
+}
+
+/* @tweakable Vertical layout for main UI buttons on mobile */
+.mobile-device #options-button {
+    /* @tweakable The bottom position of the options button on mobile. */
+    bottom: 300px;
+    /* @tweakable The right position of the options button on mobile. */
+    right: 20px;
+}
+.mobile-device #map-button {
+    /* @tweakable The bottom position of the map button on mobile devices. */
+    bottom: 160px;
+    /* @tweakable The right position of the map button on mobile devices. */
+    right: 20px;
+}
+.mobile-device #music-button {
+    /* @tweakable The bottom position of the music button on mobile devices. */
+    bottom: 230px;
+    /* @tweakable The right position of the music button on mobile devices. */
+    right: 20px;
+}
+.mobile-device #bestiary-button {
+    /* @tweakable The bottom position of the bestiary button on mobile devices. */
+    bottom: 370px;
+    /* @tweakable The right position of the bestiary button on mobile devices. */
+    right: 20px;
+}
+.mobile-device #inventory-button {
+    /* @tweakable The bottom position of the inventory button on mobile devices. */
+    bottom: 90px;
+    /* @tweakable The right position of the inventory button on mobile. */
+    right: 20px;
+}
+.mobile-device #chat-button {
+    /* @tweakable The bottom position of the chat button on mobile. */
+    bottom: 20px;
+    /* @tweakable The right position of the chat button on mobile. */
+    right: 20px;
+}
+
+.mobile-device #character-creator-button {
+    /* @tweakable Position of the character creator button on mobile. */
+    top: 20px;
+    left: 20px;
+}
+
+.mobile-device #build-button {
+    /* @tweakable Position of the build button on mobile. */
+    top: 20px;
+    right: 20px;
+}
+
+.mobile-device #build-controls {
+  flex-direction: column;
+  bottom: 80px;
+  right: 20px;
+  left: auto;
+  transform: none;
+}
+
+.mobile-device #height-slider-container {
+  top: auto;
+  bottom: 80px;
+  width: 80%;
+}
+
+.mobile-device #height-slider {
+  width: 150px;
+}
+
+.mobile-device #ai-build-modal {
+  width: 85%;
+}
+
+.mobile-device #object-library {
+  top: auto;
+  bottom: 140px;
+  left: 20px;
+  width: 160px;
+}
+
+.mobile-device #advanced-build-controls {
+  flex-direction: column;
+  bottom: 140px;
+  right: 20px;
+  left: auto;
+  transform: none;
+}
+
+.mobile-device #color-picker {
+  width: 80%;
+  max-width: 280px;
+}
+
+.mobile-device #ad-modal iframe {
+  width: 90%;
+  height: 60%;
+}
+.mobile-device #clock-container {
+    /* @tweakable The top position of the clock on mobile. */
+    top: 20px;
+    /* @tweakable The left position of the clock on mobile, moved to avoid overlap. */
+    left: 80px;
+}

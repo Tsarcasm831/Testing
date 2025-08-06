@@ -1,33 +1,53 @@
-# AGENTS
+# Repository Guide
 
-This repository hosts a simple static website for the Testing project. To minimize searching and keep contributions consistent, follow these guidelines whenever you modify files in this repo.
+This project is a Vite + React + TypeScript web application with Tailwind CSS and shadcn-ui components. It also includes a Supabase backend integration.
 
-## Repository layout
-- HTML pages live in the repository root (e.g., `index.html`, `art.html`, `music.html`, `shop.html`, etc.).
-- Stylesheets are stored in `css/`.
-- JavaScript files are stored in `js/`.
-- Images and other assets can be found at the repository root or under `assets/`.
+## Structure Overview
 
-## Conventions
-- Use **two spaces** for indentation; avoid tabs.
-- End every file with a trailing newline.
-- Keep lines under ~120 characters when possible.
-- Use double quotes for HTML attributes and single quotes for JavaScript strings.
-- Encode files as UTF-8.
+- **src/** – Application source code
+  - **components/** – React components (Layout, Navigation, RequireAuth and many reusable `ui` components)
+  - **hooks/** – Custom React hooks (`useAuth`, `use-toast`, `use-mobile`)
+  - **integrations/** – Currently contains Supabase client and types
+  - **lib/** – Utility helpers
+  - **pages/** – Route components such as Home, Music, About, Projects, Members, Auth and NotFound
+  - **index.css** – Tailwind design system and global styles
+  - **main.tsx** – Application entry
+- **public/** – Static assets (favicon, robots.txt etc.)
+- **supabase/** – Supabase configuration and SQL migrations
+- **tailwind.config.ts** – Tailwind configuration
+- **vite.config.ts** – Vite build configuration
 
-## Workflow
-1. Make your changes.
-2. If a test suite becomes available, run `npm test` and ensure it passes. (Currently no tests are defined.)
-3. Preview HTML pages in a browser to verify layout and links.
-4. Run `git status` to review changes.
-5. Commit using a clear, concise message.
+## Development
 
-## Adding Assets
-- Place new images in `assets/` and reference them with relative paths.
-- Optimize images before committing to keep the repository lightweight.
+Install dependencies with `npm install`.
 
-## Pull Request Guidelines
-- Each pull request should focus on a single logical change.
-- Mention any manual verification steps in the PR description.
-- Ensure `git status` shows a clean worktree before submitting.
+Useful npm scripts:
 
+- `npm run dev` – Start development server
+- `npm run build` – Production build
+- `npm run build:dev` – Build using development mode (useful for checking compilation)
+- `npm run lint` – Run ESLint
+- `npm run preview` – Preview production build
+
+## Coding Style
+
+- TypeScript (`.ts`/`.tsx`) is used throughout
+- Two spaces for indentation
+- End every file with a newline
+- Reusable components live in `src/components` and follow existing patterns
+- Use the helper `cn` from `src/lib/utils.ts` for class merging
+
+## Programmatic Checks
+
+Before committing, run:
+
+```sh
+npm run lint
+npm run build:dev
+```
+
+Both commands must succeed with no errors.
+
+## Pull Requests
+
+Include a concise summary of what changed and mention if lint/build commands were executed successfully. Do not open new branches; commit directly to main.

@@ -1,0 +1,31 @@
+:root {
+  --black-30: rgba(0, 0, 0, 0.3);
+  --black-50: rgba(0, 0, 0, 0.5);
+  --black-60: rgba(0, 0, 0, 0.6);
+  --black-70: rgba(0, 0, 0, 0.7);
+  --black-80: rgba(0, 0, 0, 0.8);
+  --black-85: rgba(0, 0, 0, 0.85);
+  --black-90: rgba(0, 0, 0, 0.9);
+  --black-95: rgba(0, 0, 0, 0.95);
+
+  --white-05: rgba(255, 255, 255, 0.05);
+  --white-10: rgba(255, 255, 255, 0.1);
+  --white-20: rgba(255, 255, 255, 0.2);
+  --white-30: rgba(255, 255, 255, 0.3);
+  --white-50: rgba(255, 255, 255, 0.5);
+  --white-70: rgba(255, 255, 255, 0.7);
+  --white-80: rgba(255, 255, 255, 0.8);
+  --white-90: rgba(255, 255, 255, 0.9);
+  --white-full: rgba(255, 255, 255, 1);
+
+  /* @tweakable The background color of tooltips. */
+  --tooltip-bg: var(--black-80);
+  /* @tweakable The text color of tooltips. */
+  --tooltip-color: white;
+  /* @tweakable The font size for tooltips. */
+  --tooltip-font-size: 14px;
+  /* @tweakable The padding for tooltips. */
+  --tooltip-padding: 5px 10px;
+  /* @tweakable The border radius for tooltips. */
+  --tooltip-border-radius: 5px;
+}

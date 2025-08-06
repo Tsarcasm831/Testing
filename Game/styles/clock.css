@@ -1,0 +1,16 @@
+#clock-container {
+    position: fixed;
+    /* @tweakable The top position of the clock UI element. */
+    top: 20px;
+    /* @tweakable The left position of the clock UI element. */
+    left: 95px;
+    background-color: var(--black-50);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--white-20);
+    font-size: 14px;
+    z-index: 1000;
+    pointer-events: none;
+    user-select: none;
+}

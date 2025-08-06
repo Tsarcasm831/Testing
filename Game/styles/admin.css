@@ -1,0 +1,145 @@
+/* @tweakable The primary color for admin section text and highlights. */
+:root {
+    --admin-primary-color: #4dabf7; /* A professional blue */
+    --admin-hover-color: #74c0fc;
+    --admin-active-color: #228be6;
+    --admin-input-bg: rgba(255, 255, 255, 0.1);
+    --admin-input-border: rgba(255, 255, 255, 0.2);
+    --white-full: white;
+}
+
+/* @tweakable The width of the admin modal as a percentage of viewport width. */
+#options-modal.admin-view {
+    /* @tweakable The width of the admin modal as a percentage of viewport width. */
+    width: 80vw;
+    /* @tweakable The height of the admin modal as a percentage of viewport height. */
+    height: 80vh;
+    /* @tweakable The maximum width of the admin modal in pixels. */
+    max-width: 1400px;
+    /* @tweakable The maximum height of the admin modal in pixels. */
+    max-height: 900px;
+}
+
+#admin-sections-grid {
+    display: grid;
+    /* @tweakable The minimum width of an admin section before columns wrap. */
+    --admin-section-min-width: 350px;
+    grid-template-columns: repeat(auto-fit, minmax(var(--admin-section-min-width), 1fr));
+    /* @tweakable The gap between columns and rows in the admin panel grid. */
+    gap: 20px;
+}
+
+@media (max-width: 900px) {
+    #admin-sections-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.options-tab.admin-tab {
+    border-bottom: 2px solid transparent;
+    /* @tweakable The text color for inactive admin tabs. */
+    color: var(--admin-primary-color);
+    opacity: 0.8;
+}
+
+.options-tab.admin-tab:hover {
+    /* @tweakable The text color for admin tabs on hover. */
+    color: var(--admin-hover-color);
+    opacity: 1;
+}
+
+.options-tab.admin-tab.active {
+    /* @tweakable The text color for the active admin tab. */
+    color: var(--admin-hover-color);
+    /* @tweakable The border color for the active admin tab. */
+    border-bottom: 2px solid var(--admin-primary-color);
+    opacity: 1;
+}
+
+#options-tab-admin h3, #options-tab-lyrics h3 {
+    /* @tweakable The color for main headings in admin sections. */
+    color: var(--admin-primary-color);
+}
+
+.option-item-vertical {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.option-item-vertical label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--white-80);
+}
+
+#options-tab-admin input[type="text"],
+#options-tab-admin textarea,
+#options-tab-lyrics textarea {
+    background-color: var(--admin-input-bg);
+    color: var(--white-full);
+    border: 1px solid var(--admin-input-border);
+    padding: 8px 10px;
+    border-radius: 6px;
+    transition: border-color 0.2s, background-color 0.2s;
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+#options-tab-admin input[type="text"] {
+    /* This style is no longer needed with the vertical layout */
+}
+
+#options-tab-admin input[type="text"]:focus,
+#options-tab-admin textarea:focus,
+#options-tab-lyrics textarea:focus {
+    outline: none;
+    border-color: var(--admin-active-color);
+    background-color: rgba(0,0,0,0.2);
+}
+
+#admin-notes-textarea, #lyrics-textarea {
+    height: 150px;
+    margin-top: 10px;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+#lyrics-textarea {
+    height: 250px;
+}
+
+#rigged-characters-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 5px;
+}
+
+.char-tag {
+    /* @tweakable The background color for character tags in the admin panel. */
+    background-color: var(--admin-input-bg);
+    /* @tweakable The text color for character tags. */
+    color: var(--admin-primary-color);
+    /* @tweakable The padding inside character tags. */
+    padding: 4px 8px;
+    /* @tweakable The border radius of character tags. */
+    border-radius: 5px;
+    font-size: 13px;
+    /* @tweakable The border style for character tags. */
+    border: 1px solid var(--admin-input-border);
+}
+
+#save-admin-notes,
+#save-lyrics-button {
+    /* @tweakable The background color for primary action buttons in the admin panel. */
+    background-color: var(--admin-active-color);
+    border: 1px solid var(--admin-active-color);
+    color: white;
+}
+
+#save-admin-notes:hover,
+#save-lyrics-button:hover {
+    background-color: var(--admin-primary-color);
+    border-color: var(--admin-primary-color);
+}

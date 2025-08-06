@@ -1,0 +1,246 @@
+#inventory-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* @tweakable The background color of the inventory panel. */
+  background-color: rgba(30, 30, 35, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: white;
+  /* @tweakable The border radius of the inventory panel. */
+  border-radius: 12px;
+  /* @tweakable The z-index for the inventory panel. */
+  z-index: 2000;
+  display: none; /* Set to 'flex' in JS to show */
+  flex-direction: column;
+  /* @tweakable The width of the inventory panel. */
+  width: 90%;
+  /* @tweakable The maximum width of the inventory panel. */
+  max-width: 850px;
+  /* @tweakable The maximum height of the inventory panel. */
+  max-height: 90vh;
+  /* @tweakable The shadow of the inventory panel. */
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.4);
+  /* @tweakable The border of the inventory panel. */
+  border: 1px solid var(--white-20);
+  pointer-events: auto;
+}
+
+/* @tweakable Position of the inventory button on the screen. */
+#inventory-button {
+  position: fixed;
+  /* @tweakable The bottom position of the inventory button. */
+  bottom: 90px;
+  /* @tweakable The right position of the inventory button. */
+  right: 20px;
+  z-index: 1000;
+  touch-action: none;
+  cursor: pointer;
+}
+
+#inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  /* @tweakable The bottom border color of the inventory header. */
+  border-bottom: 1px solid var(--white-10);
+  flex-shrink: 0;
+}
+
+#inventory-panel h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.inventory-grid-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: var(--white-05);
+    border-radius: 8px;
+    border: 1px solid var(--white-10);
+}
+
+.inventory-grid-container::-webkit-scrollbar {
+  width: 6px;
+}
+.inventory-grid-container::-webkit-scrollbar-thumb {
+  background-color: var(--white-30);
+  border-radius: 3px;
+}
+.inventory-grid-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.inventory-grid {
+    display: grid;
+    /* @tweakable The number of columns in the inventory grid. */
+    grid-template-columns: repeat(8, 1fr);
+    /* @tweakable The gap between inventory items. */
+    gap: 10px;
+    padding: 10px;
+}
+
+.inventory-item {
+    /* @tweakable The background color of inventory items. */
+    background-color: var(--white-05);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* @tweakable The border of inventory items. */
+    border: 1px solid var(--white-10);
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+}
+
+.inventory-item.occupied {
+    cursor: grab;
+}
+
+.inventory-item:not(.occupied) {
+    cursor: default;
+}
+
+.inventory-item:hover {
+    background-color: var(--white-10);
+    border-color: var(--white-30);
+}
+
+.inventory-item.occupied:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.inventory-item.occupied:hover .item-icon {
+  transform: scale(1.1);
+}
+
+.item-icon {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 8px;
+  background: linear-gradient(45deg, var(--white-10), var(--white-20));
+  border-radius: 5px;
+  transition: transform 0.2s ease;
+}
+
+.inventory-item span {
+  font-weight: 500;
+  color: var(--white-90);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+#close-inventory-button {
+  width: 28px;
+  height: 28px;
+  background-color: var(--white-10);
+  border-radius: 50%;
+  text-align: center;
+  line-height: 28px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+#close-inventory-button:hover {
+  background-color: var(--white-20);
+  transform: rotate(90deg);
+}
+
+#inventory-body {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+#equipped-panel {
+    /* @tweakable The width of the equipped items panel. */
+    width: 240px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#player-preview-container {
+    /* @tweakable Background color of the player preview area. */
+    background-color: var(--white-05);
+    width: 100%;
+    /* @tweakable The height of the player preview area in the inventory. */
+    height: 320px;
+    border-radius: 8px;
+    border: 1px solid var(--white-10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#player-preview-placeholder {
+    /* @tweakable A placeholder style for the player model viewer. */
+    width: 120px;
+    height: 280px;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.05),
+        rgba(255,255,255,0.05) 10px,
+        rgba(255,255,255,0.1) 10px,
+        rgba(255,255,255,0.1) 20px
+    );
+    border-radius: 5px;
+}
+
+.equip-slot {
+    /* @tweakable The size of an equipment slot. */
+    width: 48px;
+    height: 48px;
+    /* @tweakable Background color of an equipment slot. */
+    background-color: var(--white-05);
+    /* @tweakable Border of an equipment slot. */
+    border: 1px solid var(--white-10);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    position: absolute;
+}
+
+.equip-slot:hover {
+    background-color: var(--white-10);
+    border-color: var(--white-30);
+}
+
+/* @tweakable Top position of the helmet slot. */
+#equip-helmet { top: 10px; left: 50%; transform: translateX(-50%); }
+/* @tweakable Top position of the necklace slot. */
+#equip-necklace { top: 10px; left: 10px; }
+/* @tweakable Top position of the shoulders slot. */
+#equip-shoulders { top: 10px; right: 10px; }
+/* @tweakable Top position of the chest armor slot. */
+#equip-chest { top: 70px; left: 10px; }
+/* @tweakable Top position of the gloves slot. */
+#equip-gloves { top: 70px; right: 10px; }
+/* @tweakable Top position of the belt slot. */
+#equip-belt { top: 130px; left: 50%; transform: translateX(-50%); }
+/* @tweakable Top position of the pants slot. */
+#equip-pants { top: 190px; left: 10px; }
+/* @tweakable Top position of the boots slot. */
+#equip-boots { top: 250px; left: 50%; transform: translateX(-50%); }
+/* @tweakable Top position of the first ring slot. */
+#equip-ring1 { top: 130px; right: 10px; }
+/* @tweakable Top position of the second ring slot. */
+#equip-ring2 { top: 190px; right: 10px; }
