@@ -1,0 +1,81 @@
+:root {
+    --primary-color: #3a7bd5; /* Blue */
+    --secondary-color: #d1d1d1; /* Silver */
+    --background-color: #000000;
+    --container-bg: rgba(10, 10, 10, 0.8);
+    --border-color: rgba(58, 123, 213, 0.4);
+    --glow-color: rgba(58, 123, 213, 0.6);
+    --text-color: #e0e0e0;
+}
+
+body {
+    background-color: var(--background-color);
+    background-image: url('/assets/background.png');
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--text-color);
+    font-family: 'Share Tech Mono', monospace;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    overflow-x: hidden;
+    animation: panBackground 80s linear infinite alternate;
+}
+
+#app-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: var(--container-bg);
+    background-image: 
+        linear-gradient(rgba(58, 123, 213, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58, 123, 213, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 20px var(--glow-color);
+    backdrop-filter: blur(5px);
+    position: relative;
+    animation: fadeIn 1.2s ease-in-out, gridPan 60s linear infinite;
+    z-index: 1;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#donation-buttons {
+    display: flex;
+    gap: 15px;
+    align-self: center;
+}
+
+.donation-button {
+    display: inline-block;
+    vertical-align: middle;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    padding: 0;
+    margin: 0 15px;
+}
+
+.donation-button img {
+    height: 28px;
+    width: auto;
+    display: block;
+}
+
+.donation-button:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+.paypal-button,
+.venmo-button {
+    background-color: transparent;
+}

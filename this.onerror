@@ -1,0 +1,6 @@
+const projectTitleLower = project.title ? project.title.toLowerCase() : '';
+if (projectTitleLower.includes('starcraft clone')) onErrorScript = `this.onerror=null; this.src='/ws-sc-bg.png';`;
+else if (projectTitleLower.includes('disney kingdom clash')) onErrorScript = `this.onerror=null; this.src='/assets/dkc.png';`;
+
+
+

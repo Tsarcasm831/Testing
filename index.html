@@ -1,42 +1,123 @@
-<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lord Tsarcasm</title>
-    <meta name="description" content="Official website of Lord Tsarcasm - Music, lore, and projects from the Remnants of Destruction universe" />
-    <meta name="author" content="Lord Tsarcasm" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LordTsarcasm.com Update Version 3.1</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/effects.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/tabs.css">
+    <link rel="stylesheet" href="css/grid.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/loader.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/music.css">
+    <link rel="stylesheet" href="css/model_viewer.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app-container">
+        <div id="vignette"></div>
+        <div id="scanline"></div>
+        <nav id="main-nav">
+             <button id="hamburger-btn" class="hamburger">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            <div id="nav-links-container">
+                <a href="/" class="nav-link" data-page="/">HOME</a>
+                <a href="/?page=music" class="nav-link" data-page="music">MUSIC</a>
+                <a href="/?page=about" class="nav-link" data-page="about">ABOUT ME</a>
+                <a href="/?page=art" class="nav-link" data-page="art">ART</a>
+                <!-- Shop link will be added here dynamically -->
+            </div>
+        </nav>
+        <header id="profile-header">
+            <div id="avatar-wrapper">
+                <div id="avatar-container">
+                    <a id="profile-link" href="#" target="_blank">
+                        <img id="avatar" src="" alt="User Avatar">
+                    </a>
+                </div>
+                <a href="https://arc.net/gift/6fd9a333" target="_blank" id="gift-link">
+                    <img src="gift-icon.png" alt="Gift Icon">
+                    <div id="gift-tooltip">
+                        <p class="tooltip-text"></p>
+                        <p class="tooltip-text"></p>
+                    </div>
+                </a>
+            </div>
+            <a id="username-link" href="#" target="_blank">
+                <h1 id="username" data-text=""></h1>
+            </a>
+            <p id="description"></p>
+        </header>
 
-    <meta property="og:title" content="Lord Tsarcasm" />
-    <meta property="og:description" content="Official website of Lord Tsarcasm - Music, lore, and projects from the Remnants of Destruction universe" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+        <main class="hidden">
+            <!-- This main block is now empty and hidden, its content was moved to the header for structural correctness -->
+        </main>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lordtsarcasm" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+        <div id="page-content-container"></div>
 
-    <!-- Post-Apocalyptic Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="stylesheet" href="css/datastream.css" />
-        <link rel="stylesheet" href="css/dossier.css" />
-        <link rel="stylesheet" href="css/utilities.css" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script src="js/polyfills.js"></script>
-    <script src="js/vendor-react.js"></script>
-    <script src="js/vendor-react-jsx-runtime.js"></script>
-    <script src="js/vendor-scheduler.js"></script>
-    <script src="js/vendor-react-dom.js"></script>
-    <script src="js/vendor-history.js"></script>
-    <script src="js/vendor-react-router-core.js"></script>
-    <script src="js/vendor-router.js"></script>
-    <script src="js/pages/auth.js"></script>
-    <script src="js/pages/not-found.js"></script>
-    <script src="js/app.js"></script>
-  </body>
+        <nav id="tabs">
+            <button class="tab-button active" data-tab="projects">PROJECTS</button>
+            <button class="tab-button" data-tab="likes">LIKES</button>
+            <button class="tab-button" data-tab="models">MODELS</button>
+            <button class="tab-button" data-tab="support">SUPPORT</button>
+            <div id="social-links-tabs"></div>
+        </nav>
+
+        <main id="content-grid">
+            <!-- Projects and Likes will be rendered here -->
+        </main>
+        <div id="loader" class="hidden">
+            <div class="spinner"></div>
+            <p>ACCESSING DATA NODE...</p>
+        </div>
+        <div id="no-content" class="hidden">
+             <p>DATA CORRUPTED OR UNAVAILABLE...</p>
+        </div>
+
+        <footer>
+            <!-- Social links moved to tabs section on the main page -->
+        </footer>
+    </div>
+
+    <div id="modal-overlay" class="hidden">
+        <div id="modal-content">
+            <button id="modal-close-button">&times;</button>
+            <div id="modal-body">
+                <div id="modal-viewer-container" class="hidden">
+                     <div id="modal-viewer-loader" class="viewer-loader">
+                        <div class="spinner"></div>
+                        <p>LOADING SPECIMEN...</p>
+                    </div>
+                    <canvas id="modal-model-canvas"></canvas>
+                </div>
+                <img id="modal-image" src="" alt="Project Image">
+                <div id="modal-info">
+                    <h2 id="modal-title"></h2>
+                    <div id="modal-creator-container"></div>
+                    <p id="modal-description"></p>
+                    <div id="modal-stats"></div>
+                    <a id="modal-project-link" href="#" target="_blank" class="modal-button">Visit Project</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://esm.sh/three@0.166.1",
+            "three/addons/": "https://esm.sh/three@0.166.1/examples/jsm/"
+        }
+    }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script type="module" src="js/main.js"></script>
+</body>
 </html>
