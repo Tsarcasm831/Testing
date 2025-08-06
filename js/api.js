@@ -51,36 +51,21 @@ import { app } from './app.js';
     };
 
     const getCreator = async () => {
-        return new Promise((resolve) => {
-            const cacheKey = 'creator_info';
-            const cached = getCache(cacheKey);
-            if (cached) {
-                resolve(cached);
-                return;
-            }
+        // Replace the values below with your own websim profile information.
+        // The username will be used to fetch projects and likes automatically.
+        const myProfile = {
+            _type: "user",
+            // You can find your user ID in the URL of your websim profile page.
+            id: "YOUR_WEBSIM_USER_ID",
+            username: "YourWebsimUsername",
+            // This can be a link to your avatar or left as null.
+            avatar_url: "https://images.websim.com/avatar/YourWebsimUsername",
+            // This description supports Markdown.
+            description: "This is a sample description. I create amazing things with code and sound. Welcome to my digital domain.",
+            is_admin: false,
+        };
 
-            const checkWebsim = (attempts = 0) => {
-                if (window.websim && typeof window.websim.getCreator === 'function') {
-                    window.websim.getCreator()
-                        .then(user => {
-                            if (user) {
-                                setCache(cacheKey, user);
-                            }
-                            resolve(user);
-                        })
-                        .catch(err => {
-                            console.error("window.websim.getCreator() call failed:", err);
-                            resolve(null);
-                        });
-                } else if (attempts < 100) {
-                    setTimeout(() => checkWebsim(attempts + 1), 100);
-                } else {
-                    console.error("Websim API failed to initialize in time. Falling back.");
-                    resolve(null);
-                }
-            };
-            checkWebsim();
-        });
+        return Promise.resolve(myProfile);
     };
 
     const fetchProjects = async (username, after = null) => {
