@@ -56,10 +56,10 @@ import { app } from './app.js';
         const myProfile = {
             _type: "user",
             // You can find your user ID in the URL of your websim profile page.
-            id: "YOUR_WEBSIM_USER_ID",
-            username: "YourWebsimUsername",
+            id: "LordTsarcasm",
+            username: "LordTsarcasm",
             // This can be a link to your avatar or left as null.
-            avatar_url: "https://images.websim.com/avatar/YourWebsimUsername",
+            avatar_url: "https://images.websim.com/avatar/LordTsarcasm",
             // This description supports Markdown.
             description: "This is a sample description. I create amazing things with code and sound. Welcome to my digital domain.",
             is_admin: false,
