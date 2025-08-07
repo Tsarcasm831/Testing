@@ -1,487 +1,78 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import * as THREE from 'three';
-
+import { jsxDEV } from "react/jsx-dev-runtime";
+import React, { useState, useRef } from "react";
+import { initialPlayerStats, initialInventory } from "./game/initialState.js";
+import { useThreeScene } from "./hooks/useThreeScene.js";
+import { usePlayerControls } from "./hooks/usePlayerControls.js";
+import CharacterPanel from "./components/UI/CharacterPanel.jsx";
+import { InventoryPanel } from "./components/UI/InventoryPanel.jsx";
+import { WorldMapPanel } from "./components/UI/WorldMapPanel.jsx";
+import { HUD } from "./components/UI/HUD.jsx";
+import SettingsPanel from "./components/UI/SettingsPanel.jsx";
 const OpenWorldGame = () => {
   const mountRef = useRef(null);
-  const sceneRef = useRef(null);
-  const rendererRef = useRef(null);
-  const cameraRef = useRef(null);
-  const playerRef = useRef(null);
-  const keysRef = useRef({});
-  const animationIdRef = useRef(null);
-
-  // Game state
-  const [playerStats, setPlayerStats] = useState({
-    name: 'Adventurer',
-    level: 12,
-    health: 85,
-    maxHealth: 100,
-    mana: 60,
-    maxMana: 80,
-    experience: 2450,
-    maxExperience: 3000,
-    gold: 1250
-  });
-
+  const [playerStats, setPlayerStats] = useState(initialPlayerStats);
+  const [inventory, setInventory] = useState(initialInventory);
   const [playerPosition, setPlayerPosition] = useState({ x: 0, z: 0 });
+  const [worldObjects, setWorldObjects] = useState([]);
+  const [settings, setSettings] = useState({
+    shadows: true,
+    shadowQuality: "medium",
+    // low, medium, high
+    antialiasing: true,
+    grid: true,
+    objectDensity: "medium",
+    fpsLimit: "60 FPS"
+  });
   const [showCharacter, setShowCharacter] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
   const [showWorldMap, setShowWorldMap] = useState(false);
-
-  // Inventory items
-  const [inventory, setInventory] = useState([
-    { id: 1, name: 'Iron Sword', type: 'weapon', rarity: 'common', quantity: 1 },
-    { id: 2, name: 'Health Potion', type: 'consumable', rarity: 'common', quantity: 5 },
-    { id: 3, name: 'Steel Armor', type: 'armor', rarity: 'uncommon', quantity: 1 },
-    { id: 4, name: 'Magic Scroll', type: 'misc', rarity: 'rare', quantity: 3 },
-    { id: 5, name: 'Gold Ore', type: 'material', rarity: 'uncommon', quantity: 12 },
-    { id: 6, name: 'Dragon Scale', type: 'material', rarity: 'legendary', quantity: 1 }
-  ]);
-
-  const getRarityColor = (rarity) => {
-    switch (rarity) {
-      case 'common': return 'text-gray-300 border-gray-400';
-      case 'uncommon': return 'text-green-300 border-green-400';
-      case 'rare': return 'text-blue-300 border-blue-400';
-      case 'epic': return 'text-purple-300 border-purple-400';
-      case 'legendary': return 'text-yellow-300 border-yellow-400';
-      default: return 'text-gray-300 border-gray-400';
-    }
+  const [showSettings, setShowSettings] = useState(false);
+  const uiState = {
+    setShowCharacter,
+    setShowInventory,
+    setShowWorldMap,
+    setShowSettings
   };
-
-  // Initialize Three.js scene
-  useEffect(() => {
-    if (!mountRef.current) return;
-
-    // Scene setup
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87CEEB);
-    sceneRef.current = scene;
-
-    // Camera setup
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 3000);
-    camera.position.set(0, 50, 50);
-    cameraRef.current = camera;
-
-    // Renderer setup
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    rendererRef.current = renderer;
-    mountRef.current.appendChild(renderer.domElement);
-
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
-    scene.add(ambientLight);
-
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(100, 100, 50);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
-    directionalLight.shadow.camera.near = 0.5;
-    directionalLight.shadow.camera.far = 500;
-    directionalLight.shadow.camera.left = -200;
-    directionalLight.shadow.camera.right = 200;
-    directionalLight.shadow.camera.top = 200;
-    directionalLight.shadow.camera.bottom = -200;
-    scene.add(directionalLight);
-
-    // Create world terrain (2000x2000 grid)
-    const worldSize = 2000;
-    const gridSize = 50;
-    
-    // Ground plane
-    const groundGeometry = new THREE.PlaneGeometry(worldSize, worldSize, gridSize, gridSize);
-    const groundMaterial = new THREE.MeshLambertMaterial({ 
-      color: 0x90EE90,
-      wireframe: false 
-    });
-    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-    ground.rotation.x = -Math.PI / 2;
-    ground.receiveShadow = true;
-    scene.add(ground);
-
-    // Grid overlay
-    const gridHelper = new THREE.GridHelper(worldSize, gridSize, 0x000000, 0x000000);
-    gridHelper.material.opacity = 0.3;
-    gridHelper.material.transparent = true;
-    scene.add(gridHelper);
-
-    // Create player (using CylinderGeometry since CapsuleGeometry isn't available in r128)
-    const playerGeometry = new THREE.CylinderGeometry(2, 2, 8, 8);
-    const playerMaterial = new THREE.MeshLambertMaterial({ color: 0x4169E1 });
-    const player = new THREE.Mesh(playerGeometry, playerMaterial);
-    player.position.set(0, 4, 0);
-    player.castShadow = true;
-    scene.add(player);
-    playerRef.current = player;
-
-    // Add some random objects in the world
-    const addRandomObjects = () => {
-      for (let i = 0; i < 100; i++) {
-        const geometries = [
-          new THREE.BoxGeometry(5, 5, 5),
-          new THREE.ConeGeometry(3, 8, 8),
-          new THREE.SphereGeometry(3, 8, 8)
-        ];
-        const colors = [0xFF6B6B, 0x4ECDC4, 0x45B7D1, 0x96CEB4, 0xFECA57];
-        
-        const geometry = geometries[Math.floor(Math.random() * geometries.length)];
-        const material = new THREE.MeshLambertMaterial({ 
-          color: colors[Math.floor(Math.random() * colors.length)]
-        });
-        const object = new THREE.Mesh(geometry, material);
-        
-        object.position.x = (Math.random() - 0.5) * (worldSize - 100);
-        object.position.z = (Math.random() - 0.5) * (worldSize - 100);
-        object.position.y = 2.5;
-        object.castShadow = true;
-        object.receiveShadow = true;
-        
-        scene.add(object);
-      }
-    };
-    addRandomObjects();
-
-    return () => {
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-      renderer.dispose();
-    };
-  }, []);
-
-  // Handle keyboard input
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      keysRef.current[event.code] = true;
-      
-      // UI toggles
-      if (event.code === 'KeyC') {
-        setShowCharacter(prev => !prev);
-        setShowInventory(false);
-        setShowWorldMap(false);
-      }
-      if (event.code === 'KeyI') {
-        setShowInventory(prev => !prev);
-        setShowCharacter(false);
-        setShowWorldMap(false);
-      }
-      if (event.code === 'KeyM') {
-        setShowWorldMap(prev => !prev);
-        setShowCharacter(false);
-        setShowInventory(false);
-      }
-      if (event.code === 'Escape') {
-        setShowCharacter(false);
-        setShowInventory(false);
-        setShowWorldMap(false);
-      }
-    };
-
-    const handleKeyUp = (event) => {
-      keysRef.current[event.code] = false;
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
-    };
-  }, []);
-
-  // Animation loop
-  useEffect(() => {
-    const animate = () => {
-      if (!playerRef.current || !cameraRef.current || !rendererRef.current || !sceneRef.current) return;
-
-      const moveSpeed = 2;
-      let moved = false;
-
-      // Player movement
-      if (keysRef.current['KeyW'] || keysRef.current['ArrowUp']) {
-        playerRef.current.position.z -= moveSpeed;
-        moved = true;
-      }
-      if (keysRef.current['KeyS'] || keysRef.current['ArrowDown']) {
-        playerRef.current.position.z += moveSpeed;
-        moved = true;
-      }
-      if (keysRef.current['KeyA'] || keysRef.current['ArrowLeft']) {
-        playerRef.current.position.x -= moveSpeed;
-        moved = true;
-      }
-      if (keysRef.current['KeyD'] || keysRef.current['ArrowRight']) {
-        playerRef.current.position.x += moveSpeed;
-        moved = true;
-      }
-
-      // Constrain player to world bounds
-      const worldBounds = 990;
-      playerRef.current.position.x = Math.max(-worldBounds, Math.min(worldBounds, playerRef.current.position.x));
-      playerRef.current.position.z = Math.max(-worldBounds, Math.min(worldBounds, playerRef.current.position.z));
-
-      // Update camera to follow player
-      const cameraOffset = new THREE.Vector3(0, 50, 50);
-      cameraRef.current.position.copy(playerRef.current.position).add(cameraOffset);
-      cameraRef.current.lookAt(playerRef.current.position);
-
-      // Update player position state
-      if (moved) {
-        setPlayerPosition({
-          x: Math.round(playerRef.current.position.x),
-          z: Math.round(playerRef.current.position.z)
-        });
-      }
-
-      rendererRef.current.render(sceneRef.current, cameraRef.current);
-      animationIdRef.current = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      if (animationIdRef.current) {
-        cancelAnimationFrame(animationIdRef.current);
-      }
-    };
-  }, []);
-
-  // Handle window resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (!cameraRef.current || !rendererRef.current) return;
-      
-      cameraRef.current.aspect = window.innerWidth / window.innerHeight;
-      cameraRef.current.updateProjectionMatrix();
-      rendererRef.current.setSize(window.innerWidth, window.innerHeight);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const CharacterPanel = () => (
-    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900 bg-opacity-95 border-2 border-yellow-600 rounded-lg p-6 w-96 text-white shadow-2xl">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-yellow-400">Character</h2>
-        <button 
-          onClick={() => setShowCharacter(false)}
-          className="text-red-400 hover:text-red-300 text-xl font-bold"
-        >
-          ×
-        </button>
-      </div>
-      <div className="space-y-4">
-        <div className="text-center">
-          <h3 className="text-xl font-bold text-blue-300">{playerStats.name}</h3>
-          <p className="text-yellow-300">Level {playerStats.level}</p>
-        </div>
-        <div className="space-y-2">
-          <div>
-            <div className="flex justify-between">
-              <span>Health</span>
-              <span>{playerStats.health}/{playerStats.maxHealth}</span>
-            </div>
-            <div className="w-full bg-gray-700 rounded-full h-2">
-              <div 
-                className="bg-red-500 h-2 rounded-full"
-                style={{ width: `${(playerStats.health / playerStats.maxHealth) * 100}%` }}
-              ></div>
-            </div>
-          </div>
-          <div>
-            <div className="flex justify-between">
-              <span>Mana</span>
-              <span>{playerStats.mana}/{playerStats.maxMana}</span>
-            </div>
-            <div className="w-full bg-gray-700 rounded-full h-2">
-              <div 
-                className="bg-blue-500 h-2 rounded-full"
-                style={{ width: `${(playerStats.mana / playerStats.maxMana) * 100}%` }}
-              ></div>
-            </div>
-          </div>
-          <div>
-            <div className="flex justify-between">
-              <span>Experience</span>
-              <span>{playerStats.experience}/{playerStats.maxExperience}</span>
-            </div>
-            <div className="w-full bg-gray-700 rounded-full h-2">
-              <div 
-                className="bg-green-500 h-2 rounded-full"
-                style={{ width: `${(playerStats.experience / playerStats.maxExperience) * 100}%` }}
-              ></div>
-            </div>
-          </div>
-          <div className="flex justify-between pt-2 border-t border-gray-600">
-            <span>Gold</span>
-            <span className="text-yellow-400">{playerStats.gold}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const InventoryPanel = () => (
-    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900 bg-opacity-95 border-2 border-yellow-600 rounded-lg p-6 w-96 max-h-96 overflow-y-auto text-white shadow-2xl">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-yellow-400">Inventory</h2>
-        <button 
-          onClick={() => setShowInventory(false)}
-          className="text-red-400 hover:text-red-300 text-xl font-bold"
-        >
-          ×
-        </button>
-      </div>
-      <div className="grid grid-cols-1 gap-2">
-        {inventory.map(item => (
-          <div 
-            key={item.id}
-            className={`p-3 rounded border-2 ${getRarityColor(item.rarity)} bg-gray-800 hover:bg-gray-700 cursor-pointer transition-colors`}
-          >
-            <div className="flex justify-between items-center">
-              <span className="font-semibold">{item.name}</span>
-              {item.quantity > 1 && (
-                <span className="text-sm bg-gray-600 px-2 py-1 rounded">x{item.quantity}</span>
-              )}
-            </div>
-            <div className="text-sm text-gray-400 capitalize">{item.type}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const WorldMapPanel = () => (
-    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900 bg-opacity-95 border-2 border-yellow-600 rounded-lg p-6 w-96 h-96 text-white shadow-2xl">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-yellow-400">World Map</h2>
-        <button 
-          onClick={() => setShowWorldMap(false)}
-          className="text-red-400 hover:text-red-300 text-xl font-bold"
-        >
-          ×
-        </button>
-      </div>
-      <div className="relative w-full h-64 bg-green-800 border-2 border-gray-600 rounded">
-        {/* Map grid */}
-        <div className="absolute inset-0 opacity-30">
-          {Array.from({ length: 10 }, (_, i) => (
-            <div key={`h-${i}`} className="absolute w-full border-t border-gray-400" style={{ top: `${i * 10}%` }} />
-          ))}
-          {Array.from({ length: 10 }, (_, i) => (
-            <div key={`v-${i}`} className="absolute h-full border-l border-gray-400" style={{ left: `${i * 10}%` }} />
-          ))}
-        </div>
-        {/* Player position */}
-        <div 
-          className="absolute w-3 h-3 bg-red-500 rounded-full transform -translate-x-1/2 -translate-y-1/2"
-          style={{ 
-            left: `${50 + (playerPosition.x / 2000) * 100}%`, 
-            top: `${50 + (playerPosition.z / 2000) * 100}%` 
-          }}
-        />
-        {/* Legend */}
-        <div className="absolute bottom-2 left-2 text-xs">
-          <div className="flex items-center space-x-1">
-            <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-            <span>You</span>
-          </div>
-        </div>
-        {/* Coordinates */}
-        <div className="absolute bottom-2 right-2 text-xs">
-          <div>X: {playerPosition.x}</div>
-          <div>Z: {playerPosition.z}</div>
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="relative w-full h-screen overflow-hidden">
-      <div ref={mountRef} className="w-full h-full" />
-      
-      {/* HUD */}
-      <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white p-4 rounded-lg">
-        <h3 className="font-bold text-yellow-400 mb-2">{playerStats.name}</h3>
-        <div className="space-y-1 text-sm">
-          <div className="flex items-center space-x-2">
-            <span>HP:</span>
-            <div className="w-20 bg-gray-700 rounded-full h-2">
-              <div 
-                className="bg-red-500 h-2 rounded-full"
-                style={{ width: `${(playerStats.health / playerStats.maxHealth) * 100}%` }}
-              ></div>
-            </div>
-            <span className="text-xs">{playerStats.health}/{playerStats.maxHealth}</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <span>MP:</span>
-            <div className="w-20 bg-gray-700 rounded-full h-2">
-              <div 
-                className="bg-blue-500 h-2 rounded-full"
-                style={{ width: `${(playerStats.mana / playerStats.maxMana) * 100}%` }}
-              ></div>
-            </div>
-            <span className="text-xs">{playerStats.mana}/{playerStats.maxMana}</span>
-          </div>
-          <div className="text-xs text-yellow-300">Level {playerStats.level}</div>
-          <div className="text-xs text-yellow-300">Gold: {playerStats.gold}</div>
-        </div>
-      </div>
-
-      {/* Minimap */}
-      <div className="absolute top-4 right-4 w-32 h-32 bg-black bg-opacity-70 border-2 border-gray-600 rounded">
-        <div className="relative w-full h-full bg-green-800">
-          <div 
-            className="absolute w-2 h-2 bg-red-500 rounded-full transform -translate-x-1/2 -translate-y-1/2"
-            style={{ 
-              left: `${50 + (playerPosition.x / 2000) * 100}%`, 
-              top: `${50 + (playerPosition.z / 2000) * 100}%` 
-            }}
-          />
-          <div className="absolute inset-0 opacity-20">
-            {Array.from({ length: 8 }, (_, i) => (
-              <div key={`h-${i}`} className="absolute w-full border-t border-gray-400" style={{ top: `${i * 12.5}%` }} />
-            ))}
-            {Array.from({ length: 8 }, (_, i) => (
-              <div key={`v-${i}`} className="absolute h-full border-l border-gray-400" style={{ left: `${i * 12.5}%` }} />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Controls */}
-      <div className="absolute bottom-4 left-4 bg-black bg-opacity-70 text-white p-4 rounded-lg">
-        <h4 className="font-bold text-yellow-400 mb-2">Controls</h4>
-        <div className="text-xs space-y-1">
-          <div>WASD / Arrows: Move</div>
-          <div>C: Character</div>
-          <div>I: Inventory</div>
-          <div>M: World Map</div>
-          <div>ESC: Close panels</div>
-        </div>
-      </div>
-
-      {/* Position display */}
-      <div className="absolute bottom-4 right-4 bg-black bg-opacity-70 text-white p-2 rounded text-sm">
-        <div>X: {playerPosition.x}</div>
-        <div>Z: {playerPosition.z}</div>
-      </div>
-
-      {/* UI Panels */}
-      {showCharacter && <CharacterPanel />}
-      {showInventory && <InventoryPanel />}
-      {showWorldMap && <WorldMapPanel />}
-    </div>
-  );
+  const keysRef = usePlayerControls(uiState);
+  const { playerRef } = useThreeScene({ mountRef, keysRef, setPlayerPosition, settings, setWorldObjects });
+  return /* @__PURE__ */ jsxDEV("div", { className: "relative w-full h-screen overflow-hidden", children: [
+    /* @__PURE__ */ jsxDEV("div", { ref: mountRef, className: "w-full h-full" }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 46,
+      columnNumber: 7
+    }),
+    /* @__PURE__ */ jsxDEV(HUD, { playerStats, playerRef, worldObjects }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 48,
+      columnNumber: 7
+    }),
+    showCharacter && /* @__PURE__ */ jsxDEV(CharacterPanel, { playerStats, onClose: () => setShowCharacter(false) }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 51,
+      columnNumber: 25
+    }),
+    showInventory && /* @__PURE__ */ jsxDEV(InventoryPanel, { inventory, setInventory, onClose: () => setShowInventory(false) }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 52,
+      columnNumber: 25
+    }),
+    showWorldMap && /* @__PURE__ */ jsxDEV(WorldMapPanel, { playerPosition, onClose: () => setShowWorldMap(false) }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 53,
+      columnNumber: 24
+    }),
+    showSettings && /* @__PURE__ */ jsxDEV(SettingsPanel, { settings, setSettings, onClose: () => setShowSettings(false) }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 54,
+      columnNumber: 24
+    })
+  ] }, void 0, true, {
+    fileName: "<stdin>",
+    lineNumber: 45,
+    columnNumber: 5
+  });
 };
-
-
-export default OpenWorldGame;
-
+var stdin_default = OpenWorldGame;
+export {
+  stdin_default as default
+};
