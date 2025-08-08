@@ -1,3 +1,16 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  # Preflight OPTIONS for static hosting
+  RewriteCond %{REQUEST_METHOD} =OPTIONS
+  RewriteRule ^ - [R=204,L]
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-l
+  RewriteRule . /index.html [L]
+</IfModule>
+
 # Correct MIME types for 3D and related assets
 AddType model/gltf-binary .glb
 AddType model/gltf+json  .gltf
@@ -12,8 +25,3 @@ AddType application/octet-stream .bin
     Header set Access-Control-Expose-Headers "Content-Length, Content-Range"
   </FilesMatch>
 </IfModule>
-
-# Optional: reply cleanly to OPTIONS preflight (harmless for static hosting)
-RewriteEngine On
-RewriteCond %{REQUEST_METHOD} =OPTIONS
-RewriteRule ^ - [R=204,L]
