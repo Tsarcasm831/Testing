@@ -1,0 +1,19 @@
+# Correct MIME types for 3D and related assets
+AddType model/gltf-binary .glb
+AddType model/gltf+json  .gltf
+AddType application/octet-stream .bin
+
+# CORS for static assets (LiteSpeed/Apache compatible)
+<IfModule mod_headers.c>
+  <FilesMatch "\.(glb|gltf|bin|png|jpg|jpeg|gif|webp|mp3|mp4|wav|ogg|js|css|json|wasm)$">
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+    Header set Access-Control-Allow-Headers "Origin, Range, Accept, Content-Type"
+    Header set Access-Control-Expose-Headers "Content-Length, Content-Range"
+  </FilesMatch>
+</IfModule>
+
+# Optional: reply cleanly to OPTIONS preflight (harmless for static hosting)
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} =OPTIONS
+RewriteRule ^ - [R=204,L]

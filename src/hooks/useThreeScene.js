@@ -74,7 +74,10 @@ export const useThreeScene = ({ mountRef, keysRef, joystickRef, setPlayerPositio
 
         // --- Asset Loading ---
         const gltfLoader = new GLTFLoader();
+        // Ensure CORS-friendly requests
+        if (gltfLoader.setCrossOrigin) gltfLoader.setCrossOrigin('anonymous');
         const textureLoader = new THREE.TextureLoader();
+        if (textureLoader.setCrossOrigin) textureLoader.setCrossOrigin('anonymous');
 
         const animFiles = {
             idle: '/src/components/local/character/Kakashi/Animation_Idle_11_withSkin.glb',

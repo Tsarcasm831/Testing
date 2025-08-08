@@ -3,6 +3,31 @@ const CACHE_NAME = 'game-assets-v1';
 
 // This will hold the list of all asset URLs to be downloaded.
 let allAssetUrls = [];
+// Tuning knobs
+const BATCH_SIZE = 10;
+const MAX_RETRIES = 2; // in addition to the first attempt => total attempts = 3
+const RETRY_DELAY_MS = 600;
+
+// Small helper
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+
+// Fetch with retry and CORS-friendly settings. Accepts opaque responses.
+async function fetchWithRetry(url) {
+    let lastError;
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+        try {
+            const req = new Request(url, { mode: 'no-cors' });
+            const res = await fetch(req);
+            // Accept opaque (CORS-bypassed) or ok responses
+            if (res.ok || res.type === 'opaque') return res;
+            lastError = new Error(`HTTP ${res.status}`);
+        } catch (e) {
+            lastError = e;
+        }
+        if (attempt < MAX_RETRIES) await sleep(RETRY_DELAY_MS * (attempt + 1));
+    }
+    throw lastError || new Error('Unknown fetch error');
+}
 
 /**
  * Fetches and parses a JSON file to get a list of asset URLs.
@@ -59,59 +84,66 @@ export async function startCaching(onProgress) {
     if (allAssetUrls.length === 0) {
         console.error('Still no assets to cache after initialization.');
         if (onProgress) onProgress(100);
-        return;
+        return { total: 0, cached: 0, skippedExisting: 0, failed: [] };
     }
     
     console.log(`Starting to cache ${allAssetUrls.length} assets...`);
     
     try {
         const cache = await caches.open(CACHE_NAME);
-        let downloadedCount = 0;
+        let processedCount = 0;
         const totalAssets = allAssetUrls.length;
+        let skippedExisting = 0;
+        let cached = 0;
+        const failed = [];
         
         // This function will be called to update progress.
         const updateProgress = () => {
-            downloadedCount++;
+            processedCount++;
             if (onProgress) {
-                const progress = Math.round((downloadedCount / totalAssets) * 100);
+                const progress = Math.round((processedCount / totalAssets) * 100);
                 onProgress(progress);
             }
         };
 
         // We process downloads in batches to avoid overwhelming the browser.
-        const batchSize = 10;
-        for (let i = 0; i < totalAssets; i += batchSize) {
-            const batch = allAssetUrls.slice(i, i + batchSize);
-            await Promise.all(batch.map(async (url) => {
-                try {
-                    const cachedResponse = await cache.match(url);
-                    if (!cachedResponse) {
-                        // Use a 'no-cors' request to bypass CORS errors for cross-domain assets.
-                        // The response will be "opaque", but it can still be cached and used by loaders like GLTFLoader.
-                        const request = new Request(url, { mode: 'no-cors' });
-                        const response = await fetch(request);
-                        if (!response.ok && response.type !== 'opaque') { // Opaque responses have status 0 and ok=false, so we allow them.
-                            throw new Error(`Fetch failed with status: ${response.status}`);
-                        }
-                        
-                        await cache.put(url, response);
-                        console.log(`Cached new asset: ${url.split('/').pop()}`);
-                    } else {
-                        // Uncomment the line below for extremely verbose logging of already-cached assets
-                        // console.log(`Asset already in cache: ${url.split('/').pop()}`);
-                    }
-                } catch (error) {
-                    console.error(`Failed to cache asset: ${url}`, error);
-                } finally {
-                    updateProgress();
+        for (let i = 0; i < totalAssets; i += BATCH_SIZE) {
+            const batch = allAssetUrls.slice(i, i + BATCH_SIZE);
+            const results = await Promise.allSettled(batch.map(async (url) => {
+                const cachedResponse = await cache.match(url);
+                if (cachedResponse) {
+                    skippedExisting++;
+                    return { url, status: 'skipped' };
                 }
+                const response = await fetchWithRetry(url);
+                await cache.put(url, response);
+                cached++;
+                return { url, status: 'cached' };
             }));
+
+            // progress + aggregate failures
+            for (let idx = 0; idx < results.length; idx++) {
+                const r = results[idx];
+                if (r.status === 'rejected') {
+                    const url = batch[idx];
+                    failed.push(url);
+                }
+                updateProgress();
+            }
         }
         
-        console.log('All assets have been processed for caching.');
-        
+        if (failed.length) {
+            console.warn(`Caching complete with some failures. Cached: ${cached}, skipped: ${skippedExisting}, failed: ${failed.length}`);
+            // Log a compact list once to reduce spam
+            console.warn('Failed asset URLs (showing up to 20):', failed.slice(0, 20));
+        } else {
+            console.log(`Caching complete. Cached: ${cached}, skipped: ${skippedExisting}, failed: 0`);
+        }
+
+        return { total: totalAssets, cached, skippedExisting, failed };
     } catch (error) {
         console.error('Error opening cache or caching assets:', error);
+        return { total: allAssetUrls.length, cached: 0, skippedExisting: 0, failed: allAssetUrls.slice() };
     }
 }
 
