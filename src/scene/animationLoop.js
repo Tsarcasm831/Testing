@@ -46,6 +46,36 @@ export function startAnimationLoop({
     let lastInteractObj = null;
     let promptHideTimeout = null;
 
+    const clampPitch = (v) => Math.max(-0.9, Math.min(0.9, v));
+    const normalizeAngle = (a) => {
+        const twoPI = Math.PI * 2;
+        a = ((a % twoPI) + twoPI) % twoPI;
+        if (a > Math.PI) a -= twoPI;
+        return a;
+    };
+
+    const onPointerMove = (e) => {
+        if (!firstPersonRef.current) return;
+        if (document.pointerLockElement !== rendererRef.current?.domElement) return;
+        const sens = 0.002;
+        if (cameraOrbitRef) {
+            const next = (cameraOrbitRef.current || 0) - e.movementX * sens;
+            cameraOrbitRef.current = normalizeAngle(next);
+        }
+        if (cameraPitchRef) {
+            const nextP = (cameraPitchRef.current || 0) - e.movementY * sens;
+            cameraPitchRef.current = clampPitch(nextP);
+        }
+    };
+    document.addEventListener('mousemove', onPointerMove);
+
+    const onPointerLockChange = () => {
+        if (document.pointerLockElement !== rendererRef.current?.domElement) {
+            firstPersonRef.current = false;
+        }
+    };
+    document.addEventListener('pointerlockchange', onPointerLockChange);
+
     function setPrompt(text, visible) {
         const el = interactPromptRef?.current;
         if (!el) return;
@@ -93,6 +123,9 @@ export function startAnimationLoop({
         if (keysRef.current['ToggleFirstPerson']) {
             keysRef.current['ToggleFirstPerson'] = false;
             firstPersonRef.current = !firstPersonRef.current;
+            if (!firstPersonRef.current && document.pointerLockElement) {
+                document.exitPointerLock();
+            }
         }
 
         const delta = clockRef.current.getDelta();
@@ -173,5 +206,8 @@ export function startAnimationLoop({
         if (animationId) cancelAnimationFrame(animationId);
         animationId = null;
         throttledSetPlayerPosition.cancel?.();
+        document.removeEventListener('mousemove', onPointerMove);
+        document.removeEventListener('pointerlockchange', onPointerLockChange);
+        if (document.pointerLockElement) document.exitPointerLock();
     };
 }

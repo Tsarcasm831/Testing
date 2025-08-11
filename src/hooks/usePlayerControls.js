@@ -86,6 +86,12 @@ export const usePlayerControls = ({ setShowCharacter, setShowInventory, setShowW
                 case 'KeyV':
                     // Toggle first-person view (handled in animation loop)
                     keysRef.current['ToggleFirstPerson'] = true;
+                    const canvas = document.querySelector('canvas');
+                    if (document.pointerLockElement) {
+                        document.exitPointerLock();
+                    } else if (canvas && canvas.requestPointerLock) {
+                        canvas.requestPointerLock();
+                    }
                     break;
                 case 'Escape':
                     closeAllPanels();
