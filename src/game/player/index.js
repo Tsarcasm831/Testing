@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { loadPlayerAssets, playAnimation, DEFAULT_ANIMATION } from './animations.js';
-import { updatePlayerMovement } from './movement.js';
+import { updatePlayerMovement } from './movement/index.js';
 import { WORLD_SIZE } from '../../scene/terrain.js';
 
 let lastLightUpdatePosition = new THREE.Vector3();
