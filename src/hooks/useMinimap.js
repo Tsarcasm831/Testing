@@ -1,11 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
+import { WORLD_SIZE, TILE_SIZE, TEXTURE_WORLD_UNITS, getBiomeAt, getTerrainTextureForBiome } from '../scene/terrain.js';
 
-export const useMinimap = ({ playerRef, worldObjects }) => {
+export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
     const animationFrameId = useRef();
     const minimapCanvasRef = useRef();
     const worldMinimapCanvasRef = useRef(null);
     const posXRef = useRef();
     const posZRef = useRef();
+    const zoomLevelRef = useRef();
+    const biomeRef = useRef(); // NEW: biome line under minimap
 
     const [minimapState, setMinimapState] = useState({
         left: window.innerWidth - 16 - 128,
@@ -121,57 +124,105 @@ export const useMinimap = ({ playerRef, worldObjects }) => {
         };
     }, [interaction]);
 
+    // Build a world-sized canvas where each pixel maps to 1 world unit,
+    // using the same biome partitioning and textures as the 3D terrain.
     useEffect(() => {
-        const worldSize = 2000;
-        const worldMinimapScale = 1; // 1 pixel per world unit.
+        const worldSize = WORLD_SIZE;
+        const tileSize = TILE_SIZE;
+        const textureWorldSize = TEXTURE_WORLD_UNITS; // one texture tile == 20 world units
+        const numTiles = worldSize / tileSize;
 
         const canvas = document.createElement('canvas');
-        canvas.width = worldSize * worldMinimapScale;
-        canvas.height = worldSize * worldMinimapScale;
+        canvas.width = worldSize;
+        canvas.height = worldSize;
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
-        
-        ctx.fillStyle = '#166534';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        const img = new Image();
-        img.src = '/ground_texture.png';
-        img.onload = () => {
-            // In the 3D scene, the 2000-unit ground plane repeats the texture 100 times.
-            // This means one texture tile covers 2000 / 100 = 20 world units.
-            const textureWorldSize = 20;
+        // Preload all terrain images used by biomes
+        const biomes = ['grass', 'sand', 'dirt', 'rocky', 'snow', 'forest'];
+        const uniqueSrcs = new Set(biomes.map(b => getTerrainTextureForBiome(b)));
+        const imageMap = new Map();
 
-            // Create a small canvas to hold one scaled-down tile of the texture.
-            const patternCanvas = document.createElement('canvas');
-            patternCanvas.width = textureWorldSize * worldMinimapScale;
-            patternCanvas.height = textureWorldSize * worldMinimapScale;
-            const patternCtx = patternCanvas.getContext('2d');
+        const loadImage = (src) =>
+            new Promise((resolve) => {
+                const img = new Image();
+                img.src = `/${src}`;
+                img.onload = () => resolve({ src, img });
+                img.onerror = () => resolve({ src, img: null });
+            });
 
-            if (patternCtx) {
-                // Draw the full texture image into the small canvas, effectively scaling it down.
-                patternCtx.drawImage(img, 0, 0, patternCanvas.width, patternCanvas.height);
-                
-                // Create a repeating pattern from this small, scaled-down canvas.
-                const pattern = ctx.createPattern(patternCanvas, 'repeat');
-                if (pattern) {
-                    ctx.fillStyle = pattern;
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                }
-            } else {
-                // Fallback to original behavior if creating the pattern canvas fails.
-                const pattern = ctx.createPattern(img, 'repeat');
-                if (pattern) {
-                    ctx.fillStyle = pattern;
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+        (async () => {
+            const loaded = await Promise.all([...uniqueSrcs].map(loadImage));
+            loaded.forEach(({ src, img }) => {
+                if (img) imageMap.set(src, img);
+            });
+
+            // Draw per tile with a repeating pattern matching in-game repeats
+            for (let i = 0; i < numTiles; i++) {
+                for (let j = 0; j < numTiles; j++) {
+                    const x = (i - numTiles / 2) * tileSize + tileSize / 2;
+                    const z = (j - numTiles / 2) * tileSize + tileSize / 2;
+
+                    // Minimap canvas uses +X to the right, +Z downward; convert world coords to canvas space
+                    const canvasX = x + worldSize / 2 - tileSize / 2;
+                    const canvasY = z + worldSize / 2 - tileSize / 2;
+
+                    const biome = getBiomeAt(x, z);
+                    const texFile = getTerrainTextureForBiome(biome);
+                    const img = imageMap.get(texFile);
+
+                    if (!img) {
+                        // Fallback fill color per biome if image missing
+                        const fallback = {
+                            grass: '#2d6a4f',
+                            sand: '#e9d8a6',
+                            dirt: '#6b4f4f',
+                            rocky: '#6d6875',
+                            snow: '#e6e6e6',
+                            forest: '#1b4332'
+                        };
+                        ctx.fillStyle = fallback[biome] || '#166534';
+                        ctx.fillRect(canvasX, canvasY, tileSize, tileSize);
+                        continue;
+                    }
+
+                    // Build a small pattern tile: scale the source texture to 20x20 world pixels
+                    const patternCanvas = document.createElement('canvas');
+                    patternCanvas.width = textureWorldSize;
+                    patternCanvas.height = textureWorldSize;
+                    const pctx = patternCanvas.getContext('2d');
+                    pctx.drawImage(img, 0, 0, patternCanvas.width, patternCanvas.height);
+
+                    const pattern = ctx.createPattern(patternCanvas, 'repeat');
+                    if (pattern) {
+                        ctx.save();
+                        ctx.fillStyle = pattern;
+                        ctx.translate(canvasX, canvasY);
+                        ctx.fillRect(0, 0, tileSize, tileSize);
+                        ctx.restore();
+                    } else {
+                        // As a last resort, stretch the image to cover the tile
+                        ctx.drawImage(img, canvasX, canvasY, tileSize, tileSize);
+                    }
                 }
             }
 
             worldMinimapCanvasRef.current = canvas;
-        };
+        })();
     }, []);
 
     useEffect(() => {
         const updateHudElements = () => {
+            const now = performance.now();
+            const desiredFps = 12; // throttle minimap + HUD text to ~12fps to reduce load
+            const frameInterval = 1000 / desiredFps;
+            if (!updateHudElements.last) updateHudElements.last = 0;
+            if (now - updateHudElements.last < frameInterval) {
+                animationFrameId.current = requestAnimationFrame(updateHudElements);
+                return;
+            }
+            updateHudElements.last = now;
+
             if (playerRef.current) {
                 const { x, z } = playerRef.current.position;
                 
@@ -180,6 +231,18 @@ export const useMinimap = ({ playerRef, worldObjects }) => {
                 }
                 if (posZRef.current) {
                     posZRef.current.textContent = `Z: ${Math.round(z)}`;
+                }
+                if (zoomRef?.current && zoomLevelRef.current) {
+                    const defaultZoom = 0.2;
+                    const multiplier = zoomRef.current / defaultZoom;
+                    const zoomLevel = Math.round(multiplier);
+                    zoomLevelRef.current.textContent = `Zoom Level: ${zoomLevel}`;
+                }
+                // NEW: Update biome text
+                if (biomeRef.current) {
+                    const biomeRaw = getBiomeAt(x, z);
+                    const biome = biomeRaw ? biomeRaw.charAt(0).toUpperCase() + biomeRaw.slice(1) : 'Unknown';
+                    biomeRef.current.textContent = `Biome: ${biome}`;
                 }
                 
                 const canvas = minimapCanvasRef.current;
@@ -192,7 +255,7 @@ export const useMinimap = ({ playerRef, worldObjects }) => {
 
                     const worldMinimapCanvas = worldMinimapCanvasRef.current;
                     if (worldMinimapCanvas) {
-                        const worldSize = 2000;
+                        const worldSize = WORLD_SIZE;
                         const sourceSize = minimapViewSize;
                         const sourceX = (x + worldSize / 2) - (sourceSize / 2);
                         const sourceY = (z + worldSize / 2) - (sourceSize / 2);
@@ -205,10 +268,21 @@ export const useMinimap = ({ playerRef, worldObjects }) => {
                             canvas.width, canvas.height
                         );
                     } else {
-                         ctx.fillStyle = '#166534';
+                         // Quick fallback before the world canvas is ready
+                         const biome = getBiomeAt(x, z);
+                         const fallback = {
+                            grass: '#2d6a4f',
+                            sand: '#e9d8a6',
+                            dirt: '#6b4f4f',
+                            rocky: '#6d6875',
+                            snow: '#e6e6e6',
+                            forest: '#1b4332'
+                         };
+                         ctx.fillStyle = fallback[biome] || '#166534';
                          ctx.fillRect(0, 0, canvas.width, canvas.height);
                     }
                     
+                    // Grid overlay
                     ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
                     ctx.lineWidth = 0.5;
                     for(let i = 0; i < 8; i++) {
@@ -224,6 +298,7 @@ export const useMinimap = ({ playerRef, worldObjects }) => {
 
                     const halfCanvas = canvas.width / 2;
 
+                    // World objects dots
                     worldObjects.forEach(obj => {
                         const dx = obj.position.x - x;
                         const dz = obj.position.z - z;
@@ -240,6 +315,7 @@ export const useMinimap = ({ playerRef, worldObjects }) => {
                         }
                     });
 
+                    // Player marker
                     ctx.fillStyle = 'red';
                     ctx.strokeStyle = 'white';
                     ctx.lineWidth = 1;
@@ -252,6 +328,7 @@ export const useMinimap = ({ playerRef, worldObjects }) => {
             animationFrameId.current = requestAnimationFrame(updateHudElements);
         };
 
+        updateHudElements.last = 0;
         animationFrameId.current = requestAnimationFrame(updateHudElements);
 
         return () => {
@@ -259,7 +336,7 @@ export const useMinimap = ({ playerRef, worldObjects }) => {
                 cancelAnimationFrame(animationFrameId.current);
             }
         };
-    }, [playerRef, worldObjects, minimapState.width, minimapState.height]);
-
-    return { minimapState, minimapCanvasRef, posXRef, posZRef, handleInteractionStart };
+    }, [playerRef, worldObjects, minimapState.width, minimapState.height, zoomRef]);
+    
+    return { minimapState, minimapCanvasRef, posXRef, posZRef, zoomLevelRef, biomeRef, handleInteractionStart };
 };

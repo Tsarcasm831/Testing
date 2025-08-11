@@ -10,10 +10,10 @@ export const initialPlayerStats = {
     gold: 150,
 
     // Core Stats
-    strength: 25,
-    dexterity: 30,
-    vitality: 22,
-    energy: 18,
+    strength: 10,
+    dexterity: 10,
+    vitality: 10,
+    energy: 10,
     
     // Combat Stats
     stamina: 95,

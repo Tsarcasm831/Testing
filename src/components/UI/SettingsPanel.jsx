@@ -149,12 +149,51 @@ const SettingsPanel = ({ settings, setSettings, onClose }) => {
       ] }, void 0, true, {
         fileName: "<stdin>",
         lineNumber: 59,
-        columnNumber: 18
+        columnNumber: 17
+      }),
+      /* @__PURE__ */ jsxDEV("div", { children: [
+        /* @__PURE__ */ jsxDEV("label", { className: "block mb-2", children: "Render Scale" }, void 0, false, {
+          fileName: "<stdin>",
+          lineNumber: 71,
+          columnNumber: 21
+        }),
+        /* @__PURE__ */ jsxDEV("div", { className: "grid grid-cols-4 gap-2", children: [0.75, 1, 1.25, 1.5].map((scale) => /* @__PURE__ */ jsxDEV(
+          "button",
+          {
+            onClick: () => handleSettingChange("maxPixelRatio", scale),
+            className: `px-2 py-1 rounded text-sm ${settings.maxPixelRatio === scale ? "bg-yellow-500 text-black" : "bg-gray-700 hover:bg-gray-600"}`,
+            title: `Limit rendering to ${scale}\xD7 device pixel ratio`,
+            children: [
+              scale,
+              "\xD7"
+            ]
+          },
+          scale,
+          true,
+          {
+            fileName: "<stdin>",
+            lineNumber: 74,
+            columnNumber: 29
+          }
+        )) }, void 0, false, {
+          fileName: "<stdin>",
+          lineNumber: 72,
+          columnNumber: 21
+        }),
+        /* @__PURE__ */ jsxDEV("div", { className: "text-xs text-gray-400 mt-1", children: "Lower values improve performance on high-DPI screens." }, void 0, false, {
+          fileName: "<stdin>",
+          lineNumber: 84,
+          columnNumber: 21
+        })
+      ] }, void 0, true, {
+        fileName: "<stdin>",
+        lineNumber: 70,
+        columnNumber: 17
       }),
       /* @__PURE__ */ jsxDEV("div", { children: [
         /* @__PURE__ */ jsxDEV("label", { className: "block mb-2", children: "Object Density" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 70,
+          lineNumber: 89,
           columnNumber: 21
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "flex justify-between", children: ["Low", "Medium", "High"].map((level) => /* @__PURE__ */ jsxDEV(
@@ -168,23 +207,23 @@ const SettingsPanel = ({ settings, setSettings, onClose }) => {
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 73,
+            lineNumber: 92,
             columnNumber: 30
           }
         )) }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 71,
+          lineNumber: 90,
           columnNumber: 21
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 69,
+        lineNumber: 88,
         columnNumber: 17
       }),
       /* @__PURE__ */ jsxDEV("div", { children: [
         /* @__PURE__ */ jsxDEV("label", { className: "block mb-2", children: "Framerate Limit" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 85,
+          lineNumber: 104,
           columnNumber: 21
         }),
         /* @__PURE__ */ jsxDEV("div", { className: "flex justify-between", children: ["Unlimited", "60 FPS", "30 FPS"].map((level) => /* @__PURE__ */ jsxDEV(
@@ -198,26 +237,26 @@ const SettingsPanel = ({ settings, setSettings, onClose }) => {
           false,
           {
             fileName: "<stdin>",
-            lineNumber: 88,
+            lineNumber: 107,
             columnNumber: 30
           }
         )) }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 86,
+          lineNumber: 105,
           columnNumber: 21
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 84,
+        lineNumber: 103,
         columnNumber: 17
       }),
       /* @__PURE__ */ jsxDEV("div", { className: "text-xs text-gray-400 pt-2 border-t border-gray-700", children: /* @__PURE__ */ jsxDEV("p", { children: "Reducing graphics settings can improve performance on less powerful devices." }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 100,
+        lineNumber: 119,
         columnNumber: 21
       }) }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 99,
+        lineNumber: 118,
         columnNumber: 17
       })
     ] }, void 0, true, {

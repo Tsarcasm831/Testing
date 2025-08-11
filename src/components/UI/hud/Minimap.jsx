@@ -1,86 +1,71 @@
 import { jsxDEV } from "react/jsx-dev-runtime";
 import React from "react";
 import { useMinimap } from "../../../hooks/useMinimap.js";
-const Minimap = ({ playerRef, worldObjects }) => {
+const Minimap = ({ playerRef, worldObjects, zoomRef }) => {
   const {
     minimapState,
     minimapCanvasRef,
     posXRef,
     posZRef,
-    handleInteractionStart
-  } = useMinimap({ playerRef, worldObjects });
+    zoomLevelRef,
+    biomeRef
+    // We intentionally do not use interaction handlers anymore to keep the minimap bound to the corner
+    // handleInteractionStart
+  } = useMinimap({ playerRef, worldObjects, zoomRef });
   return /* @__PURE__ */ jsxDEV(
     "div",
     {
       style: {
         position: "absolute",
-        left: `${minimapState.left}px`,
-        top: `${minimapState.top}px`,
+        right: "16px",
+        top: "16px",
         width: `${minimapState.width}px`
       },
-      className: "z-10 flex flex-col shadow-2xl",
+      className: "z-10 flex flex-col shadow-2xl pointer-events-auto",
       children: [
         /* @__PURE__ */ jsxDEV(
           "div",
           {
             style: { height: `${minimapState.height}px` },
-            className: "bg-black bg-opacity-70 border-2 border-b-0 border-gray-600 rounded-t overflow-hidden relative group",
-            onMouseDown: (e) => handleInteractionStart(e, "move"),
-            children: [
-              /* @__PURE__ */ jsxDEV("div", { className: "absolute inset-0 cursor-move" }, void 0, false, {
-                fileName: "<stdin>",
-                lineNumber: 29,
-                columnNumber: 17
-              }),
-              /* @__PURE__ */ jsxDEV("canvas", { ref: minimapCanvasRef, width: minimapState.width, height: minimapState.height, className: "w-full h-full" }, void 0, false, {
-                fileName: "<stdin>",
-                lineNumber: 30,
-                columnNumber: 17
-              }),
-              /* @__PURE__ */ jsxDEV("div", { className: "absolute -left-1 -top-1 w-4 h-4 cursor-nwse-resize z-10 opacity-0 group-hover:opacity-100 transition-opacity", onMouseDown: (e) => handleInteractionStart(e, "resize-tl") }, void 0, false, {
-                fileName: "<stdin>",
-                lineNumber: 33,
-                columnNumber: 17
-              }),
-              /* @__PURE__ */ jsxDEV("div", { className: "absolute -right-1 -top-1 w-4 h-4 cursor-nesw-resize z-10 opacity-0 group-hover:opacity-100 transition-opacity", onMouseDown: (e) => handleInteractionStart(e, "resize-tr") }, void 0, false, {
-                fileName: "<stdin>",
-                lineNumber: 34,
-                columnNumber: 17
-              }),
-              /* @__PURE__ */ jsxDEV("div", { className: "absolute -left-1 -bottom-1 w-4 h-4 cursor-nesw-resize z-10 opacity-0 group-hover:opacity-100 transition-opacity", onMouseDown: (e) => handleInteractionStart(e, "resize-bl") }, void 0, false, {
-                fileName: "<stdin>",
-                lineNumber: 35,
-                columnNumber: 17
-              }),
-              /* @__PURE__ */ jsxDEV("div", { className: "absolute -right-1 -bottom-1 w-4 h-4 cursor-nwse-resize z-10 opacity-0 group-hover:opacity-100 transition-opacity", onMouseDown: (e) => handleInteractionStart(e, "resize-br") }, void 0, false, {
-                fileName: "<stdin>",
-                lineNumber: 36,
-                columnNumber: 17
-              })
-            ]
+            className: "bg-black bg-opacity-70 border-2 border-b-0 border-gray-600 rounded-t overflow-hidden relative",
+            children: /* @__PURE__ */ jsxDEV("canvas", { ref: minimapCanvasRef, width: minimapState.width, height: minimapState.height, className: "w-full h-full" }, void 0, false, {
+              fileName: "<stdin>",
+              lineNumber: 31,
+              columnNumber: 17
+            })
           },
           void 0,
-          true,
+          false,
           {
             fileName: "<stdin>",
-            lineNumber: 24,
+            lineNumber: 27,
             columnNumber: 13
           }
         ),
         /* @__PURE__ */ jsxDEV("div", { className: "bg-black bg-opacity-70 text-white p-2 rounded-b text-sm border-2 border-t-0 border-gray-600", children: [
           /* @__PURE__ */ jsxDEV("div", { ref: posXRef, children: "X: 0" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 41,
+            lineNumber: 36,
             columnNumber: 17
           }),
           /* @__PURE__ */ jsxDEV("div", { ref: posZRef, children: "Z: 0" }, void 0, false, {
             fileName: "<stdin>",
-            lineNumber: 42,
+            lineNumber: 37,
+            columnNumber: 17
+          }),
+          /* @__PURE__ */ jsxDEV("div", { ref: zoomLevelRef, children: "Zoom Level: 1" }, void 0, false, {
+            fileName: "<stdin>",
+            lineNumber: 38,
+            columnNumber: 17
+          }),
+          /* @__PURE__ */ jsxDEV("div", { ref: biomeRef, children: "Biome: Unknown" }, void 0, false, {
+            fileName: "<stdin>",
+            lineNumber: 39,
             columnNumber: 17
           })
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 40,
+          lineNumber: 35,
           columnNumber: 13
         })
       ]
@@ -89,7 +74,7 @@ const Minimap = ({ playerRef, worldObjects }) => {
     true,
     {
       fileName: "<stdin>",
-      lineNumber: 14,
+      lineNumber: 17,
       columnNumber: 9
     }
   );

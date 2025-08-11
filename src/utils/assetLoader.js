@@ -3,31 +3,35 @@ const CACHE_NAME = 'game-assets-v1';
 
 // This will hold the list of all asset URLs to be downloaded.
 let allAssetUrls = [];
-// Tuning knobs
-const BATCH_SIZE = 10;
-const MAX_RETRIES = 2; // in addition to the first attempt => total attempts = 3
-const RETRY_DELAY_MS = 600;
 
-// Small helper
-const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
+// NEW: Only cache a minimal set of essential animation clips to avoid huge downloads
+const ESSENTIAL_ANIMATION_MATCHES = [
+    'Animation_Idle_11_withSkin.glb',
+    'Animation_Walking_withSkin.glb',
+    'Animation_RunFast_withSkin.glb',
+    'Animation_Running_withSkin.glb',
+    'Animation_Regular_Jump_withSkin.glb',
+    'Animation_Fall1_withSkin.glb',
+    'Animation_Punch_Combo_1_withSkin.glb',
+    'Animation_Roll_Dodge_withSkin.glb'
+];
 
-// Fetch with retry and CORS-friendly settings. Accepts opaque responses.
-async function fetchWithRetry(url) {
-    let lastError;
-    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-        try {
-            const req = new Request(url, { mode: 'no-cors' });
-            const res = await fetch(req);
-            // Accept opaque (CORS-bypassed) or ok responses
-            if (res.ok || res.type === 'opaque') return res;
-            lastError = new Error(`HTTP ${res.status}`);
-        } catch (e) {
-            lastError = e;
-        }
-        if (attempt < MAX_RETRIES) await sleep(RETRY_DELAY_MS * (attempt + 1));
-    }
-    throw lastError || new Error('Unknown fetch error');
-}
+// NEW: Local image assets to precache during the first loading screen
+const IMAGE_ASSETS = [
+    // UI and splash screens
+    '/loading.png',
+    '/loading1.png',
+    '/menu.png',
+
+    // Terrain and world textures (some may be swapped by settings/biomes)
+    '/grass_texture.png',
+    '/sand_texture.png',
+    '/dirt_path_texture.png',
+    '/rocky_ground_texture.png',
+    '/snow_texture.png',
+    '/forest_floor_texture.png',
+    '/ground_texture.png'
+];
 
 /**
  * Fetches and parses a JSON file to get a list of asset URLs.
@@ -63,8 +67,21 @@ export async function initializeAssetLoader() {
     const urlPromises = jsonFiles.map(file => getAssetUrlsFromJson(file));
     const urlArrays = await Promise.all(urlPromises);
     
-    // Flatten the array of arrays into a single array of URLs and remove duplicates
-    allAssetUrls = [...new Set(urlArrays.flat())];
+    // Flatten the array of arrays into a single array of URLs
+    let urls = urlArrays.flat();
+
+    // NEW: Filter to only essential animations to dramatically reduce bandwidth and memory
+    if (urls && urls.length) {
+        urls = urls.filter(url =>
+            ESSENTIAL_ANIMATION_MATCHES.some(match => url.includes(match))
+        );
+    }
+
+    // Remove duplicates
+    allAssetUrls = [...new Set(urls)];
+
+    // Include local image assets so they are precached during the first loading screen
+    allAssetUrls = [...new Set([...allAssetUrls, ...IMAGE_ASSETS])];
     
     console.log(`Found ${allAssetUrls.length} unique assets to potentially download.`);
 }
@@ -84,66 +101,47 @@ export async function startCaching(onProgress) {
     if (allAssetUrls.length === 0) {
         console.error('Still no assets to cache after initialization.');
         if (onProgress) onProgress(100);
-        return { total: 0, cached: 0, skippedExisting: 0, failed: [] };
+        return;
     }
     
     console.log(`Starting to cache ${allAssetUrls.length} assets...`);
     
     try {
         const cache = await caches.open(CACHE_NAME);
-        let processedCount = 0;
+        let downloadedCount = 0;
         const totalAssets = allAssetUrls.length;
-        let skippedExisting = 0;
-        let cached = 0;
-        const failed = [];
         
         // This function will be called to update progress.
         const updateProgress = () => {
-            processedCount++;
+            downloadedCount++;
             if (onProgress) {
-                const progress = Math.round((processedCount / totalAssets) * 100);
+                const progress = Math.round((downloadedCount / totalAssets) * 100);
                 onProgress(progress);
             }
         };
 
         // We process downloads in batches to avoid overwhelming the browser.
-        for (let i = 0; i < totalAssets; i += BATCH_SIZE) {
-            const batch = allAssetUrls.slice(i, i + BATCH_SIZE);
-            const results = await Promise.allSettled(batch.map(async (url) => {
-                const cachedResponse = await cache.match(url);
-                if (cachedResponse) {
-                    skippedExisting++;
-                    return { url, status: 'skipped' };
+        const batchSize = 10;
+        for (let i = 0; i < totalAssets; i += batchSize) {
+            const batch = allAssetUrls.slice(i, i + batchSize);
+            await Promise.all(batch.map(async (url) => {
+                try {
+                    const cachedResponse = await cache.match(url);
+                    if (!cachedResponse) {
+                        await cache.add(url);
+                    }
+                } catch (error) {
+                    console.error(`Failed to cache asset: ${url}`, error);
+                } finally {
+                    updateProgress();
                 }
-                const response = await fetchWithRetry(url);
-                await cache.put(url, response);
-                cached++;
-                return { url, status: 'cached' };
             }));
-
-            // progress + aggregate failures
-            for (let idx = 0; idx < results.length; idx++) {
-                const r = results[idx];
-                if (r.status === 'rejected') {
-                    const url = batch[idx];
-                    failed.push(url);
-                }
-                updateProgress();
-            }
         }
         
-        if (failed.length) {
-            console.warn(`Caching complete with some failures. Cached: ${cached}, skipped: ${skippedExisting}, failed: ${failed.length}`);
-            // Log a compact list once to reduce spam
-            console.warn('Failed asset URLs (showing up to 20):', failed.slice(0, 20));
-        } else {
-            console.log(`Caching complete. Cached: ${cached}, skipped: ${skippedExisting}, failed: 0`);
-        }
-
-        return { total: totalAssets, cached, skippedExisting, failed };
+        console.log('All assets have been processed for caching.');
+        
     } catch (error) {
         console.error('Error opening cache or caching assets:', error);
-        return { total: allAssetUrls.length, cached: 0, skippedExisting: 0, failed: allAssetUrls.slice() };
     }
 }
 

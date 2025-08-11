@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export const usePlayerControls = ({ setShowCharacter, setShowInventory, setShowWorldMap, setShowSettings, setShowMobileControls, gameState }) => {
+export const usePlayerControls = ({ setShowCharacter, setShowInventory, setShowWorldMap, setShowSettings, setShowMobileControls, setShowAnimations, gameState, setSettings }) => {
     const keysRef = useRef({});
 
     useEffect(() => {
@@ -12,12 +12,29 @@ export const usePlayerControls = ({ setShowCharacter, setShowInventory, setShowW
             
             keysRef.current[event.code] = true;
 
+            // Edge-triggered click flag for Interact (F)
+            if (event.code === 'KeyF') {
+                keysRef.current['KeyFClicked'] = true;
+            }
+
+            // NEW: Double-tap Space toggles Dev Flight mode
+            if (event.code === 'Space') {
+                const now = performance.now();
+                const last = keysRef.current.__lastSpaceTs || 0;
+                keysRef.current.__lastSpaceTs = now;
+                if (now - last < 300) {
+                    // Signal toggle; movement system will consume this
+                    keysRef.current['DevFlightToggle'] = true;
+                }
+            }
+
             const closeAllPanels = () => {
                 setShowCharacter(false);
                 setShowInventory(false);
                 setShowWorldMap(false);
                 if (gameState === 'Playing') { // Only close settings in-game with Esc
                     setShowSettings(false);
+                    setShowAnimations(false);
                 }
             };
 
@@ -29,6 +46,7 @@ export const usePlayerControls = ({ setShowCharacter, setShowInventory, setShowW
                         if (key !== 'i') setShowInventory(false);
                         if (key !== 'm') setShowWorldMap(false);
                         if (key !== 'p') setShowSettings(false);
+                        if (key !== 'b') setShowAnimations(false);
                     } else if (isOpen && gameState !== 'Playing' && key !== 'p') {
                         // In main menu, only allow settings to open
                         return false;
@@ -50,10 +68,24 @@ export const usePlayerControls = ({ setShowCharacter, setShowInventory, setShowW
                 case 'KeyP':
                     togglePanel(setShowSettings, 'p');
                     break;
+                case 'KeyB':
+                    if (gameState === 'Playing' && setShowAnimations) {
+                        togglePanel(setShowAnimations, 'b');
+                    }
+                    break;
+                case 'KeyG':
+                    if (setSettings && gameState === 'Playing') {
+                        setSettings(prev => ({ ...prev, grid: !prev.grid }));
+                    }
+                    break;
                 case 'KeyZ':
                     if (setShowMobileControls && gameState === 'Playing') {
                         setShowMobileControls(prev => !prev);
                     }
+                    break;
+                case 'KeyV':
+                    // Toggle first-person view (handled in animation loop)
+                    keysRef.current['ToggleFirstPerson'] = true;
                     break;
                 case 'Escape':
                     closeAllPanels();
@@ -65,14 +97,33 @@ export const usePlayerControls = ({ setShowCharacter, setShowInventory, setShowW
             keysRef.current[event.code] = false;
         };
 
+        // Mouse buttons (bind left-click for attack)
+        const handleMouseDown = (event) => {
+            // Only register attacks when clicking on the game canvas to avoid UI clicks triggering attacks
+            if (event.button === 0 && event.target && event.target.tagName === 'CANVAS') {
+                keysRef.current['MouseLeft'] = true;
+                // Edge-triggered click flag (consumed by game logic)
+                keysRef.current['MouseLeftClicked'] = true;
+            }
+        };
+        const handleMouseUp = (event) => {
+            if (event.button === 0) {
+                keysRef.current['MouseLeft'] = false;
+            }
+        };
+
         window.addEventListener('keydown', handleKeyDown);
         window.addEventListener('keyup', handleKeyUp);
+        window.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mouseup', handleMouseUp);
 
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             window.removeEventListener('keyup', handleKeyUp);
+            window.removeEventListener('mousedown', handleMouseDown);
+            window.removeEventListener('mouseup', handleMouseUp);
         };
-    }, [setShowCharacter, setShowInventory, setShowWorldMap, setShowSettings, setShowMobileControls, gameState]);
+    }, [setShowCharacter, setShowInventory, setShowWorldMap, setShowSettings, setShowMobileControls, setShowAnimations, gameState, setSettings]);
 
     return keysRef;
 };

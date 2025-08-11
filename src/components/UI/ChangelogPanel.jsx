@@ -1,6 +1,26 @@
 import { jsxDEV } from "react/jsx-dev-runtime";
 import React from "react";
 const changelogData = [
+  { version: "0.003.9", date: "2025-08-11", changes: [
+    "Version bump to 0.003.9.",
+    "Added Ichiraku Ramen shop prototype (ichiraku.js) \u2014 file only, not yet integrated into the world."
+  ] },
+  { version: "0.002.51", date: "2025-08-09", changes: [
+    "Performance: Capped renderer pixel ratio via Settings \u2192 Render Scale (default 1.25x).",
+    "Performance: Minimap/HUD updates throttled to ~12 FPS.",
+    "Performance: Central wall details (crenellations, buttresses) converted to InstancedMesh (massive draw-call reduction).",
+    "Performance: Slightly reduced wall segment count for smoother rendering.",
+    "Quality: Settings panel exposes Render Scale control."
+  ] },
+  { version: "0.002.5", date: "2025-08-09", changes: [
+    "Version bump and new changelog entry.",
+    "Jump animation now immediately transitions to walk/run/idle upon landing.",
+    "Grid labels are bound to terrain height and grid cell size is locked.",
+    "Second loading overlay stays visible until the 3D scene and player are fully ready.",
+    "Prevented scene re-initialization when moving (no reload on movement).",
+    "Updated splash and main menu backgrounds; added Credits modal."
+  ] },
+  { version: "0.002.1", date: "Upcoming", changes: ["Added basic combat moves: Attack (F) and Dodge (Ctrl).", "Animation system now handles one-shot actions, preventing movement during attacks/dodges.", "Integrated a wider range of animations to make the player more dynamic."] },
   { version: "0.001.6", date: "Upcoming", changes: ["Added Main Menu with game start, options, and changelog.", "Implemented asset pre-loading for smoother game start."] },
   { version: "0.001.5", date: "2024-05-22", changes: ["Implemented asset downloader and caching system.", "Added diverse terrain types (sand, snow, rocky, forest).", "Player can now jump with Spacebar and gravity feels more responsive."] },
   { version: "0.001.4", date: "2024-05-21", changes: ["Added mobile joystick controls (toggle with Z key).", "Unified movement speed for both keyboard and joystick.", "Fixed inverted vertical axis on joystick."] },
@@ -11,7 +31,7 @@ const ChangelogPanel = ({ onClose }) => {
     /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-700 px-4 py-2 rounded-t-lg border-b border-gray-600 flex justify-between items-center", children: [
       /* @__PURE__ */ jsxDEV("h2", { className: "text-yellow-400 font-bold text-lg", children: "Changelog" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 15,
+        lineNumber: 35,
         columnNumber: 17
       }),
       /* @__PURE__ */ jsxDEV(
@@ -25,13 +45,13 @@ const ChangelogPanel = ({ onClose }) => {
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 16,
+          lineNumber: 36,
           columnNumber: 17
         }
       )
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 14,
+      lineNumber: 34,
       columnNumber: 13
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "p-4 space-y-4 max-h-[60vh] overflow-y-auto", children: changelogData.map((entry) => /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-900 p-3 rounded-lg border border-gray-700", children: [
@@ -41,40 +61,40 @@ const ChangelogPanel = ({ onClose }) => {
           entry.version
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 29,
+          lineNumber: 49,
           columnNumber: 30
         }),
         /* @__PURE__ */ jsxDEV("p", { className: "text-xs text-gray-400", children: entry.date }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 30,
+          lineNumber: 50,
           columnNumber: 30
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 28,
+        lineNumber: 48,
         columnNumber: 25
       }),
       /* @__PURE__ */ jsxDEV("ul", { className: "list-disc list-inside text-sm space-y-1 text-gray-300", children: entry.changes.map((change, index) => /* @__PURE__ */ jsxDEV("li", { children: change }, index, false, {
         fileName: "<stdin>",
-        lineNumber: 35,
+        lineNumber: 55,
         columnNumber: 33
       })) }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 33,
+        lineNumber: 53,
         columnNumber: 25
       })
     ] }, entry.version, true, {
       fileName: "<stdin>",
-      lineNumber: 27,
+      lineNumber: 47,
       columnNumber: 21
     })) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 25,
+      lineNumber: 45,
       columnNumber: 13
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 12,
+    lineNumber: 32,
     columnNumber: 9
   });
 };

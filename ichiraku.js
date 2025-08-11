@@ -1,0 +1,205 @@
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
+/* ---------- renderer / camera / controls ---------- */
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight, false);
+renderer.shadowMap.enabled = true;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x4a2d22);
+scene.fog = new THREE.Fog(scene.background, 30, 120);
+
+const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 500);
+camera.position.set(16, 10, 22);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 4, 0);
+controls.enableDamping = true;
+
+/* ---------- lights ---------- */
+const hemi = new THREE.HemisphereLight(0xffc070, 0x1a1a1a, 0.6);
+scene.add(hemi);
+
+const sun = new THREE.DirectionalLight(0xffa050, 1.0);
+sun.position.set(-30, 40, 20);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048,2048);
+scene.add(sun);
+
+/* ---------- helper: canvas text texture ---------- */
+function makeTextTexture({
+  w=512,h=256, bg="#e7e0d2", fg="#4a2a21", text="ラーメン", font="bold 160px 'Noto Sans JP'",
+  draw=(ctx)=>{ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+               ctx.fillStyle=fg;ctx.font=font;ctx.textAlign="center";ctx.textBaseline="middle";
+               ctx.fillText(text,w/2,h/2);}
+}={}) {
+  const cv = document.createElement('canvas'); cv.width=w; cv.height=h;
+  const ctx = cv.getContext('2d');
+  draw(ctx);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.anisotropy = 8;
+  tex.needsUpdate = true;
+  return tex;
+}
+
+/* ---------- ramen shop group ---------- */
+const shop = new THREE.Group();
+scene.add(shop);
+
+/* base box */
+const baseMat = new THREE.MeshStandardMaterial({color:0x7c6f66, roughness:.9});
+const base = new THREE.Mesh(new THREE.BoxGeometry(14,6,9), baseMat);
+base.position.y = 3;
+base.castShadow = base.receiveShadow = true;
+shop.add(base);
+
+/* side annex */
+const annex = new THREE.Mesh(new THREE.BoxGeometry(8,4,6), baseMat);
+annex.position.set(3.3, 5, -1.2);
+annex.castShadow = annex.receiveShadow = true;
+shop.add(annex);
+
+/* windows */
+const glassMat = new THREE.MeshStandardMaterial({color:0x223347, roughness:.2, metalness:.1, emissive:0x111318});
+function addWindow(x,y,z,w=3,h=2){
+  const g = new THREE.Mesh(new THREE.PlaneGeometry(w,h), glassMat);
+  g.position.set(x,y,z);
+  shop.add(g);
+}
+addWindow(0,4.2,4.51,6.5,2.1);
+addWindow(-5,4.2,4.51,3,2);
+addWindow(5.1,6,-2.5,4,2);
+
+/* roof main */
+function makeGabledRoof(w,d,h, color=0x6b5a52){
+  const geom = new THREE.ConeGeometry(Math.max(w,d), h, 4);
+  const mat  = new THREE.MeshStandardMaterial({color, roughness:.85, metalness:.05});
+  const roof = new THREE.Mesh(geom, mat);
+  roof.rotation.y = Math.PI/4;
+  roof.castShadow = true;
+  return roof;
+}
+const roof1 = makeGabledRoof(16,10,3.5,0x6e5d55);
+roof1.position.y=7.3;
+shop.add(roof1);
+
+/* front lean-to roof */
+const roofMat = new THREE.MeshStandardMaterial({color:0x5a4a43, roughness:.9});
+const lean = new THREE.Mesh(new THREE.BoxGeometry(12,0.25,4.2), roofMat);
+lean.position.set(0,4.6,6.0);
+lean.rotation.x = -Math.PI*0.08;
+shop.add(lean);
+
+/* vent stacks */
+function addStack(x,z,h=2.2,r=0.5){
+  const m = new THREE.MeshStandardMaterial({color:0x8a8178, roughness:.8, metalness:.2});
+  const s = new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,24), m);
+  s.position.set(x, 6+h/2, z);
+  shop.add(s);
+}
+addStack(-2.3, -1.6, 2.2);
+addStack(-3.5,  0.2, 1.6);
+addStack( 1.8, -1.1, 1.9);
+
+/* counter bar */
+const counter = new THREE.Mesh(new THREE.BoxGeometry(10.5,0.3,1.2),
+                               new THREE.MeshStandardMaterial({color:0x3b2e28, roughness:.8}));
+counter.position.set(0,2.7,5.2);
+shop.add(counter);
+
+/* stools */
+function addStool(x){
+  const seat = new THREE.Mesh(new THREE.CylinderGeometry(0.45,0.45,0.2,16),
+                              new THREE.MeshStandardMaterial({color:0x2f2f2f, roughness:.8}));
+  seat.position.set(x,1.1,4.7);
+  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.1,0.1,0.9,12),
+                              new THREE.MeshStandardMaterial({color:0x1b1b1b, metalness:.6, roughness:.4}));
+  pole.position.set(x,0.6,4.7);
+  shop.add(seat,pole);
+}
+[-4,-2,0,2,4].forEach(addStool);
+
+/* noren */
+const norenGroup = new THREE.Group(); shop.add(norenGroup);
+const words = ["一","ラ","ー","メ","ン","楽"];
+const panelW = 1.6, panelH = 1.4;
+for(let i=0;i<words.length;i++){
+  const tex = makeTextTexture({
+    w:512,h:512,bg:"#efe7d7",fg:"#5a2f22",
+    font:"bold 280px 'Noto Sans JP'", text:words[i]
+  });
+  const mat = new THREE.MeshStandardMaterial({map:tex, roughness:.95});
+  const p = new THREE.Mesh(new THREE.PlaneGeometry(panelW,panelH), mat);
+  p.position.set(-4 + i*(panelW+0.05), 3.1, 6.51);
+  norenGroup.add(p);
+}
+
+/* signboard */
+const signTex = makeTextTexture({
+  w:256,h:768,bg:"#dde4e8",fg:"#21303a",
+  draw:(ctx)=>{
+    const {width:w,height:h}=ctx.canvas;
+    ctx.fillStyle="#dde4e8"; ctx.fillRect(0,0,w,h);
+    ctx.fillStyle="#21303a"; ctx.font="bold 170px 'Noto Sans JP'";
+    ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.save(); ctx.translate(w/2,h/2); ctx.rotate(-Math.PI/2);
+    ctx.fillText("やき",0,0); ctx.restore();
+  }
+});
+const signMat = new THREE.MeshStandardMaterial({map:signTex, roughness:.95});
+const sign = new THREE.Mesh(new THREE.PlaneGeometry(2.2,5.5), signMat);
+sign.position.set(9,4.5,2.5); sign.rotation.y = -Math.PI/4;
+shop.add(sign);
+
+/* lantern */
+const lanternBody = new THREE.Mesh(
+  new THREE.CapsuleGeometry(0.6,1.2,8,16),
+  new THREE.MeshStandardMaterial({color:0xf2c6a0, emissive:0x442200, roughness:.6})
+);
+lanternBody.position.set(-7.2,3.4,5.9);
+shop.add(lanternBody);
+
+/* gas cylinders */
+function gasCylinder(x,z){
+  const body = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.5,0.5,3,16),
+    new THREE.MeshStandardMaterial({color:0x5b3f36, roughness:.85})
+  );
+  body.position.set(x,1.6,z);
+  shop.add(body);
+}
+gasCylinder(6.2,3.2);
+gasCylinder(7.2,3.2);
+
+/* figures */
+function tinyPerson(x, color=0xff7f2a){
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.25,0.6,4,10),
+                              new THREE.MeshStandardMaterial({color, roughness:.8}));
+  body.position.y = 1.6; g.add(body);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.22,16,16),
+                              new THREE.MeshStandardMaterial({color:0xffc89b, roughness:.6}));
+  head.position.y = 2.2; g.add(head);
+  g.position.set(x,0,4.7);
+  return g;
+}
+shop.add(tinyPerson(-1.9, 0xff7f2a));
+shop.add(tinyPerson(-3.4, 0x517c9c));
+
+/* ---------- resize & render loop ---------- */
+function onResize(){
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w/h; camera.updateProjectionMatrix();
+}
+addEventListener('resize', onResize);
+
+function animate(t){
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);

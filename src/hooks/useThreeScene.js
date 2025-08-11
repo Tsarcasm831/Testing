@@ -1,371 +1,459 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { useThrottle } from './useThrottle.js';
-import { createPlayer, updatePlayer, resetPlayerState } from '../game/player.js';
+import { createPlayer, updatePlayer, resetPlayerState } from '../game/player/index.js';
 import { updateObjects } from '../game/objects.js';
+import { initScene } from '../scene/initScene.js';
+import { startAnimationLoop } from '../scene/animationLoop.js';
 
-// Rename existing texture and add new ones.
-const terrainFiles = {
-    grass: 'grass_texture.png',
-    sand: 'sand_texture.png',
-    dirt: 'dirt_path_texture.png',
-    rocky: 'rocky_ground_texture.png',
-    snow: 'snow_texture.png',
-    forest: 'forest_floor_texture.png',
-};
-
-const geometries = [
-    new THREE.BoxGeometry(5, 5, 5),
-    new THREE.ConeGeometry(3, 8, 8),
-    new THREE.SphereGeometry(3, 8, 8)
-];
-const materials = [0xFF6B6B, 0x4ECDC4, 0x45B7D1, 0x96CEB4, 0xFECA57].map(color => new THREE.MeshLambertMaterial({ color }));
-
-export const useThreeScene = ({ mountRef, keysRef, joystickRef, setPlayerPosition, settings, setWorldObjects, isPlaying, onPlayerLoaded }) => {
+export const useThreeScene = ({ mountRef, keysRef, joystickRef, setPlayerPosition, settings, setWorldObjects, isPlaying, onReady }) => {
     const sceneRef = useRef(null);
     const rendererRef = useRef(null);
     const cameraRef = useRef(null);
     const playerRef = useRef(null);
-    const animationIdRef = useRef(null);
-    const lastPositionUpdateRef = useRef(0);
-    const moveStopTimerRef = useRef(null);
+    const animationStopRef = useRef(null);
     const lightRef = useRef(null);
     const randomObjectsRef = useRef([]);
     const objectGridRef = useRef(null);
     const gridHelperRef = useRef(null);
     const clockRef = useRef(new THREE.Clock());
-    const lastFrameTimeRef = useRef(0);
     const groundContainerRef = useRef(null);
-    const [isSceneReady, setIsSceneReady] = useState(false);
+    const gridLabelsGroupRef = useRef(null);
+    const gridLabelsArrayRef = useRef(null); // legacy (unused with virtualization)
+    const visibleLabelsRef = useRef(new Set()); // legacy (unused with virtualization)
+    const gridLabelsUpdateRef = useRef(null); // new: function to update labels each frame
+    const zoomRef = useRef(0.2);
+    // New: object tooltips
+    const objectTooltipsGroupRef = useRef(null);
+    const objectTooltipsUpdateRef = useRef(null);
+    // New: interaction prompt overlay
+    const interactPromptRef = useRef(null);
+    // New: camera orbit yaw ref (in radians). 0 means camera is at +Z from player.
+    const cameraOrbitRef = useRef(0);
+    // NEW: camera pitch ref (in radians, clamped in update)
+    const cameraPitchRef = useRef(0);
+    // NEW: first-person view toggle ref
+    const firstPersonRef = useRef(false);
+
+    // Keep a stable ref to onReady to avoid re-initializing the scene on every render
+    const onReadyRef = useRef(onReady);
+    useEffect(() => {
+        onReadyRef.current = onReady;
+    }, [onReady]);
 
     const throttledSetPlayerPosition = useThrottle(setPlayerPosition, 250);
 
     const cleanupScene = useCallback(() => {
-        if (animationIdRef.current) {
-            cancelAnimationFrame(animationIdRef.current);
-            animationIdRef.current = null;
+        if (animationStopRef.current) {
+            animationStopRef.current();
+            animationStopRef.current = null;
         }
+        // Remove interaction prompt overlay if present
+        if (interactPromptRef.current && mountRef.current && mountRef.current.contains(interactPromptRef.current)) {
+            mountRef.current.removeChild(interactPromptRef.current);
+        }
+        interactPromptRef.current = null;
+
         if (rendererRef.current) {
             rendererRef.current.dispose();
-            if (mountRef.current && rendererRef.current.domElement) {
-                // Check if the child exists before trying to remove it
-                if (mountRef.current.contains(rendererRef.current.domElement)) {
-                    mountRef.current.removeChild(rendererRef.current.domElement);
-                }
+            if (mountRef.current && rendererRef.current.domElement && mountRef.current.contains(rendererRef.current.domElement)) {
+                mountRef.current.removeChild(rendererRef.current.domElement);
             }
             rendererRef.current = null;
         }
         if (sceneRef.current) {
-             while(sceneRef.current.children.length > 0){
+            while (sceneRef.current.children.length > 0) {
                 sceneRef.current.remove(sceneRef.current.children[0]);
             }
             sceneRef.current = null;
         }
         groundContainerRef.current = null;
+        gridLabelsGroupRef.current = null;
+        gridLabelsArrayRef.current = null;
+        if (visibleLabelsRef.current) visibleLabelsRef.current.clear();
         randomObjectsRef.current = [];
         if (objectGridRef.current) objectGridRef.current.clear();
-        setIsSceneReady(false);
-        playerRef.current = null;
     }, [mountRef]);
 
-    const initScene = useCallback(async () => {
+    // Initialize should only change (and thus cause a re-init) when absolutely necessary.
+    // Antialiasing requires a fresh renderer, so we keep it as a dependency.
+    // Other settings (grid visibility, shadows, shadow quality, etc.) are applied live below.
+    const initialize = useCallback(() => {
         if (!mountRef.current) return;
 
-        // --- Asset Loading ---
-        const gltfLoader = new GLTFLoader();
-        // Ensure CORS-friendly requests
-        if (gltfLoader.setCrossOrigin) gltfLoader.setCrossOrigin('anonymous');
-        const textureLoader = new THREE.TextureLoader();
-        if (textureLoader.setCrossOrigin) textureLoader.setCrossOrigin('anonymous');
-
-        const animFiles = {
-            idle: '/src/components/local/character/Kakashi/Animation_Idle_11_withSkin.glb',
-            walk: '/src/components/local/character/Kakashi/Animation_Walking_withSkin.glb',
-            run: '/src/components/local/character/Kakashi/Animation_Running_withSkin.glb',
-            jump: '/src/components/local/character/Kakashi/Animation_Regular_Jump_withSkin.glb'
-        };
-
-        try {
-            // Load the main model (from the idle animation file)
-            const idleGltf = await gltfLoader.loadAsync(animFiles.idle);
-            const playerModel = idleGltf.scene;
-            const animations = { idle: idleGltf.animations[0] };
-
-            // Load other animations
-            const animPromises = Object.keys(animFiles)
-                .filter(key => key !== 'idle')
-                .map(async key => {
-                    const gltf = await gltfLoader.loadAsync(animFiles[key]);
-                    animations[key] = gltf.animations[0];
-                });
-            
-            await Promise.all(animPromises);
-            
-            // Name the animation clips for easier access
-            animations.idle.name = 'idle';
-            animations.walk.name = 'walk';
-            animations.run.name = 'run';
-            animations.jump.name = 'jump';
-
-            // --- Scene Setup ---
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x87CEEB);
-            sceneRef.current = scene;
-
-            // Camera setup
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-            camera.position.set(0, 50, 50);
-            cameraRef.current = camera;
-
-            // Renderer setup
-            const renderer = new THREE.WebGLRenderer({ antialias: settings.antialiasing });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.shadowMap.enabled = settings.shadows;
-            renderer.shadowMap.type = THREE.PCFShadowMap; // More performant than PCFSoftShadowMap
-            rendererRef.current = renderer;
-            mountRef.current.appendChild(renderer.domElement);
-
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
-            scene.add(ambientLight);
-
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-            directionalLight.position.set(30, 80, 40); // Initial position, will be updated to follow player
-            directionalLight.castShadow = settings.shadows;
-            
-            // Shadow map resolution based on quality setting
-            const shadowMapSize = { low: 512, medium: 1024, high: 2048 }[settings.shadowQuality] || 1024;
-            directionalLight.shadow.mapSize.width = shadowMapSize;
-            directionalLight.shadow.mapSize.height = shadowMapSize;
-            
-            // Optimize shadow camera frustum
-            directionalLight.shadow.camera.near = 10;
-            directionalLight.shadow.camera.far = 400;
-            const frustumSize = 160;
-            directionalLight.shadow.camera.left = -frustumSize;
-            directionalLight.shadow.camera.right = frustumSize;
-            directionalLight.shadow.camera.top = frustumSize;
-            directionalLight.shadow.camera.bottom = -frustumSize;
-            
-            scene.add(directionalLight);
-            lightRef.current = directionalLight;
-
-            // Set initial light target to player start position
-            directionalLight.target.position.set(0, 0, 0);
-            scene.add(directionalLight.target);
-
-            // Ground plane is now a container for tiles
-            groundContainerRef.current = new THREE.Group();
-            scene.add(groundContainerRef.current);
-            const groundContainer = groundContainerRef.current;
-
-            // Terrain Generation
-            const textureLoader = new THREE.TextureLoader();
-            const worldSize = 2000;
-            const tileSize = 200;
-            const numTiles = worldSize / tileSize;
-
-            // One texture repeat covers 20x20 world units, so for a 200x200 tile, it repeats 10 times.
-            const textureRepeat = tileSize / 20;
-
-            const terrainMaterials = {};
-            for (const key in terrainFiles) {
-                const texture = textureLoader.load(terrainFiles[key]);
-                texture.wrapS = THREE.RepeatWrapping;
-                texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(textureRepeat, textureRepeat);
-                terrainMaterials[key] = new THREE.MeshLambertMaterial({ map: texture });
+        const {
+            scene,
+            renderer,
+            camera,
+            light,
+            groundContainer,
+            gridHelper,
+            gridLabelsGroup,
+            gridLabelsUpdate,
+            player,
+            objectTooltipsGroup,
+            updateObjectTooltips
+        } = initScene({
+            mountEl: mountRef.current,
+            // Pass only essential init-time settings; the rest are adjusted live post-init
+            settings: {
+                antialiasing: settings.antialiasing,
+                // The following are initial values; they will be updated by effects below without re-init
+                shadows: settings.shadows,
+                shadowQuality: settings.shadowQuality,
+                grid: settings.grid
+            },
+            createPlayer,
+            onReady: () => {
+                // Always call the latest onReady without re-creating initialize
+                try { onReadyRef.current && onReadyRef.current(); } catch (_) {}
             }
-            
-            const getTerrainType = (x, z) => {
-                // x and z are tile indices from -numTiles/2 to numTiles/2
-                if (x >= 3) return 'sand';     // Desert to the East
-                if (x <= -3) return 'rocky';   // Mountains to the West
-                if (z <= -3) return 'snow';    // Snow to the North (further from camera)
-                if (z >= 3 && Math.abs(x) < 3) return 'forest'; // Forest to the South
-                return 'grass'; // Default central grassland
-            };
+        });
 
-            const groundGeometry = new THREE.PlaneGeometry(tileSize, tileSize);
-            
-            for (let i = 0; i < numTiles; i++) {
-                for (let j = 0; j < numTiles; j++) {
-                    const x = (i - numTiles / 2) * tileSize + tileSize / 2;
-                    const z = (j - numTiles / 2) * tileSize + tileSize / 2;
-                    
-                    const tileX = i - numTiles / 2;
-                    const tileZ = j - numTiles / 2;
+        sceneRef.current = scene;
+        rendererRef.current = renderer;
+        cameraRef.current = camera;
+        lightRef.current = light;
+        groundContainerRef.current = groundContainer;
+        gridHelperRef.current = gridHelper;
+        gridLabelsGroupRef.current = gridLabelsGroup;
+        gridLabelsUpdateRef.current = gridLabelsUpdate;
+        playerRef.current = player;
+        // Tooltips
+        objectTooltipsGroupRef.current = objectTooltipsGroup;
+        objectTooltipsUpdateRef.current = updateObjectTooltips;
 
-                    const terrainType = getTerrainType(tileX, tileZ);
-                    const material = terrainMaterials[terrainType] || terrainMaterials.grass;
+        // Create interaction prompt overlay
+        const prompt = document.createElement('div');
+        prompt.style.position = 'absolute';
+        prompt.style.left = '50%';
+        prompt.style.bottom = '8%';
+        prompt.style.transform = 'translateX(-50%)';
+        prompt.style.padding = '8px 12px';
+        prompt.style.background = 'rgba(0,0,0,0.7)';
+        prompt.style.border = '2px solid rgba(234, 179, 8, 0.9)'; // tailwind amber-500-ish
+        prompt.style.color = '#fff';
+        prompt.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
+        prompt.style.borderRadius = '8px';
+        prompt.style.pointerEvents = 'none';
+        prompt.style.display = 'none';
+        prompt.style.zIndex = '25';
+        prompt.id = 'interaction-prompt';
+        mountRef.current.appendChild(prompt);
+        interactPromptRef.current = prompt;
+    }, [mountRef, settings.antialiasing]); // NOTE: intentionally excludes onReady to prevent re-init on movement-driven re-renders
 
-                    const groundTile = new THREE.Mesh(groundGeometry, material);
-                    groundTile.position.set(x, 0, z);
-                    groundTile.rotation.x = -Math.PI / 2;
-                    groundTile.receiveShadow = settings.shadows;
-                    groundContainer.add(groundTile);
-                }
-            }
-
-            // Grid overlay
-            const gridHelper = new THREE.GridHelper(2000, 80, 0x334433, 0x334433);
-            gridHelper.material.opacity = 0.2;
-            gridHelper.material.transparent = true;
-            gridHelper.visible = settings.grid;
-            scene.add(gridHelper);
-            gridHelperRef.current = gridHelper;
-
-            // Player
-            playerRef.current = createPlayer(playerModel, Object.values(animations), settings);
-            scene.add(playerRef.current);
-
-            setIsSceneReady(true);
-            if(onPlayerLoaded) onPlayerLoaded();
-
-        } catch (error) {
-            console.error("Failed to load player assets:", error);
-            // Handle loading error, maybe show an error message to the user.
-        }
-
-    }, [settings.antialiasing, onPlayerLoaded]);
-
-    // Initialize or re-initialize scene on mount or antialias change
     useEffect(() => {
         if (!isPlaying) {
             cleanupScene();
             return;
         }
+        initialize();
 
-        initScene();
-        
+        // start main loop
+        animationStopRef.current = startAnimationLoop({
+            sceneRef,
+            cameraRef,
+            rendererRef,
+            lightRef,
+            playerRef,
+            objectGridRef,
+            randomObjectsRef,
+            keysRef,
+            throttledSetPlayerPosition,
+            joystickRef,
+            zoomRef,
+            cameraOrbitRef,
+            // NEW: pass pitch ref
+            cameraPitchRef,
+            fpsLimit: settings.fpsLimit,
+            // Grid labels (virtualized)
+            gridLabelsGroupRef,
+            gridLabelsArrayRef,
+            visibleLabelsRef,
+            gridLabelsUpdateRef,
+            clockRef,
+            // Object tooltips
+            objectTooltipsUpdateRef,
+            // Interaction prompt
+            interactPromptRef,
+            // NEW: first-person ref
+            firstPersonRef
+        });
+
         return cleanupScene;
-    }, [isPlaying, initScene, cleanupScene]);
-    
-    // Update settings that don't require a full re-render
+    }, [isPlaying, initialize, cleanupScene, settings.fpsLimit, keysRef, joystickRef, throttledSetPlayerPosition]);
+
+    // Settings updates (no full reinit)
     useEffect(() => {
         if (!rendererRef.current || !lightRef.current || !playerRef.current || !gridHelperRef.current || !groundContainerRef.current) return;
-        
-        // Shadows
         rendererRef.current.shadowMap.enabled = settings.shadows;
         lightRef.current.castShadow = settings.shadows;
-        
+
+        // NEW: apply pixel ratio changes live
+        if (typeof settings.maxPixelRatio === 'number') {
+            const target = Math.min(window.devicePixelRatio || 1, settings.maxPixelRatio);
+            if (rendererRef.current.getPixelRatio?.() !== target) {
+                rendererRef.current.setPixelRatio(target);
+                rendererRef.current.setSize(window.innerWidth, window.innerHeight, false);
+            }
+        }
+
         groundContainerRef.current.children.forEach(tile => {
             tile.receiveShadow = settings.shadows;
         });
+        playerRef.current.castShadow = settings.shadows;
 
-        if (playerRef.current) {
-            playerRef.current.traverse(node => {
-                if (node.isMesh) {
-                    node.castShadow = settings.shadows;
-                }
-            });
-        }
-
-        // Update shadow map size when quality changes
         const shadowMapSize = { low: 512, medium: 1024, high: 2048 }[settings.shadowQuality] || 1024;
         if (lightRef.current.shadow.mapSize.width !== shadowMapSize) {
             lightRef.current.shadow.mapSize.width = shadowMapSize;
             lightRef.current.shadow.mapSize.height = shadowMapSize;
-            // The shadow map needs to be recreated
             lightRef.current.shadow.map = null;
         }
-
-        // Object shadows are now handled dynamically in updatePlayer loop
         rendererRef.current.shadowMap.needsUpdate = true;
-        
-        // Grid
-        gridHelperRef.current.visible = settings.grid;
 
-    }, [settings.shadows, settings.grid, settings.objectDensity, settings.shadowQuality]);
-    
-    // Handle Object Density
+        if (gridHelperRef.current) gridHelperRef.current.visible = settings.grid;
+        if (gridLabelsGroupRef.current) gridLabelsGroupRef.current.visible = settings.grid;
+    }, [settings.shadows, settings.grid, settings.shadowQuality, settings.maxPixelRatio]);
+
+    // Object density updates
     useEffect(() => {
-         if (!sceneRef.current || !isPlaying) return;
-        // When objects are recreated, we must reset the player module's state
-        // to avoid trying to update shadows on old, removed objects.
+        if (!sceneRef.current || !isPlaying) return;
         resetPlayerState();
         const { objects, grid } = updateObjects(sceneRef.current, randomObjectsRef.current, settings);
         randomObjectsRef.current = objects;
         objectGridRef.current = grid;
         if (setWorldObjects) {
-            setWorldObjects(objects.map(obj => ({
-                position: obj.position.clone(),
-                color: obj.children[0]?.material.color.getHexString() ?? 'ffffff'
-            })));
-        }
-    }, [settings.objectDensity, settings.shadows, initScene, isPlaying]); // Re-run when density or scene changes
+            // Build world map dots from the spatial grid so instanced proxies are included.
+            const items = [];
+            if (objectGridRef.current && objectGridRef.current.grid) {
+                const seen = new Set();
+                const pickColorHex = (obj) => {
+                    // Prefer explicit color for proxies
+                    try {
+                        if (obj?.userData?.colorHex) return obj.userData.colorHex;
+                    } catch (e) {
+                        // ignore
+                    }
 
-    // Animation loop
-    useEffect(() => {
-        const fpsIntervals = {
-            'Unlimited': 0,
-            '60 FPS': 1000 / 60,
-            '30 FPS': 1000 / 30,
-        };
-        const fpsInterval = fpsIntervals[settings.fpsLimit] || 0;
+                    // Safely search the object and all descendants for a mesh material color
+                    const visited = new Set();
+                    const stack = [obj];
+                    while (stack.length) {
+                        const n = stack.pop();
+                        if (!n || visited.has(n)) continue;
+                        visited.add(n);
 
-        const animate = (timestamp) => {
-            animationIdRef.current = requestAnimationFrame(animate);
+                        try {
+                            if (n.isMesh && n.material && n.material.color && typeof n.material.color.getHexString === 'function') {
+                                return n.material.color.getHexString();
+                            }
+                        } catch (e) {
+                            // ignore and continue
+                        }
 
-            const elapsed = timestamp - lastFrameTimeRef.current;
-            if (fpsInterval > 0 && elapsed < fpsInterval) {
-                return;
-            }
-            lastFrameTimeRef.current = timestamp - (elapsed % fpsInterval);
+                        if (n.children && n.children.length) {
+                            for (let i = 0; i < n.children.length; i++) {
+                                stack.push(n.children[i]);
+                            }
+                        }
+                    }
 
-            if (!isSceneReady || !playerRef.current || !cameraRef.current || !rendererRef.current || !sceneRef.current || !objectGridRef.current) return;
-            
-            const delta = clockRef.current.getDelta();
+                    return 'ffffff';
+                };
 
-            // Update LODs before rendering
-            for (const obj of randomObjectsRef.current) {
-                if (obj.isLOD) {
-                    obj.update(cameraRef.current);
+                // Iterate over all grid cells
+                for (const key in objectGridRef.current.grid) {
+                    if (!Object.prototype.hasOwnProperty.call(objectGridRef.current.grid, key)) continue;
+                    const arr = objectGridRef.current.grid[key];
+                    if (!arr) continue;
+                    for (let i = 0; i < arr.length; i++) {
+                        const obj = arr[i];
+                        if (!obj || !obj.position) continue;
+                        if (seen.has(obj)) continue;
+                        seen.add(obj);
+
+                        const color = pickColorHex(obj);
+                        // Clone position to avoid mutation
+                        items.push({
+                            position: obj.position.clone ? obj.position.clone() : { x: obj.position.x, y: obj.position.y, z: obj.position.z },
+                            color
+                        });
+                    }
                 }
             }
-
-            updatePlayer(
-                playerRef.current, 
-                keysRef.current, 
-                cameraRef.current, 
-                lightRef.current, 
-                throttledSetPlayerPosition,
-                objectGridRef.current,
-                delta,
-                joystickRef.current
-            );
-
-            rendererRef.current.render(sceneRef.current, cameraRef.current);
-        };
-
-        // Start animation only when playing and scene is ready
-        if (isPlaying && isSceneReady && rendererRef.current) {
-            animate(0);
+            setWorldObjects(items);
         }
+    }, [settings.objectDensity, isPlaying, setWorldObjects]);
 
-        return () => {
-            if (animationIdRef.current) {
-                cancelAnimationFrame(animationIdRef.current);
-                animationIdRef.current = null;
-            }
-            throttledSetPlayerPosition.cancel();
-        };
-    }, [isPlaying, isSceneReady, keysRef, throttledSetPlayerPosition, rendererRef, settings.fpsLimit, joystickRef]); // Depend on rendererRef.current and fpsLimit
-
-    // Handle window resize
+    // Resize
     useEffect(() => {
         const handleResize = () => {
             if (!cameraRef.current || !rendererRef.current) return;
-
             cameraRef.current.aspect = window.innerWidth / window.innerHeight;
             cameraRef.current.updateProjectionMatrix();
             rendererRef.current.setSize(window.innerWidth, window.innerHeight);
         };
-
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    return { playerRef };
+    // Mouse wheel zoom
+    useEffect(() => {
+        const handleWheel = (event) => {
+            const zoomSpeed = 0.1;
+            zoomRef.current += event.deltaY * 0.001 * zoomSpeed * 5;
+            zoomRef.current = Math.max(0.2, Math.min(2.5, zoomRef.current));
+        };
+        const mountElement = mountRef.current;
+        if (mountElement) {
+            mountElement.addEventListener('wheel', handleWheel);
+        }
+        return () => {
+            if (mountElement) mountElement.removeEventListener('wheel', handleWheel);
+        };
+    }, [isPlaying, mountRef]);
+
+    // Mobile: Pinch-to-zoom
+    useEffect(() => {
+        const el = mountRef.current;
+        if (!el) return;
+
+        let pinchStartDist = null;
+        let pinchStartZoom = null;
+
+        const getDistance = (touches) => {
+            const dx = touches[0].clientX - touches[1].clientX;
+            const dy = touches[0].clientY - touches[1].clientY;
+            return Math.hypot(dx, dy);
+        };
+
+        const onTouchStart = (e) => {
+            if (e.touches.length === 2) {
+                // Prevent page zoom/scroll during pinch
+                if (e.cancelable) e.preventDefault();
+                pinchStartDist = getDistance(e.touches);
+                pinchStartZoom = zoomRef.current ?? 0.2;
+            }
+        };
+
+        const onTouchMove = (e) => {
+            if (e.touches.length === 2 && pinchStartDist && pinchStartZoom != null) {
+                // Prevent default to avoid page scrolling
+                if (e.cancelable) e.preventDefault();
+                const currentDist = getDistance(e.touches);
+                const scale = currentDist / pinchStartDist;
+                // Gentle sensitivity
+                const newZoom = pinchStartZoom * scale;
+                zoomRef.current = Math.max(0.2, Math.min(2.5, newZoom));
+            }
+        };
+
+        const onTouchEnd = () => {
+            // Reset when gesture ends or fingers lifted
+            pinchStartDist = null;
+            pinchStartZoom = null;
+        };
+
+        // Use non-passive to allow preventDefault
+        el.addEventListener('touchstart', onTouchStart, { passive: false });
+        el.addEventListener('touchmove', onTouchMove, { passive: false });
+        el.addEventListener('touchend', onTouchEnd, { passive: false });
+        el.addEventListener('touchcancel', onTouchEnd, { passive: false });
+
+        return () => {
+            el.removeEventListener('touchstart', onTouchStart);
+            el.removeEventListener('touchmove', onTouchMove);
+            el.removeEventListener('touchend', onTouchEnd);
+            el.removeEventListener('touchcancel', onTouchEnd);
+        };
+    }, [mountRef, zoomRef, isPlaying]);
+
+    // Desktop: Right-click-and-drag to rotate camera (yaw + pitch)
+    useEffect(() => {
+        const el = mountRef.current;
+        if (!el || !isPlaying) return;
+
+        let dragging = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        const clampPitch = (v) => Math.max(-0.9, Math.min(0.9, v));
+        const normalizeAngle = (a) => {
+            const twoPI = Math.PI * 2;
+            a = ((a % twoPI) + twoPI) % twoPI;
+            if (a > Math.PI) a -= twoPI;
+            return a;
+        };
+
+        // Base sensitivities; adapt by zoom to keep feel consistent
+        const BASE_SENS_X = 0.008; // radians per px (yaw)
+        const BASE_SENS_Y = 0.010; // radians per px (pitch)
+
+        const onContextMenu = (e) => {
+            // Disable context menu on right-drag area so camera look feels natural
+            if (e.target && e.target.tagName === 'CANVAS') {
+                e.preventDefault();
+            }
+        };
+
+        const onMouseDown = (e) => {
+            if (e.button !== 2) return; // right button
+            if (e.target && e.target.tagName !== 'CANVAS') return;
+            dragging = true;
+            lastX = e.clientX;
+            lastY = e.clientY;
+            // Prevent text selection/drag side-effects
+            e.preventDefault();
+            document.body.style.cursor = 'grabbing';
+        };
+
+        const onMouseMove = (e) => {
+            if (!dragging) return;
+
+            const dx = e.clientX - lastX;
+            const dy = e.clientY - lastY;
+            lastX = e.clientX;
+            lastY = e.clientY;
+
+            const zoom = (zoomRef?.current ?? 0.2);
+            const zoomScale = 0.2 / Math.max(0.12, Math.min(2.5, zoom));
+            const sensX = BASE_SENS_X * zoomScale;
+            const sensY = BASE_SENS_Y * zoomScale;
+
+            if (cameraOrbitRef) {
+                // Invert dx so dragging right rotates camera to the right
+                const next = (cameraOrbitRef.current || 0) - dx * sensX;
+                cameraOrbitRef.current = normalizeAngle(next);
+            }
+            if (cameraPitchRef) {
+                const proposed = (cameraPitchRef.current || 0) - dy * sensY; // dragging up tilts down
+                cameraPitchRef.current = clampPitch(proposed);
+            }
+
+            e.preventDefault();
+        };
+
+        const onMouseUp = (e) => {
+            if (e.button === 2) {
+                dragging = false;
+                document.body.style.cursor = '';
+            }
+        };
+
+        el.addEventListener('contextmenu', onContextMenu);
+        el.addEventListener('mousedown', onMouseDown);
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+
+        return () => {
+            el.removeEventListener('contextmenu', onContextMenu);
+            el.removeEventListener('mousedown', onMouseDown);
+            window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('mouseup', onMouseUp);
+            document.body.style.cursor = '';
+        };
+    }, [mountRef, isPlaying, zoomRef, cameraOrbitRef, cameraPitchRef]);
+
+    return { playerRef, zoomRef, cameraOrbitRef, cameraPitchRef };
 };
