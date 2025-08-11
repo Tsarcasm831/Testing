@@ -184,9 +184,10 @@ function resolveCollisions(newPos, playerRadius, objectGrid) {
     return newPos;
 }
 
-export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, cameraYaw) {
+export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, cameraYaw, cameraPitch = 0) {
     let moved = false;
     let moveDirection = new THREE.Vector2(0, 0);
+    let verticalFromCamera = 0;
 
     // NEW: handle Dev Flight toggle (double-tap Space)
     if (keys['DevFlightToggle']) {
@@ -331,17 +332,24 @@ export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, 
             inputDirection.set(keyMoveX, keyMoveZ).normalize();
         }
 
-        // --- Rotate input direction by camera yaw ---
+        // --- Rotate input direction by camera yaw (and pitch in flight) ---
         if (inputDirection.lengthSq() > 0) {
             const cosYaw = Math.cos(cameraYaw);
             const sinYaw = Math.sin(cameraYaw);
-            
-            // Rotate the input vector
+
             moveDirection.x = inputDirection.x * cosYaw - inputDirection.y * sinYaw;
             moveDirection.y = inputDirection.x * sinYaw + inputDirection.y * cosYaw; // .y is our Z axis for movement
+
+            if (isDevFlight) {
+                const cosPitch = Math.cos(cameraPitch);
+                const sinPitch = Math.sin(cameraPitch);
+                moveDirection.x *= cosPitch;
+                moveDirection.y *= cosPitch;
+                verticalFromCamera = -inputDirection.y * sinPitch;
+            }
         }
-        
-        if (moveDirection.lengthSq() > 0) {
+
+        if (moveDirection.lengthSq() > 0 || verticalFromCamera !== 0) {
             // Proposed new position
             let newPos = { x: player.position.x + moveDirection.x * moveDistance, z: player.position.z + moveDirection.y * moveDistance };
 
@@ -352,6 +360,9 @@ export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, 
 
             player.position.x = newPos.x;
             player.position.z = newPos.z;
+            if (isDevFlight && verticalFromCamera !== 0) {
+                player.position.y += verticalFromCamera * moveDistance;
+            }
 
             // Adjust Y to follow the ground when walking on surfaces (e.g., wall top)
             if (!isDevFlight) {
@@ -363,7 +374,7 @@ export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, 
 
             const dx = player.position.x - prevX;
             const dz = player.position.z - prevZ;
-            moved = (dx * dx + dz * dz) > 1e-6;
+            moved = (dx * dx + dz * dz) > 1e-6 || (verticalFromCamera * verticalFromCamera) > 1e-6;
 
             if (moved && player.userData.model) {
                 const angle = Math.atan2(dx, dz);
