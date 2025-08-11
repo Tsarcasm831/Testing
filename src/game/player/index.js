@@ -99,10 +99,10 @@ export function updatePlayer(player, keys, camera, light, throttledSetPlayerPosi
 
     // First, determine camera yaw/pitch for movement controls
     const yaw = (cameraOrbitRef && typeof cameraOrbitRef.current === 'number') ? cameraOrbitRef.current : 0;
-    const pitch = (cameraPitchRef && typeof cameraPitchRef.current === 'number') ? cameraPitchRef.current : 0;
+    const pitchRaw = (cameraPitchRef && typeof cameraPitchRef.current === 'number') ? cameraPitchRef.current : 0;
 
     // Pass objectGrid and camera orientation to movement for camera-relative controls
-    updatePlayerMovement(player, keys, joystick, delta, objectGrid, yaw, pitch);
+    updatePlayerMovement(player, keys, joystick, delta, objectGrid, yaw, pitchRaw);
     
     // Update animation mixer
     if (player.userData.mixer) {
@@ -120,7 +120,7 @@ export function updatePlayer(player, keys, camera, light, throttledSetPlayerPosi
     const baseY = 50;
     const baseR = 50;
     const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-    const pitchRaw = (cameraPitchRef && typeof cameraPitchRef.current === 'number') ? cameraPitchRef.current : 0;
+    // pitchRaw computed above
     const pitch = clamp(pitchRaw, -0.9, 0.9);
 
     const isFirstPerson = !!(firstPersonRef && firstPersonRef.current);
