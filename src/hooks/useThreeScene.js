@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import * as THREE from 'three';
 import { useThrottle } from './useThrottle.js';
-import { createPlayer, updatePlayer, resetPlayerState } from '../game/player/index.js';
+import { resetPlayerState } from '../game/player/index.js';
 import { updateObjects } from '../game/objects.js';
-import { initScene } from '../scene/initScene.js';
 import { startAnimationLoop } from '../scene/animationLoop.js';
+import { initThreeScene, cleanupThreeScene } from './sceneLifecycle.js';
 
 export const useThreeScene = ({ mountRef, keysRef, joystickRef, setPlayerPosition, settings, setWorldObjects, isPlaying, onReady }) => {
     const sceneRef = useRef(null);
@@ -44,103 +44,42 @@ export const useThreeScene = ({ mountRef, keysRef, joystickRef, setPlayerPositio
     const throttledSetPlayerPosition = useThrottle(setPlayerPosition, 250);
 
     const cleanupScene = useCallback(() => {
-        if (animationStopRef.current) {
-            animationStopRef.current();
-            animationStopRef.current = null;
-        }
-        // Remove interaction prompt overlay if present
-        if (interactPromptRef.current && mountRef.current && mountRef.current.contains(interactPromptRef.current)) {
-            mountRef.current.removeChild(interactPromptRef.current);
-        }
-        interactPromptRef.current = null;
-
-        if (rendererRef.current) {
-            rendererRef.current.dispose();
-            if (mountRef.current && rendererRef.current.domElement && mountRef.current.contains(rendererRef.current.domElement)) {
-                mountRef.current.removeChild(rendererRef.current.domElement);
-            }
-            rendererRef.current = null;
-        }
-        if (sceneRef.current) {
-            while (sceneRef.current.children.length > 0) {
-                sceneRef.current.remove(sceneRef.current.children[0]);
-            }
-            sceneRef.current = null;
-        }
-        groundContainerRef.current = null;
-        gridLabelsGroupRef.current = null;
-        gridLabelsArrayRef.current = null;
-        if (visibleLabelsRef.current) visibleLabelsRef.current.clear();
-        randomObjectsRef.current = [];
-        if (objectGridRef.current) objectGridRef.current.clear();
+        cleanupThreeScene({
+            mountRef,
+            rendererRef,
+            sceneRef,
+            animationStopRef,
+            interactPromptRef,
+            groundContainerRef,
+            gridLabelsGroupRef,
+            gridLabelsArrayRef,
+            visibleLabelsRef,
+            randomObjectsRef,
+            objectGridRef
+        });
     }, [mountRef]);
 
     // Initialize should only change (and thus cause a re-init) when absolutely necessary.
     // Antialiasing requires a fresh renderer, so we keep it as a dependency.
     // Other settings (grid visibility, shadows, shadow quality, etc.) are applied live below.
     const initialize = useCallback(() => {
-        if (!mountRef.current) return;
-
-        const {
-            scene,
-            renderer,
-            camera,
-            light,
-            groundContainer,
-            gridHelper,
-            gridLabelsGroup,
-            gridLabelsUpdate,
-            player,
-            objectTooltipsGroup,
-            updateObjectTooltips
-        } = initScene({
-            mountEl: mountRef.current,
-            // Pass only essential init-time settings; the rest are adjusted live post-init
-            settings: {
-                antialiasing: settings.antialiasing,
-                // The following are initial values; they will be updated by effects below without re-init
-                shadows: settings.shadows,
-                shadowQuality: settings.shadowQuality,
-                grid: settings.grid
-            },
-            createPlayer,
-            onReady: () => {
-                // Always call the latest onReady without re-creating initialize
-                try { onReadyRef.current && onReadyRef.current(); } catch (_) {}
-            }
+        initThreeScene({
+            mountRef,
+            settings,
+            onReadyRef,
+            sceneRef,
+            rendererRef,
+            cameraRef,
+            lightRef,
+            groundContainerRef,
+            gridHelperRef,
+            gridLabelsGroupRef,
+            gridLabelsUpdateRef,
+            playerRef,
+            objectTooltipsGroupRef,
+            objectTooltipsUpdateRef,
+            interactPromptRef
         });
-
-        sceneRef.current = scene;
-        rendererRef.current = renderer;
-        cameraRef.current = camera;
-        lightRef.current = light;
-        groundContainerRef.current = groundContainer;
-        gridHelperRef.current = gridHelper;
-        gridLabelsGroupRef.current = gridLabelsGroup;
-        gridLabelsUpdateRef.current = gridLabelsUpdate;
-        playerRef.current = player;
-        // Tooltips
-        objectTooltipsGroupRef.current = objectTooltipsGroup;
-        objectTooltipsUpdateRef.current = updateObjectTooltips;
-
-        // Create interaction prompt overlay
-        const prompt = document.createElement('div');
-        prompt.style.position = 'absolute';
-        prompt.style.left = '50%';
-        prompt.style.bottom = '8%';
-        prompt.style.transform = 'translateX(-50%)';
-        prompt.style.padding = '8px 12px';
-        prompt.style.background = 'rgba(0,0,0,0.7)';
-        prompt.style.border = '2px solid rgba(234, 179, 8, 0.9)'; // tailwind amber-500-ish
-        prompt.style.color = '#fff';
-        prompt.style.fontFamily = 'system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
-        prompt.style.borderRadius = '8px';
-        prompt.style.pointerEvents = 'none';
-        prompt.style.display = 'none';
-        prompt.style.zIndex = '25';
-        prompt.id = 'interaction-prompt';
-        mountRef.current.appendChild(prompt);
-        interactPromptRef.current = prompt;
     }, [mountRef, settings.antialiasing]); // NOTE: intentionally excludes onReady to prevent re-init on movement-driven re-renders
 
     useEffect(() => {
