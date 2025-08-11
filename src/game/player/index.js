@@ -97,11 +97,12 @@ export function updatePlayer(player, keys, camera, light, throttledSetPlayerPosi
         player.userData.model.visible = !fpv;
     }
 
-    // First, determine camera yaw as it's needed for movement controls
+    // First, determine camera yaw/pitch for movement controls
     const yaw = (cameraOrbitRef && typeof cameraOrbitRef.current === 'number') ? cameraOrbitRef.current : 0;
-    
-    // Pass objectGrid and camera yaw to movement for camera-relative controls
-    updatePlayerMovement(player, keys, joystick, delta, objectGrid, yaw);
+    const pitch = (cameraPitchRef && typeof cameraPitchRef.current === 'number') ? cameraPitchRef.current : 0;
+
+    // Pass objectGrid and camera orientation to movement for camera-relative controls
+    updatePlayerMovement(player, keys, joystick, delta, objectGrid, yaw, pitch);
     
     // Update animation mixer
     if (player.userData.mixer) {
