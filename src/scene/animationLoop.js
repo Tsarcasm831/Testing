@@ -59,7 +59,8 @@ export function startAnimationLoop({
         if (document.pointerLockElement !== rendererRef.current?.domElement) return;
         const sens = 0.002;
         if (cameraOrbitRef) {
-            const next = (cameraOrbitRef.current || 0) - e.movementX * sens;
+            // In first-person, moving the mouse to the right should rotate view to the right (increase yaw)
+            const next = (cameraOrbitRef.current || 0) + e.movementX * sens;
             cameraOrbitRef.current = normalizeAngle(next);
         }
         if (cameraPitchRef) {

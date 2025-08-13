@@ -1,6 +1,17 @@
 import { jsxDEV } from "react/jsx-dev-runtime";
 import React from "react";
 const changelogData = [
+  { version: "0.004.0", date: "2025-08-11", changes: [
+    "Movement: W now always moves the player forward relative to the direction they are facing.",
+    "Movement: A and D are strafe-only and no longer rotate the player.",
+    "Movement: Player now faces the direction of travel; fixed D moving opposite/right issues.",
+    "Camera: Player rotation and camera orbit are unified to feel consistent.",
+    "Feature: First\u2011person view toggle (V). Uses pointer lock with mouse\u2011look.",
+    "UX: Interaction prompt shows \u201CPress F to interact (Name)\u201D for nearby objects.",
+    "World: Ichiraku Ramen is now placed in the world at LF480 (with collider).",
+    "World: Hokage Palace placed at KN182 with detailed colliders.",
+    "World: Hokage Monument GLB placed at KN129 and scaled up."
+  ] },
   { version: "0.003.9", date: "2025-08-11", changes: [
     "Version bump to 0.003.9.",
     "Added Ichiraku Ramen shop prototype (ichiraku.js) \u2014 file only, not yet integrated into the world."
@@ -31,7 +42,7 @@ const ChangelogPanel = ({ onClose }) => {
     /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-700 px-4 py-2 rounded-t-lg border-b border-gray-600 flex justify-between items-center", children: [
       /* @__PURE__ */ jsxDEV("h2", { className: "text-yellow-400 font-bold text-lg", children: "Changelog" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 35,
+        lineNumber: 46,
         columnNumber: 17
       }),
       /* @__PURE__ */ jsxDEV(
@@ -45,13 +56,13 @@ const ChangelogPanel = ({ onClose }) => {
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 36,
+          lineNumber: 47,
           columnNumber: 17
         }
       )
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 34,
+      lineNumber: 45,
       columnNumber: 13
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "p-4 space-y-4 max-h-[60vh] overflow-y-auto", children: changelogData.map((entry) => /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-900 p-3 rounded-lg border border-gray-700", children: [
@@ -61,40 +72,40 @@ const ChangelogPanel = ({ onClose }) => {
           entry.version
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 49,
+          lineNumber: 60,
           columnNumber: 30
         }),
         /* @__PURE__ */ jsxDEV("p", { className: "text-xs text-gray-400", children: entry.date }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 50,
+          lineNumber: 61,
           columnNumber: 30
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 48,
+        lineNumber: 59,
         columnNumber: 25
       }),
       /* @__PURE__ */ jsxDEV("ul", { className: "list-disc list-inside text-sm space-y-1 text-gray-300", children: entry.changes.map((change, index) => /* @__PURE__ */ jsxDEV("li", { children: change }, index, false, {
         fileName: "<stdin>",
-        lineNumber: 55,
+        lineNumber: 66,
         columnNumber: 33
       })) }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 53,
+        lineNumber: 64,
         columnNumber: 25
       })
     ] }, entry.version, true, {
       fileName: "<stdin>",
-      lineNumber: 47,
+      lineNumber: 58,
       columnNumber: 21
     })) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 45,
+      lineNumber: 56,
       columnNumber: 13
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 32,
+    lineNumber: 43,
     columnNumber: 9
   });
 };

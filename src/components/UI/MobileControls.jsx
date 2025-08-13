@@ -1,24 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useJoystick } from '../../hooks/useJoystick.js';
-import ZoomControls from './ZoomControls.jsx';
-import ActionButtons from './ActionButtons.jsx';
-
+import { Fragment, jsxDEV } from "react/jsx-dev-runtime";
+import React, { useEffect, useRef, useState } from "react";
+import { useJoystick } from "../../hooks/useJoystick.js";
+import ZoomControls from "./ZoomControls.jsx";
+import ActionButtons from "./ActionButtons.jsx";
 const clampPitch = (v) => Math.max(-0.9, Math.min(0.9, v));
-
-export const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraPitchRef }) => {
+const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraPitchRef }) => {
   const [visible, setVisible] = useState(true);
   const lookPadRef = useRef(null);
   const lookTargetRef = useRef({ yaw: 0, pitch: 0 });
   const lookRafRef = useRef(null);
   const zoneRef = useJoystick(joystickRef, visible);
   const [holdRun, setHoldRun] = useState(false);
-
   const buzz = (ms = 15) => {
     try {
       window.navigator?.vibrate?.(ms);
-    } catch (_) {}
+    } catch (_) {
+    }
   };
-
   const pressKey = (code) => {
     if (!keysRef?.current) return;
     keysRef.current[code] = true;
@@ -33,7 +31,6 @@ export const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, 
     if (clickFlag) keysRef.current[clickFlag] = true;
     setTimeout(() => releaseKey(code), 0);
   };
-
   const clampZoom = (z) => Math.max(0.2, Math.min(2.5, z));
   const handleZoomIn = () => {
     if (!zoomRef) return;
@@ -47,41 +44,40 @@ export const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, 
   };
   const handleRunDown = () => {
     setHoldRun(true);
-    pressKey('ShiftLeft');
+    pressKey("ShiftLeft");
     buzz(8);
   };
   const handleRunUp = () => {
     setHoldRun(false);
-    releaseKey('ShiftLeft');
+    releaseKey("ShiftLeft");
   };
   const handleJump = () => {
-    clickKey('Space');
+    clickKey("Space");
     buzz(12);
   };
   const handleAttack = () => {
-    clickKey('MouseLeft', 'MouseLeftClicked');
+    clickKey("MouseLeft", "MouseLeftClicked");
     buzz(10);
   };
   const handleDodge = () => {
-    clickKey('ControlLeft');
+    clickKey("ControlLeft");
     buzz(10);
   };
   const handleInteract = () => {
-    clickKey('KeyF', 'KeyFClicked');
+    clickKey("KeyF", "KeyFClicked");
     buzz(8);
   };
-
   useEffect(() => {
     if (!lookPadRef.current) return;
     let active = false;
     let lastX = 0;
     let lastY = 0;
-    const BASE_SENS_X = 0.008;
-    const BASE_SENS_Y = 0.010;
+    const BASE_SENS_X = 8e-3;
+    const BASE_SENS_Y = 0.01;
     const EASE = 0.22;
     const normalizeAngle = (a) => {
       const twoPI = Math.PI * 2;
-      a = ((a % twoPI) + twoPI) % twoPI;
+      a = (a % twoPI + twoPI) % twoPI;
       if (a > Math.PI) a -= twoPI;
       return a;
     };
@@ -103,14 +99,14 @@ export const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, 
     lookRafRef.current = requestAnimationFrame(lookTick);
     const onStart = (e) => {
       active = true;
-      const t = (e.touches && e.touches[0]) || e;
+      const t = e.touches && e.touches[0] || e;
       lastX = t.clientX;
       lastY = t.clientY;
       if (e.cancelable) e.preventDefault();
     };
     const onMove = (e) => {
       if (!active) return;
-      const t = (e.touches && e.touches[0]) || e;
+      const t = e.touches && e.touches[0] || e;
       const dx = t.clientX - lastX;
       const dy = t.clientY - lastY;
       lastX = t.clientX;
@@ -135,80 +131,137 @@ export const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, 
       active = false;
     };
     const el = lookPadRef.current;
-    el.addEventListener('touchstart', onStart, { passive: false });
-    el.addEventListener('touchmove', onMove, { passive: false });
-    el.addEventListener('touchend', onEnd, { passive: false });
-    el.addEventListener('touchcancel', onEnd, { passive: false });
-    el.addEventListener('mousedown', onStart);
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onEnd);
+    el.addEventListener("touchstart", onStart, { passive: false });
+    el.addEventListener("touchmove", onMove, { passive: false });
+    el.addEventListener("touchend", onEnd, { passive: false });
+    el.addEventListener("touchcancel", onEnd, { passive: false });
+    el.addEventListener("mousedown", onStart);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onEnd);
     return () => {
-      el.removeEventListener('touchstart', onStart);
-      el.removeEventListener('touchmove', onMove);
-      el.removeEventListener('touchend', onEnd);
-      el.removeEventListener('touchcancel', onEnd);
-      el.removeEventListener('mousedown', onStart);
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onEnd);
+      el.removeEventListener("touchstart", onStart);
+      el.removeEventListener("touchmove", onMove);
+      el.removeEventListener("touchend", onEnd);
+      el.removeEventListener("touchcancel", onEnd);
+      el.removeEventListener("mousedown", onStart);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onEnd);
       if (lookRafRef.current) cancelAnimationFrame(lookRafRef.current);
     };
   }, [cameraOrbitRef, cameraPitchRef, visible, zoomRef]);
-
-  return (
-    <>
-      <div className="absolute top-4 right-4 z-30">
-        <button
-          onTouchStart={() => setVisible((v) => !v)}
-          onMouseDown={() => setVisible((v) => !v)}
-          className={`px-3 py-2 rounded-full border-2 shadow-lg text-sm ${visible ? 'bg-black/70 text-white border-gray-400' : 'bg-yellow-500 text-black border-yellow-300'}`}
-          aria-label="Toggle mobile controls"
-          title="Toggle controls"
-        >
-          {visible ? 'Hide Controls' : 'Show Controls'}
-        </button>
-      </div>
-      {visible && (
-        <div
-          ref={zoneRef}
-          className="absolute bottom-0 left-0 w-1/2 h-full z-20"
-          style={{ touchAction: 'none' }}
-        />
-      )}
-      {visible ? (
-        <div className="absolute bottom-6 right-6 z-20 flex flex-col gap-4 items-end select-none">
-          <ZoomControls onZoomIn={handleZoomIn} onZoomOut={handleZoomOut} />
-          <div
-            ref={lookPadRef}
-            className="w-20 h-20 rounded-full border-2 border-amber-400 bg-black/50 shadow-2xl flex items-center justify-center text-amber-300 font-bold select-none"
-            style={{ touchAction: 'none' }}
-            aria-label="Camera look pad (drag to rotate camera)"
-            title="Look (drag to rotate camera)"
-          >
-            Cam
-          </div>
-          <ActionButtons
-            holdRun={holdRun}
-            onRunDown={handleRunDown}
-            onRunUp={handleRunUp}
-            onInteract={handleInteract}
-            onJump={handleJump}
-            onAttack={handleAttack}
-            onDodge={handleDodge}
-          />
-        </div>
-      ) : (
-        <div className="absolute bottom-6 right-6 z-20">
-          <button
-            onTouchStart={() => setVisible(true)}
-            onMouseDown={() => setVisible(true)}
-            className="px-3 py-2 rounded-full bg-black/60 text-white border border-gray-400 text-sm shadow-lg"
-            aria-label="Show mobile controls"
-            title="Show controls"
-          >
-            Controls
-          </button>
-        </div>
-      )}
-    </>
-  );
+  return /* @__PURE__ */ jsxDEV(Fragment, { children: [
+    /* @__PURE__ */ jsxDEV("div", { className: "absolute top-4 right-4 z-30", children: /* @__PURE__ */ jsxDEV(
+      "button",
+      {
+        onTouchStart: () => setVisible((v) => !v),
+        onMouseDown: () => setVisible((v) => !v),
+        className: `px-3 py-2 rounded-full border-2 shadow-lg text-sm ${visible ? "bg-black/70 text-white border-gray-400" : "bg-yellow-500 text-black border-yellow-300"}`,
+        "aria-label": "Toggle mobile controls",
+        title: "Toggle controls",
+        children: visible ? "Hide Controls" : "Show Controls"
+      },
+      void 0,
+      false,
+      {
+        fileName: "<stdin>",
+        lineNumber: 160,
+        columnNumber: 9
+      }
+    ) }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 159,
+      columnNumber: 7
+    }),
+    visible && /* @__PURE__ */ jsxDEV(
+      "div",
+      {
+        ref: zoneRef,
+        className: "absolute bottom-0 left-0 w-1/2 h-full z-20",
+        style: { touchAction: "none" }
+      },
+      void 0,
+      false,
+      {
+        fileName: "<stdin>",
+        lineNumber: 171,
+        columnNumber: 9
+      }
+    ),
+    visible ? /* @__PURE__ */ jsxDEV("div", { className: "absolute bottom-6 right-6 z-20 flex flex-col gap-4 items-end select-none", children: [
+      /* @__PURE__ */ jsxDEV(ZoomControls, { onZoomIn: handleZoomIn, onZoomOut: handleZoomOut }, void 0, false, {
+        fileName: "<stdin>",
+        lineNumber: 179,
+        columnNumber: 11
+      }),
+      /* @__PURE__ */ jsxDEV(
+        "div",
+        {
+          ref: lookPadRef,
+          className: "w-20 h-20 rounded-full border-2 border-amber-400 bg-black/50 shadow-2xl flex items-center justify-center text-amber-300 font-bold select-none",
+          style: { touchAction: "none" },
+          "aria-label": "Camera look pad (drag to rotate camera)",
+          title: "Look (drag to rotate camera)",
+          children: "Cam"
+        },
+        void 0,
+        false,
+        {
+          fileName: "<stdin>",
+          lineNumber: 180,
+          columnNumber: 11
+        }
+      ),
+      /* @__PURE__ */ jsxDEV(
+        ActionButtons,
+        {
+          holdRun,
+          onRunDown: handleRunDown,
+          onRunUp: handleRunUp,
+          onInteract: handleInteract,
+          onJump: handleJump,
+          onAttack: handleAttack,
+          onDodge: handleDodge
+        },
+        void 0,
+        false,
+        {
+          fileName: "<stdin>",
+          lineNumber: 189,
+          columnNumber: 11
+        }
+      )
+    ] }, void 0, true, {
+      fileName: "<stdin>",
+      lineNumber: 178,
+      columnNumber: 9
+    }) : /* @__PURE__ */ jsxDEV("div", { className: "absolute bottom-6 right-6 z-20", children: /* @__PURE__ */ jsxDEV(
+      "button",
+      {
+        onTouchStart: () => setVisible(true),
+        onMouseDown: () => setVisible(true),
+        className: "px-3 py-2 rounded-full bg-black/60 text-white border border-gray-400 text-sm shadow-lg",
+        "aria-label": "Show mobile controls",
+        title: "Show controls",
+        children: "Controls"
+      },
+      void 0,
+      false,
+      {
+        fileName: "<stdin>",
+        lineNumber: 201,
+        columnNumber: 11
+      }
+    ) }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 200,
+      columnNumber: 9
+    })
+  ] }, void 0, true, {
+    fileName: "<stdin>",
+    lineNumber: 158,
+    columnNumber: 5
+  });
+};
+export {
+  MobileControls
 };
