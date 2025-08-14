@@ -9,12 +9,14 @@ export function placeIchiraku(scene, objectGrid, worldSize, settings, label = 'L
     const pos = posForCell(i, j, worldSize);
     pos.y = 0;
 
-    const { group, colliderProxy } = createIchiraku({ position: pos, settings });
+    const { group, colliderProxies } = createIchiraku({ position: pos, settings });
     scene.add(group);
 
-    if (colliderProxy) {
-      scene.add(colliderProxy);
-      objectGrid.add(colliderProxy);
+    if (Array.isArray(colliderProxies)) {
+      colliderProxies.forEach(proxy => {
+        scene.add(proxy);
+        objectGrid.add(proxy);
+      });
     }
 
     return group;

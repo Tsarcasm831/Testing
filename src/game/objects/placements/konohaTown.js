@@ -228,28 +228,41 @@ export function placeKonohaTown(scene, objectGrid, settings, origin = new THREE.
     const center = new THREE.Vector3();
     const size = new THREE.Vector3();
 
-    const addAabbProxy = (worldCenter, halfX, halfZ, label='House') => {
+    const addObbProxy = (building) => {
+      const temp = building.clone();
+      temp.position.set(0, 0, 0);
+      temp.rotation.set(0, 0, 0);
+      temp.updateMatrixWorld(true);
+
+      bbox.setFromObject(temp);
+      bbox.getCenter(center);
+      bbox.getSize(size);
+
+      building.updateWorldMatrix(true, false);
+      const worldCenter = center.clone().applyMatrix4(building.matrixWorld);
+      const hx = Math.max(2, size.x / 2);
+      const hz = Math.max(2, size.z / 2);
+
+      const quat = new THREE.Quaternion();
+      building.getWorldQuaternion(quat);
+      const euler = new THREE.Euler().setFromQuaternion(quat, 'YXZ');
+
       const proxy = new THREE.Object3D();
       proxy.position.set(worldCenter.x, 0, worldCenter.z);
       proxy.userData.collider = {
-        type: 'aabb',
+        type: 'obb',
         center: { x: worldCenter.x, z: worldCenter.z },
-        halfExtents: { x: halfX, z: halfZ }
+        halfExtents: { x: hx, z: hz },
+        rotationY: euler.y
       };
-      proxy.userData.label = label;
+      proxy.userData.label = building.name || 'House';
       objectGrid.add(proxy);
       scene.add(proxy);
     };
 
     townGroup.children.forEach(colorGroup => {
       colorGroup.children?.forEach(building => {
-        bbox.setFromObject(building);
-        bbox.getCenter(center);
-        bbox.getSize(size);
-        const hx = Math.max(2, size.x * 0.48);
-        const hz = Math.max(2, size.z * 0.48);
-        const worldCenter = center.clone().applyMatrix4(building.parent.matrixWorld);
-        addAabbProxy(worldCenter, hx, hz, building.name || 'House');
+        addObbProxy(building);
       });
     });
 

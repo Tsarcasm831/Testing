@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 // Builds the Ichiraku shop as a THREE.Group (no renderer/camera here).
-// Returns { group, colliderProxy } so the world system can add it and collisions work.
+// Returns { group, colliderProxies } so the world system can add it and collisions work.
 export function createIchiraku({ position = new THREE.Vector3(0, 0, 0), settings = {} } = {}) {
   const shop = new THREE.Group();
   shop.position.copy(position);
@@ -173,15 +173,30 @@ export function createIchiraku({ position = new THREE.Vector3(0, 0, 0), settings
   shop.add(tinyPerson(-1.9, 0xff7f2a));
   shop.add(tinyPerson(-3.4, 0x517c9c));
 
-  // Simple collider proxy approximating the shop footprint
-  const colliderProxy = new THREE.Object3D();
-  colliderProxy.position.set(position.x, 0, position.z);
-  colliderProxy.userData.collider = {
-    type: 'aabb',
-    center: { x: position.x, z: position.z },
-    halfExtents: { x: 8.5, z: 6.5 } // roughly covers base + lean-to
-  };
-  colliderProxy.userData.label = 'Ichiraku Ramen';
+  // Collider proxies matching the visible geometry more closely
+  const colliderProxies = [];
+
+  function addBoxCollider(cx, cz, hx, hz, label = 'Ichiraku') {
+    const proxy = new THREE.Object3D();
+    const wx = position.x + cx;
+    const wz = position.z + cz;
+    proxy.position.set(wx, 0, wz);
+    proxy.userData.collider = {
+      type: 'obb',
+      center: { x: wx, z: wz },
+      halfExtents: { x: hx, z: hz },
+      rotationY: 0
+    };
+    proxy.userData.label = label;
+    colliderProxies.push(proxy);
+  }
+
+  // Main shop base (14 x 9)
+  addBoxCollider(0, 0, 7, 4.5, 'Ichiraku Base');
+  // Side annex (8 x 6) positioned at (3.3, -1.2)
+  addBoxCollider(3.3, -1.2, 4, 3, 'Ichiraku Annex');
+  // Front lean-to roof (12 x 4.2) centered forward at z=6
+  addBoxCollider(0, 6, 6, 2.1, 'Ichiraku Front Roof');
 
   // Apply shadow toggle to all meshes
   if (typeof settings.shadows === 'boolean') {
@@ -193,5 +208,5 @@ export function createIchiraku({ position = new THREE.Vector3(0, 0, 0), settings
     });
   }
 
-  return { group: shop, colliderProxy };
+  return { group: shop, colliderProxies };
 }
