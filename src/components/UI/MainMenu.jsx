@@ -1,6 +1,6 @@
 import { jsxDEV } from "react/jsx-dev-runtime";
 import React from "react";
-const MAP_EDITOR_URL = "/map/index.html";
+const MAP_EDITOR_URL = "map/index.html";
 const MAP_BUTTON_LABEL = "Map Editor";
 const MAP_MODAL_WIDTH_PCT = 98;
 const MAP_MODAL_HEIGHT_PCT = 98;

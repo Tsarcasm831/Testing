@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 // @tweakable base path anchor for terrain imports (change only if your host serves /src under a different root)
 import { WORLD_SIZE, TILE_SIZE, TEXTURE_WORLD_UNITS, getBiomeAt, getTerrainTextureForBiome } from '/src/scene/terrain.js';
 import { drawRiver, drawRoads, drawDistricts } from '../components/game/objects/konoha_roads.js';
+// NEW: import live map model to query districts/roads
+import { MODEL } from '../../map/model.js';
 
 // @tweakable show or hide roads on the minimap/world canvas
 const MINIMAP_DRAW_ROADS = true;
@@ -24,6 +26,13 @@ const MINIMAP_WALL_STROKE_SCALE = 2.0;
 /* @tweakable wall color on the minimap/world canvas */
 const MINIMAP_WALL_COLOR = '#bfc0c2';
 
+/* @tweakable show district name on the minimap HUD */
+const MINIMAP_SHOW_DISTRICT = true;
+/* @tweakable show nearest road name on the minimap HUD */
+const MINIMAP_SHOW_ROAD = true;
+/* @tweakable max distance in world units to consider the player "on" a road */
+const MINIMAP_ROAD_MAX_DISTANCE = 18;
+
 export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
     const animationFrameId = useRef();
     const minimapCanvasRef = useRef();
@@ -32,6 +41,9 @@ export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
     const posZRef = useRef();
     const zoomLevelRef = useRef();
     const biomeRef = useRef(); // NEW: biome line under minimap
+    // NEW: district/road HUD lines
+    const districtRef = useRef();
+    const roadRef = useRef();
 
     const [minimapState, setMinimapState] = useState({
         left: window.innerWidth - 16 - 128,
@@ -299,6 +311,66 @@ export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
                     const biome = biomeRaw ? biomeRaw.charAt(0).toUpperCase() + biomeRaw.slice(1) : 'Unknown';
                     biomeRef.current.textContent = `Biome: ${biome}`;
                 }
+                // NEW: Update district and road lines
+                if (districtRef.current && MINIMAP_SHOW_DISTRICT) {
+                    const pctX = ((x + WORLD_SIZE / 2) / WORLD_SIZE) * 100;
+                    const pctY = ((z + WORLD_SIZE / 2) / WORLD_SIZE) * 100;
+                    const pointInPoly = (px, py, pts) => {
+                        let inside = false;
+                        for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+                            const xi = pts[i][0], yi = pts[i][1];
+                            const xj = pts[j][0], yj = pts[j][1];
+                            const intersect = ((yi > py) !== (yj > py)) &&
+                              (x < (xj - xi) * (py - yi) / ((yj - yi) || 1e-9) + xi);
+                            if (intersect) inside = !inside;
+                        }
+                        return inside;
+                    };
+                    let districtName = 'Unknown';
+                    try {
+                        const entries = Object.values(MODEL?.districts || {});
+                        for (let k = 0; k < entries.length; k++) {
+                            const d = entries[k];
+                            if (Array.isArray(d.points) && d.points.length >= 3 && pointInPoly(pctX, pctY, d.points)) {
+                                districtName = d.name || d.id || 'District';
+                                break;
+                            }
+                        }
+                    } catch (_) {}
+                    districtRef.current.textContent = `District: ${districtName}`;
+                }
+                if (roadRef.current && MINIMAP_SHOW_ROAD) {
+                    // nearest road (convert percent polyline to world space)
+                    const toWorld = (px, py) => ({
+                        x: (px / 100) * WORLD_SIZE - WORLD_SIZE / 2,
+                        z: (py / 100) * WORLD_SIZE - WORLD_SIZE / 2
+                    });
+                    const distPointSeg = (px, pz, ax, az, bx, bz) => {
+                        const vx = bx - ax, vz = bz - az;
+                        const wx = px - ax, wz = pz - az;
+                        const c1 = vx * wx + vz * wz;
+                        const c2 = vx * vx + vz * vz || 1e-9;
+                        const t = Math.max(0, Math.min(1, c1 / c2));
+                        const cx = ax + vx * t, cz = az + vz * t;
+                        const dx = px - cx, dz = pz - cz;
+                        return Math.hypot(dx, dz);
+                    };
+                    let best = { name: null, d: Infinity };
+                    try {
+                        for (const r of (MODEL?.roads || [])) {
+                            const pts = r.points || [];
+                            for (let i = 0; i < pts.length - 1; i++) {
+                                const a = toWorld(pts[i][0], pts[i][1]);
+                                const b = toWorld(pts[i + 1][0], pts[i + 1][1]);
+                                const d = distPointSeg(x, z, a.x, a.z, b.x, b.z);
+                                if (d < best.d) best = { name: r.name || r.id || 'Road', d };
+                            }
+                        }
+                    } catch (_) {}
+                    roadRef.current.textContent = best.d <= MINIMAP_ROAD_MAX_DISTANCE
+                        ? `Road: ${best.name}`
+                        : 'Road: –';
+                }
                 
                 const canvas = minimapCanvasRef.current;
                 const ctx = canvas?.getContext('2d');
@@ -393,5 +465,8 @@ export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
         };
     }, [playerRef, worldObjects, minimapState.width, minimapState.height, zoomRef]);
     
-    return { minimapState, minimapCanvasRef, posXRef, posZRef, zoomLevelRef, biomeRef, handleInteractionStart };
+    return { minimapState, minimapCanvasRef, posXRef, posZRef, zoomLevelRef, biomeRef, handleInteractionStart,
+        // NEW: expose refs
+        districtRef, roadRef
+    };
 };

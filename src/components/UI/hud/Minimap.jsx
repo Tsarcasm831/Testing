@@ -8,9 +8,9 @@ const Minimap = ({ playerRef, worldObjects, zoomRef }) => {
     posXRef,
     posZRef,
     zoomLevelRef,
-    biomeRef
-    // We intentionally do not use interaction handlers anymore to keep the minimap bound to the corner
-    // handleInteractionStart
+    biomeRef,
+    districtRef,
+    roadRef
   } = useMinimap({ playerRef, worldObjects, zoomRef });
   return /* @__PURE__ */ jsxDEV(
     "div",
@@ -61,6 +61,16 @@ const Minimap = ({ playerRef, worldObjects, zoomRef }) => {
           /* @__PURE__ */ jsxDEV("div", { ref: biomeRef, children: "Biome: Unknown" }, void 0, false, {
             fileName: "<stdin>",
             lineNumber: 39,
+            columnNumber: 17
+          }),
+          /* @__PURE__ */ jsxDEV("div", { ref: districtRef, children: "District: Unknown" }, void 0, false, {
+            fileName: "<stdin>",
+            lineNumber: 40,
+            columnNumber: 17
+          }),
+          /* @__PURE__ */ jsxDEV("div", { ref: roadRef, children: "Road: \u2013" }, void 0, false, {
+            fileName: "<stdin>",
+            lineNumber: 41,
             columnNumber: 17
           })
         ] }, void 0, true, {

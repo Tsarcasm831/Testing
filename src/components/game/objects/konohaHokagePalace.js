@@ -30,10 +30,17 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
+// @tweakable default background color (hex) for the standalone Hokage Palace viewer
+const HOKAGE_BG_COLOR = 0x1a2027;
+// @tweakable show the small on-screen help overlay
+const HOKAGE_WITH_UI = true;
+// @tweakable help overlay text shown in the viewer
+const HOKAGE_UI_TEXT = 'Hokage Building — center tower with crown + two side towers. Drag to orbit.';
+
 export default function createHokagePalace({
   mount = document.body,
-  withUI = true,
-  background = 0x1a2027
+  withUI = HOKAGE_WITH_UI,
+  background = HOKAGE_BG_COLOR
 } = {}) {
   // --- Size helpers
   const isBody = mount === document.body || mount === document.documentElement;
@@ -320,7 +327,7 @@ export default function createHokagePalace({
   let uiEl = null;
   if (withUI) {
     uiEl = document.createElement('div');
-    uiEl.textContent = 'Hokage Building — center tower with crown + two side towers. Drag to orbit.';
+    uiEl.textContent = HOKAGE_UI_TEXT;
     uiEl.style.position = 'absolute';
     uiEl.style.left = '12px';
     uiEl.style.top = '12px';
