@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Konoha Map</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div id="wrap">
+  <div id="mapPane">
+    <svg id="map" viewBox="0 0 1018 968" aria-label="Konohagakure interactive map">
+      <image href="konohagakure.jpg" x="0" y="0" width="1018" height="968" preserveAspectRatio="xMidYMid slice"></image>
+      <!-- New paint layers (bottom-most overlay to top-most paint): -->
+      <g id="grassLayer"></g>
+      <g id="forestLayer"></g>
+      <g id="mountainLayer"></g>
+      <!-- Layers order: roads below districts for readability; pins on top -->
+      <g id="roadLayer"></g>
+      <g id="riverLayer"></g>
+      <g id="districtLayer"></g>
+      <g id="wallLayer"></g>
+      <g id="poiLayer"></g>
+      <g id="handleLayer"></g>
+    </svg>
+    <div id="tip" hidden></div>
+    <!-- Quick panel (bottom-left) -->
+    <div id="quickPanel">
+      <button id="addPoiBtn" class="primary">Add POI</button>
+      <div class="key">
+        <span><i class="dot gate"></i> Gate</span>
+        <span><i class="dot park"></i> Park</span>
+        <span><i class="dot letter"></i> Letter</span>
+        <span><i class="dot poi"></i> POI</span>
+      </div>
+    </div>
+    <!-- POI modal -->
+    <div id="poiModal" hidden>
+      <div class="hdr">New POI</div>
+      <div class="row">
+        <label>Type
+          <select id="poiType">
+            <option value="gate">gate</option>
+            <option value="park">park</option>
+            <option value="letter">letter</option>
+            <option value="poi">poi</option>
+          </select>
+        </label>
+        <label>ID <input id="poiId" type="text" size="8" placeholder="auto"></label>
+        <label>Name <input id="poiName" type="text" size="18" placeholder="optional"></label>
+      </div>
+      <div class="row"><label style="flex:1">Description <input id="poiDesc" type="text" style="width:100%" placeholder="optional"></label></div>
+      <div class="row" style="opacity:.8">Click on the map to place. Press Esc or Cancel to exit.</div>
+      <div class="row">
+        <button id="poiCancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <aside id="side">
+    <h2>Konoha Map — Editor</h2>
+
+    <fieldset>
+      <legend>Mode</legend>
+      <div class="row">
+        <label><input type="radio" name="mode" value="select" checked> Select / Move</label>
+        <label><input type="radio" name="mode" value="draw-district"> Draw District</label>
+        <label><input type="radio" name="mode" value="draw-road"> Draw Road</label>
+        <label><input type="radio" name="mode" value="draw-wall"> Draw Wall</label>
+        <label><input type="radio" name="mode" value="draw-river"> Draw River</label>
+        <label><input type="radio" name="mode" value="draw-grass"> Draw Grass</label>
+        <label><input type="radio" name="mode" value="draw-forest"> Draw Forest</label>
+        <label><input type="radio" name="mode" value="draw-mountain"> Draw Mountain</label>
+      </div>
+      <div class="row">
+        <label><input type="checkbox" id="snap"> Snap 1% grid</label>
+        <label><input type="checkbox" id="edit"> Edit overlay (handles)</label>
+        <label><input type="checkbox" id="autosave" checked> Autosave</label>
+      </div>
+      <div class="row" style="opacity:.8">Tips: drag vertices. <b>Alt+drag</b> to move whole road/district. <b>Esc</b> cancel, <b>Enter</b> or double-click finish.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Layers</legend>
+      <div class="row">
+        <label><input type="checkbox" id="toggleDistricts" checked> Districts</label>
+        <label><input type="checkbox" id="toggleRoads" checked> Roads</label>
+        <label><input type="checkbox" id="toggleWalls" checked> Wall</label>
+        <label><input type="checkbox" id="togglePOI" checked> POIs</label>
+        <label><input type="checkbox" id="toggleRivers" checked> Rivers</label>
+        <label><input type="checkbox" id="toggleGrass" checked> Grass</label>
+        <label><input type="checkbox" id="toggleForest" checked> Forest</label>
+        <label><input type="checkbox" id="toggleMountains" checked> Mountains</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Selected</legend>
+      <div id="selNone" class="row" style="opacity:.7">Nothing selected.</div>
+      <div id="selForm" hidden>
+        <div class="row"><label>Type <input id="sType" type="text" readonly></label></div>
+        <div class="row">
+          <label>ID <input id="sId" type="text"></label>
+          <label>Name <input id="sName" type="text" size="22"></label>
+        </div>
+        <div class="row"><label style="flex:1">Description <input id="sDesc" type="text" style="width:100%"></label></div>
+        <div id="roadExtras" class="row" hidden>
+          <label>Road type
+            <select id="sRoadType">
+              <option value="avenue">avenue</option>
+              <option value="street">street</option>
+              <option value="canal">canal</option>
+            </select>
+          </label>
+          <label>Width <input id="sRoadW" type="number" min="1" max="24" step="1" value="3">px</label>
+        </div>
+        <div class="row">
+          <button id="apply" class="primary">Apply</button>
+          <button id="delete">Delete selected</button>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Export / Import</legend>
+      <div class="row">
+        <button id="copyJson">Copy JSON</button>
+        <button id="downloadJson" class="primary">Download JSON</button>
+        <button id="exportSvg">Export SVG Overlay</button>
+      </div>
+      <div class="row">
+        <input type="file" id="importFile" accept="application/json">
+        <button id="loadAutosave">Load Autosave</button>
+        <button id="clearAll">Clear All</button>
+      </div>
+      <textarea id="json" readonly></textarea>
+    </fieldset>
+
+    <p style="opacity:.65">Shortcuts: <b>E</b> toggle Edit, <b>H</b> hide panel.</p>
+  </aside>
+</div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>

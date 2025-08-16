@@ -1,0 +1,1 @@
+export { DEFAULT_RIVERS } from './rivers/index.js';
