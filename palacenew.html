@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Hokage Building — Stylized Three.js</title>
+<style>
+  html,body{height:100%;margin:0;background:#0e0e0e;overflow:hidden}
+  canvas{display:block}
+  #ui{position:fixed;left:12px;top:12px;padding:8px 10px;color:#eaeaea;
+      background:rgba(0,0,0,.55);border:1px solid #333;border-radius:10px;
+      font:12px system-ui,-apple-system,Segoe UI,Roboto;backdrop-filter:blur(4px)}
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/examples/jsm/controls/OrbitControls.js":
+      "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js"
+  }
+}
+</script>
+</head>
+<body>
+<div id="ui">Hokage Building — center tower with crown + two side towers. Drag to orbit.</div>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
+/* Scene / renderer */
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a2027);
+
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.VSMShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+document.body.appendChild(renderer.domElement);
+
+const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 4000);
+camera.position.set(520, 320, 540);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 120, 0);
+controls.enableDamping = true;
+
+/* Lights */
+scene.add(new THREE.HemisphereLight(0xffffff, 0x435262, 0.55));
+const sun = new THREE.DirectionalLight(0xffffff, 1.25);
+sun.position.set(600, 820, 220);
+sun.castShadow = true;
+sun.shadow.mapSize.set(4096, 4096);
+sun.shadow.camera.left=-1200; sun.shadow.camera.right=1200;
+sun.shadow.camera.top=800; sun.shadow.camera.bottom=-800;
+sun.shadow.camera.near=50; sun.shadow.camera.far=2200;
+sun.shadow.bias=-0.0002; sun.shadow.normalBias=1.2;
+scene.add(sun);
+
+/* Ground (dark plaza) */
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(4000, 4000),
+  new THREE.MeshStandardMaterial({color:0x14181d, roughness:1}));
+ground.rotation.x = -Math.PI/2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+/* Palette / materials */
+const Palette = {
+  wall: 0xe88978,     // salmon plaster
+  eave: 0xe6d556,     // yellow tiles
+  trim: 0xeedfd9,     // light trim (door frame / parapet)
+  slit: 0x24282e,     // black/dark windows
+  emblem: 0xe5543d,   // emblem plate
+  roofTop: 0xf6eee8   // off-white top platform/crown
+};
+const M = {
+  wall : new THREE.MeshStandardMaterial({color:Palette.wall, roughness:.93, metalness:.02}),
+  eave : new THREE.MeshStandardMaterial({
+    color:Palette.eave, roughness:.9, metalness:.02,
+    polygonOffset:true, polygonOffsetFactor:-1, polygonOffsetUnits:-1
+  }),
+  trim : new THREE.MeshStandardMaterial({color:Palette.trim, roughness:.95}),
+  slit : new THREE.MeshStandardMaterial({color:Palette.slit, roughness:.9}),
+  emblem: new THREE.MeshStandardMaterial({color:Palette.emblem, roughness:.8}),
+  top  : new THREE.MeshStandardMaterial({color:Palette.roofTop, roughness:.95})
+};
+
+/* Helpers */
+function cylinder(rTop, rBot, h, mat, seg=32){
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(rTop, rBot, h, seg), mat);
+  m.castShadow = m.receiveShadow = true; return m;
+}
+function box(w,h,d,mat){
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), mat);
+  m.castShadow = m.receiveShadow = true; return m;
+}
+function ringEave(radius, width, thickness, tilt=0.0){
+  // a beveled ring made of a thin cylinder + edge lines to fake tiles
+  const g = new THREE.RingGeometry(radius-width, radius, 64, 1);
+  const m = new THREE.Mesh(g, M.eave);
+  m.rotation.x = -Math.PI/2 + tilt;
+  m.castShadow = m.receiveShadow = true;
+
+  // add tile seams with a LineLoop around the ring
+  const tiles = new THREE.Group();
+  const tileCount = Math.max(24, Math.floor(2*Math.PI*radius/8));
+  for(let i=0;i<tileCount;i++){
+    const a = i / tileCount * Math.PI*2;
+    const seg = box(width*0.92, thickness, 1.2, new THREE.MeshStandardMaterial({
+      color:0x000000, roughness:1, transparent:true, opacity:0.18
+    }));
+    seg.position.set(Math.cos(a)*(radius-width*0.45), thickness/2, Math.sin(a)*(radius-width*0.45));
+    seg.rotation.y = -a;
+    tiles.add(seg);
+  }
+  const grp = new THREE.Group();
+  grp.add(m); grp.add(tiles);
+  return grp;
+}
+function slitWindows(radius, y, count=18, h=5, w=2.4){
+  const g = new THREE.Group();
+  for(let i=0;i<count;i++){
+    const a = (i/count)*Math.PI*2;
+    const s = box(w, h, 1.4, M.slit);
+    s.position.set(Math.cos(a)*radius, y, Math.sin(a)*radius);
+    s.lookAt(0, y, 0);
+    g.add(s);
+  }
+  return g;
+}
+function squareWindows(radius, y, count=8, size=8){
+  const g = new THREE.Group();
+  for(let i=0;i<count;i++){
+    const a = (i/count)*Math.PI*2;
+    const frame = box(size+2, size+2, 1.6, M.trim);
+    const glass = box(size, size, 1.0, M.slit);
+    frame.position.set(Math.cos(a)*radius, y, Math.sin(a)*radius);
+    frame.lookAt(0, y, 0);
+    glass.position.copy(frame.position);
+    glass.lookAt(0, y, 0);
+    g.add(frame, glass);
+  }
+  return g;
+}
+function whiteCrown(radius, y){
+  const grp = new THREE.Group();
+  // top platform
+  const plat = cylinder(radius*0.98, radius*0.98, 3, M.top, 48);
+  plat.position.y = y; grp.add(plat);
+  // fence ring
+  const fence = new THREE.Mesh(new THREE.TorusGeometry(radius*0.86, 0.6, 10, 64), M.slit);
+  fence.position.y = y+2.0; fence.rotation.x = Math.PI/2; grp.add(fence);
+  // spikes
+  const spikes = 12;
+  for(let i=0;i<spikes;i++){
+    const a = (i/spikes)*Math.PI*2;
+    const c = new THREE.Mesh(new THREE.ConeGeometry(3.2, 26, 12), M.top);
+    c.position.set(Math.cos(a)*radius*0.78, y+2, Math.sin(a)*radius*0.78);
+    c.lookAt(0, y+26, 0);
+    grp.add(c);
+  }
+  return grp;
+}
+function emblemDisc(r=14, y=0, symbol=true){
+  const grp = new THREE.Group();
+  const disc = cylinder(r, r, 2.6, M.emblem, 48);
+  disc.position.y = y; grp.add(disc);
+  if(symbol){
+    // simple "leaf swirl" mark: 2 arcs + triangle — very stylized
+    const mark = new THREE.Mesh(new THREE.TorusGeometry(r*0.45, 1.1, 8, 32, Math.PI*1.5), M.slit);
+    mark.position.set(0, y+1.6, r-0.5);
+    mark.rotation.x = Math.PI/2;
+    grp.add(mark);
+    const dot = new THREE.Mesh(new THREE.CircleGeometry(2.2, 24), M.slit);
+    dot.position.set(0, y+1.7, r-0.4);
+    grp.add(dot);
+  }
+  return grp;
+}
+
+/* A tower composed of stacked drums + eaves */
+function makeHokageTower({
+  baseRadius=80,
+  tiers=[
+    {h:40, r:1.00, eave:true,  slit:true},
+    {h:36, r:0.86, eave:true,  slit:true},
+    {h:30, r:0.72, eave:true,  slit:false},
+    {h:26, r:0.58, eave:false, slit:false} // top drum
+  ],
+  crown=true,
+  emblemAtTier=2,       // index (0-based) to mount emblem on that drum
+  squareTopWindows=true // small square windows on top drum
+}={}){
+  const tower = new THREE.Group();
+
+  let y = 0;
+  const eaveWidth = 18;
+  const eaveThick = 2.0;
+
+  tiers.forEach((t, i)=>{
+    const R = baseRadius * t.r;
+    const drum = cylinder(R*0.99, R*1.01, t.h, M.wall, 48);
+    drum.position.y = y + t.h/2;
+    tower.add(drum);
+
+    if(t.slit){
+      const sl = slitWindows(R*0.96, drum.position.y+ t.h*0.12, Math.round(16* t.r + 10));
+      tower.add(sl);
+    }
+
+    if(t.eave){
+      const eave = ringEave(R*1.12, eaveWidth, eaveThick, 0.02);
+      eave.position.y = y + t.h + 1.0;
+      tower.add(eave);
+    }
+
+    // emblem
+    if(i === emblemAtTier){
+      const em = emblemDisc(14, drum.position.y + t.h*0.28, true);
+      em.position.z = baseRadius*0.72;
+      tower.add(em);
+    }
+
+    // square windows on very top drum
+    if(squareTopWindows && i === tiers.length-1){
+      const sw = squareWindows(R*0.78, drum.position.y + t.h*0.35, 8, 10);
+      tower.add(sw);
+      const parapet = cylinder(R*0.82, R*0.82, 3, M.top, 48);
+      parapet.position.y = y + t.h + 2; tower.add(parapet);
+    }
+
+    y += t.h + (t.eave? 4 : 0);
+  });
+
+  if(crown){
+    const topR = baseRadius*tiers[tiers.length-1].r*0.82;
+    const crownGrp = whiteCrown(topR, y+2);
+    tower.add(crownGrp);
+  }
+
+  // front doorway on base drum
+  const doorW=26, doorH=36;
+  const frame = box(doorW+6, doorH+6, 2.4, M.trim);
+  frame.position.set(0, doorH/2+2, baseRadius*1.01);
+  const door = box(doorW, doorH, 1.4, M.slit);
+  door.position.copy(frame.position);
+  tower.add(frame, door);
+
+  return tower;
+}
+
+/* Build the complex: center + two side towers */
+const complex = new THREE.Group(); complex.name = "HokageComplex";
+scene.add(complex);
+
+// Center (taller)
+const center = makeHokageTower({
+  baseRadius: 90,
+  tiers: [
+    {h:46, r:1.00, eave:true,  slit:true},
+    {h:40, r:0.85, eave:true,  slit:true},
+    {h:34, r:0.70, eave:true,  slit:false},
+    {h:30, r:0.58, eave:false, slit:false}
+  ],
+  crown:true,
+  emblemAtTier:1
+});
+center.position.set(0,0,0);
+complex.add(center);
+
+// Left & Right (shorter)
+const left = makeHokageTower({
+  baseRadius: 70,
+  tiers: [
+    {h:36, r:1.00, eave:true,  slit:true},
+    {h:30, r:0.82, eave:true,  slit:true},
+    {h:26, r:0.66, eave:true,  slit:false},
+    {h:22, r:0.52, eave:false, slit:false}
+  ],
+  crown:false,
+  emblemAtTier:1
+});
+left.position.set(-150, 0, -10);
+complex.add(left);
+
+const right = left.clone();
+right.position.set(150, 0, -10);
+complex.add(right);
+
+/* Resize / render */
+addEventListener("resize", ()=>{
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+(function loop(){
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
