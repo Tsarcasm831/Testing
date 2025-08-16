@@ -1,8 +1,7 @@
 import { jsxDEV } from "react/jsx-dev-runtime";
 import React, { useEffect, useRef } from "react";
 import { WORLD_SIZE } from "../../scene/terrain.js";
-import { loadKonohaRoads, drawRoads } from "../../components/game/objects/konoha_roads.js";
-import { drawRiver } from "../../components/game/objects/konoha_roads.js";
+import { drawRoads, drawRiver, drawDistricts } from "../../components/game/objects/konoha_roads.js";
 import { getBiomeAt, getTerrainTextureForBiome, TEXTURE_WORLD_UNITS, TILE_SIZE } from "../../scene/terrain.js";
 const WorldMapPanel = ({ playerPosition, onClose, worldObjects = [] }) => {
   const canvasRef = useRef(null);
@@ -122,6 +121,12 @@ const WorldMapPanel = ({ playerPosition, onClose, worldObjects = [] }) => {
       ctx.restore();
       const cx = w / 2 - px * scale;
       const cy = h / 2 - pz * scale;
+      await drawDistricts(ctx, scale, cx, cy, {
+        alpha: 0.15,
+        stroke: "#ffffff",
+        lineWidth: 1,
+        fill: "#ffffff"
+      });
       await drawRoads(ctx, scale, cx, cy, {
         /* @tweakable primary road color on world map */
         primaryColor: "#e9d7b8",

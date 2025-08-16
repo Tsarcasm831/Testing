@@ -90,7 +90,7 @@ export function getTerrainTextureForBiome(biome) {
     return terrainFiles[biome] || terrainFiles.grass;
 }
 
-import { drawRoads, drawRiver } from '../components/game/objects/konoha_roads.js';
+import { drawRoads, drawRiver, drawDistricts } from '../components/game/objects/konoha_roads.js';
 
 export function createTerrain(scene, settings) {
     const textureLoader = new THREE.TextureLoader();
@@ -142,7 +142,13 @@ export function createTerrain(scene, settings) {
                 if (!octx) return;
                 // Draw terrain-sized roads/river centered at (worldSize/2, worldSize/2), 1px == 1 world unit
                 const scale = 1, cx = worldSize / 2, cy = worldSize / 2;
-                // Roads first
+                // Districts then roads
+                await drawDistricts(octx, scale, cx, cy, {
+                    alpha: 0.15,
+                    stroke: '#ffffff',
+                    lineWidth: 1,
+                    fill: '#ffffff'
+                });
                 await drawRoads(octx, scale, cx, cy, {
                     /* @tweakable overwrite primary road width on overworld (pixels) */
                     wPrimary: 14,
