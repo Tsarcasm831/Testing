@@ -128,7 +128,7 @@ export function drawGhost(isRoad=false,isWall=false){
   const el = isWall || kind==='wall'
     ? mkEl('circle',{class:'wall ghost',cx:state.drawing.center[0]*W/100,cy:state.drawing.center[1]*H/100,r:state.drawing.r*W/100,strokeWidth:8})
     : (isRoad || kind==='road' || kind==='river' || kind==='grass' || kind==='forest' || kind==='mountain')
-    ? mkEl('polyline',{class:(kind==='river'?'river':(kind==='grass'?'grass':(kind==='forest'?'forest':'mountain')))+' ghost',points:pts,strokeWidth:(kind==='grass'?22:(kind==='forest'?10:(kind==='mountain'?10:3)))})
+    ? mkEl('polyline',{class:(kind==='river'?'river':(kind==='grass'?'grass':(kind==='forest'?'forest':'mountain')))+' ghost',points:pts,strokeWidth:(kind==='grass'?28:(kind==='forest'?10:(kind==='mountain'?10:3)))})
     : mkEl('polygon',{class:'district ghost',points:pts});
   hLayer.append(el);
 }
@@ -164,7 +164,7 @@ export function finishDrawing(){
     MODEL.rivers.push({id:'river-'+(MODEL.rivers.length+1),points:state.drawing.points,width:7});
   }else if(isGrass){
     if(!Array.isArray(MODEL.grass)) MODEL.grass=[];
-    MODEL.grass.push({id:'grass-'+(MODEL.grass.length+1),points:state.drawing.points,width:22});
+    MODEL.grass.push({id:'grass-'+(MODEL.grass.length+1),points:state.drawing.points,width:28});
   }else if(isForest){
     if(!Array.isArray(MODEL.forest)) MODEL.forest=[];
     MODEL.forest.push({id:'forest-'+(MODEL.forest.length+1),points:state.drawing.points,width:10});

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Konoha Blocks — 3×5 Buildings (self-contained)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Konoha City Slice — 30 Unique Buildings (No Brown Ground)</title>
 <style>
   html,body{height:100%;margin:0;background:#0e0e0e;overflow:hidden}
   canvas{display:block}
@@ -14,294 +14,446 @@
   }
 </style>
 <script type="importmap">
-{
-  "imports":{
-    "three":"https://unpkg.com/three@0.160.0/build/three.module.js",
-    "three/examples/jsm/controls/OrbitControls.js":
-      "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js"
-  }
-}
+{"imports":{
+  "three":"https://unpkg.com/three@0.160.0/build/three.module.js",
+  "three/examples/jsm/controls/OrbitControls.js":
+    "https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js"
+}}
 </script>
 </head>
 <body>
-<div id="ui">3 rows × 5 buildings. Mix of hip/gable/flat + rotundas with domes and cones. Konoha palette.</div>
+<div id="ui">30 buildings total (6×5). Fresh, more oriental silhouettes. Brown plaza removed.</div>
 
 <script type="module">
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-/* -------------------------------------------------------
-   Scene / Camera / Lights
-------------------------------------------------------- */
+/* Scene */
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xa9c8ff);
+scene.background = new THREE.Color(0xa8c7ff);
 
-const renderer = new THREE.WebGLRenderer({ antialias:true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.VSMShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 document.body.appendChild(renderer.domElement);
 
-const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 5000);
-camera.position.set(650, 400, 750);
-
+const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, .1, 6000);
+camera.position.set(1100, 620, 1200);
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.target.set(0, 50, 0);
+controls.target.set(0, 80, 0);
 controls.enableDamping = true;
 
-scene.add(new THREE.HemisphereLight(0xffffff, 0x4b5563, 0.65));
+/* Light */
+scene.add(new THREE.HemisphereLight(0xffffff, 0x4b5563, .65));
 const sun = new THREE.DirectionalLight(0xffffff, 1.2);
-sun.position.set(800, 900, 300);
+sun.position.set(1600, 1300, 500);
 sun.castShadow = true;
 sun.shadow.mapSize.set(4096,4096);
-sun.shadow.camera.left=-1400; sun.shadow.camera.right=1400;
-sun.shadow.camera.top=900;    sun.shadow.camera.bottom=-900;
-sun.shadow.camera.near=50;    sun.shadow.camera.far=2500;
+sun.shadow.camera.left=-2200; sun.shadow.camera.right=2200;
+sun.shadow.camera.top=1500;   sun.shadow.camera.bottom=-1500;
+sun.shadow.camera.near=50;    sun.shadow.camera.far=4500;
 sun.shadow.bias=-0.0002;      sun.shadow.normalBias=1.2;
 scene.add(sun);
 
-/* -------------------------------------------------------
-   Ground + a pale plaza strip to suggest streets
-------------------------------------------------------- */
+/* Ground — green only (no brown plaza) */
 const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(4000, 3000),
-  new THREE.MeshStandardMaterial({ color:0x6fae62, roughness:1 })
+  new THREE.PlaneGeometry(7000, 5000),
+  new THREE.MeshStandardMaterial({color:0x74ad66, roughness:1})
 );
 ground.rotation.x = -Math.PI/2;
 ground.receiveShadow = true;
 scene.add(ground);
 
-const plaza = new THREE.Mesh(
-  new THREE.PlaneGeometry(2200, 2600),
-  new THREE.MeshStandardMaterial({ color:0xe3d7b0, roughness:1 })
-);
-plaza.rotation.x = -Math.PI/2;
-plaza.position.y = 0.05;
-scene.add(plaza);
-
-/* -------------------------------------------------------
-   Palette & Materials (Konoha-leaning)
-------------------------------------------------------- */
-const Palette = {
-  plaster:   0xf2efe9,
-  trim:      0xbfc6a7,
-  skirt:     0x808a78,
-  wood:      0x6f5233,
-  frame:     0x3b3f45,
-  glass:     0x97b8cf,
-  roofRed:   0xd44b34,
-  roofBlue:  0x5872b8,
-  roofYellow:0xd8c24e,
-  roofGreen: 0x3f844a,
-  roofDark:  0x2f3338
+/* Palette */
+const P = {
+  plasterA:0xf2efe9, plasterB:0xf5f1e6, plasterC:0xf0ebdf,
+  vermilion:0xc8452d, brick:0xb94637, rust:0xb4562d,
+  wood:0x6f5233, frame:0x34383e, band:0x8a8f7a,
+  roofTerracotta:0xd24b30, roofOrange:0xe0662f, roofClay:0xb1492c,
+  roofTeal:0x3a8f7b, roofSea:0x3f844a, roofBlue:0x5b73b8, roofSlate:0x2f3338
 };
 const M = {
-  plaster: new THREE.MeshStandardMaterial({ color:Palette.plaster, roughness:.95, metalness:.02 }),
-  trim:    new THREE.MeshStandardMaterial({ color:Palette.trim,    roughness:.95, metalness:.02 }),
-  skirt:   new THREE.MeshStandardMaterial({ color:Palette.skirt,   roughness:.95, metalness:.02 }),
-  wood:    new THREE.MeshStandardMaterial({ color:Palette.wood,    roughness:.9,  metalness:.03 }),
-  frame:   new THREE.MeshStandardMaterial({ color:Palette.frame,   roughness:.9,  metalness:.02 }),
-  glass:   new THREE.MeshStandardMaterial({ color:Palette.glass,   roughness:.2,  metalness:.02 }),
-  roof: (c)=> new THREE.MeshStandardMaterial({
-    color:c, roughness:.9, metalness:.02, polygonOffset:true, polygonOffsetFactor:-1, polygonOffsetUnits:-1
+  plasterA:new THREE.MeshStandardMaterial({color:P.plasterA, roughness:.95, metalness:.02}),
+  plasterB:new THREE.MeshStandardMaterial({color:P.plasterB, roughness:.95, metalness:.02}),
+  plasterC:new THREE.MeshStandardMaterial({color:P.plasterC, roughness:.95, metalness:.02}),
+  wood:    new THREE.MeshStandardMaterial({color:P.wood, roughness:.9, metalness:.03}),
+  frame:   new THREE.MeshStandardMaterial({color:P.frame, roughness:.9, metalness:.02}),
+  band:    new THREE.MeshStandardMaterial({color:P.band, roughness:.95, metalness:.02}),
+  glass:   new THREE.MeshStandardMaterial({color:0x9dbbd0, roughness:.2, metalness:.02}),
+  roof:(c)=>new THREE.MeshStandardMaterial({
+    color:c, roughness:.9, metalness:.03, polygonOffset:true, polygonOffsetFactor:-1, polygonOffsetUnits:-1
   })
 };
 
-/* -------------------------------------------------------
-   Small kit helpers
-------------------------------------------------------- */
-function box(w,h,d,mat){ const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat); m.castShadow=m.receiveShadow=true; return m; }
-function cylinder(r,h,mat,rad=32){ const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,rad),mat); m.castShadow=m.receiveShadow=true; return m; }
-function cone(r,h,mat,rad=32){ const m=new THREE.Mesh(new THREE.ConeGeometry(r,h,rad),mat); m.castShadow=m.receiveShadow=true; return m; }
-function seam(mesh,color=0x000,alpha=.28){
+/* Utils */
+const box=(w,h,d,mat)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat); m.castShadow=m.receiveShadow=true; return m;};
+const cyl=(r,h,mat,seg=48)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,seg),mat); m.castShadow=m.receiveShadow=true; return m;};
+const cone=(r,h,mat,seg=48)=>{const m=new THREE.Mesh(new THREE.ConeGeometry(r,h,seg),mat); m.castShadow=m.receiveShadow=true; return m;};
+function edges(mesh,alpha=.28){
   const g=new THREE.EdgesGeometry(mesh.geometry,25);
-  const m=new THREE.LineBasicMaterial({color,transparent:true,opacity:alpha});
-  const lines=new THREE.LineSegments(g,m); lines.position.copy(mesh.position); lines.rotation.copy(mesh.rotation);
-  mesh.add(lines); return lines;
+  const l=new THREE.LineSegments(g,new THREE.LineBasicMaterial({color:0x000,transparent:true,opacity:alpha}));
+  l.position.copy(mesh.position); l.rotation.copy(mesh.rotation); mesh.add(l);
 }
 
-/* Windows / door / balcony */
-function makeWindow(w=12,h=10,depth=1.2){
+/* Detail bits */
+function windowRect(w=9,h=8,d=1.2){
   const g=new THREE.Group();
-  const f=box(w,h,depth,M.frame); f.position.y=h/2; g.add(f);
-  const gl=box(w-2,h-2,depth-.6,M.glass); gl.position.y=h/2; gl.position.z=0.3; g.add(gl);
+  const fr=box(w,h,d,M.frame); fr.position.y=h/2; g.add(fr);
+  const gl=box(w-2,h-2,d-.6,M.glass); gl.position.set(0,h/2,.35); g.add(gl);
   return g;
 }
-function makeDoor(w=14,h=20,depth=1.6){
-  const g=new THREE.Group();
-  const f=box(w,h,depth,M.frame); f.position.y=h/2; g.add(f);
-  const p=box(w-2,h-2,depth-.6,M.wood); p.position.y=h/2; p.position.z=0.4; g.add(p);
-  return g;
+function archStrip(w,d,y,count=6,spacing=14){
+  for(let i=0;i<count;i++){
+    const x=-w/2+10+i*spacing;
+    const t=windowRect(10,9,1.2); t.position.set(x,y,d/2+1); t.rotation.y=Math.PI; this.add(t);
+    const b=t.clone(); b.position.z=-d/2-1; b.rotation.y=0; this.add(b);
+  }
 }
-function makeBalcony(w=30,d=10,h=6){
-  const g=new THREE.Group();
-  const floor=box(w,2,d,M.wood); floor.position.y=1; g.add(floor);
-  const rail=new THREE.Mesh(new THREE.BoxGeometry(w,h,1.2),M.frame);
-  rail.position.set(0,h/2+2,d/2-0.6); rail.castShadow=true; g.add(rail);
-  const n=Math.floor((w-4)/3);
-  for(let i=0;i<n;i++){ const x=-w/2+2+i*3; const pk=box(0.6,h-0.8,1.0,M.frame); pk.position.set(x,h/2+2,d/2-0.6); g.add(pk); }
-  return g;
+function belt(grp, w,d,y,th=4,color=P.vermilion){
+  const m=new THREE.MeshStandardMaterial({color, roughness:.9, metalness:.02});
+  const s=box(w+2,th,d+2,m); s.position.y=y; grp.add(s);
 }
 
 /* Roofs */
-function makeGableRoof(w,d,t,color){
-  const grp=new THREE.Group(), T=t??2, slopeH=Math.max(w,d)*0.18, baseY=T/2;
-  const s1=box(w,T,d/2,M.roof(color)); s1.position.set(0,baseY,-d/4);
-  const s2=box(w,T,d/2,M.roof(color)); s2.position.set(0,baseY, d/4);
-  const ang=Math.atan2(slopeH,d/2); s1.rotation.x= ang; s2.rotation.x=-ang;
-  [s1,s2].forEach(s=>{ seam(s,0x000,0.35); grp.add(s); });
-  const ridge=box(w+1.0,T*.8,1.4,M.roof(Palette.roofDark));
-  ridge.position.set(0, baseY + Math.sin(ang)*(d/2), 0); grp.add(ridge);
-  return grp;
-}
-function makeHipRoof(w,d,t,color){
-  const grp=new THREE.Group(), T=t??2;
-  const base=box(w,T,d,M.roof(color)); base.position.y=T/2; grp.add(base); seam(base,0x000,0.35);
-  const cap=box(Math.max(6,w*.18),1.6,Math.max(6,d*.18),M.roof(Palette.roofDark));
-  cap.position.y=T/2+Math.max(w,d)*0.22+0.2; grp.add(cap);
-  return grp;
-}
-function makeFlatRoof(w,d,t=2,color=Palette.roofDark){ const slab=box(w,t,d,M.roof(color)); seam(slab,0x000,0.15); return slab; }
-function makeDomeRoof(r,color){
+function hipRoof(w,d,color){
   const grp=new THREE.Group();
-  const drum=cylinder(r*0.95,10,M.roof(Palette.roofDark),36); drum.position.y=5; grp.add(drum);
-  const dome=new THREE.Mesh(new THREE.SphereGeometry(r,36,24,0,Math.PI*2,0,Math.PI/2), M.roof(color));
-  dome.position.y=5; dome.castShadow=dome.receiveShadow=true; grp.add(dome);
-  const cap=cone(r*0.18,8,M.roof(Palette.roofDark),24); cap.position.y=5+r*0.98; grp.add(cap);
+  const t=2.2, base = box(w,t,d,M.roof(color)); base.position.y=t/2; grp.add(base); edges(base,.35);
+  const rim = box(w+2,1.2,d+2,M.roof(P.roofSlate)); rim.position.y=t+1.2/2; grp.add(rim);
   return grp;
 }
-function makeConeRoof(r,color){
-  const grp=new THREE.Group();
-  const eave=cylinder(r*1.05,3,M.roof(Palette.roofDark),32); eave.position.y=1.5; grp.add(eave);
-  const con=cone(r, r*1.2, M.roof(color), 32); con.position.y=1.5+r*0.6; grp.add(con);
+function gableRoof(w,d,color){
+  const grp=new THREE.Group(), t=2.2, slope=Math.max(w,d)*0.22;
+  const s1=box(w,t,d/2,M.roof(color)); s1.position.set(0,t/2,-d/4);
+  const s2=box(w,t,d/2,M.roof(color)); s2.position.set(0,t/2, d/4);
+  const ang=Math.atan2(slope,d/2); s1.rotation.x= ang; s2.rotation.x=-ang; [s1,s2].forEach(s=>{edges(s,.35); grp.add(s);});
+  const ridge=box(w+1.4,1.4,1.4,M.roof(P.roofSlate)); ridge.position.set(0, t/2 + Math.sin(ang)*(d/2), 0); grp.add(ridge);
   return grp;
+}
+function domeRoof(r,color){
+  const grp=new THREE.Group();
+  const drum=cyl(r*0.96,8,M.roof(P.roofSlate),40); drum.position.y=4; grp.add(drum);
+  const dome=new THREE.Mesh(new THREE.SphereGeometry(r,42,30,0,Math.PI*2,0,Math.PI/2), M.roof(color));
+  dome.position.y=4; dome.castShadow=dome.receiveShadow=true; grp.add(dome);
+  const fin=cone(r*0.2,8,M.roof(P.roofSlate),32); fin.position.y=4+r*0.98; grp.add(fin);
+  return grp;
+}
+function coneRoof(r,color){
+  const grp=new THREE.Group();
+  const eave=cyl(r*1.05,3,M.roof(P.roofSlate),40); eave.position.y=1.5; grp.add(eave);
+  const con=cone(r, r*1.25, M.roof(color), 40); con.position.y=1.5+r*0.62; grp.add(con);
+  return grp;
+}
+/* Upturned corner accents for more East-Asian feel */
+function addUpturnedCorners(target,w,d,tilt=0.5,len=10){
+  const plate=(sx,sz,angX,px,pz)=>{
+    const p=box(len,1.2,sz,M.roof(P.roofSlate));
+    p.position.set(px, 2.2, pz); p.rotation.x=angX; target.add(p);
+  };
+  const offX=w/2+0.2, offZ=d/2-3;
+  plate(len,6, tilt,  offX, -offZ);
+  plate(len,6,-tilt,  offX,  offZ);
+  plate(len,6, tilt, -offX,  offZ);
+  plate(len,6,-tilt, -offX, -offZ);
 }
 
-/* Rect level + windows ring */
-function makeLevel({w=60,d=40,h=24, withSkirt=true}={}){
+/* Blocks */
+function rectLevel({w=64,d=44,h=24, plaster="A", skirt=true}={}){
+  const mat = plaster==="B"?M.plasterB:plaster==="C"?M.plasterC:M.plasterA;
   const grp=new THREE.Group();
-  const body=box(w,h,d,M.plaster); body.position.y=h/2; grp.add(body);
-  const t=2.2, corners=[
-    [-w/2+t/2,h/2,-d/2+t/2],[w/2-t/2,h/2,-d/2+t/2],
-    [-w/2+t/2,h/2, d/2-t/2],[w/2-t/2,h/2, d/2-t/2]
-  ];
-  corners.forEach(p=>{ const c=box(t,h,t,M.trim); c.position.set(...p); grp.add(c); });
-  if(withSkirt){ const sk=box(w+2,6,d+2,M.skirt); sk.position.y=3; grp.add(sk); }
+  const body=box(w,h,d,mat); body.position.y=h/2; grp.add(body);
+  const t=2.2;
+  const corners=[[-w/2+t/2,h/2,-d/2+t/2],[w/2-t/2,h/2,-d/2+t/2],[-w/2+t/2,h/2,d/2-t/2],[w/2-t/2,h/2,d/2-t/2]];
+  corners.forEach(p=>{const c=box(t,h,t,M.band); c.position.set(...p); grp.add(c);});
+  if(skirt){ const s=box(w+2,6,d+2,M.band); s.position.y=3; grp.add(s); }
+  grp.archStrip = archStrip; // for strips via Function.call
   return grp;
 }
-function addWindowsRect(grp,{w,d,y=12,gap=12,size=[10,8],inset=1.6}){
-  const [ww,hh]=size;
-  const countX=Math.floor((w-16)/gap);
-  for(let i=0;i<countX;i++){
-    const x=-w/2+8+i*gap;
-    const W1=makeWindow(ww,hh,inset); W1.position.set(x,y, d/2+0.6); W1.rotation.y=Math.PI; grp.add(W1);
-    const W2=makeWindow(ww,hh,inset); W2.position.set(x,y,-d/2-0.6);                       grp.add(W2);
+function ringWindows(grp,r,y,count=6){
+  for(let i=0;i<count;i++){
+    const a=(i/count)*Math.PI*2;
+    const W=windowRect(10,9,1.2);
+    W.position.set(Math.cos(a)*r, y, Math.sin(a)*r);
+    W.lookAt(0,y,0); grp.add(W);
   }
-  const countZ=Math.floor((d-16)/gap);
-  for(let i=0;i<countZ;i++){
-    const z=-d/2+8+i*gap;
-    const W1=makeWindow(ww,hh,inset); W1.position.set( w/2+0.6,y,z); W1.rotation.y=-Math.PI/2; grp.add(W1);
-    const W2=makeWindow(ww,hh,inset); W2.position.set(-w/2-0.6,y,z); W2.rotation.y= Math.PI/2;  grp.add(W2);
-  }
 }
 
-/* Full building (rectangular or round) */
-function makeBuilding({
-  name="bldg", w=60, d=40, floors=2, floorH=24,
-  roofType="hip", roofColor=Palette.roofRed,
-  balcony=false, sign=false, door=true,
-  round=false, cone=false
-}={}){
-  const B=new THREE.Group(); B.name=name;
-  const levels=new THREE.Group(); B.add(levels);
-  const details=new THREE.Group(); B.add(details);
-  const roof=new THREE.Group(); B.add(roof);
-
-  if(!round){
-    for(let f=0; f<floors; f++){
-      const L=makeLevel({w,d,h:floorH}); L.position.y=f*floorH; levels.add(L);
-      addWindowsRect(L,{w,d,y:floorH*0.55});
-      if(f===0 && door){ const Dr=makeDoor(14,20,2); Dr.position.set(0,10,d/2+1.1); Dr.rotation.y=Math.PI; L.add(Dr); }
-      if(f===1 && balcony){ const Bc=makeBalcony(Math.min(36,w-12),10,6); Bc.position.set(0,floorH+2,d/2+5.6); L.add(Bc); }
+/* Core building types from previous set */
+function drumTower({r=30, floors=3, beltColor=P.vermilion, roofColor=P.roofBlue, plaster="A"}={}){
+  const grp=new THREE.Group(); let y=0, radius=r;
+  for(let f=0; f<floors; f++){
+    const mat = plaster==="B"?M.plasterB:plaster==="C"?M.plasterC:M.plasterA;
+    const drum=cyl(radius, 22, mat, 40); drum.position.y=y+11; grp.add(drum);
+    ringWindows(grp, radius*0.92, y+13, 8);
+    belt(grp, radius*2+2, radius*2+2, y+5, 4, beltColor);
+    y+=22; radius*=0.93;
+  }
+  const top=domeRoof(radius*0.98, roofColor); top.position.y=y+2; grp.add(top);
+  return grp;
+}
+function pagoda({w=80,d=60, tiers=3, roofColor=P.roofOrange, plaster="B"}={}){
+  const grp=new THREE.Group(); let Y=0, W=w, D=d;
+  for(let i=0;i<tiers;i++){
+    const L=rectLevel({w:W,d:D,h:20,plaster}); L.position.y=Y; grp.add(L);
+    L.archStrip.call(L,W,D,12, Math.max(4, Math.floor(W/18)));
+    const RF = hipRoof(W+6, D+6, roofColor); RF.position.y=Y+20.8; grp.add(RF);
+    addUpturnedCorners(RF, W+6, D+6, 0.55, 12);
+    Y += 22; W*=0.86; D*=0.86;
+  }
+  const cap=cone(8,14,M.roof(P.roofSlate)); cap.position.y=Y+6; grp.add(cap);
+  return grp;
+}
+function terrace({w=86,d=46, floors=2, roofColor=P.roofClay, plaster="A"}={}){
+  const grp=new THREE.Group();
+  for(let f=0; f<floors; f++){
+    const L=rectLevel({w,d,h:22,plaster}); L.position.y=f*22; grp.add(L);
+    L.archStrip.call(L,w,d,12, Math.floor(w/16));
+    if(f===1){
+      const deck=box(w-16,2,10,M.wood); deck.position.set(0, 22+2, d/2+5.5); grp.add(deck);
+      const rail=box(w-16,6,1.2,M.frame); rail.position.set(0, 22+2+3, d/2+5.5); grp.add(rail);
     }
-    const topY=floors*floorH;
-    let roofMesh;
-    if(roofType==="gable") roofMesh=makeGableRoof(w-2,d-2,2,roofColor);
-    else if(roofType==="flat") roofMesh=makeFlatRoof(w-6,d-6,2.2,Palette.roofDark);
-    else roofMesh=makeHipRoof(w-2,d-2,2,roofColor);
-    roofMesh.position.y=topY+1.4; roof.add(roofMesh);
-    if(sign){ const s=box(24,2,6,M.wood); s.position.set(-w/2-2,floorH*0.9,0); s.rotation.y=Math.PI/2; details.add(s); }
-  } else {
-    const radius=Math.max(w,d)*0.45;
-    for(let f=0; f<floors; f++){
-      const drum=cylinder(radius*(1-f*0.05), floorH, M.plaster, 32);
-      drum.position.y=floorH/2+f*floorH; levels.add(drum);
-      for(let i=0;i<8;i++){
-        const ang=(i/8)*Math.PI*2;
-        const col=box(2.2, floorH, 2.2, M.trim);
-        col.position.set(Math.cos(ang)*radius*0.98, floorH/2+f*floorH, Math.sin(ang)*radius*0.98);
-        levels.add(col);
-      }
-      for(let i=0;i<6;i++){
-        const ang=(i/6)*Math.PI*2;
-        const W=makeWindow(10,9,1.2);
-        W.position.set(Math.cos(ang)*radius*0.98, floorH*0.55+f*floorH, Math.sin(ang)*radius*0.98);
-        W.lookAt(0, W.position.y, 0); levels.add(W);
-      }
-    }
-    const topY=floors*floorH;
-    const cap = cone ? makeConeRoof(radius*0.95, roofColor) : makeDomeRoof(radius*0.95, roofColor);
-    cap.position.y=topY+2; roof.add(cap);
   }
-  return B;
+  const roof=gableRoof(w+4,d+4,roofColor); roof.position.y=floors*22+1.6; grp.add(roof);
+  return grp;
+}
+function bathhouse({w=70,d=48, r=26, roofMain=P.roofTeal, roofSides=P.roofTerracotta, plaster="C"}={}){
+  const grp=new THREE.Group();
+  const L=rectLevel({w,d,h:20,plaster}); L.position.y=0; grp.add(L);
+  L.archStrip.call(L,w,d,12, Math.floor(w/16));
+  const drum=cyl(r,22, M.plasterA, 40); drum.position.set(0,11,0); grp.add(drum);
+  ringWindows(grp,r*0.92, 14, 6);
+  const dome=domeRoof(r*0.98, roofMain); dome.position.y=22+2; grp.add(dome);
+  const wingW=(w*0.46)|0;
+  const W1=rectLevel({w:wingW,d:d*0.8,h:18,plaster:"B"}); W1.position.set(-w/2-wingW/2+6, 0, 0); grp.add(W1);
+  const W2=W1.clone(); W2.position.x*=-1; grp.add(W2);
+  const R1=hipRoof(wingW+6, d*0.8+6, roofSides); R1.position.set(W1.position.x, 18.8, 0); addUpturnedCorners(R1, wingW+6, d*0.8+6); grp.add(R1);
+  const R2=hipRoof(wingW+6, d*0.8+6, roofSides); R2.position.set(W2.position.x, 18.8, 0); addUpturnedCorners(R2, wingW+6, d*0.8+6); grp.add(R2);
+  return grp;
+}
+function gatehouse({w=84,d=36, roofColor=P.roofTerracotta, coneColor=P.roofSea, plaster="B"}={}){
+  const grp=new THREE.Group();
+  const base=rectLevel({w,d,h:22,plaster}); base.position.y=0; grp.add(base);
+  const arch = new THREE.Mesh(new THREE.CylinderGeometry(8,8,14,24,1,true,0,Math.PI), M.frame);
+  arch.rotation.z = Math.PI/2; arch.position.set(0,11,d/2+1); grp.add(arch);
+  const top=rectLevel({w:w*0.92,d:d*0.92,h:18,plaster:"A"}); top.position.y=22; grp.add(top);
+  belt(grp,w*0.92,d*0.92,22+2.2,4,P.vermilion);
+  const roof=hipRoof(w*0.96+6, d*0.96+6, roofColor); roof.position.y=41.2; addUpturnedCorners(roof,w*0.96+6,d*0.96+6); grp.add(roof);
+  const r=12, t1=coneRoof(r, coneColor); t1.position.set(-w/2-4, 22, -d/2+6); grp.add(t1);
+  const t2=coneRoof(r, coneColor); t2.position.set( w/2+4, 22, -d/2+6); grp.add(t2);
+  return grp;
+}
+function libraryTower({r=20, floors=4, roofColor=P.roofTeal, beltColor=P.brick}={}){
+  return drumTower({r, floors, beltColor, roofColor, plaster:"B"});
 }
 
-/* -------------------------------------------------------
-   Build 3×5 unique buildings in a grid
-------------------------------------------------------- */
-const town=new THREE.Group(); scene.add(town);
+/* NEW, even more oriental types (15) */
+function octagonTower({r=26,floors=3,roofColor=P.roofSea,plaster="A"}={}){
+  const grp=new THREE.Group(); let y=0, rad=r;
+  for(let i=0;i<floors;i++){
+    const mat=plaster==="B"?M.plasterB:plaster==="C"?M.plasterC:M.plasterA;
+    const drum=new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,20,8), mat);
+    drum.castShadow=drum.receiveShadow=true; drum.position.y=y+10; grp.add(drum);
+    ringWindows(grp, rad*0.9, y+12, 8);
+    y+=20; rad*=0.94;
+  }
+  const cap=coneRoof(rad*0.98, roofColor); cap.position.y=y+2; grp.add(cap);
+  return grp;
+}
+function hexPavilion({r=22, roofColor=P.roofOrange, open=true}={}){
+  const grp=new THREE.Group();
+  const seg=6, h=14;
+  const base=new THREE.Mesh(new THREE.CylinderGeometry(r,r,4,seg), M.band); base.position.y=2; base.castShadow=base.receiveShadow=true; grp.add(base);
+  for(let i=0;i<seg;i++){
+    const a=(i/seg)*Math.PI*2;
+    const col=open?cyl(1.8,h,M.wood,12):box(6,h,2,M.wood);
+    const px=Math.cos(a)*r*0.9, pz=Math.sin(a)*r*0.9;
+    col.position.set(px, h/2+4, pz);
+    col.lookAt(0,col.position.y,0); grp.add(col);
+  }
+  const roof=coneRoof(r*1.02, roofColor); roof.position.y=h+5; grp.add(roof);
+  return grp;
+}
+function stupa({r=24, levels=5, roofColor=P.roofSea}={}){
+  const grp=new THREE.Group(); let y=0, rad=r;
+  for(let i=0;i<levels;i++){
+    const ring=cyl(rad, 10, M.plasterC, 48); ring.position.y=y+5; grp.add(ring);
+    belt(grp, rad*2, rad*2, y+1.8, 3, P.vermilion);
+    y+=10; rad*=0.9;
+  }
+  const spire=new THREE.Group();
+  spire.add(cone(rad,rad*1.1,M.roof(roofColor),32));
+  const tip=cone(Math.max(2,rad*0.2), 10, M.roof(P.roofSlate),24); tip.position.y=rad*1.1; spire.add(tip);
+  spire.position.y=y+2; grp.add(spire);
+  return grp;
+}
+function teaHouseStilts({w=64,d=44, roofColor=P.roofTerracotta}={}){
+  const grp=new THREE.Group();
+  const deck=box(w,2,d,M.wood); deck.position.y=10; grp.add(deck);
+  for(let x=-w/2+6; x<=w/2-6; x+=w-12){
+    for(let z=-d/2+6; z<=d/2-6; z+=d-12){
+      const post=cyl(2,10,M.wood,12); post.position.set(x,5,z); grp.add(post);
+    }
+  }
+  const body=rectLevel({w:d*0.9,d:w*0.6,h:16,plaster:"B"}); body.position.y=12; grp.add(body);
+  const roof=hipRoof(w+10, d+10, roofColor); roof.position.y=22; addUpturnedCorners(roof,w+10,d+10,0.6,14); grp.add(roof);
+  return grp;
+}
+function marketHall({w=120,d=44, roofColor=P.roofClay}={}){
+  const grp=new THREE.Group();
+  const L=rectLevel({w,d,h:18,plaster:"A"}); L.position.y=0; grp.add(L);
+  L.archStrip.call(L,w,d,10, Math.floor(w/12));
+  const roof=gableRoof(w+6,d+6,roofColor); roof.position.y=19.4; grp.add(roof);
+  return grp;
+}
+function bellPavilion({w=70,d=70, roofColor=P.roofOrange}={}){
+  const grp=new THREE.Group();
+  const pad=box(w,3,d,M.band); pad.position.y=1.5; grp.add(pad);
+  for(let x=-w/2+8;x<=w/2-8;x+=w-16){
+    for(let z=-d/2+8;z<=d/2-8;z+=d-16){
+      const col=cyl(3,16,M.wood,14); col.position.set(x,8,z); grp.add(col);
+    }
+  }
+  const roof=hipRoof(w+12,d+12,roofColor); roof.position.y=18; addUpturnedCorners(roof,w+12,d+12,0.6,16); grp.add(roof);
+  const bell=cyl(5,6,M.roof(P.roofSlate),24); bell.position.y=12; grp.add(bell);
+  return grp;
+}
+function siheyuan({w=120,d=120, roofColor=P.roofTerracotta}={}){
+  const grp=new THREE.Group();
+  const wing=()=>{ const g=rectLevel({w:44,d:28,h:16,plaster:"C"}); const r=hipRoof(50,34,roofColor); r.position.y=16.8; addUpturnedCorners(r,50,34,0.6,12); g.add(r); return g; };
+  const north=wing(); north.position.set(0,0,-d/2+20); grp.add(north);
+  const south=wing(); south.position.set(0,0, d/2-20); grp.add(south);
+  const west=wing();  west.position.set(-w/2+24,0,0);  west.rotation.y=Math.PI/2; grp.add(west);
+  const east=wing();  east.position.set( w/2-24,0,0);  east.rotation.y=Math.PI/2; grp.add(east);
+  return grp;
+}
+function twinBridge({w=56,d=40,h=24, roofColor=P.roofTeal}={}){
+  const grp=new THREE.Group();
+  const A=rectLevel({w,d,h,plaster:"B"}); A.position.set(-w,0,0); grp.add(A);
+  const B=rectLevel({w,d,h,plaster:"B"}); B.position.set( w,0,0); grp.add(B);
+  const roofA=hipRoof(w+6,d+6,roofColor); roofA.position.set(-w,h+1.4,0); grp.add(roofA);
+  const roofB=hipRoof(w+6,d+6,roofColor); roofB.position.set( w,h+1.4,0); grp.add(roofB);
+  const bridge=box(w*1.2,4, d*0.6, M.wood); bridge.position.y=h+8; grp.add(bridge);
+  const cover=gableRoof(w*1.2+6,d*0.6+6,P.roofOrange); cover.position.y=h+10; grp.add(cover);
+  return grp;
+}
+function toriiGateComplex({w=80,d=30, roofColor=P.roofTerracotta}={}){
+  const grp=new THREE.Group();
+  // torii
+  const postA=cyl(3,20,M.wood,16); postA.position.set(-w/2+8,10,-d/2); grp.add(postA);
+  const postB=postA.clone(); postB.position.x*=-1; grp.add(postB);
+  const lintel=box(w-16,3,6,M.wood); lintel.position.set(0,21,-d/2); grp.add(lintel);
+  const kasagi=box(w-10,2,8,M.roof(P.roofSlate)); kasagi.position.set(0,23,-d/2); grp.add(kasagi);
+  // small guardhouse behind
+  const house=rectLevel({w:50,d:30,h:16,plaster:"A"}); house.position.y=0; grp.add(house);
+  const r=hipRoof(54,34,roofColor); r.position.y=17; addUpturnedCorners(r,54,34,0.6,12); grp.add(r);
+  return grp;
+}
+function barrelHall({w=100,d=40, roofColor=P.roofSea}={}){
+  const grp=new THREE.Group();
+  const L=rectLevel({w,d,h:18,plaster:"C"}); L.position.y=0; grp.add(L);
+  // Approx barrel with multiple sloped plates
+  const roof=new THREE.Group(); const seg=5;
+  for(let i=0;i<seg;i++){
+    const t=box(w+6,2,(d+6)/seg,M.roof(roofColor));
+    const z=-d/2-3 + (i+0.5)*(d+6)/seg;
+    const ang=(i - (seg-1)/2)*0.18;
+    t.position.set(0, 19+i*0.3, z); t.rotation.x=ang; roof.add(t);
+  }
+  roof.position.y=0; grp.add(roof);
+  return grp;
+}
+function karahafuHall({w=84,d=44, roofColor=P.roofTerracotta}={}){
+  const grp=new THREE.Group();
+  const L=rectLevel({w,d,h:18,plaster:"A"}); L.position.y=0; grp.add(L);
+  const roof=gableRoof(w+6,d+6,roofColor); roof.position.y=19.4; addUpturnedCorners(roof,w+6,d+6,0.55,12); grp.add(roof);
+  // decorative cusped front (fake karahafu)
+  const crest=box(26,10,1.4,M.roof(P.roofSlate)); crest.position.set(0,26,d/2+1.6); grp.add(crest);
+  return grp;
+}
+function drumPagodaHybrid({w=70,d=50,r=22}={}){
+  const grp=new THREE.Group();
+  const L=rectLevel({w,d,h:18,plaster:"B"}); L.position.y=0; grp.add(L);
+  const roof=hipRoof(w+6,d+6,P.roofOrange); roof.position.y=19.2; addUpturnedCorners(roof,w+6,d+6,0.55,12); grp.add(roof);
+  const drum=cyl(r,18,M.plasterA,36); drum.position.y=32; grp.add(drum);
+  const dome=domeRoof(r*0.98,P.roofTeal); dome.position.y=42; grp.add(dome);
+  return grp;
+}
+function tallWatchtower({w=36,d=36,floors=4, roofColor=P.roofSea}={}){
+  const grp=new THREE.Group();
+  for(let i=0;i<floors;i++){
+    const L=rectLevel({w,d,h:18,plaster:i%2?"B":"C"}); L.position.y=i*18; grp.add(L);
+  }
+  const cap=coneRoof(Math.min(w,d)*0.7, roofColor); cap.position.y=floors*18+2; grp.add(cap);
+  return grp;
+}
+function cornerPagoda({w=90,d=66,tiers=3, roofColor=P.roofOrange}={}){
+  const grp=pagoda({w,d,tiers,roofColor,plaster:"A"});
+  return grp;
+}
 
-const defs=[
-  // Row 1
-  {name:"R1A", w:66,d:44,floors:2, roofType:"hip",   roofColor:Palette.roofRed,    sign:true},
-  {name:"R1B", round:true, w:70,d:70, floors:3,      roofColor:Palette.roofBlue},
-  {name:"R1C", w:72,d:46,floors:2, roofType:"gable", roofColor:Palette.roofYellow, balcony:true},
-  {name:"R1D", round:true, cone:true, w:68,d:68, floors:2, roofColor:Palette.roofGreen},
-  {name:"R1E", w:56,d:40,floors:2, roofType:"flat",  roofColor:Palette.roofDark},
+/* Build 30 (original 15 + 15 new) */
+const grid = new THREE.Group(); scene.add(grid);
+const COLS=5, ROWS=6;            // 6 rows × 5 columns
+const SX=300, SZ=280, X0=-(COLS-1)*SX/2, Z0=-(ROWS-1)*SZ/2;
 
-  // Row 2
-  {name:"R2A", w:64,d:42,floors:3, roofType:"gable", roofColor:Palette.roofRed, balcony:true},
-  {name:"R2B", round:true, w:64,d:64, floors:2,      roofColor:Palette.roofYellow},
-  {name:"R2C", w:60,d:40,floors:2, roofType:"hip",   roofColor:Palette.roofBlue},
-  {name:"R2D", w:68,d:48,floors:2, roofType:"hip",   roofColor:Palette.roofGreen, sign:true},
-  {name:"R2E", round:true, cone:true, w:72,d:72, floors:3, roofColor:Palette.roofRed},
+/* First 15 — from prior message (kept) */
+const originals = [
+  pagoda({w:92,d:68,tiers:3,roofColor:P.roofOrange,plaster:"B"}),
+  drumTower({r:34,floors:3,roofColor:P.roofBlue,beltColor:P.vermilion,plaster:"A"}),
+  terrace({w:96,d:48,floors:2,roofColor:P.roofClay,plaster:"C"}),
+  bathhouse({w:88,d:56,r:30,roofMain:P.roofTeal,roofSides:P.roofTerracotta,plaster:"B"}),
+  gatehouse({w:96,d:40,roofColor:P.roofTerracotta,coneColor:P.roofSea,plaster:"A"}),
 
-  // Row 3
-  {name:"R3A", w:58,d:38,floors:2, roofType:"flat",  roofColor:Palette.roofDark},
-  {name:"R3B", w:66,d:44,floors:2, roofType:"gable", roofColor:Palette.roofYellow},
-  {name:"R3C", round:true, w:76,d:76, floors:2,      roofColor:Palette.roofBlue},
-  {name:"R3D", w:70,d:46,floors:2, roofType:"hip",   roofColor:Palette.roofRed, balcony:true, sign:true},
-  {name:"R3E", round:true, cone:true, w:66,d:66, floors:2, roofColor:Palette.roofGreen}
+  pagoda({w:86,d:62,tiers:4,roofColor:P.roofTerracotta,plaster:"A"}),
+  libraryTower({r:22,floors:5,roofColor:P.roofSea,beltColor:P.rust}),
+  terrace({w:88,d:44,floors:3,roofColor:P.roofOrange,plaster:"B"}),
+  bathhouse({w:78,d:52,r:26,roofMain:P.roofBlue,roofSides:P.roofOrange,plaster:"C"}),
+  drumTower({r:36,floors:2,roofColor:P.roofSea,beltColor:P.brick,plaster:"B"}),
+
+  gatehouse({w:90,d:38,roofColor:P.roofClay,coneColor:P.roofTeal,plaster:"C"}),
+  pagoda({w:100,d:72,tiers:3,roofColor:P.roofOrange,plaster:"A"}),
+  terrace({w:82,d:42,floors:2,roofColor:P.roofTerracotta,plaster:"B"}),
+  libraryTower({r:24,floors:4,roofColor:P.roofBlue,beltColor:P.vermilion}),
+  bathhouse({w:92,d:60,r:32,roofMain:P.roofSea,roofSides:P.roofClay,plaster:"A"})
 ];
 
-const SPACING_X = 220, SPACING_Z = 220;
-const START_X = -SPACING_X*2;  // 5 columns centered
-const START_Z = -SPACING_Z;    // 3 rows centered
+/* New 15 — more oriental variety */
+const more = [
+  octagonTower({r:28,floors:3,roofColor:P.roofSea,plaster:"B"}),
+  hexPavilion({r:26,roofColor:P.roofOrange}),
+  stupa({r:26,levels:5,roofColor:P.roofTeal}),
+  teaHouseStilts({w:78,d:52,roofColor:P.roofTerracotta}),
+  marketHall({w:140,d:46,roofColor:P.roofClay}),
 
-for(let i=0;i<defs.length;i++){
-  const col = i % 5, row = Math.floor(i/5);
-  const b = makeBuilding(defs[i]);
-  b.position.set(START_X + col*SPACING_X, 0, START_Z + row*SPACING_Z);
-  // add tiny random yaw to avoid a too-perfect grid vibe
-  b.rotation.y = (Math.random()-0.5)*0.12;
-  town.add(b);
+  bellPavilion({w:86,d:86,roofColor:P.roofOrange}),
+  siheyuan({w:140,d:140,roofColor:P.roofTerracotta}),
+  twinBridge({w:60,d:36,h:22,roofColor:P.roofTeal}),
+  toriiGateComplex({w:96,d:36,roofColor:P.roofTerracotta}),
+  barrelHall({w:120,d:46,roofColor:P.roofSea}),
+
+  karahafuHall({w:96,d:48,roofColor:P.roofTerracotta}),
+  drumPagodaHybrid({w:84,d:58,r:24}),
+  tallWatchtower({w:40,d:40,floors:5,roofColor:P.roofSea}),
+  cornerPagoda({w:104,d:76,tiers:4,roofColor:P.roofOrange}),
+  octagonTower({r:30,floors:4,roofColor:P.roofBlue,plaster:"C"})
+];
+
+const builds = [...originals, ...more];
+
+for(let r=0;r<ROWS;r++){
+  for(let c=0;c<COLS;c++){
+    const idx=r*COLS+c;
+    const b = builds[idx];
+    if(!b) continue;
+    b.position.set(X0+c*SX, 0, Z0+r*SZ);
+    b.rotation.y = (Math.random()-0.5)*0.14;
+    grid.add(b);
+  }
 }
 
-/* -------------------------------------------------------
-   Resize / Render
-------------------------------------------------------- */
+/* Resize / render */
 addEventListener("resize", ()=>{
   camera.aspect = innerWidth/innerHeight;
   camera.updateProjectionMatrix();

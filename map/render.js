@@ -16,13 +16,18 @@ function drawDistricts(){
   for(const k in MODEL.districts){
     const d=MODEL.districts[k];
     const pts=d.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
-    const poly=mk('polygon',{class:'district '+(isSelected('district',k)?'selected':''),'data-id':k,points:pts});
+    const col = d.color || '#22d3ee';
+    const poly=mk('polygon',{class:'district '+(isSelected('district',k)?'selected':''),'data-id':k,points:pts, style:`--dist-stroke:${col};--dist-fill:${col}55`});
     poly.addEventListener('mouseenter',e=>showTip(e,{name:d.name,desc:d.desc}));
     poly.addEventListener('mousemove',moveTip);
     poly.addEventListener('mouseleave',hideTip);
     poly.addEventListener('mousedown',e=>{
       e.stopPropagation();
-      if(state.mode==='select'){ select('district',k); if(e.altKey){ startDragWhole(e,'district',k);} }
+      if(state.mode==='select'){
+        select('district',k);
+        if(e.altKey){ startDragWhole(e,'district',k); }
+        else if(window.__openDistrictModal){ window.__openDistrictModal(k); }
+      }
     });
     dLayer.append(poly);
   }
@@ -64,7 +69,7 @@ function drawGrass(){
   if(!document.getElementById('toggleGrass').checked || !Array.isArray(MODEL.grass)) return;
   for(const g of MODEL.grass){
     const d=g.points.map(p=>[p[0]*W/100,p[1]*H/100].join(',')).join(' ');
-    layer.append(mk('polyline',{class:'grass',points:d,strokeWidth:g.width||22}));
+    layer.append(mk('polyline',{class:'grass',points:d,strokeWidth:g.width||300}));
   }
 }
 

@@ -8,7 +8,8 @@ export function buildExportSVG(){
   const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const dPolys = Object.values(MODEL.districts).map(d=>{
     const pts=d.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
-    return `<polygon points="${pts}" fill="#22d3ee55" stroke="#22d3ee" stroke-width="2"/>`;
+    const col = d.color || '#22d3ee';
+    return `<polygon points="${pts}" fill="${col}" fill-opacity="0.33" stroke="${col}" stroke-width="2"/>`;
   }).join('\n');
   const dRoads = MODEL.roads.map(r=>{
     const pts=r.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
@@ -27,7 +28,7 @@ export function buildExportSVG(){
   }).join('\n');
   const dGrass = (MODEL.grass||[]).map(g=>{
     const pts=g.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
-    return `<polyline points="${pts}" fill="none" stroke="#16a34a" stroke-opacity=".4" stroke-width="${g.width||22}" stroke-linecap="round" stroke-linejoin="round"/>`;
+    return `<polyline points="${pts}" fill="none" stroke="#16a34a" stroke-opacity=".4" stroke-width="${g.width||28}" stroke-linecap="round" stroke-linejoin="round"/>`;
   }).join('\n');
   const dForest = (MODEL.forest||[]).map(f=>{
     const pts=f.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
