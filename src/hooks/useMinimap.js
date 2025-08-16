@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { WORLD_SIZE, TILE_SIZE, TEXTURE_WORLD_UNITS, getBiomeAt, getTerrainTextureForBiome } from '../scene/terrain.js';
+// @tweakable base path anchor for terrain imports (change only if your host serves /src under a different root)
+import { WORLD_SIZE, TILE_SIZE, TEXTURE_WORLD_UNITS, getBiomeAt, getTerrainTextureForBiome } from '/src/scene/terrain.js';
 import { drawRiver, drawRoads, drawDistricts } from '../components/game/objects/konoha_roads.js';
 
 // @tweakable show or hide roads on the minimap/world canvas
@@ -12,6 +13,16 @@ const MINIMAP_DRAW_DISTRICTS = true;
 const MINIMAP_ROAD_ALPHA = 0.9;
 // @tweakable base road widths on the minimap/world canvas (pixels at world scale 1)
 const MINIMAP_W_PRIMARY = 10.0, MINIMAP_W_SECONDARY = 7.0, MINIMAP_W_TERTIARY = 4.0;
+
+// NEW: walls overlay controls
+/* @tweakable show or hide walls on the minimap/world canvas */
+const MINIMAP_DRAW_WALLS = true;
+/* @tweakable wall opacity on the minimap/world canvas (0..1) */
+const MINIMAP_WALL_ALPHA = 0.9;
+/* @tweakable thickness multiplier for walls on the minimap/world canvas */
+const MINIMAP_WALL_STROKE_SCALE = 2.0;
+/* @tweakable wall color on the minimap/world canvas */
+const MINIMAP_WALL_COLOR = '#bfc0c2';
 
 export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
     const animationFrameId = useRef();
@@ -229,6 +240,15 @@ export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
                     stroke: '#ffffff',
                     lineWidth: 1,
                     fill: '#ffffff'
+                });
+            }
+            // NEW: draw walls
+            if (MINIMAP_DRAW_WALLS) {
+                const { drawWalls } = await import('../components/game/objects/konoha_roads.js');
+                await drawWalls(ctx, scale, cx, cy, {
+                    alpha: MINIMAP_WALL_ALPHA,
+                    strokeScale: MINIMAP_WALL_STROKE_SCALE,
+                    color: MINIMAP_WALL_COLOR
                 });
             }
             if (MINIMAP_DRAW_ROADS) {

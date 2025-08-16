@@ -5,6 +5,17 @@ import { drawAll } from './render.js';
 import { dumpJSON, buildExportSVG } from './export-utils.js';
 import { canvasDown, finishDrawing, cancelDrawing, select } from './interactions.js';
 
+// @tweakable keyboard shortcut to open the Load JSON modal (DOM KeyboardEvent.code)
+const LOAD_JSON_HOTKEY_CODE = 'Backquote';
+// @tweakable when true, completely replace MODEL fields with loaded data; when false, shallow-merge
+const LOAD_JSON_REPLACE = true;
+/* @tweakable additional keyboard identifiers to trigger Load JSON (matches KeyboardEvent.key) */
+const LOAD_JSON_ALT_KEYS = ['`', '～', '°'];
+/* @tweakable allow the hotkey to work even when a text input or textarea is focused */
+const LOAD_JSON_HOTKEY_IN_INPUTS = true;
+/* @tweakable when true, the hotkey toggles the modal instead of only opening it */
+const LOAD_JSON_TOGGLE_MODAL = true;
+
 function wireUI(){
   document.querySelectorAll('input[name="mode"]').forEach(r=>r.addEventListener('change',e=>{
     state.mode=e.target.value; state.drawing=null; document.body.dataset.mode=state.mode; drawAll();
@@ -30,40 +41,59 @@ function wireUI(){
     document.getElementById('poiModal').hidden=true;
   });
 
-  // District modal wiring
-  const dModal = document.getElementById('districtModal');
-  const dmId = document.getElementById('dmId');
-  const dmName = document.getElementById('dmName');
-  const dmDesc = document.getElementById('dmDesc');
-  const dmColor = document.getElementById('dmColor');
-  let currentDistrictKey = null;
-  function openDistrictModal(key){
-    currentDistrictKey = key;
-    const d = MODEL.districts[key];
-    dmId.value = d.id || key;
-    dmName.value = d.name || '';
-    dmDesc.value = d.desc || '';
-    dmColor.value = d.color || '#22d3ee';
-    dModal.hidden = false;
-  }
-  window.__openDistrictModal = openDistrictModal;
-  document.getElementById('dmCancel').addEventListener('click', ()=>{ dModal.hidden = true; });
-  document.getElementById('dmApply').addEventListener('click', ()=>{
-    if(!currentDistrictKey) return;
-    const old = MODEL.districts[currentDistrictKey];
-    const newId = (dmId.value||'').trim() || currentDistrictKey;
-    const updated = {...old, id:newId, name:dmName.value, desc:dmDesc.value, color:dmColor.value};
-    delete MODEL.districts[currentDistrictKey];
-    MODEL.districts[newId] = updated;
-    dModal.hidden = true;
-    drawAll(); dumpJSON(); autosave(MODEL);
+  // Load JSON modal wiring
+  const jsonLoadModal = document.getElementById('jsonLoadModal');
+  const jsonLoadInput = document.getElementById('jsonLoadInput');
+  document.getElementById('jsonLoadCancel').addEventListener('click', () => { jsonLoadModal.hidden = true; });
+  document.getElementById('jsonLoadApply').addEventListener('click', () => {
+    try{
+      const data = JSON.parse(jsonLoadInput.value || '{}');
+      if (LOAD_JSON_REPLACE) {
+        MODEL.districts = data.districts || {};
+        MODEL.roads     = data.roads     || [];
+        MODEL.poi       = data.poi       || [];
+        MODEL.walls     = data.walls     || [];
+        MODEL.rivers    = data.rivers    || [];
+        MODEL.grass     = data.grass     || [];
+        MODEL.forest    = data.forest    || [];
+        MODEL.mountains = data.mountains || [];
+      } else {
+        MODEL.districts = { ...(MODEL.districts||{}), ...(data.districts||{}) };
+        MODEL.roads     = Array.isArray(data.roads) ? data.roads : (MODEL.roads||[]);
+        MODEL.poi       = Array.isArray(data.poi) ? data.poi : (MODEL.poi||[]);
+        MODEL.walls     = Array.isArray(data.walls) ? data.walls : (MODEL.walls||[]);
+        MODEL.rivers    = Array.isArray(data.rivers) ? data.rivers : (MODEL.rivers||[]);
+        MODEL.grass     = Array.isArray(data.grass) ? data.grass : (MODEL.grass||[]);
+        MODEL.forest    = Array.isArray(data.forest) ? data.forest : (MODEL.forest||[]);
+        MODEL.mountains = Array.isArray(data.mountains) ? data.mountains : (MODEL.mountains||[]);
+      }
+      drawAll(); dumpJSON(); autosave(MODEL);
+      jsonLoadModal.hidden = true;
+    }catch(err){
+      alert('Invalid JSON');
+    }
   });
 
   svg.addEventListener('dblclick',finishDrawing);
   svg.addEventListener('mousedown',canvasDown);
   window.addEventListener('keydown',e=>{
     const t=e.target, tag=(t?.tagName||'').toUpperCase();
-    if(['INPUT','TEXTAREA','SELECT'].includes(tag) || t?.isContentEditable) return;
+    const isEditable = ['INPUT','TEXTAREA','SELECT'].includes(tag) || t?.isContentEditable;
+    const wantsHotkey = (e.code === LOAD_JSON_HOTKEY_CODE) || LOAD_JSON_ALT_KEYS.includes(e.key);
+    if (wantsHotkey) {
+      if (!LOAD_JSON_HOTKEY_IN_INPUTS && isEditable) return;
+      e.preventDefault();
+      const modal = document.getElementById('jsonLoadModal');
+      const input = document.getElementById('jsonLoadInput');
+      if (LOAD_JSON_TOGGLE_MODAL) {
+        modal.hidden = !modal.hidden;
+      } else {
+        modal.hidden = false;
+      }
+      if (!modal.hidden) setTimeout(() => input.focus(), 0);
+      return;
+    }
+    if(isEditable) return;
     if(e.key==='Escape') cancelDrawing();
     if(e.key==='Enter' && state.drawing){ e.preventDefault(); finishDrawing(); }
     if(e.key.toLowerCase()==='e'){ document.getElementById('edit').click(); }

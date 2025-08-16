@@ -1,6 +1,22 @@
 import { jsxDEV } from "react/jsx-dev-runtime";
 import React from "react";
+const LATEST_VERSION = "0.023.9";
+const LATEST_DATE = "2025-08-16";
+const LATEST_CHANGES = [
+  "Version: Bumped to 0.023.9 and synchronized across UI title and in-game labels.",
+  "Zoom: Hard-capped camera zoom-out at 50 across desktop, mobile, and keyboard controls.",
+  "Map: Editor opens in a 98% modal from Main Menu; live districts/walls render on minimap & world map.",
+  "Fix: parseGridLabel import for rivers; all districts now loaded from map/ data.",
+  "UX: FPV toggle added to mobile; tooltips and interact prompt refined near objects.",
+  "World: Konoha town avoids roads; precise OBB colliders for Hokage Monument and Palace walls."
+];
 const changelogData = [
+  { version: LATEST_VERSION, date: LATEST_DATE, changes: LATEST_CHANGES },
+  { version: "0.007.5", date: "2025-08-16", changes: [
+    "Version set to 0.007.5.",
+    "Changelog updated with latest changes.",
+    "UI version label is now tweakable (VERSION_PREFIX / OVERRIDE_VERSION)."
+  ] },
   { version: "0.007.4", date: "2025-08-15", changes: [
     "Collision: Round Konoha buildings now use precise spherical colliders.",
     "Credits: Added cooroinuzuka (DeviantArt) link to Credits and Special Thanks.",
@@ -59,7 +75,7 @@ const ChangelogPanel = ({ onClose }) => {
     /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-700 px-4 py-2 rounded-t-lg border-b border-gray-600 flex justify-between items-center", children: [
       /* @__PURE__ */ jsxDEV("h2", { className: "text-yellow-400 font-bold text-lg", children: "Changelog" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 63,
+        lineNumber: 83,
         columnNumber: 17
       }),
       /* @__PURE__ */ jsxDEV(
@@ -73,18 +89,18 @@ const ChangelogPanel = ({ onClose }) => {
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 64,
+          lineNumber: 84,
           columnNumber: 17
         }
       )
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 62,
+      lineNumber: 82,
       columnNumber: 13
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "px-4 pt-2 text-xs text-gray-300", children: "by Lord Tsarcasm" }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 72,
+      lineNumber: 92,
       columnNumber: 13
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "p-4 space-y-4 max-h-[60vh] overflow-y-auto", children: changelogData.map((entry) => /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-900 p-3 rounded-lg border border-gray-700", children: [
@@ -94,40 +110,40 @@ const ChangelogPanel = ({ onClose }) => {
           entry.version
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 78,
+          lineNumber: 98,
           columnNumber: 30
         }),
         /* @__PURE__ */ jsxDEV("p", { className: "text-xs text-gray-400", children: entry.date }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 79,
+          lineNumber: 99,
           columnNumber: 30
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 77,
+        lineNumber: 97,
         columnNumber: 25
       }),
       /* @__PURE__ */ jsxDEV("ul", { className: "list-disc list-inside text-sm space-y-1 text-gray-300", children: entry.changes.map((change, index) => /* @__PURE__ */ jsxDEV("li", { children: change }, index, false, {
         fileName: "<stdin>",
-        lineNumber: 84,
+        lineNumber: 104,
         columnNumber: 33
       })) }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 82,
+        lineNumber: 102,
         columnNumber: 25
       })
     ] }, entry.version, true, {
       fileName: "<stdin>",
-      lineNumber: 76,
+      lineNumber: 96,
       columnNumber: 21
     })) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 74,
+      lineNumber: 94,
       columnNumber: 13
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 60,
+    lineNumber: 80,
     columnNumber: 9
   });
 };

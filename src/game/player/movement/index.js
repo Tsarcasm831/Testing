@@ -8,6 +8,11 @@ const moveDirection = new THREE.Vector2();
 const inputDirection = new THREE.Vector2();
 const tmpPos = { x: 0, z: 0 };
 
+/* @tweakable when true, clamps flight to stay above the terrain surface (legacy behavior) */
+const FLIGHT_CLAMP_TO_GROUND = false;
+/* @tweakable minimum Y position while in dev flight; set to null to disable */
+const FLIGHT_MIN_Y = null;
+
 export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, cameraYaw, cameraPitch = 0, isFirstPerson = false) {
     let moved = false;
     moveDirection.set(0, 0);
@@ -58,8 +63,13 @@ export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, 
         if (keys['ControlLeft']) {
             player.position.y -= currentMoveSpeed * delta;
         }
-        const minY = groundY + 0.1;
-        if (player.position.y < minY) player.position.y = minY;
+        // Free flight: do not force the player back to ground unless explicitly enabled
+        if (FLIGHT_CLAMP_TO_GROUND) {
+            const minY = groundY + 0.1;
+            if (player.position.y < minY) player.position.y = minY;
+        } else if (typeof FLIGHT_MIN_Y === 'number') {
+            if (player.position.y < FLIGHT_MIN_Y) player.position.y = FLIGHT_MIN_Y;
+        }
     } else {
         player.position.y += player.userData.velocity.y * delta;
     }

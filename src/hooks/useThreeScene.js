@@ -242,7 +242,7 @@ export const useThreeScene = ({ mountRef, keysRef, joystickRef, setPlayerPositio
         const handleWheel = (event) => {
             const zoomSpeed = 0.1;
             zoomRef.current += event.deltaY * 0.001 * zoomSpeed * 5;
-            zoomRef.current = Math.max(0.2, Math.min(2.5, zoomRef.current));
+            zoomRef.current = Math.max(0.2, Math.min(MAX_CAMERA_ZOOM, zoomRef.current));
         };
         const mountElement = mountRef.current;
         if (mountElement) {
@@ -284,7 +284,7 @@ export const useThreeScene = ({ mountRef, keysRef, joystickRef, setPlayerPositio
                 const scale = currentDist / pinchStartDist;
                 // Gentle sensitivity
                 const newZoom = pinchStartZoom * scale;
-                zoomRef.current = Math.max(0.2, Math.min(2.5, newZoom));
+                zoomRef.current = Math.max(0.2, Math.min(MAX_CAMERA_ZOOM, newZoom));
             }
         };
 
@@ -353,7 +353,7 @@ export const useThreeScene = ({ mountRef, keysRef, joystickRef, setPlayerPositio
             lastY = e.clientY;
 
             const zoom = (zoomRef?.current ?? 0.2);
-            const zoomScale = 0.2 / Math.max(0.12, Math.min(2.5, zoom));
+            const zoomScale = 0.2 / Math.max(0.12, Math.min(MAX_CAMERA_ZOOM, zoom));
             const sensX = BASE_SENS_X * zoomScale;
             const sensY = BASE_SENS_Y * zoomScale;
 
@@ -390,6 +390,9 @@ export const useThreeScene = ({ mountRef, keysRef, joystickRef, setPlayerPositio
             document.body.style.cursor = '';
         };
     }, [mountRef, isPlaying, zoomRef, cameraOrbitRef, cameraPitchRef]);
+
+    // @tweakable maximum camera zoom multiplier (applies to wheel, pinch, and sensitivity calcs)
+    const MAX_CAMERA_ZOOM = 50;
 
     return { playerRef, zoomRef, cameraOrbitRef, cameraPitchRef };
 };

@@ -93,6 +93,12 @@ export const usePlayerControls = ({ setShowCharacter, setShowInventory, setShowW
                         canvas.requestPointerLock();
                     }
                     break;
+                case 'Equal': // '=' zoom in
+                    keysRef.current['ZoomInClicked'] = true;
+                    break;
+                case 'Minus': // '-' zoom out
+                    keysRef.current['ZoomOutClicked'] = true;
+                    break;
                 case 'Escape':
                     closeAllPanels();
                     break;

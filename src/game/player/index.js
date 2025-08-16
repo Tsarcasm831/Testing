@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { loadPlayerAssets, playAnimation, DEFAULT_ANIMATION } from './animations.js';
 import { updatePlayerMovement } from './movement/index.js';
-import { WORLD_SIZE } from '../../scene/terrain.js';
+// @tweakable base path anchor for terrain imports (change only if your host serves /src under a different root)
+import { WORLD_SIZE } from '/src/scene/terrain.js';
 
 let lastLightUpdatePosition = new THREE.Vector3();
 let shadowCastingObjects = new Set();

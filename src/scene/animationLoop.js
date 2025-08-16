@@ -54,6 +54,16 @@ export function startAnimationLoop({
         return a;
     };
 
+    // @tweakable keyboard zoom-in multiplicative factor (applied per key press)
+    const KEY_ZOOM_IN_FACTOR = 0.9;
+    // @tweakable keyboard zoom-out multiplicative factor (applied per key press)
+    const KEY_ZOOM_OUT_FACTOR = 1.1;
+    // @tweakable minimum camera zoom multiplier
+    const KEY_ZOOM_MIN = 0.2;
+    /* @tweakable maximum camera zoom multiplier for keyboard zoom controls */
+    const KEY_ZOOM_MAX = 50;
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
     const onPointerMove = (e) => {
         if (!firstPersonRef.current) return;
         if (document.pointerLockElement !== rendererRef.current?.domElement) return;
@@ -118,6 +128,12 @@ export function startAnimationLoop({
 
         TWEEN.update(timestamp);
 
+        /* @tweakable hard maximum camera zoom multiplier (frame-enforced cap) */
+        const HARD_ZOOM_MAX = KEY_ZOOM_MAX;
+        if (zoomRef && typeof zoomRef.current === 'number') {
+            zoomRef.current = clamp(zoomRef.current, KEY_ZOOM_MIN, HARD_ZOOM_MAX);
+        }
+
         if (!playerRef.current || !cameraRef.current || !rendererRef.current || !sceneRef.current || !objectGridRef.current) return;
 
         // Handle first-person toggle (V)
@@ -139,6 +155,18 @@ export function startAnimationLoop({
                     model.rotation.y = cameraOrbitRef.current || 0;
                 }
             } catch (_) {}
+        }
+
+        // Handle keyboard zoom clicks ('=' to zoom in, '-' to zoom out)
+        if (keysRef.current['ZoomInClicked']) {
+            keysRef.current['ZoomInClicked'] = false;
+            const current = zoomRef.current ?? 0.2;
+            zoomRef.current = clamp(current * KEY_ZOOM_IN_FACTOR, KEY_ZOOM_MIN, KEY_ZOOM_MAX);
+        }
+        if (keysRef.current['ZoomOutClicked']) {
+            keysRef.current['ZoomOutClicked'] = false;
+            const current = zoomRef.current ?? 0.2;
+            zoomRef.current = clamp(current * KEY_ZOOM_OUT_FACTOR, KEY_ZOOM_MIN, KEY_ZOOM_MAX);
         }
 
         const delta = clockRef.current.getDelta();

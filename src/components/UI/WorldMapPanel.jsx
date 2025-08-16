@@ -1,17 +1,29 @@
 import { jsxDEV } from "react/jsx-dev-runtime";
-import React, { useEffect, useRef } from "react";
-import { WORLD_SIZE } from "../../scene/terrain.js";
-import { drawRoads, drawRiver, drawDistricts } from "../../components/game/objects/konoha_roads.js";
-import { getBiomeAt, getTerrainTextureForBiome, TEXTURE_WORLD_UNITS, TILE_SIZE } from "../../scene/terrain.js";
+import React, { useEffect, useRef, useState } from "react";
+import { WORLD_SIZE } from "/src/scene/terrain.js";
+import { drawRoads, drawRiver, drawDistricts, drawWalls } from "../../components/game/objects/konoha_roads.js";
+import { getBiomeAt, getTerrainTextureForBiome, TEXTURE_WORLD_UNITS, TILE_SIZE } from "/src/scene/terrain.js";
+const WORLD_MAP_INITIAL_ZOOM = 1;
+const WORLD_MAP_MIN_ZOOM = 0.2;
+const WORLD_MAP_MAX_ZOOM = 20;
+const WORLD_MAP_ZOOM_STEP = 0.1;
+const WORLD_MAP_DRAW_WALLS = true;
+const WORLD_MAP_WALL_ALPHA = 0.9;
+const WORLD_MAP_WALL_STROKE_SCALE = 2;
+const WORLD_MAP_WALL_COLOR = "#bfc0c2";
+const WORLD_MAP_UPDATE_FPS = 12;
+const WORLD_MAP_PRERENDER_OVERLAYS = true;
 const WorldMapPanel = ({ playerPosition, onClose, worldObjects = [] }) => {
   const canvasRef = useRef(null);
   const worldMinimapCanvasRef = useRef(null);
   const rafRef = useRef(null);
-  const UPDATE_FPS = 12;
   const MAP_VIEW_SIZE = 360;
   const GRID_ALPHA = 0.3;
   const OBJ_DOT_R = 2;
   const OBJ_DOT_ALPHA = 0.95;
+  const [zoom, setZoom] = useState(WORLD_MAP_INITIAL_ZOOM);
+  const handleZoomIn = () => setZoom((z) => Math.min(WORLD_MAP_MAX_ZOOM, +(z + WORLD_MAP_ZOOM_STEP).toFixed(2)));
+  const handleZoomOut = () => setZoom((z) => Math.max(WORLD_MAP_MIN_ZOOM, +(z - WORLD_MAP_ZOOM_STEP).toFixed(2)));
   useEffect(() => {
     const buildWorldCanvas = async () => {
       const worldSize = WORLD_SIZE;
@@ -65,6 +77,15 @@ const WorldMapPanel = ({ playerPosition, onClose, worldObjects = [] }) => {
           }
         }
       }
+      if (WORLD_MAP_PRERENDER_OVERLAYS) {
+        const scale = 1, cx = WORLD_SIZE / 2, cy = WORLD_SIZE / 2;
+        await drawDistricts(ctx, scale, cx, cy, { alpha: 0.15, stroke: "#ffffff", lineWidth: 1, fill: "#ffffff" });
+        if (WORLD_MAP_DRAW_WALLS) {
+          await drawWalls(ctx, scale, cx, cy, { alpha: WORLD_MAP_WALL_ALPHA, strokeScale: WORLD_MAP_WALL_STROKE_SCALE, color: WORLD_MAP_WALL_COLOR });
+        }
+        await drawRoads(ctx, scale, cx, cy, { alpha: 0.9, wPrimary: 3, wSecondary: 2, wTertiary: 1.2 });
+        drawRiver(ctx, scale, cx, cy);
+      }
       worldMinimapCanvasRef.current = canvas;
     };
     buildWorldCanvas();
@@ -73,31 +94,48 @@ const WorldMapPanel = ({ playerPosition, onClose, worldObjects = [] }) => {
     let last = 0;
     let mounted = true;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let lastCanvasW = -1, lastCanvasH = -1;
     const render = async (ts = 0) => {
       if (!mounted) return;
       rafRef.current = requestAnimationFrame(render);
-      if (ts - last < 1e3 / UPDATE_FPS) return;
+      if (ts - last < 1e3 / WORLD_MAP_UPDATE_FPS) return;
       last = ts;
       const canvas = canvasRef.current;
       if (!canvas) return;
       const parent = canvas.parentElement;
       const w = parent.clientWidth, h = parent.clientHeight;
-      canvas.width = Math.max(1, Math.floor(w * dpr));
-      canvas.height = Math.max(1, Math.floor(h * dpr));
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
+      const needResize = canvas.width !== Math.max(1, Math.floor(w * dpr)) || canvas.height !== Math.max(1, Math.floor(h * dpr));
+      if (needResize) {
+        canvas.width = Math.max(1, Math.floor(w * dpr));
+        canvas.height = Math.max(1, Math.floor(h * dpr));
+        canvas.style.width = `${w}px`;
+        canvas.style.height = `${h}px`;
+        lastCanvasW = canvas.width;
+        lastCanvasH = canvas.height;
+      }
       const ctx = canvas.getContext("2d");
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
       const worldCanvas = worldMinimapCanvasRef.current;
       const viewSize = MAP_VIEW_SIZE;
-      const scale = Math.min(w, h) / viewSize;
+      const scaleBase = Math.min(w, h) / viewSize;
+      const scale = scaleBase * zoom;
       const half = viewSize / 2;
       const px = playerPosition.x, pz = playerPosition.z;
       if (worldCanvas) {
-        const sx = px + WORLD_SIZE / 2 - half;
-        const sy = pz + WORLD_SIZE / 2 - half;
-        ctx.drawImage(worldCanvas, sx, sy, viewSize, viewSize, (w - viewSize * scale) / 2, (h - viewSize * scale) / 2, viewSize * scale, viewSize * scale);
+        const sx = px + WORLD_SIZE / 2 - viewSize / zoom / 2;
+        const sy = pz + WORLD_SIZE / 2 - viewSize / zoom / 2;
+        ctx.drawImage(
+          worldCanvas,
+          sx,
+          sy,
+          viewSize / zoom,
+          viewSize / zoom,
+          (w - viewSize * scaleBase) / 2,
+          (h - viewSize * scaleBase) / 2,
+          viewSize * scaleBase,
+          viewSize * scaleBase
+        );
       } else {
         ctx.fillStyle = "#1b4332";
         ctx.fillRect((w - viewSize * scale) / 2, (h - viewSize * scale) / 2, viewSize * scale, viewSize * scale);
@@ -127,6 +165,13 @@ const WorldMapPanel = ({ playerPosition, onClose, worldObjects = [] }) => {
         lineWidth: 1,
         fill: "#ffffff"
       });
+      if (WORLD_MAP_DRAW_WALLS) {
+        await drawWalls(ctx, scale, cx, cy, {
+          alpha: WORLD_MAP_WALL_ALPHA,
+          strokeScale: WORLD_MAP_WALL_STROKE_SCALE,
+          color: WORLD_MAP_WALL_COLOR
+        });
+      }
       await drawRoads(ctx, scale, cx, cy, {
         /* @tweakable primary road color on world map */
         primaryColor: "#e9d7b8",
@@ -177,7 +222,7 @@ const WorldMapPanel = ({ playerPosition, onClose, worldObjects = [] }) => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", onResize);
     };
-  }, [playerPosition.x, playerPosition.z, worldObjects.length]);
+  }, [playerPosition.x, playerPosition.z, worldObjects.length, zoom]);
   return /* @__PURE__ */ jsxDEV("div", { className: "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gray-900 bg-opacity-95 border-2 border-yellow-600 rounded-lg p-6 w-96 h-96 text-white shadow-2xl", children: [
     /* @__PURE__ */ jsxDEV("div", { className: "flex justify-between items-center mb-4", children: [
       /* @__PURE__ */ jsxDEV("h2", { className: "text-2xl font-bold text-yellow-400", children: "World Map" }, void 0, false, {
@@ -185,21 +230,35 @@ const WorldMapPanel = ({ playerPosition, onClose, worldObjects = [] }) => {
         lineNumber: 158,
         columnNumber: 9
       }),
-      /* @__PURE__ */ jsxDEV(
-        "button",
-        {
-          onClick: onClose,
-          className: "text-red-400 hover:text-red-300 text-xl font-bold",
-          children: "\xD7"
-        },
-        void 0,
-        false,
-        {
-          fileName: "<stdin>",
-          lineNumber: 159,
-          columnNumber: 9
-        }
-      )
+      /* @__PURE__ */ jsxDEV("div", { className: "flex items-center gap-2", children: [
+        /* @__PURE__ */ jsxDEV(
+          "button",
+          { onClick: handleZoomOut, className: "px-2 py-1 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded", children: "\u2013" },
+          void 0,
+          false
+        ),
+        /* @__PURE__ */ jsxDEV(
+          "button",
+          { onClick: handleZoomIn, className: "px-2 py-1 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded", children: "+" },
+          void 0,
+          false
+        ),
+        /* @__PURE__ */ jsxDEV(
+          "button",
+          {
+            onClick: onClose,
+            className: "text-red-400 hover:text-red-300 text-xl font-bold",
+            children: "\xD7"
+          },
+          void 0,
+          false,
+          {
+            fileName: "<stdin>",
+            lineNumber: 159,
+            columnNumber: 9
+          }
+        )
+      ] }, void 0, true)
     ] }, void 0, true, {
       fileName: "<stdin>",
       lineNumber: 157,

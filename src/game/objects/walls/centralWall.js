@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { parseGridLabel, posForCell } from '../utils/gridLabel.js';
+import { WALL_RADIUS } from '../../player/movement/constants.js';
 
 // Helper to create a central circular wall:
 // - Visual: open ring with inner+outer cylinders for sides
@@ -7,7 +8,7 @@ import { parseGridLabel, posForCell } from '../utils/gridLabel.js';
 // - Physics: lightweight invisible colliders arrayed around the ring
 export function createCentralWall({
   scene,
-  radius = 960,
+  radius = WALL_RADIUS,
   height = 30,
   segments = 128,
   colliderSpacing = 12,
@@ -82,7 +83,7 @@ export function createCentralWall({
 export function createCentralWallWithGate({
   scene,
   worldSize,
-  radius = 960,
+  radius = WALL_RADIUS,
   height = 30,
   segments = 140,           // slightly reduced for performance
   colliderSpacing = 16,

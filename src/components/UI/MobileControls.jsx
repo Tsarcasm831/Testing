@@ -7,6 +7,7 @@ const clampPitch = (v) => Math.max(-0.9, Math.min(0.9, v));
 const MOBILE_FPV_LABEL = "FPV";
 const MOBILE_FPV_BTN_SIZE = "w-16 h-10";
 const MOBILE_FPV_OFFSET = { x: 0, y: 0 };
+const MAX_CAMERA_ZOOM = 50;
 const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraPitchRef }) => {
   const [visible, setVisible] = useState(true);
   const lookPadRef = useRef(null);
@@ -34,7 +35,7 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
     if (clickFlag) keysRef.current[clickFlag] = true;
     setTimeout(() => releaseKey(code), 0);
   };
-  const clampZoom = (z) => Math.max(0.2, Math.min(2.5, z));
+  const clampZoom = (z) => Math.max(0.2, Math.min(MAX_CAMERA_ZOOM, z));
   const handleZoomIn = () => {
     if (!zoomRef) return;
     zoomRef.current = clampZoom((zoomRef.current ?? 0.2) * 0.9);
@@ -118,7 +119,7 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
       lastX = t.clientX;
       lastY = t.clientY;
       const zoom = zoomRef?.current ?? 0.2;
-      const zoomScale = 0.2 / Math.max(0.12, Math.min(2.5, zoom));
+      const zoomScale = 0.2 / Math.max(0.12, Math.min(MAX_CAMERA_ZOOM, zoom));
       const sensX = BASE_SENS_X * zoomScale;
       const sensY = BASE_SENS_Y * zoomScale;
       const ax = Math.abs(dx);
@@ -170,12 +171,12 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 172,
+        lineNumber: 175,
         columnNumber: 9
       }
     ) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 171,
+      lineNumber: 174,
       columnNumber: 7
     }),
     visible && /* @__PURE__ */ jsxDEV(
@@ -189,14 +190,14 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 183,
+        lineNumber: 186,
         columnNumber: 9
       }
     ),
     visible ? /* @__PURE__ */ jsxDEV("div", { className: "absolute bottom-6 right-6 z-20 flex flex-col gap-4 items-end select-none", children: [
       /* @__PURE__ */ jsxDEV(ZoomControls, { onZoomIn: handleZoomIn, onZoomOut: handleZoomOut }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 191,
+        lineNumber: 194,
         columnNumber: 11
       }),
       /* @__PURE__ */ jsxDEV(
@@ -214,7 +215,7 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 192,
+          lineNumber: 195,
           columnNumber: 11
         }
       ),
@@ -232,7 +233,7 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 202,
+          lineNumber: 205,
           columnNumber: 11
         }
       ),
@@ -251,13 +252,13 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 211,
+          lineNumber: 214,
           columnNumber: 11
         }
       )
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 190,
+      lineNumber: 193,
       columnNumber: 9
     }) : /* @__PURE__ */ jsxDEV("div", { className: "absolute bottom-6 right-6 z-20", children: /* @__PURE__ */ jsxDEV(
       "button",
@@ -273,17 +274,17 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 223,
+        lineNumber: 226,
         columnNumber: 11
       }
     ) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 222,
+      lineNumber: 225,
       columnNumber: 9
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 170,
+    lineNumber: 173,
     columnNumber: 5
   });
 };

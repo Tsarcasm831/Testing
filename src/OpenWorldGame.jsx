@@ -17,6 +17,8 @@ import { MobileControls } from "./components/UI/MobileControls.jsx";
 import CreditsPanel from "./components/UI/CreditsPanel.jsx";
 import AnimationsPanel from "./components/UI/AnimationsPanel.jsx";
 import { changelogData } from "./components/UI/ChangelogPanel.jsx";
+const VERSION_PREFIX = "v";
+const OVERRIDE_VERSION = null;
 const OpenWorldGame = () => {
   const mountRef = useRef(null);
   const [gameState, setGameState] = useState("MainMenu");
@@ -25,7 +27,8 @@ const OpenWorldGame = () => {
   const [gameReady, setGameReady] = useState(false);
   useEffect(() => {
     const latest = changelogData?.[0]?.version || "";
-    setVersion(latest ? `v${latest}` : "");
+    const label = OVERRIDE_VERSION != null && OVERRIDE_VERSION !== "" ? OVERRIDE_VERSION : latest ? `${VERSION_PREFIX}${latest}` : "";
+    setVersion(label);
   }, []);
   const [playerStats, setPlayerStats] = useState(initialPlayerStats);
   const [inventory, setInventory] = useState(initialInventory);

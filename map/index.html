@@ -54,18 +54,16 @@
         <button id="poiCancel">Cancel</button>
       </div>
     </div>
-    <!-- District modal -->
-    <div id="districtModal" hidden>
-      <div class="hdr">District Settings</div>
+    <!-- Load JSON modal -->
+    <div id="jsonLoadModal" hidden>
+      <div class="hdr">Load Map JSON</div>
       <div class="row">
-        <label>ID <input id="dmId" type="text" size="10"></label>
-        <label>Name <input id="dmName" type="text" size="20"></label>
+        <textarea id="jsonLoadInput" placeholder="Paste map JSON here..." style="width:100%;height:220px"></textarea>
       </div>
-      <div class="row"><label style="flex:1">Description <input id="dmDesc" type="text" style="width:100%"></label></div>
-      <div class="row"><label>Color <input id="dmColor" type="color" value="#22d3ee"></label></div>
+      <div class="row" style="opacity:.8">Press Apply to replace the current map with the provided JSON. Press ` again to toggle.</div>
       <div class="row">
-        <button id="dmCancel">Cancel</button>
-        <button id="dmApply" class="primary">Apply</button>
+        <button id="jsonLoadCancel">Cancel</button>
+        <button id="jsonLoadApply" class="primary">Apply</button>
       </div>
     </div>
   </div>
