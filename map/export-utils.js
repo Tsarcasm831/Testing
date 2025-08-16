@@ -27,7 +27,7 @@ export function buildExportSVG(){
   }).join('\n');
   const dGrass = (MODEL.grass||[]).map(g=>{
     const pts=g.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
-    return `<polyline points="${pts}" fill="none" stroke="#16a34a" stroke-opacity=".4" stroke-width="${g.width||22}" stroke-linecap="round" stroke-linejoin="round"/>`;
+    return `<polyline points="${pts}" fill="none" stroke="#16a34a" stroke-opacity=".4" stroke-width="${g.width||300}" stroke-linecap="round" stroke-linejoin="round"/>`;
   }).join('\n');
   const dForest = (MODEL.forest||[]).map(f=>{
     const pts=f.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');

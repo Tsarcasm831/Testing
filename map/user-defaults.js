@@ -1,1 +1,1 @@
-export { DEFAULT_MODEL } from './defaults/index.js';
+export { DEFAULT_MODEL } from './user-defaults-data.js';

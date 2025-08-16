@@ -64,7 +64,7 @@ function drawGrass(){
   if(!document.getElementById('toggleGrass').checked || !Array.isArray(MODEL.grass)) return;
   for(const g of MODEL.grass){
     const d=g.points.map(p=>[p[0]*W/100,p[1]*H/100].join(',')).join(' ');
-    layer.append(mk('polyline',{class:'grass',points:d,strokeWidth:g.width||22}));
+    layer.append(mk('polyline',{class:'grass',points:d,strokeWidth:g.width||300}));
   }
 }
 
