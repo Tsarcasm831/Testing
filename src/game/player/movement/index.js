@@ -8,7 +8,7 @@ const moveDirection = new THREE.Vector2();
 const inputDirection = new THREE.Vector2();
 const tmpPos = { x: 0, z: 0 };
 
-export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, cameraYaw, cameraPitch = 0) {
+export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, cameraYaw, cameraPitch = 0, isFirstPerson = false) {
     let moved = false;
     moveDirection.set(0, 0);
     inputDirection.set(0, 0);
@@ -105,20 +105,21 @@ export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, 
         player.userData.currentAnimation === 'regularJump' || !player.userData.onGround;
     if (allowMovement) {
         if (joystick && joystick.force > 0.1) {
-            const angle = joystick.angle.radian;
-            const force = joystick.force;
-            const adjustedAngle = angle - Math.PI / 2;
-            const moveX = Math.cos(adjustedAngle);
-            const moveZ = Math.sin(adjustedAngle);
-            inputDirection.set(moveX * force, moveZ * force);
+            // Map joystick angle (0 = right, pi/2 = up) to our input axes:
+            // x = strafe (right positive), y = forward (positive for forward)
+            const rad = joystick.angle.radian;
+            const f = joystick.force;
+            const dx = Math.cos(rad);
+            const dy = Math.sin(rad);
+            inputDirection.set(dx * f, dy * f);
         }
 
         let keyMoveX = 0;
         let keyMoveZ = 0;
-        if (keys['KeyW'] || keys['ArrowUp']) keyMoveZ = -1;
-        if (keys['KeyS'] || keys['ArrowDown']) keyMoveZ = 1;
-        if (keys['KeyA'] || keys['ArrowLeft']) keyMoveX = -1;
-        if (keys['KeyD'] || keys['ArrowRight']) keyMoveX = 1;
+        if (keys['KeyW'] || keys['ArrowUp']) keyMoveZ = 1;     // forward
+        if (keys['KeyS'] || keys['ArrowDown']) keyMoveZ = -1;  // backward
+        if (keys['KeyA'] || keys['ArrowLeft']) keyMoveX = -1;  // left
+        if (keys['KeyD'] || keys['ArrowRight']) keyMoveX = 1;  // right
 
         if ((keys['KeyW'] || keys['ArrowUp']) && (keys['KeyS'] || keys['ArrowDown'])) keyMoveZ = 0;
         if ((keys['KeyA'] || keys['ArrowLeft']) && (keys['KeyD'] || keys['ArrowRight'])) keyMoveX = 0;
@@ -129,14 +130,20 @@ export function updatePlayerMovement(player, keys, joystick, delta, objectGrid, 
         if (inputDirection.lengthSq() > 0) {
             const cosYaw = Math.cos(cameraYaw);
             const sinYaw = Math.sin(cameraYaw);
-            moveDirection.x = inputDirection.x * cosYaw - inputDirection.y * sinYaw;
-            moveDirection.y = inputDirection.x * sinYaw + inputDirection.y * cosYaw;
+            // Camera-relative basis on XZ; invert forward in 3rd person so W pushes "into" the screen
+            const forwardSign = isFirstPerson ? 1 : -1;
+            const rightSign   = isFirstPerson ? -1 : 1;
+            const forwardX =  forwardSign * sinYaw, forwardZ =  forwardSign * cosYaw;
+            const rightX   =  rightSign * cosYaw,  rightZ   =  rightSign * -sinYaw;
+            // Map inputs: x = A/D (strafe), y = W/S (forward); W now sets +1
+            moveDirection.x = rightX * inputDirection.x + forwardX * (inputDirection.y);
+            moveDirection.y = rightZ * inputDirection.x + forwardZ * (inputDirection.y);
             if (isDevFlight) {
                 const cosPitch = Math.cos(cameraPitch);
                 const sinPitch = Math.sin(cameraPitch);
                 moveDirection.x *= cosPitch;
                 moveDirection.y *= cosPitch;
-                verticalFromCamera = -inputDirection.y * sinPitch;
+                verticalFromCamera = (inputDirection.y) * sinPitch;
             }
         }
         if (moveDirection.lengthSq() > 0 || verticalFromCamera !== 0) {

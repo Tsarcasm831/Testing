@@ -59,8 +59,8 @@ export function startAnimationLoop({
         if (document.pointerLockElement !== rendererRef.current?.domElement) return;
         const sens = 0.002;
         if (cameraOrbitRef) {
-            // In first-person, moving the mouse to the right should rotate view to the right (increase yaw)
-            const next = (cameraOrbitRef.current || 0) + e.movementX * sens;
+            // Desktop FPV: moving mouse right rotates camera to the right (invert sign vs. add)
+            const next = (cameraOrbitRef.current || 0) - e.movementX * sens;
             cameraOrbitRef.current = normalizeAngle(next);
         }
         if (cameraPitchRef) {
@@ -123,10 +123,22 @@ export function startAnimationLoop({
         // Handle first-person toggle (V)
         if (keysRef.current['ToggleFirstPerson']) {
             keysRef.current['ToggleFirstPerson'] = false;
+            const entering = !firstPersonRef.current;
             firstPersonRef.current = !firstPersonRef.current;
             if (!firstPersonRef.current && document.pointerLockElement) {
                 document.exitPointerLock();
+            } else if (firstPersonRef.current && rendererRef.current?.domElement && !document.pointerLockElement) {
+                rendererRef.current.domElement.requestPointerLock?.();
             }
+            // NEW: keep orientation consistent across FPV toggles
+            try {
+                const model = playerRef.current?.userData?.model;
+                if (entering && model && cameraOrbitRef) {
+                    cameraOrbitRef.current = model.rotation.y || 0;
+                } else if (!entering && model && cameraOrbitRef) {
+                    model.rotation.y = cameraOrbitRef.current || 0;
+                }
+            } catch (_) {}
         }
 
         const delta = clockRef.current.getDelta();

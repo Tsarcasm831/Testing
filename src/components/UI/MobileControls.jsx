@@ -4,6 +4,9 @@ import { useJoystick } from "../../hooks/useJoystick.js";
 import ZoomControls from "./ZoomControls.jsx";
 import ActionButtons from "./ActionButtons.jsx";
 const clampPitch = (v) => Math.max(-0.9, Math.min(0.9, v));
+const MOBILE_FPV_LABEL = "FPV";
+const MOBILE_FPV_BTN_SIZE = "w-16 h-10";
+const MOBILE_FPV_OFFSET = { x: 0, y: 0 };
 const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraPitchRef }) => {
   const [visible, setVisible] = useState(true);
   const lookPadRef = useRef(null);
@@ -67,6 +70,11 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
     clickKey("KeyF", "KeyFClicked");
     buzz(8);
   };
+  const handleFPVToggle = () => {
+    if (!keysRef?.current) return;
+    keysRef.current["ToggleFirstPerson"] = true;
+    buzz(10);
+  };
   useEffect(() => {
     if (!lookPadRef.current) return;
     let active = false;
@@ -85,14 +93,12 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
     if (cameraPitchRef) lookTargetRef.current.pitch = clampPitch(cameraPitchRef.current || 0);
     const lookTick = () => {
       const tgt = lookTargetRef.current;
-      if (cameraOrbitRef) {
-        const cur = cameraOrbitRef.current || 0;
-        const next = cur + (tgt.yaw - cur) * EASE;
-        cameraOrbitRef.current = normalizeAngle(next);
-      }
-      if (cameraPitchRef) {
-        const curP = cameraPitchRef.current || 0;
-        cameraPitchRef.current = clampPitch(curP + (tgt.pitch - curP) * EASE);
+      if (active) {
+        if (cameraOrbitRef) cameraOrbitRef.current = normalizeAngle((cameraOrbitRef.current || 0) + (tgt.yaw - (cameraOrbitRef.current || 0)) * EASE);
+        if (cameraPitchRef) cameraPitchRef.current = clampPitch((cameraPitchRef.current || 0) + (tgt.pitch - (cameraPitchRef.current || 0)) * EASE);
+      } else {
+        if (cameraOrbitRef) tgt.yaw = cameraOrbitRef.current || 0;
+        if (cameraPitchRef) tgt.pitch = clampPitch(cameraPitchRef.current || 0);
       }
       lookRafRef.current = requestAnimationFrame(lookTick);
     };
@@ -164,12 +170,12 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 160,
+        lineNumber: 172,
         columnNumber: 9
       }
     ) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 159,
+      lineNumber: 171,
       columnNumber: 7
     }),
     visible && /* @__PURE__ */ jsxDEV(
@@ -183,16 +189,35 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 171,
+        lineNumber: 183,
         columnNumber: 9
       }
     ),
     visible ? /* @__PURE__ */ jsxDEV("div", { className: "absolute bottom-6 right-6 z-20 flex flex-col gap-4 items-end select-none", children: [
       /* @__PURE__ */ jsxDEV(ZoomControls, { onZoomIn: handleZoomIn, onZoomOut: handleZoomOut }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 179,
+        lineNumber: 191,
         columnNumber: 11
       }),
+      /* @__PURE__ */ jsxDEV(
+        "button",
+        {
+          onTouchStart: handleFPVToggle,
+          onMouseDown: handleFPVToggle,
+          className: `rounded-full border-2 bg-black/60 text-white border-gray-400 shadow-xl active:scale-95 transition-transform font-bold ${MOBILE_FPV_BTN_SIZE}`,
+          style: { transform: `translate(${MOBILE_FPV_OFFSET.x}px, ${MOBILE_FPV_OFFSET.y}px)` },
+          "aria-label": "Toggle first-person view",
+          title: "Toggle FPV",
+          children: MOBILE_FPV_LABEL
+        },
+        void 0,
+        false,
+        {
+          fileName: "<stdin>",
+          lineNumber: 192,
+          columnNumber: 11
+        }
+      ),
       /* @__PURE__ */ jsxDEV(
         "div",
         {
@@ -207,7 +232,7 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 180,
+          lineNumber: 202,
           columnNumber: 11
         }
       ),
@@ -226,13 +251,13 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 189,
+          lineNumber: 211,
           columnNumber: 11
         }
       )
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 178,
+      lineNumber: 190,
       columnNumber: 9
     }) : /* @__PURE__ */ jsxDEV("div", { className: "absolute bottom-6 right-6 z-20", children: /* @__PURE__ */ jsxDEV(
       "button",
@@ -248,17 +273,17 @@ const MobileControls = ({ joystickRef, keysRef, zoomRef, cameraOrbitRef, cameraP
       false,
       {
         fileName: "<stdin>",
-        lineNumber: 201,
+        lineNumber: 223,
         columnNumber: 11
       }
     ) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 200,
+      lineNumber: 222,
       columnNumber: 9
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 158,
+    lineNumber: 170,
     columnNumber: 5
   });
 };

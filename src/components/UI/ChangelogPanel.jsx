@@ -1,6 +1,23 @@
 import { jsxDEV } from "react/jsx-dev-runtime";
 import React from "react";
 const changelogData = [
+  { version: "0.007.4", date: "2025-08-15", changes: [
+    "Collision: Round Konoha buildings now use precise spherical colliders.",
+    "Credits: Added cooroinuzuka (DeviantArt) link to Credits and Special Thanks.",
+    "Mobile: Fixed joystick vertical inversion and restored free-look; no longer forces south.",
+    "FPV: Corrected mouse-look direction and preserved facing when entering/exiting FPV.",
+    "UX: Version and changelog updated."
+  ] },
+  { version: "0.006.1", date: "2025-08-14", changes: [
+    "Walls: South opening cut cleanly and Konoha Gates placed; sealed stray gaps on the East side.",
+    "Movement: WASD made camera-relative in both 3rd and 1st person; right-click drag (desktop) and cam pad (mobile) control yaw/pitch.",
+    "Feature: First\u2011person view toggle (V) with pointer lock; auto-hide player model in FPV.",
+    "UX: Nearby object tooltips (pooled sprites) and on-screen interaction prompt (F).",
+    "Performance: Grid labels virtualized, bound to terrain, fixed 5u cells; wall details instanced; FPS limit + render scale cap.",
+    "Assets: Loader caches only essential player animations and core images for faster startup.",
+    "World: Hokage Palace, Hokage Monument, Ichiraku, Town cluster integrated with precise colliders.",
+    "Mobile: Pinch-to-zoom, refined joystick smoothing; improved camera pad responsiveness."
+  ] },
   { version: "0.004.0", date: "2025-08-11", changes: [
     "Movement: W now always moves the player forward relative to the direction they are facing.",
     "Movement: A and D are strafe-only and no longer rotate the player.",
@@ -42,7 +59,7 @@ const ChangelogPanel = ({ onClose }) => {
     /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-700 px-4 py-2 rounded-t-lg border-b border-gray-600 flex justify-between items-center", children: [
       /* @__PURE__ */ jsxDEV("h2", { className: "text-yellow-400 font-bold text-lg", children: "Changelog" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 46,
+        lineNumber: 63,
         columnNumber: 17
       }),
       /* @__PURE__ */ jsxDEV(
@@ -56,13 +73,18 @@ const ChangelogPanel = ({ onClose }) => {
         false,
         {
           fileName: "<stdin>",
-          lineNumber: 47,
+          lineNumber: 64,
           columnNumber: 17
         }
       )
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 45,
+      lineNumber: 62,
+      columnNumber: 13
+    }),
+    /* @__PURE__ */ jsxDEV("div", { className: "px-4 pt-2 text-xs text-gray-300", children: "by Lord Tsarcasm" }, void 0, false, {
+      fileName: "<stdin>",
+      lineNumber: 72,
       columnNumber: 13
     }),
     /* @__PURE__ */ jsxDEV("div", { className: "p-4 space-y-4 max-h-[60vh] overflow-y-auto", children: changelogData.map((entry) => /* @__PURE__ */ jsxDEV("div", { className: "bg-gray-900 p-3 rounded-lg border border-gray-700", children: [
@@ -72,45 +94,46 @@ const ChangelogPanel = ({ onClose }) => {
           entry.version
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 60,
+          lineNumber: 78,
           columnNumber: 30
         }),
         /* @__PURE__ */ jsxDEV("p", { className: "text-xs text-gray-400", children: entry.date }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 61,
+          lineNumber: 79,
           columnNumber: 30
         })
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 59,
+        lineNumber: 77,
         columnNumber: 25
       }),
       /* @__PURE__ */ jsxDEV("ul", { className: "list-disc list-inside text-sm space-y-1 text-gray-300", children: entry.changes.map((change, index) => /* @__PURE__ */ jsxDEV("li", { children: change }, index, false, {
         fileName: "<stdin>",
-        lineNumber: 66,
+        lineNumber: 84,
         columnNumber: 33
       })) }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 64,
+        lineNumber: 82,
         columnNumber: 25
       })
     ] }, entry.version, true, {
       fileName: "<stdin>",
-      lineNumber: 58,
+      lineNumber: 76,
       columnNumber: 21
     })) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 56,
+      lineNumber: 74,
       columnNumber: 13
     })
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 43,
+    lineNumber: 60,
     columnNumber: 9
   });
 };
 var stdin_default = ChangelogPanel;
 export {
   ChangelogPanel,
+  changelogData,
   stdin_default as default
 };

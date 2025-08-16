@@ -91,7 +91,8 @@ export function createCentralWallWithGate({
   thickness = 5,
   gateFromLabel = 'KD493',
   gateToLabel = 'LD493',
-  removeExactlyBetween = false
+  removeExactlyBetween = false,
+  openingAt = null // 'north'|'south'|'east'|'west' overrides labels
 }) {
   const group = new THREE.Group();
   group.name = 'CentralWall';
@@ -113,7 +114,17 @@ export function createCentralWallWithGate({
 
   // Determine the initial cut range (nStart, nEnd)
   let nStart, nEnd;
-  if (!removeExactlyBetween) {
+  if (openingAt) {
+    // Cardinal opening centers
+    const centers = { north: 3*Math.PI/2, south: Math.PI/2, east: 0, west: Math.PI };
+    const midTheta = norm(centers[openingAt] ?? Math.PI/2);
+    const desiredChord = 48;
+    let thetaWidth = desiredChord / Math.max(1, radius);
+    const padding = (8 / Math.max(1, radius));
+    thetaWidth += padding * 2;
+    nStart = norm(midTheta - thetaWidth / 2);
+    nEnd = norm(midTheta + thetaWidth / 2);
+  } else if (!removeExactlyBetween) {
     const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
     const midTheta = norm(Math.atan2(mid.z, mid.x));
     const desiredChord = 48;
@@ -166,7 +177,7 @@ export function createCentralWallWithGate({
   }
 
   // Determine segments left after cutting out initial gap [nStart, nEnd]
-  const epsilon = 0.12;
+  const epsilon = 0.001;
   function addSegmentsOutsideGap(gStart, gEnd) {
     if (gStart <= gEnd) {
       const leftLen = Math.max(0, gStart - epsilon);

@@ -72,6 +72,13 @@ function nearestBiomeAt(x, z, seeds) {
     return best || 'grass';
 }
 
+// @tweakable enable or disable drawing the overworld road/river overlay
+const ROAD_OVERLAY_ENABLED = true;
+// @tweakable opacity of the overworld road/river overlay (0..1)
+const ROAD_OVERLAY_OPACITY = 0.75;
+// @tweakable vertical offset of the overlay above ground to avoid z-fighting
+const ROAD_OVERLAY_ZOFFSET = 0.015;
+
 // Public: query biome under a world position using the same layout as the 3D terrain
 export function getBiomeAt(x, z) {
     // For now, force the entire world to be grass
@@ -82,6 +89,8 @@ export function getBiomeAt(x, z) {
 export function getTerrainTextureForBiome(biome) {
     return terrainFiles[biome] || terrainFiles.grass;
 }
+
+import { drawRoads, drawRiver } from '../components/game/objects/konoha_roads.js';
 
 export function createTerrain(scene, settings) {
     const textureLoader = new THREE.TextureLoader();
@@ -120,6 +129,44 @@ export function createTerrain(scene, settings) {
             groundTile.receiveShadow = settings.shadows;
             groundContainer.add(groundTile);
         }
+    }
+
+    // NEW: world road/river overlay (single transparent canvas laid over terrain)
+    if (ROAD_OVERLAY_ENABLED) {
+        (async () => {
+            try {
+                const overlayCanvas = document.createElement('canvas');
+                overlayCanvas.width = worldSize;
+                overlayCanvas.height = worldSize;
+                const octx = overlayCanvas.getContext('2d');
+                if (!octx) return;
+                // Draw terrain-sized roads/river centered at (worldSize/2, worldSize/2), 1px == 1 world unit
+                const scale = 1, cx = worldSize / 2, cy = worldSize / 2;
+                // Roads first
+                await drawRoads(octx, scale, cx, cy, {
+                    /* @tweakable overwrite primary road width on overworld (pixels) */
+                    wPrimary: 14,
+                    /* @tweakable overwrite secondary road width on overworld (pixels) */
+                    wSecondary: 10,
+                    /* @tweakable overwrite tertiary road width on overworld (pixels) */
+                    wTertiary: 6,
+                    /* @tweakable global road opacity multiplier on overworld (0..1) */
+                    alpha: 1.0
+                });
+                // River on top
+                drawRiver(octx, scale, cx, cy);
+                const tex = new THREE.CanvasTexture(overlayCanvas);
+                tex.wrapS = THREE.ClampToEdgeWrapping; tex.wrapT = THREE.ClampToEdgeWrapping;
+                const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: ROAD_OVERLAY_OPACITY });
+                // Slight polygon offset and depthWrite off to reduce artifacts
+                mat.depthWrite = false; mat.polygonOffset = true; mat.polygonOffsetFactor = -1; mat.polygonOffsetUnits = -1;
+                const overlay = new THREE.Mesh(new THREE.PlaneGeometry(worldSize, worldSize), mat);
+                overlay.rotation.x = -Math.PI / 2; overlay.position.y = ROAD_OVERLAY_ZOFFSET; overlay.renderOrder = 1; // draw after ground
+                scene.add(overlay);
+            } catch (e) {
+                console.warn('Road overlay creation failed:', e);
+            }
+        })();
     }
 
     return { groundContainer, worldSize };

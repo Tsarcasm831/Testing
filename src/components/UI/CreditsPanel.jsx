@@ -103,6 +103,19 @@ const CreditsPanel = ({ onClose }) => {
                   fileName: "<stdin>",
                   lineNumber: 45,
                   columnNumber: 15
+                }),
+                /* @__PURE__ */ jsxDEV("li", { children: [
+                  "Konohagakure map (@konohagakure.jpg):",
+                  " ",
+                  /* @__PURE__ */ jsxDEV("a", { className: "text-blue-400 hover:underline", href: "https://www.deviantart.com/cooroinuzuka/gallery", target: "_blank", rel: "noreferrer", children: "cooroinuzuka (DeviantArt)" }, void 0, false, {
+                    fileName: "<stdin>",
+                    lineNumber: 48,
+                    columnNumber: 17
+                  })
+                ] }, void 0, true, {
+                  fileName: "<stdin>",
+                  lineNumber: 46,
+                  columnNumber: 15
                 })
               ] }, void 0, true, {
                 fileName: "<stdin>",
@@ -115,57 +128,93 @@ const CreditsPanel = ({ onClose }) => {
               columnNumber: 11
             }),
             /* @__PURE__ */ jsxDEV("section", { children: [
+              /* @__PURE__ */ jsxDEV("h3", { className: "text-yellow-300 font-semibold mb-2", children: "Testers" }, void 0, false, {
+                fileName: "<stdin>",
+                lineNumber: 56,
+                columnNumber: 13
+              }),
+              /* @__PURE__ */ jsxDEV("ul", { className: "list-disc list-inside text-sm text-gray-200 space-y-1", children: /* @__PURE__ */ jsxDEV("li", { children: /* @__PURE__ */ jsxDEV(
+                "a",
+                {
+                  className: "text-blue-400 hover:underline",
+                  href: "https://websim.com/@Justanimation3Dgames",
+                  target: "_blank",
+                  rel: "noreferrer",
+                  children: "@Justanimation3Dgames"
+                },
+                void 0,
+                false,
+                {
+                  fileName: "<stdin>",
+                  lineNumber: 59,
+                  columnNumber: 17
+                }
+              ) }, void 0, false, {
+                fileName: "<stdin>",
+                lineNumber: 58,
+                columnNumber: 15
+              }) }, void 0, false, {
+                fileName: "<stdin>",
+                lineNumber: 57,
+                columnNumber: 13
+              })
+            ] }, void 0, true, {
+              fileName: "<stdin>",
+              lineNumber: 55,
+              columnNumber: 11
+            }),
+            /* @__PURE__ */ jsxDEV("section", { children: [
               /* @__PURE__ */ jsxDEV("h3", { className: "text-yellow-300 font-semibold mb-2", children: "Libraries & Tech" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 50,
+                lineNumber: 72,
                 columnNumber: 13
               }),
               /* @__PURE__ */ jsxDEV("ul", { className: "list-disc list-inside text-sm text-gray-200 space-y-1", children: [
                 /* @__PURE__ */ jsxDEV("li", { children: "Three.js" }, void 0, false, {
                   fileName: "<stdin>",
-                  lineNumber: 52,
+                  lineNumber: 74,
                   columnNumber: 15
                 }),
                 /* @__PURE__ */ jsxDEV("li", { children: "React" }, void 0, false, {
                   fileName: "<stdin>",
-                  lineNumber: 53,
+                  lineNumber: 75,
                   columnNumber: 15
                 }),
                 /* @__PURE__ */ jsxDEV("li", { children: "Tailwind CSS" }, void 0, false, {
                   fileName: "<stdin>",
-                  lineNumber: 54,
+                  lineNumber: 76,
                   columnNumber: 15
                 }),
                 /* @__PURE__ */ jsxDEV("li", { children: "@tweenjs/tween.js" }, void 0, false, {
                   fileName: "<stdin>",
-                  lineNumber: 55,
+                  lineNumber: 77,
                   columnNumber: 15
                 }),
                 /* @__PURE__ */ jsxDEV("li", { children: "nipplejs (mobile joystick)" }, void 0, false, {
                   fileName: "<stdin>",
-                  lineNumber: 56,
+                  lineNumber: 78,
                   columnNumber: 15
                 })
               ] }, void 0, true, {
                 fileName: "<stdin>",
-                lineNumber: 51,
+                lineNumber: 73,
                 columnNumber: 13
               })
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 49,
+              lineNumber: 71,
               columnNumber: 11
             }),
             /* @__PURE__ */ jsxDEV("section", { children: [
               /* @__PURE__ */ jsxDEV("h3", { className: "text-yellow-300 font-semibold mb-2", children: "Special Thanks" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 61,
+                lineNumber: 83,
                 columnNumber: 13
               }),
               /* @__PURE__ */ jsxDEV("ul", { className: "list-disc list-inside text-sm text-gray-200 space-y-1", children: [
                 /* @__PURE__ */ jsxDEV("li", { children: "gpt5" }, void 0, false, {
                   fileName: "<stdin>",
-                  lineNumber: 63,
+                  lineNumber: 85,
                   columnNumber: 15
                 }),
                 /* @__PURE__ */ jsxDEV("li", { children: [
@@ -184,55 +233,90 @@ const CreditsPanel = ({ onClose }) => {
                     false,
                     {
                       fileName: "<stdin>",
-                      lineNumber: 66,
+                      lineNumber: 88,
                       columnNumber: 17
                     }
                   )
                 ] }, void 0, true, {
                   fileName: "<stdin>",
-                  lineNumber: 64,
+                  lineNumber: 86,
+                  columnNumber: 15
+                }),
+                /* @__PURE__ */ jsxDEV("li", { children: [
+                  "Konohagakure map reference:",
+                  " ",
+                  /* @__PURE__ */ jsxDEV(
+                    "a",
+                    {
+                      className: "text-blue-400 hover:underline",
+                      href: "https://www.deviantart.com/cooroinuzuka/gallery",
+                      target: "_blank",
+                      rel: "noreferrer",
+                      children: "cooroinuzuka (DeviantArt)"
+                    },
+                    void 0,
+                    false,
+                    {
+                      fileName: "<stdin>",
+                      lineNumber: 99,
+                      columnNumber: 17
+                    }
+                  )
+                ] }, void 0, true, {
+                  fileName: "<stdin>",
+                  lineNumber: 97,
                   columnNumber: 15
                 })
               ] }, void 0, true, {
                 fileName: "<stdin>",
-                lineNumber: 62,
+                lineNumber: 84,
                 columnNumber: 13
               })
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 60,
+              lineNumber: 82,
               columnNumber: 11
             }),
             /* @__PURE__ */ jsxDEV("section", { children: [
               /* @__PURE__ */ jsxDEV("h3", { className: "text-yellow-300 font-semibold mb-2", children: "Community" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 79,
+                lineNumber: 112,
                 columnNumber: 13
               }),
               /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-300", children: "Thank you to everyone providing feedback and ideas during early development." }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 80,
+                lineNumber: 113,
                 columnNumber: 13
               })
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 78,
+              lineNumber: 111,
               columnNumber: 11
             }),
             /* @__PURE__ */ jsxDEV("section", { children: [
               /* @__PURE__ */ jsxDEV("h3", { className: "text-yellow-300 font-semibold mb-2", children: "Legal\u2011ish" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 86,
+                lineNumber: 119,
                 columnNumber: 13
               }),
-              /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-300", children: "Disclaimer: Naruto, all related characters, and assets are property of Masashi Kishimoto, Shueisha, and associated rights holders. This is a fan-made, non-commercial project created by a lone, over-caffeinated indie dev with no affiliation to said owners. Please don\u2019t sue me \u2014 I can barely afford instant ramen, let alone lawyers." }, void 0, false, {
+              /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-300", children: "This is a fan\u2011made, non\u2011commercial prototype created for educational and transformative purposes. Naruto and all related characters, logos, and story elements are the property of Masashi Kishimoto, Shueisha, TV Tokyo, and other respective rights holders. No endorsement or affiliation is implied." }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 87,
+                lineNumber: 120,
+                columnNumber: 13
+              }),
+              /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-300 mt-2", children: "All trademarks and copyrights remain with their respective owners. No assets in this project are sold or monetized. If you are a rights holder and have concerns about any material, please contact the project maintainer and we will remove or modify the content promptly." }, void 0, false, {
+                fileName: "<stdin>",
+                lineNumber: 123,
+                columnNumber: 13
+              }),
+              /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-300 mt-2", children: "Provided \u201Cas is\u201D without warranty of any kind. This project is for personal study, experimentation, and community feedback only." }, void 0, false, {
+                fileName: "<stdin>",
+                lineNumber: 126,
                 columnNumber: 13
               })
             ] }, void 0, true, {
               fileName: "<stdin>",
-              lineNumber: 85,
+              lineNumber: 118,
               columnNumber: 11
             })
           ] }, void 0, true, {

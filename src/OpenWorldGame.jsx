@@ -16,6 +16,7 @@ import ErrorBoundary from "./components/UI/ErrorBoundary.jsx";
 import { MobileControls } from "./components/UI/MobileControls.jsx";
 import CreditsPanel from "./components/UI/CreditsPanel.jsx";
 import AnimationsPanel from "./components/UI/AnimationsPanel.jsx";
+import { changelogData } from "./components/UI/ChangelogPanel.jsx";
 const OpenWorldGame = () => {
   const mountRef = useRef(null);
   const [gameState, setGameState] = useState("MainMenu");
@@ -23,11 +24,8 @@ const OpenWorldGame = () => {
   const [version, setVersion] = useState("");
   const [gameReady, setGameReady] = useState(false);
   useEffect(() => {
-    const title = document.title;
-    const versionMatch = title.match(/v[\d.]+/);
-    if (versionMatch) {
-      setVersion(versionMatch[0]);
-    }
+    const latest = changelogData?.[0]?.version || "";
+    setVersion(latest ? `v${latest}` : "");
   }, []);
   const [playerStats, setPlayerStats] = useState(initialPlayerStats);
   const [inventory, setInventory] = useState(initialInventory);
@@ -136,7 +134,7 @@ const OpenWorldGame = () => {
       lineNumber: 66,
       columnNumber: 27
     }),
-    gameState === "Playing" && showWorldMap && /* @__PURE__ */ jsxDEV(ErrorBoundary, { children: /* @__PURE__ */ jsxDEV(WorldMapPanel, { playerPosition, onClose: () => setShowWorldMap(false) }, void 0, false, {
+    gameState === "Playing" && showWorldMap && /* @__PURE__ */ jsxDEV(ErrorBoundary, { children: /* @__PURE__ */ jsxDEV(WorldMapPanel, { playerPosition, onClose: () => setShowWorldMap(false), worldObjects }, void 0, false, {
       fileName: "<stdin>",
       lineNumber: 67,
       columnNumber: 43

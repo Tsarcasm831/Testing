@@ -330,15 +330,12 @@ export const useThreeScene = ({ mountRef, keysRef, joystickRef, setPlayerPositio
         const BASE_SENS_Y = 0.010; // radians per px (pitch)
 
         const onContextMenu = (e) => {
-            // Disable context menu on right-drag area so camera look feels natural
-            if (e.target && e.target.tagName === 'CANVAS') {
-                e.preventDefault();
-            }
+            // Disable context menu anywhere over the game mount for uninterrupted camera look
+            e.preventDefault();
         };
 
         const onMouseDown = (e) => {
             if (e.button !== 2) return; // right button
-            if (e.target && e.target.tagName !== 'CANVAS') return;
             dragging = true;
             lastX = e.clientX;
             lastY = e.clientY;

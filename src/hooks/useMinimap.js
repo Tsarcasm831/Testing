@@ -1,5 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { WORLD_SIZE, TILE_SIZE, TEXTURE_WORLD_UNITS, getBiomeAt, getTerrainTextureForBiome } from '../scene/terrain.js';
+import { drawRiver, drawRoads } from '../components/game/objects/konoha_roads.js';
+
+// @tweakable show or hide roads on the minimap/world canvas
+const MINIMAP_DRAW_ROADS = true;
+// @tweakable show or hide river on the minimap/world canvas
+const MINIMAP_DRAW_RIVER = true;
+// @tweakable global road opacity for the minimap/world canvas (0..1)
+const MINIMAP_ROAD_ALPHA = 0.9;
+// @tweakable base road widths on the minimap/world canvas (pixels at world scale 1)
+const MINIMAP_W_PRIMARY = 10.0, MINIMAP_W_SECONDARY = 7.0, MINIMAP_W_TERTIARY = 4.0;
 
 export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
     const animationFrameId = useRef();
@@ -207,6 +217,21 @@ export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
                 }
             }
 
+            // Draw roads and river on top of terrain for global reuse by minimap and world map
+            const scale = 1; // 1 pixel = 1 world unit on this canvas
+            const cx = worldSize / 2;
+            const cy = worldSize / 2;
+            if (MINIMAP_DRAW_ROADS) {
+                await drawRoads(ctx, scale, cx, cy, {
+                    alpha: MINIMAP_ROAD_ALPHA,
+                    wPrimary: MINIMAP_W_PRIMARY,
+                    wSecondary: MINIMAP_W_SECONDARY,
+                    wTertiary: MINIMAP_W_TERTIARY
+                });
+            }
+            if (MINIMAP_DRAW_RIVER) {
+                drawRiver(ctx, scale, cx, cy);
+            }
             worldMinimapCanvasRef.current = canvas;
         })();
     }, []);

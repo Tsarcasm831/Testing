@@ -74,4 +74,3 @@ export function useJoystick(joystickRef, visible) {
 
   return zoneRef;
 }
-

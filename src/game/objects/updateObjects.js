@@ -1,5 +1,6 @@
 import { WORLD_SIZE as WORLD_SIZE_CONST } from '../../scene/terrain.js';
 import { ObjectGrid } from './grid.js';
+import { createCentralWall } from './walls/centralWall.js';
 import { createCentralWallWithGate } from './walls/centralWall.js';
 import { placeHokagePalace } from './placements/hokagePalace.js';
 import { placeHokageMonument } from './placements/hokageMonument.js';
@@ -27,18 +28,16 @@ export function updateObjects(scene, currentObjects, settings) {
     colliderRadius: 12,
     color: 0xffffff,
     thickness: 5,
-    gateFromLabel: 'KX491',
-    gateToLabel: 'KD491',
-    removeExactlyBetween: true
+    // Open the wall at the south side (+Z)
+    openingAt: 'south'
   });
   renderObjects.push(wall);
   colliders.forEach(c => objectGrid.add(c));
 
   // NEW: Place the animated Konoha Gates model right in the opening we cut out
   const gates = placeKonohaGates(scene, objectGrid, worldSize, settings, {
-    gateFromLabel: 'KX491',
-    gateToLabel: 'KD491',
-    // Scale the standalone gate to roughly fill the ~48u opening we left in the wall
+    // Place gates at the south opening (+Z)
+    openingAt: 'south',
     scale: 4
   });
   if (gates) renderObjects.push(gates);
