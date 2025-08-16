@@ -53,6 +53,9 @@ button.primary{border-color:#4f46e5}
 #poiModal{position:absolute;left:12px;bottom:64px;min-width:300px;background:#0b0b0fdd;border:1px solid #222;border-radius:12px;
   padding:10px 12px;box-shadow:0 8px 22px #000a;backdrop-filter:blur(6px)}
 #poiModal .hdr{font-weight:700;margin-bottom:.35rem}
+#districtModal{position:absolute;left:12px;bottom:64px;min-width:300px;background:#0b0b0fdd;border:1px solid #222;border-radius:12px;
+  padding:10px 12px;box-shadow:0 8px 22px #000a;backdrop-filter:blur(6px)}
+#districtModal .hdr{font-weight:700;margin-bottom:.35rem}
 /* cursor feedback by mode */
 body[data-mode="draw-district"] svg,
 body[data-mode="draw-road"] svg{cursor:crosshair}

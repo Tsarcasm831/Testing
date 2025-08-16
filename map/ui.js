@@ -30,6 +30,35 @@ function wireUI(){
     document.getElementById('poiModal').hidden=true;
   });
 
+  // District modal wiring
+  const dModal = document.getElementById('districtModal');
+  const dmId = document.getElementById('dmId');
+  const dmName = document.getElementById('dmName');
+  const dmDesc = document.getElementById('dmDesc');
+  const dmColor = document.getElementById('dmColor');
+  let currentDistrictKey = null;
+  function openDistrictModal(key){
+    currentDistrictKey = key;
+    const d = MODEL.districts[key];
+    dmId.value = d.id || key;
+    dmName.value = d.name || '';
+    dmDesc.value = d.desc || '';
+    dmColor.value = d.color || '#22d3ee';
+    dModal.hidden = false;
+  }
+  window.__openDistrictModal = openDistrictModal;
+  document.getElementById('dmCancel').addEventListener('click', ()=>{ dModal.hidden = true; });
+  document.getElementById('dmApply').addEventListener('click', ()=>{
+    if(!currentDistrictKey) return;
+    const old = MODEL.districts[currentDistrictKey];
+    const newId = (dmId.value||'').trim() || currentDistrictKey;
+    const updated = {...old, id:newId, name:dmName.value, desc:dmDesc.value, color:dmColor.value};
+    delete MODEL.districts[currentDistrictKey];
+    MODEL.districts[newId] = updated;
+    dModal.hidden = true;
+    drawAll(); dumpJSON(); autosave(MODEL);
+  });
+
   svg.addEventListener('dblclick',finishDrawing);
   svg.addEventListener('mousedown',canvasDown);
   window.addEventListener('keydown',e=>{
