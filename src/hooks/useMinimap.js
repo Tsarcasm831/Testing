@@ -5,33 +5,26 @@ import { drawRiver, drawRoads, drawDistricts } from '../components/game/objects/
 // NEW: import live map model to query districts/roads
 import { MODEL } from '../../map/model.js';
 
-// @tweakable show or hide roads on the minimap/world canvas
-const MINIMAP_DRAW_ROADS = true;
-// @tweakable show or hide river on the minimap/world canvas
-const MINIMAP_DRAW_RIVER = true;
-// @tweakable show or hide districts on the minimap/world canvas
-const MINIMAP_DRAW_DISTRICTS = true;
-// @tweakable global road opacity for the minimap/world canvas (0..1)
-const MINIMAP_ROAD_ALPHA = 0.9;
-// @tweakable base road widths on the minimap/world canvas (pixels at world scale 1)
-const MINIMAP_W_PRIMARY = 10.0, MINIMAP_W_SECONDARY = 7.0, MINIMAP_W_TERTIARY = 4.0;
+// Minimap configuration extracted to its own module
+import {
+    MINIMAP_DRAW_ROADS,
+    MINIMAP_DRAW_RIVER,
+    MINIMAP_DRAW_DISTRICTS,
+    MINIMAP_ROAD_ALPHA,
+    MINIMAP_W_PRIMARY,
+    MINIMAP_W_SECONDARY,
+    MINIMAP_W_TERTIARY,
+    MINIMAP_DRAW_WALLS,
+    MINIMAP_WALL_ALPHA,
+    MINIMAP_WALL_STROKE_SCALE,
+    MINIMAP_WALL_COLOR,
+    MINIMAP_SHOW_DISTRICT,
+    MINIMAP_SHOW_ROAD,
+    MINIMAP_ROAD_MAX_DISTANCE,
+} from './minimapConstants.js';
 
-// NEW: walls overlay controls
-/* @tweakable show or hide walls on the minimap/world canvas */
-const MINIMAP_DRAW_WALLS = true;
-/* @tweakable wall opacity on the minimap/world canvas (0..1) */
-const MINIMAP_WALL_ALPHA = 0.9;
-/* @tweakable thickness multiplier for walls on the minimap/world canvas */
-const MINIMAP_WALL_STROKE_SCALE = 2.0;
-/* @tweakable wall color on the minimap/world canvas */
-const MINIMAP_WALL_COLOR = '#bfc0c2';
-
-/* @tweakable show district name on the minimap HUD */
-const MINIMAP_SHOW_DISTRICT = true;
-/* @tweakable show nearest road name on the minimap HUD */
-const MINIMAP_SHOW_ROAD = true;
-/* @tweakable max distance in world units to consider the player "on" a road */
-const MINIMAP_ROAD_MAX_DISTANCE = 18;
+// Interaction handling moved to a dedicated hook
+import { useMinimapInteractions } from './useMinimapInteractions.js';
 
 export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
     const animationFrameId = useRef();
@@ -52,12 +45,8 @@ export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
         height: 128,
     });
 
-    const [interaction, setInteraction] = useState({
-        active: false,
-        type: null, // 'move', 'resize-br', 'resize-bl', 'resize-tr', 'resize-tl'
-        initialMouse: { x: 0, y: 0 },
-        initialState: {},
-    });
+    // Hook managing drag/resize interactions
+    const { handleInteractionStart } = useMinimapInteractions(minimapState, setMinimapState);
 
     // Update minimap position on window resize
     useEffect(() => {
@@ -71,93 +60,6 @@ export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-
-    const handleInteractionStart = (e, type) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setInteraction({
-            active: true,
-            type: type,
-            initialMouse: { x: e.clientX, y: e.clientY },
-            initialState: { ...minimapState },
-        });
-    };
-
-    useEffect(() => {
-        const handleMouseMove = (e) => {
-            if (!interaction.active) return;
-            
-            const dx = e.clientX - interaction.initialMouse.x;
-            const dy = e.clientY - interaction.initialMouse.y;
-
-            let newState = {};
-            const minSize = 64;
-
-            switch (interaction.type) {
-                case 'move':
-                    newState = {
-                        top: interaction.initialState.top + dy,
-                        left: interaction.initialState.left + dx,
-                    };
-                    break;
-                case 'resize-br': {
-                    const dSize = Math.abs(dx) > Math.abs(dy) ? dx : dy;
-                    const newSize = Math.max(minSize, interaction.initialState.width + dSize);
-                    newState = { width: newSize, height: newSize };
-                    break;
-                }
-                case 'resize-bl': {
-                    const dSize = Math.abs(dx) > Math.abs(dy) ? -dx : dy;
-                    const newSize = Math.max(minSize, interaction.initialState.width + dSize);
-                    const sizeChange = newSize - interaction.initialState.width;
-                    newState = { 
-                        width: newSize, 
-                        height: newSize,
-                        left: interaction.initialState.left - sizeChange
-                    };
-                    break;
-                }
-                case 'resize-tr': {
-                    const dSize = Math.abs(dx) > Math.abs(dy) ? dx : -dy;
-                    const newSize = Math.max(minSize, interaction.initialState.width + dSize);
-                    const sizeChange = newSize - interaction.initialState.width;
-                    newState = { 
-                        width: newSize, 
-                        height: newSize,
-                        top: interaction.initialState.top - sizeChange
-                    };
-                    break;
-                }
-                case 'resize-tl': {
-                    const dSize = Math.abs(dx) > Math.abs(dy) ? -dx : -dy;
-                    const newSize = Math.max(minSize, interaction.initialState.width + dSize);
-                    const sizeChange = newSize - interaction.initialState.width;
-                     newState = {
-                        width: newSize,
-                        height: newSize,
-                        left: interaction.initialState.left - sizeChange,
-                        top: interaction.initialState.top - sizeChange,
-                    };
-                    break;
-                }
-                default:
-                    return;
-            }
-            setMinimapState(prev => ({ ...prev, ...newState }));
-        };
-
-        const handleMouseUp = () => {
-            if (!interaction.active) return;
-            setInteraction(prev => ({ ...prev, active: false }));
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mouseup', handleMouseUp);
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
-        };
-    }, [interaction]);
 
     // Build a world-sized canvas where each pixel maps to 1 world unit,
     // using the same biome partitioning and textures as the 3D terrain.
