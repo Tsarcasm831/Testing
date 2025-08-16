@@ -29,6 +29,7 @@ import { placeHokageMonument } from './placements/hokageMonument.js';
 import { placeIchiraku } from './placements/ichiraku.js';
 import { placeKonohaTown } from './placements/konohaTown.js';
 import { placeKonohaGates } from './placements/konohaGates.js';
+import { placeCitySlice } from './placements/citySlice.js';
 import { WALL_RADIUS } from '../player/movement/constants.js';
 import { parseGridLabel, posForCell } from './utils/gridLabel.js';
 
@@ -129,6 +130,9 @@ export function updateObjects(scene, currentObjects, settings) {
 
   const town = placeKonohaTown(scene, objectGrid, settings);
   if (town) renderObjects.push(town);
+
+  const citySlice = placeCitySlice(scene, objectGrid, settings);
+  if (citySlice) renderObjects.push(citySlice);
 
   return { objects: renderObjects, grid: objectGrid };
 }
