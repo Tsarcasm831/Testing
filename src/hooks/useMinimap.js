@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { WORLD_SIZE, TILE_SIZE, TEXTURE_WORLD_UNITS, getBiomeAt, getTerrainTextureForBiome } from '../scene/terrain.js';
-import { drawRiver, drawRoads } from '../components/game/objects/konoha_roads.js';
+import { drawRiver, drawRoads, drawDistricts } from '../components/game/objects/konoha_roads.js';
 
 // @tweakable show or hide roads on the minimap/world canvas
 const MINIMAP_DRAW_ROADS = true;
 // @tweakable show or hide river on the minimap/world canvas
 const MINIMAP_DRAW_RIVER = true;
+// @tweakable show or hide districts on the minimap/world canvas
+const MINIMAP_DRAW_DISTRICTS = true;
 // @tweakable global road opacity for the minimap/world canvas (0..1)
 const MINIMAP_ROAD_ALPHA = 0.9;
 // @tweakable base road widths on the minimap/world canvas (pixels at world scale 1)
@@ -221,6 +223,14 @@ export const useMinimap = ({ playerRef, worldObjects, zoomRef }) => {
             const scale = 1; // 1 pixel = 1 world unit on this canvas
             const cx = worldSize / 2;
             const cy = worldSize / 2;
+            if (MINIMAP_DRAW_DISTRICTS) {
+                await drawDistricts(ctx, scale, cx, cy, {
+                    alpha: 0.15,
+                    stroke: '#ffffff',
+                    lineWidth: 1,
+                    fill: '#ffffff'
+                });
+            }
             if (MINIMAP_DRAW_ROADS) {
                 await drawRoads(ctx, scale, cx, cy, {
                     alpha: MINIMAP_ROAD_ALPHA,
