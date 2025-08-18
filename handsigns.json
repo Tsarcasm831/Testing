@@ -1,0 +1,16 @@
+[
+    {"id":1,"name":"Rat","jp":"Ne","kanji":"子","form":"palms together; fingers interlaced; both index+middle vertical and touching","notes":"common in shadow-manipulation sets"},
+    {"id":2,"name":"Ox","jp":"Ushi","kanji":"丑","form":"interlock; raise/cross middle fingers like horns","notes":"appears in Lightning sets incl. Chidori"},
+    {"id":3,"name":"Tiger","jp":"Tora","kanji":"寅","form":"clasp; extend index+middle to meet","notes":"fire finisher"},
+    {"id":4,"name":"Hare","jp":"U","kanji":"卯","form":"left hand L; right pinky hooks left thumb","notes":"in Chidori short seq"},
+    {"id":5,"name":"Dragon","jp":"Tatsu","kanji":"辰","form":"interlace; pinkies down, thumbs up","notes":"used in long elemental chains"},
+    {"id":6,"name":"Snake","jp":"Mi","kanji":"巳","form":"palms together, fully interlaced","notes":"opens Great Fireball"},
+    {"id":7,"name":"Horse","jp":"Uma","kanji":"午","form":"index tips meet; other fingers curled","notes":"mid Fire sequences"},
+    {"id":8,"name":"Ram","jp":"Hitsuji","kanji":"未","form":"both index+middle up; right over left","notes":"ends Summoning; focus/release vibes"},
+    {"id":9,"name":"Monkey","jp":"Saru","kanji":"申","form":"stacked hands; thumbs lock little finger","notes":"in Fire & Lightning chains"},
+    {"id":10,"name":"Bird","jp":"Tori","kanji":"酉","form":"palms together; middle fingertips touch; index curl","notes":"Summoning middle step"},
+    {"id":11,"name":"Dog","jp":"Inu","kanji":"戌","form":"top palm over bottom fist","notes":"Summoning second step"},
+    {"id":12,"name":"Boar","jp":"I","kanji":"亥","form":"palms together; fingers folded inward","notes":"Summoning opener"},
+    {"id":"clone","name":"Clone Cross","jp":"—","kanji":"—","form":"cross index+middle of both hands","+uses":"Shadow Clone etc."}
+  ]
+  
