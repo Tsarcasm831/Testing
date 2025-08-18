@@ -1,0 +1,332 @@
+{
+    "element": "Water",
+    "version": "1.0",
+    "notes": "Single-extension system. Baseline multipliers are 1.0; apply impacts multiplicatively to base stats. Extensions: speed, power, compression, expansion, control, echo, amplification.",
+    "modifiers": {
+      "speed": { "label": "Speed (Hayasa)", "minigame": "rhythm_qte", "base_effect": "Faster formation/release and flow/projectile velocity.", "tradeoff": "Usually smaller/shorter; less stability if overdriven." },
+      "power": { "label": "Power (Chikara)", "minigame": "channeling_gauge", "base_effect": "Greater pressure/force/destructive output.", "tradeoff": "Higher chakra drain; slight cast delay at extremes." },
+      "compression": { "label": "Compression (Shukushō)", "minigame": "seal_shape_puzzle", "base_effect": "Condense into dense, precise form.", "tradeoff": "Reduced AoE; execution difficulty up." },
+      "expansion": { "label": "Expansion (Kakuchō)", "minigame": "spread_stability_tracing", "base_effect": "Broader spray/sheet; wider control.", "tradeoff": "Lower per-target force; instability risk." },
+      "control": { "label": "Control (Seigyo)", "minigame": "balance_hold_or_steering", "base_effect": "Sustain/steer/reshape in real time.", "tradeoff": "Continuous chakra upkeep; attention split." },
+      "echo": { "label": "Echo (Kōshō)", "minigame": "echo_pulse_timing", "base_effect": "Delayed after-surge/secondary hit.", "tradeoff": "Extra chakra; secondary is weaker." },
+      "amplification": { "label": "Amplification (Kyōka)", "minigame": "bonus_seal_combo", "base_effect": "Boosts secondaries (slow, blind, bind, knockback).", "tradeoff": "Chakra-inefficient; harder inputs." }
+    },
+    "ranks": [
+      {
+        "rank": "Genin",
+        "jutsu": [
+          {
+            "id": "suiton_mizu_bunshin",
+            "name": "Mizu Bunshin — Water Clone",
+            "kanji": "水分身の術",
+            "combo": ["Dog", "Water", "Seal"],
+            "tags": ["decoy", "summon", "scout"],
+            "base": {
+              "description": "Creates a fragile decoy clone of water that baits, scouts, and splashes on break.",
+              "stats": { "damage": 0.5, "aoe": 0.5, "duration": 15.0, "chakra_cost": 1.0, "cast_time": 1.0, "clone_hp": 0.7 }
+            },
+            "variants": {
+              "speed": { "name": "Flash Clone", "description": "Forms instantly for snap baits; brittle.", "impacts": { "damage_mult": 0.9, "aoe_mult": 0.9, "duration_mult": 0.9, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55, "clone_hp_mult": 0.6 } },
+              "power": { "name": "Dense Current Clone", "description": "Heavier body that soaks a real hit.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.0, "duration_mult": 1.1, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1, "clone_hp_mult": 1.6 } },
+              "compression": { "name": "Knot-Clone", "description": "Compact core; tighter striking mass.", "impacts": { "damage_mult": 1.1, "aoe_mult": 0.7, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "clone_hp_mult": 1.2 } },
+              "expansion": { "name": "Puddle Phantoms", "description": "Splits into multiple flimsy clones.", "impacts": { "damage_mult": 0.9, "aoe_mult": 1.2, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05, "clone_hp_mult": 0.7, "clone_count_mult": 1.6 } },
+              "control": { "name": "Puppet Stream", "description": "Sustain direct control over the clone(s).", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.6, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0, "clone_hp_mult": 1.15 } },
+              "echo": { "name": "Splash Bomb Clone", "description": "On death, delayed splash staggers nearby foes.", "impacts": { "damage_mult": 1.1, "aoe_mult": 1.25, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Soaking Shade", "description": "Hits apply a wet slow for follow-ups.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.05, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "slow_pct": 0.2, "slow_seconds": 2.0 } } }
+            }
+          },
+          {
+            "id": "suiton_kirigakure_light_mist",
+            "name": "Kirigakure — Light Mist Screen",
+            "kanji": "霧隠れ・薄霧",
+            "combo": ["Snake", "Water", "Seal"],
+            "tags": ["conceal", "control", "anti_vision"],
+            "base": {
+              "description": "Localized thin fog that breaks line-of-sight and dampens sound just enough to reposition.",
+              "stats": { "damage": 0.0, "aoe": 0.9, "duration": 6.0, "chakra_cost": 0.9, "cast_time": 0.9 }
+            },
+            "variants": {
+              "speed": { "name": "Snap Mist", "description": "Instant micro-veil for emergency escapes.", "impacts": { "damage_mult": 0.0, "aoe_mult": 0.85, "duration_mult": 0.85, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55 } },
+              "power": { "name": "Choking Haze", "description": "Denser sting; harsher vision cut and muffle.", "impacts": { "damage_mult": 0.1, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.1 } },
+              "compression": { "name": "Pin-Veil", "description": "Tight cone blinds a lane without friendly fire.", "impacts": { "damage_mult": 0.0, "aoe_mult": 0.6, "duration_mult": 1.0, "chakra_cost_mult": 1.05, "cast_time_mult": 1.0 } },
+              "expansion": { "name": "Blanket Fog", "description": "Wide coverage; thinner overall effect.", "impacts": { "damage_mult": 0.0, "aoe_mult": 1.4, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05 } },
+              "control": { "name": "Living Mist", "description": "Steer/hold the veil around you with upkeep.", "impacts": { "damage_mult": 0.0, "aoe_mult": 1.05, "duration_mult": 1.6, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Rolling Fog", "description": "A second wave of mist sweeps in after a beat.", "impacts": { "damage_mult": 0.0, "aoe_mult": 1.1, "duration_mult": 1.2, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Slick Veil", "description": "Surfaces become slick; enemies fumble/slip.", "impacts": { "damage_mult": 0.0, "aoe_mult": 1.05, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "fumble_chance": 0.2 } } }
+            }
+          },
+          {
+            "id": "suiton_mizuame_nabara",
+            "name": "Mizuame Nabara — Syrup Capture Field",
+            "kanji": "水飴縄原",
+            "combo": ["Boar", "Water", "Seal"],
+            "tags": ["trap", "slow", "terrain"],
+            "base": {
+              "description": "Sticky suiton syrup spread on ground/walls; slows movement and gums up weapon grips.",
+              "stats": { "damage": 0.2, "aoe": 1.0, "duration": 7.0, "chakra_cost": 1.0, "cast_time": 1.0 }
+            },
+            "variants": {
+              "speed": { "name": "Quick Pour", "description": "Small puddle that sticks immediately.", "impacts": { "damage_mult": 1.0, "aoe_mult": 0.8, "duration_mult": 0.85, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6 } },
+              "power": { "name": "Tar Lock", "description": "High-viscosity trap; brutal to pull free.", "impacts": { "damage_mult": 1.1, "aoe_mult": 1.0, "duration_mult": 1.1, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1, "status": { "slow_pct": 0.4 } } },
+              "compression": { "name": "Bond-Line", "description": "Thin tripline across a path; punishes sprinters.", "impacts": { "damage_mult": 1.0, "aoe_mult": 0.6, "duration_mult": 1.0, "chakra_cost_mult": 1.05, "cast_time_mult": 1.0, "status": { "root_seconds": 1.8 } } },
+              "expansion": { "name": "Syrup Carpet", "description": "Wide film; lighter slow, massive coverage.", "impacts": { "damage_mult": 0.9, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05, "status": { "slow_pct": 0.25 } } },
+              "control": { "name": "Marionette Web", "description": "Reposition strands in real time with upkeep.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.1, "duration_mult": 1.6, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Second Stick", "description": "Re-adhesion pulse re-snags escapees.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.05, "duration_mult": 1.2, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Gum Seal", "description": "Gums weapon grips; jams blocks/throws briefly.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.1, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "jam_seconds": 1.0 } } }
+            }
+          },
+          {
+            "id": "suiton_mizuhimo",
+            "name": "Mizuhimo — Water Tether",
+            "kanji": "水紐",
+            "combo": ["Ox", "Water", "Channel"],
+            "tags": ["utility", "pull", "disarm"],
+            "base": {
+              "description": "Short water rope to yank objects, trip ankles, or micro-grapple to ledges.",
+              "stats": { "damage": 0.5, "aoe": 0.3, "duration": 0.0, "chakra_cost": 0.9, "cast_time": 0.8, "pull_strength": 1.0 }
+            },
+            "variants": {
+              "speed": { "name": "Snapline", "description": "Instant cast; quick yank/ankle trip.", "impacts": { "damage_mult": 0.95, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.5, "pull_strength_mult": 0.9 } },
+              "power": { "name": "Anchor Pull", "description": "Heavier draw; drags midweight targets.", "impacts": { "damage_mult": 1.1, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "pull_strength_mult": 1.35 } },
+              "compression": { "name": "Wire-Tether", "description": "Needle-thin, high-tension line for precise disarms.", "impacts": { "damage_mult": 1.0, "aoe_mult": 0.7, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "disarm_bonus": 0.25 } },
+              "expansion": { "name": "Tow-Cable", "description": "Wide strap; easier catches, weaker pull.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.3, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05, "pull_strength_mult": 0.9 } },
+              "control": { "name": "Puppet Line", "description": "Maintain the tether, steer target/gear.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.05, "duration_mult": 1.6, "chakra_cost_mult": 1.3, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Reel-In", "description": "Automatic second tug after a pause.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.0, "duration_mult": 1.05, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0, "pull_strength_mult": 1.15 } },
+              "amplification": { "name": "Drown Drag", "description": "Pull adds wet slow/choke debuff.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.1, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "slow_pct": 0.2, "choke_seconds": 1.0 } } }
+            }
+          },
+          {
+            "id": "sumi_ink_puff_mark",
+            "name": "Sumi Ninpō — Ink Puff Mark",
+            "kanji": "墨忍法・墨幕印",
+            "combo": ["Ram", "Seal", "Channel"],
+            "tags": ["ink", "blind", "mark"],
+            "base": {
+              "description": "Ink-laced splash briefly blinds and leaves a trackable dripping mark.",
+              "stats": { "damage": 0.2, "aoe": 0.8, "duration": 0.0, "chakra_cost": 0.9, "cast_time": 0.8, "blind_seconds": 1.2 }
+            },
+            "variants": {
+              "speed": { "name": "Flash Stain", "description": "Instant eye-level puff; short blind.", "impacts": { "damage_mult": 0.95, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.5, "blind_seconds_mult": 0.8 } },
+              "power": { "name": "Blind Bomb", "description": "Heavier pigment; longer blackout on hit.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1, "blind_seconds_mult": 1.4 } },
+              "compression": { "name": "Needle Ink", "description": "Pinpoint shot to a single eye; surgical, brief.", "impacts": { "damage_mult": 1.0, "aoe_mult": 0.6, "duration_mult": 1.0, "chakra_cost_mult": 1.05, "cast_time_mult": 1.0 } },
+              "expansion": { "name": "Ink Cloud", "description": "Big dark bloom; area denial, lighter blind.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05, "blind_seconds_mult": 0.85 } },
+              "control": { "name": "Guided Drip", "description": "Ink creeps along surfaces toward feet.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.1, "duration_mult": 1.4, "chakra_cost_mult": 1.3, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Ghost Mark", "description": "A second drip trail appears later for tracking.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.05, "duration_mult": 1.1, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Tracking Hex", "description": "Mark pings position through mist/rain.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.2, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "reveal_seconds": 3.0 } } }
+            }
+          }
+        ]
+      },
+      {
+        "rank": "Chūnin",
+        "jutsu": [
+          {
+            "id": "suiton_suiro",
+            "name": "Suirō no Jutsu — Water Prison",
+            "kanji": "水牢の術",
+            "combo": ["Boar", "Water", "Seal", "Channel"],
+            "tags": ["bind", "single_target", "setup"],
+            "base": {
+              "description": "Bubble entrapment immobilizes one target while you maintain contact.",
+              "stats": { "damage": 0.5, "aoe": 0.5, "duration": 4.0, "chakra_cost": 1.2, "cast_time": 1.05 }
+            },
+            "variants": {
+              "speed": { "name": "Snap Prison", "description": "Small bubble clamps fast; shorter hold.", "impacts": { "damage_mult": 0.95, "aoe_mult": 0.85, "duration_mult": 0.8, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6 } },
+              "power": { "name": "Crushing Prison", "description": "Pressure spikes; brutal to struggle.", "impacts": { "damage_mult": 1.2, "aoe_mult": 1.0, "duration_mult": 1.1, "chakra_cost_mult": 1.3, "cast_time_mult": 1.1 } },
+              "compression": { "name": "Pin Prison", "description": "Tight single-limb bubble; precision disable.", "impacts": { "damage_mult": 1.0, "aoe_mult": 0.6, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0 } },
+              "expansion": { "name": "Coffin Prison", "description": "Bigger sphere; weaker pressure; edge multi-target.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.35, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05 } },
+              "control": { "name": "Warden’s Hold", "description": "Slide the prison with your palm; sustain drain.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.05, "duration_mult": 1.6, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Ripple Rebind", "description": "Bubble re-forms briefly if broken.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.05, "duration_mult": 1.1, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Suffocation Seal", "description": "Adds oxygen drain; panic/stamina loss.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.0, "duration_mult": 1.2, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "stamina_drain": 0.3 } } }
+            }
+          },
+          {
+            "id": "suiton_suiben",
+            "name": "Suiben — Water Whip",
+            "kanji": "水鞭",
+            "combo": ["Snake", "Water", "Channel"],
+            "tags": ["melee_mid", "disarm", "bind"],
+            "base": {
+              "description": "Flexible water lash to strike, disarm, or entangle; can split mid-swing.",
+              "stats": { "damage": 1.0, "aoe": 0.6, "duration": 0.0, "chakra_cost": 1.1, "cast_time": 1.0, "bind_strength": 0.25 }
+            },
+            "variants": {
+              "speed": { "name": "Whiplash", "description": "Lightning snap for interrupts.", "impacts": { "damage_mult": 0.95, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6, "bind_strength": 0.2 } },
+              "power": { "name": "Breaker Lash", "description": "Thudding impact; forceful disarms.", "impacts": { "damage_mult": 1.3, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1, "bind_strength": 0.3 } },
+              "compression": { "name": "Cable Lash", "description": "Tight rope-whip; superior binds, shorter reach.", "impacts": { "damage_mult": 1.1, "aoe_mult": 0.7, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "bind_strength": 0.35 } },
+              "expansion": { "name": "Sheet Lash", "description": "Broad slap tags multiple lightly.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.35, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05, "bind_strength": 0.2 } },
+              "control": { "name": "Puppeted Lash", "description": "Sustain wrap and steer the bind.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.05, "duration_mult": 1.6, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0, "bind_strength": 0.4 } },
+              "echo": { "name": "Rebound Lash", "description": "Auto second snap from return arc.", "impacts": { "damage_mult": 1.1, "aoe_mult": 1.1, "duration_mult": 1.05, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Binding Lash", "description": "Longer entangle; extra pull on hit.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.0, "duration_mult": 1.15, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "drag_distance": 1.0 } } }
+            }
+          },
+          {
+            "id": "suiton_mizukiri",
+            "name": "Mizukiri — Water Cutter",
+            "kanji": "水切り",
+            "combo": ["Ox", "Water", "Release"],
+            "tags": ["precision", "breach", "utility"],
+            "base": {
+              "description": "High-pressure slicing stream for precise breaches (ropes, wood, weak stone).",
+              "stats": { "damage": 1.1, "aoe": 0.4, "duration": 0.0, "chakra_cost": 1.1, "cast_time": 1.0 }
+            },
+            "variants": {
+              "speed": { "name": "Flash Cutter", "description": "Instant microjet slice; short lane.", "impacts": { "damage_mult": 0.95, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55 } },
+              "power": { "name": "Severance Beam", "description": "High-pressure cut that bites deep.", "impacts": { "damage_mult": 1.35, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.3, "cast_time_mult": 1.1 } },
+              "compression": { "name": "Needle Cutter", "description": "Hair-thin jet for surgical seams.", "impacts": { "damage_mult": 1.2, "aoe_mult": 0.6, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "crit_mult": 1.2 } },
+              "expansion": { "name": "Shear Curtain", "description": "Wide pane trims cover with low penetration.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05 } },
+              "control": { "name": "Gimbaled Cutter", "description": "Steer mid-cast for curved cuts.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.05, "duration_mult": 1.4, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 } },
+              "echo": { "name": "After-Slice", "description": "Wake current finishes a delayed second line.", "impacts": { "damage_mult": 1.1, "aoe_mult": 1.1, "duration_mult": 1.05, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Erosion Cut", "description": "Leaves armor-shred/soak debuff.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.15, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "armor_shred": 0.25 } } }
+            }
+          },
+          {
+            "id": "suiton_mizurappa",
+            "name": "Mizurappa — Violent Water Wave",
+            "kanji": "水乱波",
+            "combo": ["Tiger", "Water", "Release"],
+            "tags": ["zone", "push", "lane_clear"],
+            "base": {
+              "description": "Shoulder-width surge that bowls foes back, clears lanes, and snuffs flames.",
+              "stats": { "damage": 1.0, "aoe": 1.0, "duration": 0.0, "chakra_cost": 1.2, "cast_time": 1.0, "knockback_mult": 1.0 }
+            },
+            "variants": {
+              "speed": { "name": "Quick Surge", "description": "Shallow burst; instant lane clear.", "impacts": { "damage_mult": 0.95, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6, "knockback_mult": 0.9 } },
+              "power": { "name": "Breaker Wave", "description": "Heavy surge; big knockback.", "impacts": { "damage_mult": 1.35, "aoe_mult": 1.1, "duration_mult": 1.0, "chakra_cost_mult": 1.3, "cast_time_mult": 1.1, "knockback_mult": 1.35 } },
+              "compression": { "name": "Ridge Wave", "description": "Narrow crest that hits harder straight ahead.", "impacts": { "damage_mult": 1.2, "aoe_mult": 0.7, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "knockback_mult": 1.1 } },
+              "expansion": { "name": "Sheet Flood", "description": "Wide fan; softer push, massive control.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05, "knockback_mult": 1.0 } },
+              "control": { "name": "Shepherd Tide", "description": "Steer the flow around cover.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.1, "duration_mult": 1.4, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Backwash", "description": "Return current pulls targets off-balance.", "impacts": { "damage_mult": 1.1, "aoe_mult": 1.05, "duration_mult": 1.05, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Heavy Water", "description": "Sticky drag leaves a lingering slow zone.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.05, "duration_mult": 1.25, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "slow_pct": 0.3, "slow_seconds": 3.0 } } }
+            }
+          },
+          {
+            "id": "sumi_ink_binding_serpents",
+            "name": "Sumi Ninpō — Ink Binding Serpents",
+            "kanji": "墨忍法・縛蛇",
+            "combo": ["Ram", "Seal", "Channel"],
+            "tags": ["ink", "bind", "control"],
+            "base": {
+              "description": "Animated ink coils from wet surfaces to restrain and mark targets.",
+              "stats": { "damage": 0.8, "aoe": 0.9, "duration": 5.0, "chakra_cost": 1.25, "cast_time": 1.1 }
+            },
+            "variants": {
+              "speed": { "name": "Snap Coils", "description": "Quick strike binds; short duration.", "impacts": { "damage_mult": 0.95, "aoe_mult": 0.9, "duration_mult": 0.85, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6 } },
+              "power": { "name": "Lead Serpents", "description": "Dense coils; difficult to tear free.", "impacts": { "damage_mult": 1.2, "aoe_mult": 1.0, "duration_mult": 1.15, "chakra_cost_mult": 1.3, "cast_time_mult": 1.1 } },
+              "compression": { "name": "Wire Serpents", "description": "Thin cords bite deep into joints.", "impacts": { "damage_mult": 1.1, "aoe_mult": 0.7, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0 } },
+              "expansion": { "name": "Carpet Serpents", "description": "Many small coils; weaker but swarm.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05 } },
+              "control": { "name": "Puppet Serpents", "description": "Steer coils between targets; sustain.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.1, "duration_mult": 1.6, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Second Bind", "description": "Coils re-tighten a moment after release.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.05, "duration_mult": 1.15, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Staining Bind", "description": "Marks targets for tracking/slow combo.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.2, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "reveal_seconds": 3.0 } } }
+            }
+          }
+        ]
+      },
+      {
+        "rank": "Jōnin",
+        "jutsu": [
+          {
+            "id": "suiton_suiryudan_bomb",
+            "name": "Suiryūdan — Water Dragon Bomb",
+            "kanji": "水龍弾の術",
+            "combo": ["Ox", "Snake", "Water", "Release"],
+            "tags": ["alpha_strike", "push", "burst"],
+            "base": {
+              "description": "A towering dragon of water detonates on impact, crushing and pushing back entire formations.",
+              "stats": { "damage": 1.8, "aoe": 1.2, "duration": 0.0, "chakra_cost": 1.8, "cast_time": 1.3 }
+            },
+            "variants": {
+              "speed": { "name": "Swift Dragon", "description": "Smaller construct; launches near-instantly.", "impacts": { "damage_mult": 0.9, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6 } },
+              "power": { "name": "Abyss Dragon", "description": "Denser core for a crushing hit.", "impacts": { "damage_mult": 1.45, "aoe_mult": 1.1, "duration_mult": 1.0, "chakra_cost_mult": 1.35, "cast_time_mult": 1.15 } },
+              "compression": { "name": "Spiral-Core Dragon", "description": "Narrower body; armor-piercing charge.", "impacts": { "damage_mult": 1.25, "aoe_mult": 0.75, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05 } },
+              "expansion": { "name": "Monsoon Dragon", "description": "Huge silhouette; wide shock-front, less bite.", "impacts": { "damage_mult": 1.1, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1 } },
+              "control": { "name": "Serpent Driver", "description": "Actively steer the path and detonation point.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.1, "duration_mult": 1.4, "chakra_cost_mult": 1.4, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Twin-Surge Dragon", "description": "Secondary detonation wave follows the first.", "impacts": { "damage_mult": 1.15, "aoe_mult": 1.15, "duration_mult": 1.05, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Riptide Dragon", "description": "Leaves riptide currents that drag and slow.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.1, "duration_mult": 1.25, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "slow_pct": 0.35, "slow_seconds": 4.0 } } }
+            }
+          },
+          {
+            "id": "suiton_daikodan_great_shark_bomb",
+            "name": "Daikōdan — Great Shark Bomb",
+            "kanji": "大鮫弾の術",
+            "combo": ["Boar", "Ox", "Water", "Release"],
+            "tags": ["anti_ninjutsu", "homing", "burst"],
+            "base": {
+              "description": "A colossal shark-form projectile that devours chakra techniques it collides with, absorbing power as it hunts.",
+              "stats": { "damage": 1.6, "aoe": 1.0, "duration": 0.0, "chakra_cost": 1.7, "cast_time": 1.2, "devour_ratio": 0.6 }
+            },
+            "variants": {
+              "speed": { "name": "Rush Shark", "description": "Fast acquisition; shorter growth window.", "impacts": { "damage_mult": 0.95, "aoe_mult": 0.95, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6, "devour_ratio_mult": 0.9 } },
+              "power": { "name": "Apex Shark", "description": "Max devour and strike force.", "impacts": { "damage_mult": 1.4, "aoe_mult": 1.05, "duration_mult": 1.0, "chakra_cost_mult": 1.35, "cast_time_mult": 1.15, "devour_ratio_mult": 1.25 } },
+              "compression": { "name": "Spear Shark", "description": "Slim profile; penetrates barrier gaps.", "impacts": { "damage_mult": 1.2, "aoe_mult": 0.75, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05 } },
+              "expansion": { "name": "Megalodon Wake", "description": "Massive body sweeps a lane with wake.", "impacts": { "damage_mult": 1.1, "aoe_mult": 1.4, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1, "devour_ratio_mult": 1.1 } },
+              "control": { "name": "Tracker Shark", "description": "Strong homing; veers toward new ninjutsu.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.05, "duration_mult": 1.2, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Second Bite", "description": "Delayed tailwake snap after impact.", "impacts": { "damage_mult": 1.15, "aoe_mult": 1.1, "duration_mult": 1.05, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Chakra Feast", "description": "On hit, saps enemy chakra regen briefly.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.15, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "regen_suppression_seconds": 5.0 } } }
+            }
+          },
+          {
+            "id": "suiton_suiro_sameodori",
+            "name": "Suirō: Sameodori — Water Prison: Shark Dance",
+            "kanji": "水牢・鮫踊りの術",
+            "combo": ["Dog", "Boar", "Water", "Seal", "Channel"],
+            "tags": ["zone", "arena", "attrition"],
+            "base": {
+              "description": "An expanding water dome turns the battlefield aquatic; enemies slow and tire while you excel.",
+              "stats": { "damage": 1.0, "aoe": 1.4, "duration": 8.0, "chakra_cost": 1.8, "cast_time": 1.2 }
+            },
+            "variants": {
+              "speed": { "name": "Snap Dome", "description": "Rapid small arena for instant tempo swing.", "impacts": { "damage_mult": 0.95, "aoe_mult": 0.85, "duration_mult": 0.85, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6 } },
+              "power": { "name": "Crushing Current", "description": "Pressure/undertow intensified; brutal stamina drain.", "impacts": { "damage_mult": 1.25, "aoe_mult": 1.05, "duration_mult": 1.1, "chakra_cost_mult": 1.35, "cast_time_mult": 1.1 } },
+              "compression": { "name": "Tight Dome", "description": "Small, high-pressure kill box.", "impacts": { "damage_mult": 1.15, "aoe_mult": 0.7, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "expansion": { "name": "Tidal Arena", "description": "Huge zone; lighter pressure, teamfight control.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1 } },
+              "control": { "name": "Roving Arena", "description": "Walk the dome forward; shepherd enemies.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.15, "duration_mult": 1.6, "chakra_cost_mult": 1.4, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Undertow Pulse", "description": "Periodic shock waves knock swimmers off balance.", "impacts": { "damage_mult": 1.1, "aoe_mult": 1.1, "duration_mult": 1.1, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Drowning Hex", "description": "Accelerated oxygen debt + panic debuff.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.25, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "panic_seconds": 4.0 } } }
+            }
+          },
+          {
+            "id": "suiton_bakusui_shoha",
+            "name": "Bakusui Shōha — Exploding Water Colliding Wave",
+            "kanji": "爆水衝破",
+            "combo": ["Tiger", "Water", "Release"],
+            "tags": ["terrain_reset", "flood", "aoe"],
+            "base": {
+              "description": "Detonates a lake-sized surge that floods terrain, reshapes lanes, and feeds other Suiton.",
+              "stats": { "damage": 1.4, "aoe": 1.5, "duration": 0.0, "chakra_cost": 1.8, "cast_time": 1.25 }
+            },
+            "variants": {
+              "speed": { "name": "Burst Flood", "description": "Rapid surge; quicker reset, less depth.", "impacts": { "damage_mult": 0.95, "aoe_mult": 0.95, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6 } },
+              "power": { "name": "Mountain Flood", "description": "Heaviest volume; sweeps fortifications.", "impacts": { "damage_mult": 1.35, "aoe_mult": 1.15, "duration_mult": 1.0, "chakra_cost_mult": 1.35, "cast_time_mult": 1.15 } },
+              "compression": { "name": "Torrent Line", "description": "Focused corridor to siege a single lane.", "impacts": { "damage_mult": 1.2, "aoe_mult": 0.75, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05 } },
+              "expansion": { "name": "Deluge Field", "description": "Broad flood; softer push but vast control.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1 } },
+              "control": { "name": "River Architect", "description": "Shape channels and eddies mid-cast.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.2, "duration_mult": 1.4, "chakra_cost_mult": 1.4, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Afterflood", "description": "Follow-up surge seconds later.", "impacts": { "damage_mult": 1.15, "aoe_mult": 1.15, "duration_mult": 1.05, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Quagmire Aftermath", "description": "Flood leaves muddy slow zones.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.05, "duration_mult": 1.25, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "slow_pct": 0.3, "slow_seconds": 6.0 } } }
+            }
+          },
+          {
+            "id": "suiton_mizukagami",
+            "name": "Mizukagami no Jutsu — Water Mirror Technique",
+            "kanji": "水鏡の術",
+            "combo": ["Ram", "Water", "Seal"],
+            "tags": ["counter", "reflect", "precision"],
+            "base": {
+              "description": "A standing water mirror captures an attacker’s silhouette and reflects a mirrored strike back with suiton force.",
+              "stats": { "damage": 1.1, "aoe": 0.8, "duration": 0.0, "chakra_cost": 1.5, "cast_time": 1.0, "reflect_power": 1.0 }
+            },
+            "variants": {
+              "speed": { "name": "Snap Mirror", "description": "Instant pane catches telegraphed strikes.", "impacts": { "damage_mult": 1.0, "aoe_mult": 0.8, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55, "reflect_power_mult": 0.95 } },
+              "power": { "name": "Crashing Reflection", "description": "Reflected blow slams back harder.", "impacts": { "damage_mult": 1.25, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 1.3, "cast_time_mult": 1.1, "reflect_power_mult": 1.25 } },
+              "compression": { "name": "Pinpoint Mirror", "description": "Narrow pane for precise projectile returns.", "impacts": { "damage_mult": 1.1, "aoe_mult": 0.6, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0 } },
+              "expansion": { "name": "Hall of Mirrors", "description": "Wide pane; easier catch, weaker rebound.", "impacts": { "damage_mult": 0.95, "aoe_mult": 1.4, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05, "reflect_power_mult": 0.9 } },
+              "control": { "name": "Angle Keeper", "description": "Steer/tilt to intercept multi-angles; sustain.", "impacts": { "damage_mult": 1.05, "aoe_mult": 1.1, "duration_mult": 1.6, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 } },
+              "echo": { "name": "Phantom Mirror", "description": "A second mirrored strike triggers after a beat.", "impacts": { "damage_mult": 1.15, "aoe_mult": 1.05, "duration_mult": 1.05, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 } },
+              "amplification": { "name": "Reverb Seal", "description": "Reflections add stagger/disorient on hit.", "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.15, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "stagger_seconds": 1.2 } } }
+            }
+          }
+        ]
+      }
+    ]
+  }
+  

@@ -1,0 +1,881 @@
+{
+    "element": "Earth",
+    "version": "1.0",
+    "notes": "Baseline multipliers are 1.0. Apply variant multipliers multiplicatively against base stats. Only one modifier at a time in this schema (stacking rules optional).",
+    "modifiers": {
+      "speed": {
+        "label": "Speed (Hayasa)",
+        "minigame": "rhythm_qte",
+        "base_effect": "Faster formation/release and projectile velocity.",
+        "tradeoff": "Slight stability/size reduction if pushed."
+      },
+      "power": {
+        "label": "Power (Chikara)",
+        "minigame": "channeling_gauge",
+        "base_effect": "Greater destructive force/impact.",
+        "tradeoff": "Higher chakra drain; potential recoil at extremes."
+      },
+      "compression": {
+        "label": "Compression (Shukushō)",
+        "minigame": "seal_shape_puzzle",
+        "base_effect": "Condenses chakra into denser, precise forms.",
+        "tradeoff": "Narrower AoE; execution difficulty increases."
+      },
+      "expansion": {
+        "label": "Expansion (Kakuchō)",
+        "minigame": "spread_stability_tracing",
+        "base_effect": "Wider coverage/zone control.",
+        "tradeoff": "Lower per-target damage; more instability if sloppy."
+      },
+      "control": {
+        "label": "Control (Seigyo)",
+        "minigame": "balance_hold_or_steering",
+        "base_effect": "Sustain/steer or reshape effects in real time.",
+        "tradeoff": "Continuous chakra upkeep; attention split."
+      },
+      "echo": {
+        "label": "Echo (Kōshō)",
+        "minigame": "echo_pulse_timing",
+        "base_effect": "Aftershock/delayed secondary strike.",
+        "tradeoff": "Extra chakra cost; secondary hit is weaker."
+      },
+      "amplification": {
+        "label": "Amplification (Kyōka)",
+        "minigame": "bonus_seal_combo",
+        "base_effect": "Boosts secondaries (stagger, knockback, slow, bind).",
+        "tradeoff": "Poor damage-per-chakra; harder inputs."
+      }
+    },
+    "ranks": [
+      {
+        "rank": "Genin",
+        "jutsu": [
+          {
+            "id": "doton_stone_fist",
+            "name": "Stone Fist",
+            "kanji": "岩石の拳",
+            "combo": ["Ox", "Earth", "Seal"],
+            "tags": ["melee", "buff", "short_duration"],
+            "base": {
+              "description": "Covers the user's fist in stone for sturdier punches.",
+              "stats": {
+                "damage": 1.0,
+                "aoe": 0.2,
+                "duration": 6.0,
+                "chakra_cost": 1.0,
+                "cast_time": 0.9
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Swift Gauntlet",
+                "description": "A thin stone glove forms instantly for snap counters.",
+                "impacts": { "damage_mult": 0.9, "aoe_mult": 0.9, "duration_mult": 0.8, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6 }
+              },
+              "power": {
+                "name": "Titan’s Knuckle",
+                "description": "Dense rocky fist that cracks armor with bone-shaking blows.",
+                "impacts": { "damage_mult": 1.35, "aoe_mult": 1.0, "duration_mult": 0.9, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1 }
+              },
+              "compression": {
+                "name": "Diamond Point Fist",
+                "description": "Knuckles condense into jagged points for piercing jabs.",
+                "impacts": { "damage_mult": 1.15, "aoe_mult": 0.6, "duration_mult": 0.9, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0 }
+              },
+              "expansion": {
+                "name": "Bulwark Arm",
+                "description": "Forearm and shoulder encased—battering-ram punches, heavier feel.",
+                "impacts": { "damage_mult": 1.1, "aoe_mult": 1.2, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.1 }
+              },
+              "control": {
+                "name": "Enduring Gauntlet",
+                "description": "Maintain hardened form as long as chakra flows.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 0.9, "duration_mult": 1.6, "chakra_cost_mult": 1.3, "cast_time_mult": 1.0 }
+              },
+              "echo": {
+                "name": "Aftershock Punch",
+                "description": "A delayed ground-crack staggers nearby foes after impact.",
+                "impacts": { "damage_mult": 1.05, "aoe_mult": 1.15, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Shattering Strike",
+                "description": "Impact sends debris shockwaves that knock targets back.",
+                "impacts": { "damage_mult": 0.95, "aoe_mult": 1.25, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "knockback": 1.0 } }
+              }
+            }
+          },
+          {
+            "id": "doton_pebble_shot",
+            "name": "Pebble Shot",
+            "kanji": "石礫弾丸",
+            "combo": ["Ram", "Earth", "Release"],
+            "tags": ["ranged", "projectile", "harass"],
+            "base": {
+              "description": "Fires chakra-propelled pebbles as fast, light projectiles.",
+              "stats": {
+                "damage": 0.7,
+                "aoe": 0.15,
+                "duration": 0.0,
+                "chakra_cost": 0.7,
+                "cast_time": 0.7
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Scatter Flick",
+                "description": "Rapid-fire volley peppering enemies with chip damage.",
+                "impacts": { "damage_mult": 0.85, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 0.9, "cast_time_mult": 0.5, "rate_mult": 1.35 }
+              },
+              "power": {
+                "name": "Stone Bullet",
+                "description": "Heavier shots crack light armor on clean hits.",
+                "impacts": { "damage_mult": 1.35, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "armor_shred": 0.2 }
+              },
+              "compression": {
+                "name": "Needle Shard",
+                "description": "One razor-sharp dart for long-range precision.",
+                "impacts": { "damage_mult": 1.25, "aoe_mult": 0.5, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "crit_mult": 1.25 }
+              },
+              "expansion": {
+                "name": "Rock Hail",
+                "description": "Shotgun-like spread that saturates an area.",
+                "impacts": { "damage_mult": 0.9, "aoe_mult": 1.35, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.05, "pellet_count_mult": 1.5 }
+              },
+              "control": {
+                "name": "Guided Stone",
+                "description": "Pebbles subtly curve toward moving targets.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.0, "homing_strength": 0.5 }
+              },
+              "echo": {
+                "name": "Fragment Burst",
+                "description": "Impact releases a small shard burst for extra chip damage.",
+                "impacts": { "damage_mult": 1.1, "aoe_mult": 1.2, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Stunning Shot",
+                "description": "Briefly rattles the target, adding a short daze.",
+                "impacts": { "damage_mult": 0.95, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.0, "status": { "stagger_seconds": 0.75 } }
+              }
+            }
+          },
+          {
+            "id": "doton_soften_ground",
+            "name": "Soften Ground",
+            "kanji": "地盤柔らかい",
+            "combo": ["Snake", "Earth", "Channel"],
+            "tags": ["control", "trap", "terrain"],
+            "base": {
+              "description": "Weakens a patch of terrain to trip or slow opponents.",
+              "stats": {
+                "damage": 0.2,
+                "aoe": 1.0,
+                "duration": 6.0,
+                "chakra_cost": 0.9,
+                "cast_time": 1.0
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Sinkstep Snare",
+                "description": "Instant, small patch that catches feet mid-stride.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 0.8, "duration_mult": 0.8, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6 }
+              },
+              "power": {
+                "name": "Grave Maw",
+                "description": "Patch deepens abruptly, dragging targets knee-deep.",
+                "impacts": { "damage_mult": 1.15, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1, "status": { "immobilize_strength": 0.6 } }
+              },
+              "compression": {
+                "name": "Iron Shackles",
+                "description": "Narrow but vice-like grip that locks a single target.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 0.6, "duration_mult": 1.1, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "status": { "root_seconds": 2.5 } }
+              },
+              "expansion": {
+                "name": "Bogfield",
+                "description": "Wide shallow mire that slows many at once.",
+                "impacts": { "damage_mult": 0.9, "aoe_mult": 1.35, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05, "status": { "slow_pct": 0.25 } }
+              },
+              "control": {
+                "name": "Binding Mire",
+                "description": "Sustain to choose when to tighten or release the grip.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.6, "chakra_cost_mult": 1.3, "cast_time_mult": 1.0 }
+              },
+              "echo": {
+                "name": "Seismic Grip",
+                "description": "A delayed tremor re-snags escaping targets.",
+                "impacts": { "damage_mult": 1.05, "aoe_mult": 1.1, "duration_mult": 1.2, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Clutching Mud",
+                "description": "Sticky suction prolongs immobilization.",
+                "impacts": { "damage_mult": 0.95, "aoe_mult": 1.0, "duration_mult": 1.4, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05 }
+              }
+            }
+          },
+          {
+            "id": "doton_dirt_dome",
+            "name": "Dirt Dome",
+            "kanji": "土盾",
+            "combo": ["Dog", "Earth", "Seal"],
+            "tags": ["defense", "cover", "ally_protect"],
+            "base": {
+              "description": "Raises a small earthen dome for quick protection.",
+              "stats": {
+                "damage": 0.0,
+                "aoe": 0.8,
+                "duration": 5.0,
+                "chakra_cost": 1.0,
+                "cast_time": 0.9
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Quick Shelter",
+                "description": "Thin dome pops instantly to catch incoming fire.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 0.9, "duration_mult": 0.9, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55, "hp_mult": 0.7 }
+              },
+              "power": {
+                "name": "Titan Walllet",
+                "description": "Heavily reinforced dome tanks serious hits.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 1.0, "duration_mult": 1.1, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1, "hp_mult": 1.5 }
+              },
+              "compression": {
+                "name": "Stone Core Shield",
+                "description": "Compact but near-indestructible cover for a single ally.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 0.6, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "hp_mult": 1.65 }
+              },
+              "expansion": {
+                "name": "Earthen Bulwark",
+                "description": "Wider coverage for squads; thinner shell overall.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 1.35, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05, "hp_mult": 0.85 }
+              },
+              "control": {
+                "name": "Living Wall",
+                "description": "Sustain and reshape the dome as moving cover.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 1.0, "duration_mult": 1.7, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0, "hp_mult": 1.2 }
+              },
+              "echo": {
+                "name": "Shrapnel Burst",
+                "description": "When broken, the dome erupts outward with rock shards.",
+                "impacts": { "damage_mult": 0.3, "aoe_mult": 1.2, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Deflective Carapace",
+                "description": "Ricochets some projectiles unpredictably.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "deflect_chance": 0.2 }
+              }
+            }
+          },
+          {
+            "id": "doton_rock_grab",
+            "name": "Rock Grab",
+            "kanji": "岩握り",
+            "combo": ["Boar", "Earth", "Seal"],
+            "tags": ["bind", "single_target", "setup"],
+            "base": {
+              "description": "Forms stone around a limb to immobilize a target.",
+              "stats": {
+                "damage": 0.4,
+                "aoe": 0.3,
+                "duration": 3.0,
+                "chakra_cost": 1.0,
+                "cast_time": 0.95
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Snapping Bind",
+                "description": "Clamp snaps shut instantly but breaks sooner.",
+                "impacts": { "damage_mult": 0.9, "aoe_mult": 1.0, "duration_mult": 0.7, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6 }
+              },
+              "power": {
+                "name": "Stone Vice",
+                "description": "Crushing grip can fracture bone on tough squeezes.",
+                "impacts": { "damage_mult": 1.35, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1 }
+              },
+              "compression": {
+                "name": "Iron Grip",
+                "description": "Narrow clamp focuses pressure on one limb—brutal control.",
+                "impacts": { "damage_mult": 1.1, "aoe_mult": 0.7, "duration_mult": 1.2, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0 }
+              },
+              "expansion": {
+                "name": "Stone Shackles",
+                "description": "Encases both legs/arms; heavier drain but firmer hold.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 1.25, "duration_mult": 1.15, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1 }
+              },
+              "control": {
+                "name": "Earthen Hold",
+                "description": "Maintain pressure as long as chakra flows; squeeze on command.",
+                "impacts": { "damage_mult": 1.1, "aoe_mult": 1.0, "duration_mult": 1.6, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 }
+              },
+              "echo": {
+                "name": "Cracking Grip",
+                "description": "Residual shards re-bite after the bind breaks.",
+                "impacts": { "damage_mult": 1.15, "aoe_mult": 1.05, "duration_mult": 1.1, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Concussive Bind",
+                "description": "Initial clamp impact staggers and briefly stuns.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "stun_seconds": 1.0 } }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "rank": "Chūnin",
+        "jutsu": [
+          {
+            "id": "doton_earth_wall",
+            "name": "Earth Wall",
+            "kanji": "土流壁",
+            "combo": ["Ox", "Earth", "Seal"],
+            "tags": ["defense", "cover", "terrain"],
+            "base": {
+              "description": "A sturdy wall of stone rises to block attacks.",
+              "stats": {
+                "damage": 0.0,
+                "aoe": 1.0,
+                "duration": 7.0,
+                "chakra_cost": 1.25,
+                "cast_time": 1.0,
+                "hp": 1.0
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Flash Barrier",
+                "description": "Wall shoots up in an instant; thinner shell.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 0.95, "duration_mult": 0.9, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55, "hp_mult": 0.75 }
+              },
+              "power": {
+                "name": "Titan Wall",
+                "description": "Massive thick bulwark that shrugs off heavy jutsu.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 1.0, "duration_mult": 1.1, "chakra_cost_mult": 1.3, "cast_time_mult": 1.1, "hp_mult": 1.6 }
+              },
+              "compression": {
+                "name": "Stone Bastion",
+                "description": "Compact shield section—nearly unbreakable but small.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 0.6, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "hp_mult": 1.75 }
+              },
+              "expansion": {
+                "name": "Great Rampart",
+                "description": "Wide wall protecting multiple allies; weaker vs focused fire.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 1.35, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05, "hp_mult": 0.85 }
+              },
+              "control": {
+                "name": "Living Fortress",
+                "description": "Sustain and slide the wall as mobile cover.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 1.0, "duration_mult": 1.8, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0, "hp_mult": 1.15 }
+              },
+              "echo": {
+                "name": "Falling Rampart",
+                "description": "When destroyed, rubble collapses forward, crushing foes.",
+                "impacts": { "damage_mult": 0.6, "aoe_mult": 1.2, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Debris Field",
+                "description": "Leaves slowing rubble after destruction.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "slow_pct": 0.3, "slow_seconds": 4.0 } }
+              }
+            }
+          },
+          {
+            "id": "doton_earth_spear",
+            "name": "Earth Spear",
+            "kanji": "土矛",
+            "combo": ["Ram", "Earth", "Seal"],
+            "tags": ["self_buff", "defense", "melee"],
+            "base": {
+              "description": "Hardens the body like stone to reduce damage taken.",
+              "stats": {
+                "damage": 0.0,
+                "aoe": 0.3,
+                "duration": 8.0,
+                "chakra_cost": 1.2,
+                "cast_time": 0.9,
+                "dr": 0.25
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Stone Skin",
+                "description": "Light coating forms instantly; modest protection.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 1.0, "duration_mult": 0.9, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55, "dr_bonus": -0.05 }
+              },
+              "power": {
+                "name": "Iron Hide",
+                "description": "Near-impenetrable layer absorbs brutal punishment.",
+                "impacts": { "damage_mult": 0.0, "aoe_mult": 1.0, "duration_mult": 1.0, "chakra_cost_mult": 1.3, "cast_time_mult": 1.1, "dr_bonus": 0.2 }
+              },
+              "compression": {
+                "name": "Stone Core",
+                "description": "Vital zones hardened to crystal density; exposed gaps remain.",
+                "impacts": { "damage_mult": 0.1, "aoe_mult": 0.8, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "dr_bonus": 0.15, "mobility_mult": 0.95 }
+              },
+              "expansion": {
+                "name": "Granite Armor",
+                "description": "Full-body casing; excellent defense but slower steps.",
+                "impacts": { "damage_mult": 0.1, "aoe_mult": 1.0, "duration_mult": 1.1, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05, "dr_bonus": 0.12, "mobility_mult": 0.9 }
+              },
+              "control": {
+                "name": "Living Golem",
+                "description": "Sustain stone-body form and continuously reinforce plates.",
+                "impacts": { "damage_mult": 0.1, "aoe_mult": 1.0, "duration_mult": 1.8, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0, "dr_bonus": 0.12 }
+              },
+              "echo": {
+                "name": "Quake Armor",
+                "description": "Each melee hit pulses a destabilizing shockwave.",
+                "impacts": { "damage_mult": 0.2, "aoe_mult": 1.1, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Juggernaut’s Shell",
+                "description": "Blocks hit harder, adding knockback to counters.",
+                "impacts": { "damage_mult": 0.25, "aoe_mult": 1.1, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "knockback": 1.0 } }
+              }
+            }
+          },
+          {
+            "id": "doton_rock_pillars",
+            "name": "Rock Pillars",
+            "kanji": "岩柱",
+            "combo": ["Snake", "Earth", "Release"],
+            "tags": ["terrain", "trap", "burst"],
+            "base": {
+              "description": "Stone pillars erupt from the ground to strike or block.",
+              "stats": {
+                "damage": 1.1,
+                "aoe": 0.9,
+                "duration": 0.0,
+                "chakra_cost": 1.25,
+                "cast_time": 1.1
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Stone Spikes",
+                "description": "Rapid smaller spikes that pop instantly.",
+                "impacts": { "damage_mult": 0.9, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6, "count_mult": 1.25 }
+              },
+              "power": {
+                "name": "Obsidian Pillar",
+                "description": "One massive, crushing pillar.",
+                "impacts": { "damage_mult": 1.45, "aoe_mult": 1.05, "duration_mult": 1.0, "chakra_cost_mult": 1.3, "cast_time_mult": 1.15 }
+              },
+              "compression": {
+                "name": "Drill Fang",
+                "description": "A single drill-like spike that pierces armor.",
+                "impacts": { "damage_mult": 1.25, "aoe_mult": 0.6, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05, "armor_shred": 0.25 }
+              },
+              "expansion": {
+                "name": "Stone Forest",
+                "description": "Many small pillars sprout across a wide zone.",
+                "impacts": { "damage_mult": 0.95, "aoe_mult": 1.4, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.1, "count_mult": 1.6 }
+              },
+              "control": {
+                "name": "Seismic Control",
+                "description": "Keep pillars active and reposition to corral enemies.",
+                "impacts": { "damage_mult": 1.05, "aoe_mult": 1.1, "duration_mult": 1.6, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 }
+              },
+              "echo": {
+                "name": "Aftershock Spires",
+                "description": "A secondary rumble knocks foes off balance.",
+                "impacts": { "damage_mult": 1.1, "aoe_mult": 1.15, "duration_mult": 1.1, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Shattering Spires",
+                "description": "Pillars splinter, scattering jagged shards.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 1.25, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "bleed_chance": 0.25 }
+              }
+            }
+          },
+          {
+            "id": "doton_mud_wave",
+            "name": "Mud Wave",
+            "kanji": "泥流弾",
+            "combo": ["Boar", "Earth", "Release"],
+            "tags": ["zone", "push", "control"],
+            "base": {
+              "description": "A surge of mud flows forward, knocking enemies back.",
+              "stats": {
+                "damage": 0.9,
+                "aoe": 1.0,
+                "duration": 0.0,
+                "chakra_cost": 1.2,
+                "cast_time": 1.0
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Flash Flood",
+                "description": "Quick shallow rush for instant disruption.",
+                "impacts": { "damage_mult": 0.9, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6, "knockback_mult": 0.9 }
+              },
+              "power": {
+                "name": "Avalanche Flow",
+                "description": "Massive surge that bowls over anything ahead.",
+                "impacts": { "damage_mult": 1.35, "aoe_mult": 1.1, "duration_mult": 1.0, "chakra_cost_mult": 1.3, "cast_time_mult": 1.1, "knockback_mult": 1.35 }
+              },
+              "compression": {
+                "name": "Mud Lance",
+                "description": "Narrow, heavier strike line that hits hard.",
+                "impacts": { "damage_mult": 1.2, "aoe_mult": 0.7, "duration_mult": 1.0, "chakra_cost_mult": 1.1, "cast_time_mult": 1.0, "knockback_mult": 1.1 }
+              },
+              "expansion": {
+                "name": "Quagmire Flood",
+                "description": "Wide shallow sweep; exceptional crowd control.",
+                "impacts": { "damage_mult": 0.95, "aoe_mult": 1.4, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05, "knockback_mult": 1.0 }
+              },
+              "control": {
+                "name": "Mire Current",
+                "description": "Sustain and steer the wave like a roaming hazard.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 1.1, "duration_mult": 1.6, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0 }
+              },
+              "echo": {
+                "name": "Second Wave",
+                "description": "A delayed surge catches enemies off guard.",
+                "impacts": { "damage_mult": 1.15, "aoe_mult": 1.05, "duration_mult": 1.1, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Suffocating Mire",
+                "description": "Leaves heavy, sticky mud that pins enemies down.",
+                "impacts": { "damage_mult": 0.95, "aoe_mult": 1.1, "duration_mult": 1.3, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "immobilize_strength": 0.5 } }
+              }
+            }
+          },
+          {
+            "id": "doton_earth_clone",
+            "name": "Earth Clone",
+            "kanji": "土遁分身",
+            "combo": ["Dog", "Earth", "Seal"],
+            "tags": ["summon", "decoy", "tank"],
+            "base": {
+              "description": "Creates a clone composed of soil and stone.",
+              "stats": {
+                "damage": 0.6,
+                "aoe": 0.4,
+                "duration": 15.0,
+                "chakra_cost": 1.25,
+                "cast_time": 1.1,
+                "clone_hp": 1.0
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Stone Shade",
+                "description": "Instant but brittle clone for fast baits.",
+                "impacts": { "damage_mult": 0.55, "aoe_mult": 0.4, "duration_mult": 0.9, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6, "clone_hp_mult": 0.6 }
+              },
+              "power": {
+                "name": "Golem Double",
+                "description": "Dense clone that soaks real punishment.",
+                "impacts": { "damage_mult": 0.7, "aoe_mult": 0.5, "duration_mult": 1.1, "chakra_cost_mult": 1.3, "cast_time_mult": 1.15, "clone_hp_mult": 1.6 }
+              },
+              "compression": {
+                "name": "Iron Warden",
+                "description": "Single extremely durable clone—frontline anchor.",
+                "impacts": { "damage_mult": 0.65, "aoe_mult": 0.45, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05, "clone_hp_mult": 1.8, "clone_count_mult": 0.6 }
+              },
+              "expansion": {
+                "name": "Clay Horde",
+                "description": "Multiple weaker clones overwhelm by numbers.",
+                "impacts": { "damage_mult": 0.55, "aoe_mult": 0.45, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1, "clone_hp_mult": 0.65, "clone_count_mult": 1.8 }
+              },
+              "control": {
+                "name": "Earthen Puppet",
+                "description": "Manual control and sustained presence.",
+                "impacts": { "damage_mult": 0.65, "aoe_mult": 0.5, "duration_mult": 1.7, "chakra_cost_mult": 1.35, "cast_time_mult": 1.0, "clone_hp_mult": 1.25 }
+              },
+              "echo": {
+                "name": "Cragburst Clone",
+                "description": "On death, explodes into jagged rubble.",
+                "impacts": { "damage_mult": 0.8, "aoe_mult": 1.2, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Binding Husk",
+                "description": "Clone grapples and restrains before crumbling.",
+                "impacts": { "damage_mult": 0.6, "aoe_mult": 0.5, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "grapple_seconds": 2.0 } }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "rank": "Jōnin",
+        "jutsu": [
+          {
+            "id": "doton_spear_armor",
+            "name": "Earth Spear Armor",
+            "kanji": "鉱石鎧",
+            "combo": ["Ox", "Ram", "Earth", "Seal"],
+            "tags": ["elite_defense", "form", "melee_aura"],
+            "base": {
+              "description": "Full-body stone armor for near-total protection.",
+              "stats": {
+                "damage": 0.25,
+                "aoe": 0.4,
+                "duration": 12.0,
+                "chakra_cost": 1.6,
+                "cast_time": 1.2,
+                "dr": 0.4
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Stone Skin Mantle",
+                "description": "Light shell forms instantly—emergency reaction defense.",
+                "impacts": { "damage_mult": 0.2, "aoe_mult": 0.35, "duration_mult": 0.85, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55, "dr_bonus": -0.08 }
+              },
+              "power": {
+                "name": "Colossus Shell",
+                "description": "Bedrock plates that shrug off advanced ninjutsu.",
+                "impacts": { "damage_mult": 0.3, "aoe_mult": 0.45, "duration_mult": 1.05, "chakra_cost_mult": 1.35, "cast_time_mult": 1.15, "dr_bonus": 0.2 }
+              },
+              "compression": {
+                "name": "Diamond Plating",
+                "description": "Vital areas compact into crystal-hard facets; mobility preserved.",
+                "impacts": { "damage_mult": 0.3, "aoe_mult": 0.4, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05, "dr_bonus": 0.15, "mobility_mult": 0.98 }
+              },
+              "expansion": {
+                "name": "Titan Carapace",
+                "description": "Thick full suit—ultimate protection at the cost of speed.",
+                "impacts": { "damage_mult": 0.35, "aoe_mult": 0.5, "duration_mult": 1.1, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1, "dr_bonus": 0.15, "mobility_mult": 0.85 }
+              },
+              "control": {
+                "name": "Living Golem Form",
+                "description": "Indefinite sustain while reshaping plates on the fly.",
+                "impacts": { "damage_mult": 0.3, "aoe_mult": 0.45, "duration_mult": 1.9, "chakra_cost_mult": 1.4, "cast_time_mult": 1.0, "dr_bonus": 0.12 }
+              },
+              "echo": {
+                "name": "Shatterburst Carapace",
+                "description": "When broken, armor erupts in a shockwave of stone.",
+                "impacts": { "damage_mult": 0.6, "aoe_mult": 1.25, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Juggernaut’s Roar",
+                "description": "Armored strikes emit seismic pulses that stagger.",
+                "impacts": { "damage_mult": 0.45, "aoe_mult": 1.1, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "stagger_radius": 2.0 } }
+              }
+            }
+          },
+          {
+            "id": "doton_earth_dragon",
+            "name": "Earth Dragon",
+            "kanji": "土龍弾",
+            "combo": ["Snake", "Ox", "Earth", "Release"],
+            "tags": ["summon_construct", "burst", "controller"],
+            "base": {
+              "description": "Summons a massive dragon of stone or mud that surges forward.",
+              "stats": {
+                "damage": 1.6,
+                "aoe": 1.2,
+                "duration": 0.0,
+                "chakra_cost": 1.7,
+                "cast_time": 1.3
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Drake Rush",
+                "description": "Smaller dragon forms instantly to lunge quickly.",
+                "impacts": { "damage_mult": 0.85, "aoe_mult": 0.9, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55 }
+              },
+              "power": {
+                "name": "Titan Dragon",
+                "description": "Colossal dragon with devastating bite and crash.",
+                "impacts": { "damage_mult": 1.45, "aoe_mult": 1.15, "duration_mult": 1.0, "chakra_cost_mult": 1.35, "cast_time_mult": 1.15 }
+              },
+              "compression": {
+                "name": "Obsidian Fang Serpent",
+                "description": "Sleek, piercing dragon that breaks armor cleanly.",
+                "impacts": { "damage_mult": 1.25, "aoe_mult": 0.75, "duration_mult": 1.0, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05, "armor_shred": 0.3 }
+              },
+              "expansion": {
+                "name": "Mountain Wyrm",
+                "description": "Huge but less controlled dragon that thrashes widely.",
+                "impacts": { "damage_mult": 1.15, "aoe_mult": 1.4, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1 }
+              },
+              "control": {
+                "name": "Earth Serpent’s Coil",
+                "description": "Direct the dragon's path and target while chakra flows.",
+                "impacts": { "damage_mult": 1.05, "aoe_mult": 1.1, "duration_mult": 1.6, "chakra_cost_mult": 1.4, "cast_time_mult": 1.0 }
+              },
+              "echo": {
+                "name": "Aftershock Drake",
+                "description": "Debris explodes into a secondary shockwave after the crash.",
+                "impacts": { "damage_mult": 1.2, "aoe_mult": 1.2, "duration_mult": 1.05, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Seismic Maw",
+                "description": "Bite/breath leaves lingering tremors that destabilize terrain.",
+                "impacts": { "damage_mult": 1.05, "aoe_mult": 1.15, "duration_mult": 1.2, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "terrain_unstable_seconds": 6.0 } }
+              }
+            }
+          },
+          {
+            "id": "doton_earth_burial",
+            "name": "Earth Burial (Swamp of the Underworld)",
+            "kanji": "黄泉沼",
+            "combo": ["Boar", "Snake", "Earth", "Channel"],
+            "tags": ["control", "trap", "aoe_root"],
+            "base": {
+              "description": "Creates a swampy pit that drags enemies downward.",
+              "stats": {
+                "damage": 0.8,
+                "aoe": 1.2,
+                "duration": 6.0,
+                "chakra_cost": 1.6,
+                "cast_time": 1.2
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Sinkhole Snare",
+                "description": "Quick shallow pit that catches mid-step.",
+                "impacts": { "damage_mult": 0.9, "aoe_mult": 0.9, "duration_mult": 0.9, "chakra_cost_mult": 0.95, "cast_time_mult": 0.6 }
+              },
+              "power": {
+                "name": "Bottomless Maw",
+                "description": "Deep, chakra-heavy mire swallows enemies waist-deep.",
+                "impacts": { "damage_mult": 1.35, "aoe_mult": 1.05, "duration_mult": 1.1, "chakra_cost_mult": 1.35, "cast_time_mult": 1.15 }
+              },
+              "compression": {
+                "name": "Iron Pit",
+                "description": "Small but inescapable sink with crushing pressure.",
+                "impacts": { "damage_mult": 1.2, "aoe_mult": 0.7, "duration_mult": 1.1, "chakra_cost_mult": 1.15, "cast_time_mult": 1.05 }
+              },
+              "expansion": {
+                "name": "Marsh of Despair",
+                "description": "Wide shallow mire bogs down entire squads.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1, "status": { "slow_pct": 0.35 } }
+              },
+              "control": {
+                "name": "Quagmire Prison",
+                "description": "Sustain and migrate the swamp's grip across the field.",
+                "impacts": { "damage_mult": 1.05, "aoe_mult": 1.15, "duration_mult": 1.7, "chakra_cost_mult": 1.4, "cast_time_mult": 1.0 }
+              },
+              "echo": {
+                "name": "Second Collapse",
+                "description": "After the mire ends, the ground trembles and re-traps.",
+                "impacts": { "damage_mult": 1.1, "aoe_mult": 1.1, "duration_mult": 1.2, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Clinging Mire",
+                "description": "Viscous mud prolongs holds significantly.",
+                "impacts": { "damage_mult": 0.95, "aoe_mult": 1.0, "duration_mult": 1.4, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05 }
+              }
+            }
+          },
+          {
+            "id": "doton_rock_avalanche",
+            "name": "Rock Avalanche",
+            "kanji": "岩屋戸崩し",
+            "combo": ["Ox", "Dog", "Earth", "Release"],
+            "tags": ["aoe", "siege", "terrain_denial"],
+            "base": {
+              "description": "Triggers a rockfall/landslide that crushes enemies.",
+              "stats": {
+                "damage": 1.5,
+                "aoe": 1.4,
+                "duration": 0.0,
+                "chakra_cost": 1.7,
+                "cast_time": 1.25
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Stonefall Burst",
+                "description": "Smaller rocks rain instantly for quick disruption.",
+                "impacts": { "damage_mult": 0.85, "aoe_mult": 0.95, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55 }
+              },
+              "power": {
+                "name": "Boulder Crash",
+                "description": "Huge boulders cascade with devastating force.",
+                "impacts": { "damage_mult": 1.45, "aoe_mult": 1.1, "duration_mult": 1.0, "chakra_cost_mult": 1.35, "cast_time_mult": 1.15 }
+              },
+              "compression": {
+                "name": "Monolith Drop",
+                "description": "One enormous slab falls like a guillotine.",
+                "impacts": { "damage_mult": 1.35, "aoe_mult": 0.75, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.1 }
+              },
+              "expansion": {
+                "name": "Stone Rain",
+                "description": "Wide shower of rubble blankets the field.",
+                "impacts": { "damage_mult": 1.05, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1 }
+              },
+              "control": {
+                "name": "Controlled Collapse",
+                "description": "Guide where and how the avalanche falls.",
+                "impacts": { "damage_mult": 1.1, "aoe_mult": 1.15, "duration_mult": 1.6, "chakra_cost_mult": 1.4, "cast_time_mult": 1.0 }
+              },
+              "echo": {
+                "name": "Echoing Landslide",
+                "description": "A second wave of debris tumbles down after a beat.",
+                "impacts": { "damage_mult": 1.2, "aoe_mult": 1.15, "duration_mult": 1.05, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Crippling Rubble",
+                "description": "Scattered rocks create difficult terrain.",
+                "impacts": { "damage_mult": 1.0, "aoe_mult": 1.1, "duration_mult": 1.2, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "difficult_terrain_seconds": 8.0 } }
+              }
+            }
+          },
+          {
+            "id": "doton_grudge_divide",
+            "name": "Earth Grudge Divide",
+            "kanji": "大地割れ目",
+            "combo": ["Tiger", "Earth", "Seal", "Channel"],
+            "tags": ["terrain", "control", "aoe_breach"],
+            "base": {
+              "description": "Splits the ground into trenches or chasms, disrupting formations.",
+              "stats": {
+                "damage": 1.2,
+                "aoe": 1.3,
+                "duration": 0.0,
+                "chakra_cost": 1.7,
+                "cast_time": 1.25
+              }
+            },
+            "variants": {
+              "speed": {
+                "name": "Faultline Snap",
+                "description": "Shallow crack rips open instantly.",
+                "impacts": { "damage_mult": 0.9, "aoe_mult": 0.95, "duration_mult": 1.0, "chakra_cost_mult": 0.95, "cast_time_mult": 0.55 }
+              },
+              "power": {
+                "name": "Chasm Split",
+                "description": "Deep ravine tears across the battlefield.",
+                "impacts": { "damage_mult": 1.45, "aoe_mult": 1.1, "duration_mult": 1.0, "chakra_cost_mult": 1.35, "cast_time_mult": 1.15 }
+              },
+              "compression": {
+                "name": "Razor Crevasse",
+                "description": "Narrow but abyssal fissure—precise, lethal breach.",
+                "impacts": { "damage_mult": 1.25, "aoe_mult": 0.75, "duration_mult": 1.0, "chakra_cost_mult": 1.2, "cast_time_mult": 1.05 }
+              },
+              "expansion": {
+                "name": "Great Divide",
+                "description": "Wide rift destabilizes the entire zone.",
+                "impacts": { "damage_mult": 1.1, "aoe_mult": 1.45, "duration_mult": 1.0, "chakra_cost_mult": 1.25, "cast_time_mult": 1.1 }
+              },
+              "control": {
+                "name": "Tectonic Grip",
+                "description": "Sustain and steer the fissure like a moving scar.",
+                "impacts": { "damage_mult": 1.1, "aoe_mult": 1.2, "duration_mult": 1.7, "chakra_cost_mult": 1.4, "cast_time_mult": 1.0 }
+              },
+              "echo": {
+                "name": "Aftershock Rift",
+                "description": "Crack shakes violently again to unbalance foes.",
+                "impacts": { "damage_mult": 1.15, "aoe_mult": 1.1, "duration_mult": 1.1, "chakra_cost_mult": 1.15, "cast_time_mult": 1.0 }
+              },
+              "amplification": {
+                "name": "Seismic Collapse",
+                "description": "Surrounding terrain caves in, partly immobilizing.",
+                "impacts": { "damage_mult": 1.05, "aoe_mult": 1.15, "duration_mult": 1.2, "chakra_cost_mult": 1.25, "cast_time_mult": 1.05, "status": { "immobilize_strength": 0.4 } }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+  
