@@ -56,10 +56,20 @@ button.primary{border-color:#4f46e5}
 #districtModal{position:absolute;left:12px;bottom:64px;min-width:300px;background:#0b0b0fdd;border:1px solid #222;border-radius:12px;
   padding:10px 12px;box-shadow:0 8px 22px #000a;backdrop-filter:blur(6px)}
 #districtModal .hdr{font-weight:700;margin-bottom:.35rem}
+#legend{position:absolute;left:12px;top:32px;max-width:min(416px,58.5vw);z-index:10;
+  background:#052e16cc;border:1px solid #064e3b;border-radius:12px;color:#e7f6ec;
+  padding:10px 12px;backdrop-filter:blur(6px)}
+#legend .hdr{font-weight:700;margin-bottom:.35rem;letter-spacing:.2px}
+#legend ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+#legend li{display:flex;gap:.5rem;align-items:flex-start;font:12px/1.35 system-ui}
+#legend li b{display:inline-block;min-width:1.6rem;text-align:right;color:#86efac}
 /* cursor feedback by mode */
 body[data-mode="draw-district"] svg,
 body[data-mode="draw-road"] svg{cursor:crosshair}
 @media (max-width:980px){#wrap{grid-template-columns:1fr}}
-.grass{fill:none;stroke:#16a34a;stroke-opacity:.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-.forest{fill:none;stroke:#166534;stroke-opacity:.75;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.grass{fill:none;stroke:#16a34a;stroke-opacity:.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-width:50}
+.forest{fill:none;stroke:#064e3b;stroke-opacity:.85;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 .mountain{fill:none;stroke:#78350f;stroke-opacity:.8;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.mountain-tri{fill:#78350f;fill-opacity:.85;stroke:#3f1d0b;stroke-width:2;vector-effect:non-scaling-stroke}
+.grass-base{fill:#16a34a;fill-opacity:.12;stroke:none}
+.forest-area{fill:#064e3b;fill-opacity:.5;stroke:#064e3b;stroke-opacity:.9;vector-effect:non-scaling-stroke}

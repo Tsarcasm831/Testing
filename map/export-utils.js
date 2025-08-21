@@ -14,7 +14,7 @@ export function buildExportSVG(){
   const dRoads = MODEL.roads.map(r=>{
     const pts=r.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
     const col = r.type==='avenue'?'#f8fafc':(r.type==='canal'?'#38bdf8':'#cbd5e1');
-    return `<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="${r.width||3}" stroke-linecap="round" stroke-linejoin="round"/>`;
+    return `<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="${Math.max(4, r.width||4)}" stroke-linecap="round" stroke-linejoin="round"/>`;
   }).join('\n');
   const dPins = MODEL.poi.map(p=>{
     const r = 8.8; // uniform px radius for all POIs in exported SVG
@@ -28,15 +28,17 @@ export function buildExportSVG(){
   }).join('\n');
   const dGrass = (MODEL.grass||[]).map(g=>{
     const pts=g.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
-    return `<polyline points="${pts}" fill="none" stroke="#16a34a" stroke-opacity=".4" stroke-width="${g.width||28}" stroke-linecap="round" stroke-linejoin="round"/>`;
+    return `<polyline points="${pts}" fill="none" stroke="#16a34a" stroke-opacity=".4" stroke-width="${g.width||50}" stroke-linecap="round" stroke-linejoin="round"/>`;
   }).join('\n');
   const dForest = (MODEL.forest||[]).map(f=>{
     const pts=f.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
-    return `<polyline points="${pts}" fill="none" stroke="#166534" stroke-opacity=".75" stroke-width="${f.width||10}" stroke-linecap="round" stroke-linejoin="round"/>`;
+    return `<polygon points="${pts}" fill="#166534" fill-opacity="0.75" stroke="#064e3b" stroke-width="1.5" />`;
   }).join('\n');
   const dMountains = (MODEL.mountains||[]).map(m=>{
     const pts=m.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
-    return `<polyline points="${pts}" fill="none" stroke="#78350f" stroke-opacity=".8" stroke-width="${m.width||10}" stroke-linecap="round" stroke-linejoin="round"/>`;
+    return m.shape==='triangle'
+      ? `<polygon points="${pts}" fill="#78350f" fill-opacity=".85" stroke="#3f1d0b" stroke-width="1.5"/>`
+      : `<polyline points="${pts}" fill="none" stroke="#78350f" stroke-opacity=".8" stroke-width="${m.width||10}" stroke-linecap="round" stroke-linejoin="round"/>`;
   }).join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">

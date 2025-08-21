@@ -5,7 +5,13 @@ export const state = {
   mode:'select', edit:false, snap:false,
   selected:null, 
   drawing:null, 
-  addingPOI:false
+  addingPOI:false,
+  brush:{
+    road:{type:'street', width:4},
+    river:{width:7},
+    forest:{width:40},
+    mountain:{shape:'line', width:10, triSize:8}
+  }
 };
 
 // ensure rivers array exists for new feature

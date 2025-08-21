@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cake Mania Clone</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            border: 2px solid #333;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        #gameCanvas {
+            background-color: #d3e0e6; /* A light blue kitchen background */
+            display: block;
+        }
+
+        .ui-element {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        #ui-timer {
+            top: 10px;
+            left: 10px;
+        }
+
+        #ui-money {
+            top: 10px;
+            right: 10px;
+        }
+        
+        #ui-goal {
+            top: 50px;
+            right: 10px;
+            background-color: rgba(100, 60, 20, 0.7);
+        }
+
+        .modal {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .modal h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 5px black;
+        }
+        
+        .modal p {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .modal button {
+            font-size: 22px;
+            padding: 15px 30px;
+            margin-top: 20px;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .modal button:hover {
+            background-color: #45a049;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <!-- UI Elements -->
+        <div id="ui-timer" class="ui-element">Time: 3:00</div>
+        <div id="ui-money" class="ui-element">Money: $0</div>
+        <div id="ui-goal" class="ui-element">Goal: $500</div>
+
+        <!-- Modals for Game State -->
+        <div id="start-screen" class="modal">
+            <h1>Cake Mania</h1>
+            <p id="start-level-info">Level 1</p>
+            <p id="start-goal-info">Goal: $500</p>
+            <button id="start-button">Start Day</button>
+        </div>
+
+        <div id="level-complete-screen" class="modal hidden">
+            <h1>Level Complete!</h1>
+            <p id="final-score">You earned: $550</p>
+            <p id="goal-met-message">Goal Met!</p>
+            <button id="next-level-button">Go to Shop</button>
+        </div>
+        
+        <div id="game-over-screen" class="modal hidden">
+            <h1>Game Over</h1>
+            <p id="game-over-reason">Time's up!</p>
+            <button id="restart-button">Try Again</button>
+        </div>
+        
+        <!-- The "Shop" is simplified here as a concept. A full shop would be more complex. -->
+         <div id="shop-screen" class="modal hidden">
+            <h1>Jill's Bakery Upgrades</h1>
+            <p>Spend your earnings to improve the kitchen!</p>
+            <div id="upgrade-options"></div>
+            <button id="continue-to-next-level-button">Start Next Level</button>
+        </div>
+
+    </div>
+
+    <!-- Audio Elements (kept silent for simplicity, but hooks are here) -->
+    <audio id="snd-click" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" preload="auto"></audio>
+    <audio id="snd-cash" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" preload="auto"></audio>
+    <audio id="snd-oven-ding" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" preload="auto"></audio>
+    <audio id="snd-customer-angry" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" preload="auto"></audio>
+    <audio id="snd-success" src="data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA" preload="auto"></audio>
+
+
+<script>
+// =================================================================================
+// GAME ENTRY POINT & MAIN SETUP
+// =================================================================================
+window.addEventListener('load', function() {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 800;
+    canvas.height = 600;
+
+    const game = new Game(canvas.width, canvas.height);
+    let lastTime = 0;
+
+    function gameLoop(timestamp) {
+        const deltaTime = timestamp - lastTime;
+        lastTime = timestamp;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        game.update(deltaTime);
+        game.draw(ctx);
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    game.init().then(() => {
+        requestAnimationFrame(gameLoop);
+    });
+});
+
+
+// =================================================================================
+// CONFIGURATION
+// =================================================================================
+const GAME_CONFIG = {
+    JILL_SPEED: 0.2, // pixels per millisecond
+    CUSTOMER_SPEED: 0.05,
+    PATIENCE_RATE: 10, // points per second
+    CAKE_SHAPES: ['circle', 'square', 'heart'],
+    FROSTING_COLORS: {
+        'pink': '#FFC0CB',
+        'chocolate': '#7B3F00',
+        'vanilla': '#F3E5AB'
+    },
+    TOPPERS: ['sprinkles', 'cherry', 'flower'],
+    LEVELS: [
+        { goal: 500, expertGoal: 750, duration: 180, customers: { count: 8, interval: 15000 } },
+        { goal: 800, expertGoal: 1100, duration: 180, customers: { count: 12, interval: 12000 } },
+        { goal: 1200, expertGoal: 1600, duration: 180, customers: { count: 15, interval: 10000 } }
+    ],
+    UPGRADES: {
+        'shoes': { name: 'Faster Shoes', cost: 300, description: 'Jill moves 25% faster.', effect: (game) => game.player.speed *= 1.25 },
+        'oven': { name: 'Super Oven', cost: 500, description: 'Bakes cakes 30% faster.', effect: (game) => { game.stations.filter(s => s instanceof OvenStation).forEach(o => o.baseBakeTime *= 0.7) } },
+        'display': { name: 'Cupcake Display', cost: 400, description: 'Customers lose patience 20% slower.', effect: (game) => game.patienceDecayRate *= 0.8 },
+    }
+};
+
+
+// =================================================================================
+// ASSET LOADER (with Base64 placeholders)
+// =================================================================================
+class AssetLoader {
+    constructor() {
+        this.images = {};
+        // In a real game, these would be detailed sprites. Here, they are simple colored squares.
+        // Format: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=' is a 1x1 red pixel
+        this.imageSources = {
+            jill: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', // Red for Jill
+            customer: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', // Blue for Customer
+            counter: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwAB/epv2AAAAABJRU5ErkJggg==', // Gray
+            oven: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNsqAcAAQUBAZx84fIAAAAASUVORK5CYII=', // Orange
+            frosting: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkmAkAAUAAAP94/DQAAAAASUVORK5CYII=', // Pink
+            topper: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYPj/HwADAQEAd/24UQAAAABJRU5ErkJggg==', // Yellow
+            trash: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', // Red
+            cake_raw: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/wcAAwAB/epv2AAAAABJRU5ErkJggg==', // Light Gray
+            cake_baked: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mO8//8AAwAB/el9aQAAAABJRU5ErkJggg==', // Brown
+            cake_burnt: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', // Black
+            heart: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mN/4A8AAgEB/f8/IAAAAABJRU5ErkJggg==', // Red heart placeholder
+        };
+    }
+
+    loadImages() {
+        const promises = Object.keys(this.imageSources).map(key => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = this.imageSources[key];
+                img.onload = () => {
+                    this.images[key] = img;
+                    resolve();
+                };
+                img.onerror = reject;
+            });
+        });
+        return Promise.all(promises);
+    }
+
+    get(key) {
+        return this.images[key];
+    }
+}
+
+
+// =================================================================================
+// AUDIO MANAGER
+// =================================================================================
+class AudioManager {
+    constructor() {
+        this.sounds = {
+            click: document.getElementById('snd-click'),
+            cash: document.getElementById('snd-cash'),
+            ovenDing: document.getElementById('snd-oven-ding'),
+            customerAngry: document.getElementById('snd-customer-angry'),
+            success: document.getElementById('snd-success')
+        };
+    }
+    play(soundKey) {
+        const sound = this.sounds[soundKey];
+        if (sound) {
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Audio play failed:", e));
+        }
+    }
+}
+
+
+// =================================================================================
+// GAME CLASS - Main Controller
+// =================================================================================
+class Game {
+    constructor(width, height) {
+        this.width = width;
+        this.height = height;
+        this.gameState = 'START_SCREEN';
+        this.currentLevel = 0;
+        this.money = 0;
+        this.patienceDecayRate = GAME_CONFIG.PATIENCE_RATE;
+        
+        this.assetLoader = new AssetLoader();
+        this.audioManager = new AudioManager();
+        this.inputHandler = new InputHandler(this);
+        
+        this.player = new Jill(this, 350, 300);
+        this.customers = [];
+        this.stations = [];
+        this.levelData = null;
+        this.timer = 0;
+
+        this.customerQueuePositions = [
+            { x: 100, y: 150 }, { x: 100, y: 250 }, { x: 100, y: 350 }, { x: 100, y: 450 }
+        ];
+        
+        this.ui = {
+            timer: document.getElementById('ui-timer'),
+            money: document.getElementById('ui-money'),
+            goal: document.getElementById('ui-goal'),
+            startScreen: document.getElementById('start-screen'),
+            levelCompleteScreen: document.getElementById('level-complete-screen'),
+            gameOverScreen: document.getElementById('game-over-screen'),
+            shopScreen: document.getElementById('shop-screen')
+        };
+        this.setupUIListeners();
+    }
+
+    async init() {
+        await this.assetLoader.loadImages();
+        this.setupLevel(this.currentLevel);
+    }
+
+    setupLevel(levelIndex) {
+        this.currentLevel = levelIndex;
+        if (levelIndex >= GAME_CONFIG.LEVELS.length) {
+            this.showWinScreen(); // Or loop levels
+            return;
+        }
+        
+        this.levelData = GAME_CONFIG.LEVELS[levelIndex];
+        this.timer = this.levelData.duration;
+        this.money = 0; // Reset money at the start of the level
+        this.customers = [];
+        this.player.reset();
+
+        this.createStations(); // Create or reset stations
+        this.customerSpawnTimer = 0;
+        this.customersToSpawn = this.levelData.customers.count;
+        
+        // Setup start screen
+        document.getElementById('start-level-info').textContent = `Level ${this.currentLevel + 1}`;
+        document.getElementById('start-goal-info').textContent = `Goal: $${this.levelData.goal}`;
+        this.ui.startScreen.classList.remove('hidden');
+        this.gameState = 'START_SCREEN';
+    }
+    
+    startNextLevel() {
+        this.currentLevel++;
+        this.setupLevel(this.currentLevel);
+    }
+    
+    restartLevel() {
+        this.setupLevel(this.currentLevel);
+    }
+    
+    showShop() {
+        this.gameState = 'SHOP';
+        this.ui.shopScreen.classList.remove('hidden');
+        const optionsDiv = document.getElementById('upgrade-options');
+        optionsDiv.innerHTML = '';
+        
+        for (const key in GAME_CONFIG.UPGRADES) {
+            const upgrade = GAME_CONFIG.UPGRADES[key];
+            if (!upgrade.purchased) {
+                const btn = document.createElement('button');
+                btn.innerHTML = `${upgrade.name} - $${upgrade.cost}<br><small>${upgrade.description}</small>`;
+                btn.disabled = this.money < upgrade.cost;
+                btn.onclick = () => {
+                    this.money -= upgrade.cost;
+                    upgrade.effect(this);
+                    upgrade.purchased = true;
+                    this.audioManager.play('cash');
+                    this.showShop(); // Refresh shop view
+                };
+                optionsDiv.appendChild(btn);
+            }
+        }
+    }
+    
+    showWinScreen(){
+        // Simple win screen, can be expanded
+        this.ui.levelCompleteScreen.classList.remove('hidden');
+        document.getElementById('final-score').textContent = "You've completed all levels!";
+        document.getElementById('goal-met-message').textContent = `Final Money: $${this.money}`;
+        document.getElementById('next-level-button').textContent = "Play Again?";
+        document.getElementById('next-level-button').onclick = () => window.location.reload();
+    }
+
+
+    setupUIListeners() {
+        document.getElementById('start-button').onclick = () => {
+            this.ui.startScreen.classList.add('hidden');
+            this.gameState = 'PLAYING';
+        };
+        document.getElementById('next-level-button').onclick = () => {
+            this.ui.levelCompleteScreen.classList.add('hidden');
+            this.showShop();
+        };
+         document.getElementById('continue-to-next-level-button').onclick = () => {
+            this.ui.shopScreen.classList.add('hidden');
+            this.startNextLevel();
+        };
+        document.getElementById('restart-button').onclick = () => {
+            this.ui.gameOverScreen.classList.add('hidden');
+            this.restartLevel();
+        };
+    }
+
+    createStations() {
+        this.stations = [
+            // Row 1: Ovens
+            new OvenStation(this, 250, 50, 80, 80),
+            new OvenStation(this, 350, 50, 80, 80),
+
+            // Row 2: Frosting
+            new FrostingStation(this, 250, 150, 80, 80, 'pink'),
+            new FrostingStation(this, 350, 150, 80, 80, 'chocolate'),
+            new FrostingStation(this, 450, 150, 80, 80, 'vanilla'),
+
+            // Row 3: Toppers
+            new TopperStation(this, 250, 250, 80, 80, 'sprinkles'),
+            new TopperStation(this, 350, 250, 80, 80, 'cherry'),
+            new TopperStation(this, 450, 250, 80, 80, 'flower'),
+
+            // Bottom row: Pans and Trash
+            new CakePanStation(this, 250, 450, 80, 80, 'circle'),
+            new CakePanStation(this, 350, 450, 80, 80, 'square'),
+            new CakePanStation(this, 450, 450, 80, 80, 'heart'),
+            new TrashStation(this, 650, 450, 80, 80),
+            
+            // Customer Counter
+            new CounterStation(this, 150, 100, 20, 400),
+        ];
+    }
+    
+    update(deltaTime) {
+        if (this.gameState !== 'PLAYING') return;
+
+        // Update timer
+        this.timer -= deltaTime / 1000;
+        if (this.timer <= 0) {
+            this.timer = 0;
+            this.endLevel(false);
+        }
+
+        // Spawn customers
+        this.customerSpawnTimer += deltaTime;
+        if (this.customersToSpawn > 0 && this.customerSpawnTimer > this.levelData.customers.interval) {
+            if (this.customers.length < this.customerQueuePositions.length) {
+                this.spawnCustomer();
+                this.customersToSpawn--;
+                this.customerSpawnTimer = 0;
+            }
+        }
+
+        // Update all game objects
+        this.player.update(deltaTime);
+        this.stations.forEach(s => s.update(deltaTime));
+        this.customers.forEach(c => c.update(deltaTime));
+
+        // Remove angry customers
+        this.customers = this.customers.filter(c => c.state !== 'leaving');
+        this.updateCustomerQueue();
+        
+        // Check for level end condition
+        if (this.customersToSpawn === 0 && this.customers.length === 0) {
+            this.endLevel(true);
+        }
+    }
+    
+    endLevel(finishedAllCustomers) {
+        if (this.gameState !== 'PLAYING') return; // Prevent multiple triggers
+        
+        if (this.money >= this.levelData.goal) {
+            this.gameState = 'LEVEL_COMPLETE';
+            this.audioManager.play('success');
+            document.getElementById('final-score').textContent = `You earned: $${this.money}`;
+            let msg = this.money >= this.levelData.expertGoal ? "Expert Goal Met! ⭐" : "Goal Met!";
+            document.getElementById('goal-met-message').textContent = msg;
+            this.ui.levelCompleteScreen.classList.remove('hidden');
+        } else {
+            this.gameState = 'GAME_OVER';
+            document.getElementById('game-over-reason').textContent = finishedAllCustomers ? "Didn't meet the goal!" : "Time's up!";
+            this.ui.gameOverScreen.classList.remove('hidden');
+        }
+    }
+
+    draw(ctx) {
+        // Draw background and stations first
+        this.stations.forEach(s => s.draw(ctx));
+
+        // Draw customers
+        this.customers.forEach(c => c.draw(ctx));
+        
+        // Draw player
+        this.player.draw(ctx);
+        
+        // Draw UI
+        this.updateUI();
+    }
+    
+    updateUI() {
+        const minutes = Math.floor(this.timer / 60);
+        const seconds = Math.floor(this.timer % 60);
+        this.ui.timer.textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        this.ui.money.textContent = `Money: $${this.money}`;
+        this.ui.goal.textContent = `Goal: $${this.levelData.goal}`;
+    }
+
+    spawnCustomer() {
+        const queueIndex = this.customers.length;
+        if (queueIndex < this.customerQueuePositions.length) {
+            const pos = this.customerQueuePositions[queueIndex];
+            const newCustomer = new Customer(this, pos.x, pos.y);
+            this.customers.push(newCustomer);
+        }
+    }
+    
+    updateCustomerQueue() {
+        this.customers.forEach((customer, index) => {
+            const targetPos = this.customerQueuePositions[index];
+            customer.setTarget(targetPos.x, targetPos.y);
+        });
+    }
+    
+    handleClick(x, y) {
+        if (this.gameState !== 'PLAYING') return;
+
+        let clickedObject = null;
+        // Check stations first
+        for (const station of this.stations) {
+            if (station.isClicked(x, y)) {
+                clickedObject = station;
+                break;
+            }
+        }
+        // Then check customers, but only if they are waiting for an order
+        if (!clickedObject) {
+            for (const customer of this.customers) {
+                if (customer.state === 'waiting_for_cake' && customer.isClicked(x, y)) {
+                    clickedObject = customer;
+                    break;
+                }
+            }
+        }
+
+        if (clickedObject) {
+            this.player.setTarget(clickedObject);
+        }
+    }
+    
+    addMoney(amount) {
+        this.money += amount;
+        this.audioManager.play('cash');
+    }
+}
+
+
+// =================================================================================
+// INPUT HANDLER
+// =================================================================================
+class InputHandler {
+    constructor(game) {
+        this.game = game;
+        game.canvas.addEventListener('click', (e) => {
+            const rect = game.canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            this.game.handleClick(x, y);
+        });
+    }
+}
+
+
+// =================================================================================
+// JILL - The Player
+// =================================================================================
+class Jill {
+    constructor(game, x, y) {
+        this.game = game;
+        this.x = x;
+        this.y = y;
+        this.width = 40;
+        this.height = 60;
+        this.speed = GAME_CONFIG.JILL_SPEED;
+        this.image = this.game.assetLoader.get('jill');
+        
+        this.target = null; // Can be a station object or {x, y} coordinates
+        this.heldItem = null; // Will be a Cake object
+        this.interactionDistance = 5; // How close to get to a station
+    }
+    
+    reset() {
+        this.x = 350;
+        this.y = 300;
+        this.heldItem = null;
+        this.target = null;
+    }
+
+    setTarget(target) {
+        this.target = target;
+        this.game.audioManager.play('click');
+    }
+
+    update(deltaTime) {
+        if (!this.target) return;
+
+        const targetX = this.target.x + (this.target.width / 2);
+        const targetY = this.target.y + (this.target.height / 2);
+        
+        const dx = targetX - this.x;
+        const dy = targetY - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < this.interactionDistance) {
+            // Arrived at destination
+            this.x = targetX;
+            this.y = targetY;
+            if (this.target.interact) { // Check if it's an interactable object
+                this.target.interact(this);
+            }
+            this.target = null;
+        } else {
+            // Move towards target
+            this.x += (dx / distance) * this.speed * deltaTime;
+            this.y += (dy / distance) * this.speed * deltaTime;
+        }
+    }
+
+    draw(ctx) {
+        // Draw Jill sprite
+        ctx.fillStyle = 'red';
+        ctx.fillRect(this.x - this.width / 2, this.y - this.height, this.width, this.height);
+        
+        // Draw held item
+        if (this.heldItem) {
+            this.heldItem.draw(ctx, this.x, this.y - this.height - 10);
+        }
+    }
+    
+    pickupItem(item) {
+        if (!this.heldItem) {
+            this.heldItem = item;
+            return true;
+        }
+        return false;
+    }
+    
+    placeItem() {
+        const item = this.heldItem;
+        this.heldItem = null;
+        return item;
+    }
+}
+
+// =================================================================================
+// CAKE - The Item being processed
+// =================================================================================
+class Cake {
+    constructor(shape) {
+        this.shape = shape; // 'circle', 'square', 'heart'
+        this.bakeStatus = 'raw'; // 'raw', 'baked', 'burnt'
+        this.frosting = null; // 'pink', 'chocolate', 'vanilla'
+        this.topper = null; // 'sprinkles', 'cherry', 'flower'
+    }
+
+    draw(ctx, x, y, size = 30) {
+        // Simple representation of the cake
+        ctx.save();
+        
+        // Frosting color
+        if (this.frosting) {
+            ctx.fillStyle = GAME_CONFIG.FROSTING_COLORS[this.frosting];
+        } else {
+            // Bake status color
+            if (this.bakeStatus === 'raw') ctx.fillStyle = '#e0e0e0';
+            else if (this.bakeStatus === 'baked') ctx.fillStyle = '#D2B48C';
+            else if (this.bakeStatus === 'burnt') ctx.fillStyle = '#301000';
+        }
+        
+        // Shape
+        if (this.shape === 'circle') {
+            ctx.beginPath();
+            ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (this.shape === 'square') {
+            ctx.fillRect(x - size / 2, y - size / 2, size, size);
+        } else if (this.shape === 'heart') {
+            // A simple heart shape
+            ctx.beginPath();
+            ctx.moveTo(x, y + size / 4);
+            ctx.bezierCurveTo(x, y, x - size / 2, y - size / 4, x - size / 2, y + size / 4);
+            ctx.bezierCurveTo(x - size / 2, y + size / 2, x, y + size / 2, x, y + size);
+            ctx.bezierCurveTo(x, y + size / 2, x + size / 2, y + size / 2, x + size / 2, y + size / 4);
+            ctx.bezierCurveTo(x + size / 2, y - size / 4, x, y, x, y + size / 4);
+            ctx.fill();
+        }
+        
+        // Topper
+        if (this.topper) {
+            if(this.topper === 'sprinkles') ctx.fillStyle = '#ff00ff';
+            if(this.topper === 'cherry') ctx.fillStyle = '#ff0000';
+            if(this.topper === 'flower') ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        ctx.restore();
+    }
+    
+    matchesOrder(order) {
+        return this.shape === order.shape &&
+               this.frosting === order.frosting &&
+               this.topper === order.topper;
+    }
+}
+
+
+// =================================================================================
+// CUSTOMER
+// =================================================================================
+class Customer {
+    constructor(game, targetX, targetY) {
+        this.game = game;
+        this.x = -50;
+        this.y = targetY;
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.width = 40;
+        this.height = 60;
+        this.image = this.game.assetLoader.get('customer');
+        
+        this.patience = 100;
+        this.maxPatience = 100;
+        this.state = 'entering'; // entering, ordering, waiting_for_cake, leaving
+        
+        this.order = this.generateOrder();
+        this.orderTimer = 3000; // time to decide on order
+    }
+    
+    generateOrder() {
+        const shape = GAME_CONFIG.CAKE_SHAPES[Math.floor(Math.random() * GAME_CONFIG.CAKE_SHAPES.length)];
+        const frosting = Object.keys(GAME_CONFIG.FROSTING_COLORS)[Math.floor(Math.random() * Object.keys(GAME_CONFIG.FROSTING_COLORS).length)];
+        // Toppers are optional for early levels maybe
+        const topper = Math.random() > 0.3 ? GAME_CONFIG.TOPPERS[Math.floor(Math.random() * GAME_CONFIG.TOPPERS.length)] : null;
+        
+        return { shape, frosting, topper, price: 100 + (topper ? 25 : 0) };
+    }
+    
+    setTarget(x, y) {
+        this.targetX = x;
+        this.targetY = y;
+    }
+
+    update(deltaTime) {
+        // Movement
+        if (this.x < this.targetX) {
+            this.x += GAME_CONFIG.CUSTOMER_SPEED * deltaTime;
+            if (this.x > this.targetX) this.x = this.targetX;
+        } else if (this.x > this.targetX) {
+            this.x -= GAME_CONFIG.CUSTOMER_SPEED * deltaTime;
+            if (this.x < this.targetX) this.x = this.targetX;
+        }
+
+        if (this.y < this.targetY) {
+            this.y += GAME_CONFIG.CUSTOMER_SPEED * deltaTime;
+            if (this.y > this.targetY) this.y = this.targetY;
+        } else if (this.y > this.targetY) {
+            this.y -= GAME_CONFIG.CUSTOMER_SPEED * deltaTime;
+            if (this.y < this.targetY) this.y = this.targetY;
+        }
+
+        // State machine
+        switch (this.state) {
+            case 'entering':
+                if (Math.abs(this.x - this.targetX) < 2 && Math.abs(this.y - this.targetY) < 2) {
+                    this.state = 'ordering';
+                }
+                break;
+            case 'ordering':
+                this.orderTimer -= deltaTime;
+                if (this.orderTimer <= 0) {
+                    this.state = 'waiting_for_cake';
+                }
+                break;
+            case 'waiting_for_cake':
+                this.patience -= (this.game.patienceDecayRate / 1000) * deltaTime;
+                if (this.patience <= 0) {
+                    this.leaveAngry();
+                }
+                break;
+            case 'leaving':
+                this.targetX = -100; // Move off-screen
+                 if (this.x <= -50) {
+                     // Mark for deletion by returning false in filter
+                 }
+                break;
+        }
+    }
+    
+    draw(ctx) {
+        // Draw customer sprite
+        ctx.fillStyle = 'blue';
+        ctx.fillRect(this.x - this.width / 2, this.y - this.height, this.width, this.height);
+        
+        // Draw patience hearts
+        const hearts = Math.ceil(this.patience / (this.maxPatience / 4));
+        for (let i = 0; i < hearts; i++) {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(this.x - this.width / 2 + i * 12, this.y - this.height - 15, 10, 10);
+        }
+        
+        // Draw order bubble
+        if (this.state === 'waiting_for_cake' || this.state === 'ordering') {
+            ctx.fillStyle = 'white';
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.roundRect(this.x + this.width / 2, this.y - this.height - 40, 120, 50, 10);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw dummy cake in bubble
+            const dummyCake = new Cake(this.order.shape);
+            dummyCake.frosting = this.order.frosting;
+            dummyCake.topper = this.order.topper;
+            dummyCake.draw(ctx, this.x + this.width / 2 + 25, this.y - this.height - 15, 25);
+        }
+    }
+    
+    isClicked(x, y) {
+        return x > this.x - this.width / 2 && x < this.x + this.width / 2 &&
+               y > this.y - this.height && y < this.y;
+    }
+    
+    interact(jill) {
+        if (this.state === 'waiting_for_cake' && jill.heldItem && jill.heldItem instanceof Cake) {
+            if (jill.heldItem.matchesOrder(this.order)) {
+                jill.placeItem();
+                this.game.addMoney(this.order.price);
+                this.state = 'leaving';
+            } else {
+                // Wrong order, maybe penalize player?
+            }
+        }
+    }
+    
+    leaveAngry() {
+        this.state = 'leaving';
+        this.game.audioManager.play('customerAngry');
+    }
+}
+
+// =================================================================================
+// STATIONS - Base class and subclasses
+// =================================================================================
+class Station {
+    constructor(game, x, y, width, height) {
+        this.game = game;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
+    isClicked(x, y) {
+        return x > this.x && x < this.x + this.width &&
+               y > this.y && y < this.y + this.height;
+    }
+    
+    update(deltaTime) {
+        // Most stations don't need an update loop, but some (like ovens) do.
+    }
+
+    draw(ctx) {
+        // Generic draw method
+        ctx.strokeStyle = '#333';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(this.x, this.y, this.width, this.height);
+    }
+    
+    interact(jill) {
+        console.log("Interacted with a generic station");
+    }
+}
+
+class CakePanStation extends Station {
+    constructor(game, x, y, width, height, shape) {
+        super(game, x, y, width, height);
+        this.shape = shape;
+    }
+    
+    draw(ctx) {
+        super.draw(ctx);
+        ctx.fillStyle = '#aaa';
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        
+        const dummyCake = new Cake(this.shape);
+        dummyCake.draw(ctx, this.x + this.width/2, this.y + this.height/2);
+    }
+    
+    interact(jill) {
+        if (!jill.heldItem) {
+            jill.pickupItem(new Cake(this.shape));
+        }
+    }
+}
+
+class OvenStation extends Station {
+    constructor(game, x, y, width, height) {
+        super(game, x, y, width, height);
+        this.state = 'empty'; // empty, baking, ready, burnt
+        this.cake = null;
+        this.baseBakeTime = 10000; // 10 seconds
+        this.readyTime = 5000; // 5 seconds before it burns
+        this.timer = 0;
+    }
+    
+    update(deltaTime) {
+        if (this.state === 'baking') {
+            this.timer -= deltaTime;
+            if (this.timer <= 0) {
+                this.state = 'ready';
+                this.timer = this.readyTime;
+                this.game.audioManager.play('ovenDing');
+            }
+        } else if (this.state === 'ready') {
+            this.timer -= deltaTime;
+            if (this.timer <= 0) {
+                this.state = 'burnt';
+                this.cake.bakeStatus = 'burnt';
+            }
+        }
+    }
+    
+    draw(ctx) {
+        super.draw(ctx);
+        if (this.state === 'baking') ctx.fillStyle = 'orange';
+        else if (this.state === 'ready') ctx.fillStyle = 'lightgreen';
+        else if (this.state === 'burnt') ctx.fillStyle = 'darkred';
+        else ctx.fillStyle = '#ccc';
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        
+        if (this.cake) {
+            this.cake.draw(ctx, this.x + this.width/2, this.y + this.height/2);
+        }
+        
+        // Draw timer bar
+        if (this.state === 'baking' || this.state === 'ready') {
+            const maxTime = this.state === 'baking' ? this.baseBakeTime : this.readyTime;
+            const progress = this.timer / maxTime;
+            ctx.fillStyle = this.state === 'baking' ? 'lightblue' : 'red';
+            ctx.fillRect(this.x, this.y + this.height - 5, this.width * progress, 5);
+        }
+    }
+    
+    interact(jill) {
+        if (this.state === 'empty' && jill.heldItem?.bakeStatus === 'raw') {
+            this.cake = jill.placeItem();
+            this.state = 'baking';
+            this.timer = this.baseBakeTime;
+        } else if ((this.state === 'ready' || this.state === 'burnt') && !jill.heldItem) {
+            if (this.state === 'ready') this.cake.bakeStatus = 'baked';
+            jill.pickupItem(this.cake);
+            this.cake = null;
+            this.state = 'empty';
+        }
+    }
+}
+
+class ProcessingStation extends Station {
+    constructor(game, x, y, width, height, processType, processValue) {
+        super(game, x, y, width, height);
+        this.processType = processType; // 'frosting' or 'topper'
+        this.processValue = processValue; // e.g., 'pink' or 'sprinkles'
+        
+        this.state = 'empty'; // empty, processing, ready
+        this.cake = null;
+        this.processTime = 3000; // 3 seconds
+        this.timer = 0;
+    }
+    
+    update(deltaTime) {
+        if (this.state === 'processing') {
+            this.timer -= deltaTime;
+            if (this.timer <= 0) {
+                this.state = 'ready';
+                if (this.processType === 'frosting') this.cake.frosting = this.processValue;
+                if (this.processType === 'topper') this.cake.topper = this.processValue;
+            }
+        }
+    }
+    
+    draw(ctx) {
+        super.draw(ctx);
+        if(this.processType === 'frosting') ctx.fillStyle = GAME_CONFIG.FROSTING_COLORS[this.processValue];
+        else ctx.fillStyle = '#FFD700'; // Gold for toppers
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        
+        if (this.cake) {
+             this.cake.draw(ctx, this.x + this.width/2, this.y + this.height/2);
+        }
+        
+        if (this.state === 'processing') {
+            const progress = this.timer / this.processTime;
+            ctx.fillStyle = 'lightblue';
+            ctx.fillRect(this.x, this.y + this.height - 5, this.width * progress, 5);
+        }
+    }
+    
+    interact(jill) {
+        if (this.state === 'empty' && jill.heldItem?.bakeStatus === 'baked') {
+             // Can only frost baked cakes
+            if (this.processType === 'frosting' && !jill.heldItem.frosting) {
+                 this.cake = jill.placeItem();
+                 this.state = 'processing';
+                 this.timer = this.processTime;
+            }
+            // Can only add topper to frosted cakes
+            if (this.processType === 'topper' && jill.heldItem.frosting && !jill.heldItem.topper) {
+                 this.cake = jill.placeItem();
+                 this.state = 'processing';
+                 this.timer = this.processTime;
+            }
+        } else if (this.state === 'ready' && !jill.heldItem) {
+            jill.pickupItem(this.cake);
+            this.cake = null;
+            this.state = 'empty';
+        }
+    }
+}
+
+class FrostingStation extends ProcessingStation {
+    constructor(game, x, y, width, height, color) {
+        super(game, x, y, width, height, 'frosting', color);
+    }
+}
+
+class TopperStation extends ProcessingStation {
+    constructor(game, x, y, width, height, topper) {
+        super(game, x, y, width, height, 'topper', topper);
+    }
+}
+
+class TrashStation extends Station {
+    draw(ctx) {
+        super.draw(ctx);
+        ctx.fillStyle = '#333';
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.fillStyle = 'white';
+        ctx.font = "20px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("TRASH", this.x + this.width / 2, this.y + this.height / 2);
+    }
+    
+    interact(jill) {
+        if (jill.heldItem) {
+            jill.placeItem(); // Discard item
+        }
+    }
+}
+
+class CounterStation extends Station {
+    draw(ctx) {
+        ctx.fillStyle = '#8B4513'; // SaddleBrown
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+    
+    interact(jill) {
+        // The counter itself is not interactable, it's just a barrier/visual
+        // Jill will target customers in front of it.
+    }
+}
+</script>
+
+</body>
+</html>

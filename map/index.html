@@ -49,9 +49,10 @@
         <label>Name <input id="poiName" type="text" size="18" placeholder="optional"></label>
       </div>
       <div class="row"><label style="flex:1">Description <input id="poiDesc" type="text" style="width:100%" placeholder="optional"></label></div>
-      <div class="row" style="opacity:.8">Click on the map to place. Press Esc or Cancel to exit.</div>
+      <div class="row" style="opacity:.8">Location set. Enter details and click Create.</div>
       <div class="row">
         <button id="poiCancel">Cancel</button>
+        <button id="poiCreate" class="primary">Create POI</button>
       </div>
     </div>
     <!-- District modal -->
@@ -68,6 +69,28 @@
         <button id="dmApply" class="primary">Apply</button>
       </div>
     </div>
+    <div id="legend">
+      <div class="hdr">Legend</div>
+      <ul>
+        <li><b>1</b> Hokage Palace</li>
+        <li><b>2</b> Academy & Training Ground</li>
+        <li><b>3</b> ROOT</li>
+        <li><b>4</b> Uchiha Lake</li>
+        <li><b>5</b> Uchiha Training Ground</li>
+        <li><b>6</b> Museum | Library</li>
+        <li><b>7</b> Hospital / Greenhouse</li>
+        <li><b>8</b> Hotel</li>
+        <li><b>9</b> ANBU Headquarters</li>
+        <li><b>10</b> Research Facility</li>
+        <li><b>11</b> Arena</li>
+        <li><b>12</b> ANBU Outpost</li>
+        <li><b>A.</b> Plaza of Fire</li>
+        <li><b>B.</b> Marketplace II</li>
+        <li><b>C.</b> Parks</li>
+        <li><b>D.</b> Cemetery</li>
+        <li><b>E.</b> Gates</li>
+      </ul>
+    </div>
   </div>
 
   <aside id="side">
@@ -81,7 +104,6 @@
         <label><input type="radio" name="mode" value="draw-road"> Draw Road</label>
         <label><input type="radio" name="mode" value="draw-wall"> Draw Wall</label>
         <label><input type="radio" name="mode" value="draw-river"> Draw River</label>
-        <label><input type="radio" name="mode" value="draw-grass"> Draw Grass</label>
         <label><input type="radio" name="mode" value="draw-forest"> Draw Forest</label>
         <label><input type="radio" name="mode" value="draw-mountain"> Draw Mountain</label>
       </div>
@@ -93,17 +115,33 @@
       <div class="row" style="opacity:.8">Tips: drag vertices. <b>Alt+drag</b> to move whole road/district. <b>Esc</b> cancel, <b>Enter</b> or double-click finish.</div>
     </fieldset>
 
-    <fieldset>
-      <legend>Layers</legend>
-      <div class="row">
-        <label><input type="checkbox" id="toggleDistricts" checked> Districts</label>
-        <label><input type="checkbox" id="toggleRoads" checked> Roads</label>
-        <label><input type="checkbox" id="toggleWalls" checked> Wall</label>
-        <label><input type="checkbox" id="togglePOI" checked> POIs</label>
-        <label><input type="checkbox" id="toggleRivers" checked> Rivers</label>
-        <label><input type="checkbox" id="toggleGrass" checked> Grass</label>
-        <label><input type="checkbox" id="toggleForest" checked> Forest</label>
-        <label><input type="checkbox" id="toggleMountains" checked> Mountains</label>
+    <fieldset id="brushPanel">
+      <legend>Brush Settings</legend>
+      <div class="row" data-for="draw-road">
+        <label>Type
+          <select id="brRoadType">
+            <option value="street">street</option>
+            <option value="avenue">avenue</option>
+            <option value="canal">canal</option>
+          </select>
+        </label>
+        <label>Width <input id="brRoadW" type="number" min="1" max="24" step="1" value="4">px</label>
+      </div>
+      <div class="row" data-for="draw-river" hidden>
+        <label>Width <input id="brRiverW" type="number" min="3" max="32" step="1" value="7">px</label>
+      </div>
+      <div class="row" data-for="draw-forest" hidden>
+        <label>Width <input id="brForestW" type="number" min="10" max="120" step="5" value="40">px</label>
+      </div>
+      <div class="row" data-for="draw-mountain" hidden>
+        <label>Shape
+          <select id="brMountainShape">
+            <option value="line">hand‑drawn line</option>
+            <option value="triangle">triangle</option>
+          </select>
+        </label>
+        <label id="brMountainWWrap">Width <input id="brMountainW" type="number" min="4" max="48" step="1" value="10">px</label>
+        <label id="brMountainTriWrap" hidden>Size <input id="brMountainTri" type="number" min="2" max="40" step="1" value="8">%</label>
       </div>
     </fieldset>
 
@@ -125,7 +163,7 @@
               <option value="canal">canal</option>
             </select>
           </label>
-          <label>Width <input id="sRoadW" type="number" min="1" max="24" step="1" value="3">px</label>
+          <label>Width <input id="sRoadW" type="number" min="1" max="24" step="1" value="4">px</label>
         </div>
         <div class="row">
           <button id="apply" class="primary">Apply</button>

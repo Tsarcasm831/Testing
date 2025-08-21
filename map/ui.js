@@ -1,4 +1,4 @@
-import { svg, $ } from './constants.js';
+import { svg, $, W, H } from './constants.js';
 import { MODEL, state } from './model.js';
 import { download, autosave } from './utils.js';
 import { drawAll } from './render.js';
@@ -7,26 +7,21 @@ import { canvasDown, finishDrawing, cancelDrawing, select } from './interactions
 
 function wireUI(){
   document.querySelectorAll('input[name="mode"]').forEach(r=>r.addEventListener('change',e=>{
-    state.mode=e.target.value; state.drawing=null; document.body.dataset.mode=state.mode; drawAll();
+    state.mode=e.target.value; state.drawing=null; document.body.dataset.mode=state.mode; drawAll(); updateBrushPanel();
   }));
   document.getElementById('edit').addEventListener('change',e=>{ state.edit=e.target.checked; drawAll(); });
   document.getElementById('snap').addEventListener('change',e=>{ state.snap=e.target.checked; });
-  document.getElementById('toggleDistricts').addEventListener('change',drawAll);
-  document.getElementById('toggleRoads').addEventListener('change',drawAll);
-  document.getElementById('toggleWalls').addEventListener('change',drawAll);
-  document.getElementById('togglePOI').addEventListener('change',drawAll);
-  document.getElementById('toggleRivers').addEventListener('change',drawAll);
-  document.getElementById('toggleGrass').addEventListener('change',drawAll);
-  document.getElementById('toggleForest').addEventListener('change',drawAll);
-  document.getElementById('toggleMountains').addEventListener('change',drawAll);
+  const onToggle=id=>{ const el=document.getElementById(id); if(el) el.addEventListener('change',drawAll); };
+  ['toggleDistricts','toggleRoads','toggleWalls','togglePOI','toggleRivers','toggleGrass','toggleForest','toggleMountains'].forEach(onToggle);
 
   // POI modal wiring
   document.getElementById('addPoiBtn').addEventListener('click', ()=>{
     state.addingPOI=true;
-    document.getElementById('poiModal').hidden=false;
+    // do not open modal yet; wait for map click to choose location
   });
   document.getElementById('poiCancel').addEventListener('click', ()=>{
     state.addingPOI=false;
+    state._pendingPOI=null;
     document.getElementById('poiModal').hidden=true;
   });
 
@@ -61,10 +56,14 @@ function wireUI(){
 
   svg.addEventListener('dblclick',finishDrawing);
   svg.addEventListener('mousedown',canvasDown);
+  svg.addEventListener('wheel', onWheelZoom, { passive:false }); // scroll to zoom
   window.addEventListener('keydown',e=>{
     const t=e.target, tag=(t?.tagName||'').toUpperCase();
     if(['INPUT','TEXTAREA','SELECT'].includes(tag) || t?.isContentEditable) return;
-    if(e.key==='Escape') cancelDrawing();
+    if(e.key==='Escape'){ 
+      cancelDrawing(); 
+      if(state.addingPOI){ state.addingPOI=false; state._pendingPOI=null; document.getElementById('poiModal').hidden=true; }
+    }
     if(e.key==='Enter' && state.drawing){ e.preventDefault(); finishDrawing(); }
     if(e.key.toLowerCase()==='e'){ document.getElementById('edit').click(); }
     if(e.key.toLowerCase()==='h'){ document.querySelector('#wrap').style.gridTemplateColumns=
@@ -140,22 +139,81 @@ function wireUI(){
     if(!confirm('Clear all districts & roads?')) return;
     MODEL.roads=[]; MODEL.districts={}; MODEL.walls=[]; drawAll(); dumpJSON(); autosave(MODEL);
   });
+
+  // Create POI from modal after map placement
+  document.getElementById('poiCreate').addEventListener('click', ()=>{
+    const pos = state._pendingPOI; if(!state.addingPOI || !pos) return;
+    const type = document.getElementById('poiType').value;
+    const inId = (document.getElementById('poiId').value||'').trim();
+    const name = (document.getElementById('poiName').value||'').trim();
+    const desc = (document.getElementById('poiDesc').value||'').trim();
+    const idx = (MODEL.poi?.length||0)+1;
+    const autoId = (type==='gate' ? `gate-${idx}` : type==='park' ? `C${idx}` : type==='letter' ? String.fromCharCode(64 + ((idx%26)||26)) : `poi-${idx}`);
+    if(!Array.isArray(MODEL.poi)) MODEL.poi=[];
+    MODEL.poi.push({id: inId || autoId, name, type, x: pos.x, y: pos.y, desc});
+    state.addingPOI=false; state._pendingPOI=null; document.getElementById('poiModal').hidden=true;
+    select('poi', MODEL.poi.length-1); dumpJSON(); autosave(MODEL);
+  });
+
+  // Brush controls
+  const $r=t=>document.getElementById(t);
+  $r('brRoadType').addEventListener('change',e=>state.brush.road.type=e.target.value);
+  $r('brRoadW').addEventListener('change',e=>state.brush.road.width=parseInt(e.target.value,10)||3);
+  $r('brRiverW').addEventListener('change',e=>state.brush.river.width=parseInt(e.target.value,10)||7);
+  $r('brForestW').addEventListener('change',e=>state.brush.forest.width=parseInt(e.target.value,10)||40);
+  $r('brMountainShape').addEventListener('change',e=>{
+    state.brush.mountain.shape=e.target.value;
+    $r('brMountainWWrap').hidden = e.target.value==='triangle';
+    $r('brMountainTriWrap').hidden = e.target.value!=='triangle';
+  });
+  $r('brMountainW').addEventListener('change',e=>state.brush.mountain.width=parseInt(e.target.value,10)||10);
+  $r('brMountainTri').addEventListener('change',e=>state.brush.mountain.triSize=parseInt(e.target.value,10)||8);
 }
 
 function migrateDefaults(){
-  try{
-    // supersede previous migration to avoid renaming/injecting roads
-    if(localStorage.getItem('konoha-migrated-v4')) return;
-    if(!Array.isArray(MODEL.walls) || MODEL.walls.length===0){
-      MODEL.walls=[{id:'wall-1',name:'',desc:'',cx:52.85,cy:52,r:35.4649601719782,width:8}];
-    }
-    localStorage.setItem('konoha-migrated-v4','1');
-  }catch{}
+  /* force all districts to sequential residential ids/names each load */
+  const nd={}, list=Object.values(MODEL.districts); let n=1;
+  for(const d of list){ const id=`residential${n++}`; nd[id]={...d, id, name:id, desc:''}; }
+  MODEL.districts = nd;
+}
+
+function updateBrushPanel(){
+  document.querySelectorAll('#brushPanel [data-for]').forEach(row=>{
+    row.hidden = row.getAttribute('data-for') !== state.mode || row.getAttribute('data-for')==='draw-forest';
+  });
+  const shp=document.getElementById('brMountainShape').value;
+  document.getElementById('brMountainWWrap').hidden = shp==='triangle';
+  document.getElementById('brMountainTriWrap').hidden = shp!=='triangle';
+}
+
+// Zoom helpers
+function parseViewBox() {
+  const vb = (svg.getAttribute('viewBox') || '').trim().split(/\s+/).map(Number);
+  return (vb.length===4 && vb.every(n=>!Number.isNaN(n))) ? { x:vb[0], y:vb[1], w:vb[2], h:vb[3] } : { x:0, y:0, w:W, h:H };
+}
+function setViewBox(vb){ svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`); }
+function onWheelZoom(e){
+  e.preventDefault();
+  const vb = parseViewBox();
+  const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+  const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+  const minW = W/6, minH = H/6, maxW = W, maxH = H;
+  const zoomFactor = e.deltaY < 0 ? 0.9 : 1.1; // in=0.9, out=1.1
+  const newW = Math.min(maxW, Math.max(minW, vb.w * zoomFactor));
+  const newH = Math.min(maxH, Math.max(minH, vb.h * zoomFactor));
+  const tx = (p.x - vb.x) / vb.w;
+  const ty = (p.y - vb.y) / vb.h;
+  let nx = p.x - tx * newW;
+  let ny = p.y - ty * newH;
+  nx = Math.max(0, Math.min(W - newW, nx));
+  ny = Math.max(0, Math.min(H - newH, ny));
+  setViewBox({ x:nx, y:ny, w:newW, h:newH });
 }
 
 export function initUI(){
   wireUI();
-  migrateDefaults();
   document.body.dataset.mode=state.mode;
-  drawAll(); dumpJSON();
+  // Ensure starting at max zoom-out
+  setViewBox({ x:0, y:0, w:W, h:H });
+  drawAll(); dumpJSON(); updateBrushPanel();
 }

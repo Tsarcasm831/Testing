@@ -6,6 +6,4 @@ import { initUI } from './ui.js';
 
 export function init(){
   initUI();
-  // keep default rivers intact; remove prior unification/deletion logic
-  /* removed river migration and deletion to honor provided defaults */
 }

@@ -1,5 +1,7 @@
+import { FOREST_DEFAULTS } from './forest-defaults.js';
+
 export const DEFAULT_TERRAIN = {
   "grass": [],
-  "forest": [],
+  "forest": FOREST_DEFAULTS,
   "mountains": []
 };

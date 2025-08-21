@@ -56,21 +56,18 @@ export function startDragPOI(e,i){
 
 export function canvasDown(e){
   const [x,y]=screenToPct(e.clientX,e.clientY);
-  // Handle placing a new POI via modal
+  // Handle placing a new POI: first click chooses location, then modal opens for details
   if(state.addingPOI){
-    const type = document.getElementById('poiType').value;
-    const inId = (document.getElementById('poiId').value||'').trim();
-    const name = (document.getElementById('poiName').value||'').trim();
-    const desc = (document.getElementById('poiDesc').value||'').trim();
-    const idx = (MODEL.poi?.length||0)+1;
-    let id = inId || (type==='gate' ? `gate-${idx}` : type==='park' ? `C${idx}` : type==='letter' ? String.fromCharCode(64 + ((idx%26)||26)) : `poi-${idx}`);
-    if(!Array.isArray(MODEL.poi)) MODEL.poi=[];
-    MODEL.poi.push({id,name,type,x,y,desc});
-    state.addingPOI=false; document.getElementById('poiModal').hidden=true;
-    select('poi', MODEL.poi.length-1); dumpJSON(); autosave(MODEL);
+    state._pendingPOI = {x,y};
+    const modal = document.getElementById('poiModal');
+    if(modal) modal.hidden=false;
     return;
   }
-  if(state.mode==='select'){ if(e.target===svg){ state.selected=null; drawAll(); } return; }
+  if(state.mode==='select'){
+    const onDistrict = e.target && typeof e.target.closest==='function' ? e.target.closest('.district') : null;
+    if(!onDistrict){ state.selected=null; drawAll(); }
+    return;
+  }
   if(state.mode==='draw-district'){
     if(!state.drawing){ state.drawing={kind:'district',points:[[x,y]]}; drawGhost(); }
     else{ state.drawing.points.push([x,y]); drawGhost(); }
@@ -95,15 +92,27 @@ export function canvasDown(e){
       window.addEventListener('mousemove',move);
       window.addEventListener('mouseup',up,{once:true});
     }
-  } else if(state.mode==='draw-grass' || state.mode==='draw-forest' || state.mode==='draw-mountain'){
+  } else if(state.mode==='draw-forest'){
+    if(!state.drawing){ state.drawing={kind:'forest',points:[[x,y]]}; drawGhost(); }
+    else{ state.drawing.points.push([x,y]); drawGhost(); }
+  } else if(state.mode==='draw-mountain'){
+    if(state.brush.mountain.shape==='triangle'){
+      state.drawing={kind:'mountain',center:[x,y],r:0};
+      const move=(ev)=>{ const [mx,my]=screenToPct(ev.clientX,ev.clientY);
+        const dx=mx-x, dy=my-y; state.drawing.r=Math.hypot(dx,dy)*(state.brush.mountain.triSize/10); drawGhost(true); };
+      state._mountMove=move; window.addEventListener('mousemove',move);
+      const up=()=>{ window.removeEventListener('mousemove',move); finishDrawing(); };
+      window.addEventListener('mouseup',up,{once:true});
+      return;
+    }
     if(!state.drawing){
-      state.drawing={kind: state.mode.replace('draw-',''), points:[[x,y]]};
-      drawGhost(true);
+      state.drawing={kind:'mountain', points:[[x,y]]};
+      drawGhost();
       const move=(ev)=>{
         const [mx,my]=screenToPct(ev.clientX,ev.clientY);
         const last=state.drawing.points[state.drawing.points.length-1];
         if(!last || Math.hypot(mx-last[0], my-last[1])>0.3){
-          state.drawing.points.push([mx,my]); drawGhost(true);
+          state.drawing.points.push([mx,my]); drawGhost();
         }
       };
       const up=()=>{ window.removeEventListener('mousemove',move); finishDrawing(); };
@@ -127,9 +136,17 @@ export function drawGhost(isRoad=false,isWall=false){
   const kind = state.drawing?.kind;
   const el = isWall || kind==='wall'
     ? mkEl('circle',{class:'wall ghost',cx:state.drawing.center[0]*W/100,cy:state.drawing.center[1]*H/100,r:state.drawing.r*W/100,strokeWidth:8})
-    : (isRoad || kind==='road' || kind==='river' || kind==='grass' || kind==='forest' || kind==='mountain')
-    ? mkEl('polyline',{class:(kind==='river'?'river':(kind==='grass'?'grass':(kind==='forest'?'forest':'mountain')))+' ghost',points:pts,strokeWidth:(kind==='grass'?28:(kind==='forest'?10:(kind==='mountain'?10:3)))})
-    : mkEl('polygon',{class:'district ghost',points:pts});
+    : (kind==='mountain' && state.drawing?.center && state.brush.mountain.shape==='triangle')
+    ? (()=>{ const [cx,cy]=state.drawing.center, r=state.drawing.r;
+        const tri=trianglePts(cx,cy,r).map(([px,py])=>[px*W/100,py*H/100].join(',')).join(' ');
+        return mkEl('polygon',{class:'mountain-tri ghost',points:tri});
+      })()
+    : (isRoad || kind==='road' || kind==='river' || kind==='mountain')
+    ? mkEl('polyline',{class:(kind==='river'?'river':'mountain')+' ghost',
+        points:pts,strokeWidth:(kind==='river'? (state.brush.river.width||7)
+                               : kind==='mountain'? (state.brush.mountain.width||10)
+                               : (state.brush.road.width||3))})
+    : mkEl('polygon',{class: (kind==='forest' ? 'forest-area ghost' : 'district ghost'), points:pts});
   hLayer.append(el);
 }
 
@@ -138,7 +155,6 @@ export function finishDrawing(){
   const isRoad = state.drawing.kind==='road';
   const isRiver = state.drawing.kind==='river';
   const isWall = state.drawing.kind==='wall';
-  const isGrass = state.drawing.kind==='grass';
   const isForest = state.drawing.kind==='forest';
   const isMountain = state.drawing.kind==='mountain';
   if(isWall){
@@ -149,28 +165,32 @@ export function finishDrawing(){
     MODEL.walls.push({id:'wall-'+(MODEL.walls.length+1),name:'',desc:'',cx,cy,r,width:8});
     state.drawing=null; select('wall',MODEL.walls.length-1); dumpJSON(); autosave(MODEL); return;
   }
-  if(state.drawing.points.length < (isRoad?2:(isRiver?2: (isGrass||isForest||isMountain?2:3)))){ cancelDrawing(); return;}
-  if(!isRoad && !isRiver && !isWall && !isGrass && !isForest && !isMountain){
-    let idx=1; while(MODEL.districts['district-'+idx]) idx++;
-    const id='district-'+idx;
-    MODEL.districts[id]={id,name:'',desc:'',points:state.drawing.points};
+  if(state.drawing.points.length < ((isRoad||isRiver)?2 : (isForest?3 : (isMountain?2 : 3)))){ cancelDrawing(); return;}
+  if(!isRoad && !isRiver && !isWall && !isForest && !isMountain){
+    let idx=1; while(MODEL.districts['residential'+idx]) idx++;
+    const id='residential'+idx;
+    MODEL.districts[id]={id,name:id,desc:'',points:state.drawing.points};
     select('district',id);
   }else if(isRoad){
     const id='road-'+(MODEL.roads.length+1);
-    MODEL.roads.push({id,name:'',type:'street',width:3,points:state.drawing.points});
+    MODEL.roads.push({id,name:'',type:state.brush.road.type||'street',width:state.brush.road.width||4,points:state.drawing.points});
     select('road',MODEL.roads.length-1);
   }else if(isRiver){
     if(!Array.isArray(MODEL.rivers)) MODEL.rivers=[];
-    MODEL.rivers.push({id:'river-'+(MODEL.rivers.length+1),points:state.drawing.points,width:7});
-  }else if(isGrass){
-    if(!Array.isArray(MODEL.grass)) MODEL.grass=[];
-    MODEL.grass.push({id:'grass-'+(MODEL.grass.length+1),points:state.drawing.points,width:28});
+    MODEL.rivers.push({id:'river-'+(MODEL.rivers.length+1),points:state.drawing.points,width:state.brush.river.width||7});
   }else if(isForest){
     if(!Array.isArray(MODEL.forest)) MODEL.forest=[];
-    MODEL.forest.push({id:'forest-'+(MODEL.forest.length+1),points:state.drawing.points,width:10});
+    MODEL.forest.push({id:'forest-'+(MODEL.forest.length+1),points:state.drawing.points});
   }else if(isMountain){
+    if(state._mountMove){ window.removeEventListener('mousemove',state._mountMove); state._mountMove=null; }
     if(!Array.isArray(MODEL.mountains)) MODEL.mountains=[];
-    MODEL.mountains.push({id:'mountain-'+(MODEL.mountains.length+1),points:state.drawing.points,width:10});
+    if(state.drawing.center && (state.brush.mountain.shape==='triangle')){ 
+      const [cx,cy]=state.drawing.center, r=state.drawing.r||6;
+      const pts=trianglePts(cx,cy,r);
+      MODEL.mountains.push({id:'mountain-'+(MODEL.mountains.length+1),points:pts,shape:'triangle'});
+    } else {
+      MODEL.mountains.push({id:'mountain-'+(MODEL.mountains.length+1),points:state.drawing.points,width:state.brush.mountain.width||10});
+    }
   }
   state.drawing=null; drawAll(); dumpJSON(); autosave(MODEL);
 }
@@ -183,3 +203,13 @@ export function cancelDrawing(){
 /* lightweight helpers to avoid importing heavy modules here */
 function mkEl(tag,attrs){const ns='http://www.w3.org/2000/svg';const el=document.createElementNS(ns,tag);for(const k in attrs)el.setAttribute(k,attrs[k]);return el;}
 function clearLayer(el){ while(el && el.firstChild) el.removeChild(el.firstChild); }
+
+/* helper to compute an upright triangle in pct units */
+function trianglePts(cx,cy,r){
+  const h = r*1.732; // height for equilateral from side ≈ r*2 -> adjust scale for prominence
+  return [
+    [cx, cy - h/2],           // top
+    [cx - r, cy + h/2],       // bottom-left
+    [cx + r, cy + h/2]        // bottom-right
+  ];
+}

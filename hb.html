@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Konoha Administration — Three.js</title>
+<style>
+  html,body{height:100%;margin:0;background:#e7dfd2;overflow:hidden}
+  canvas{display:block}
+  #ui{
+    position:fixed;left:12px;top:12px;padding:10px 12px;color:#111;
+    background:rgba(255,255,255,.85);border:1px solid #c9c1b3;border-radius:10px;
+    font:12px system-ui, -apple-system, Segoe UI, Roboto;backdrop-filter: blur(6px); z-index: 5;
+  }
+  #ui b{font-size:12px}
+  #ui a{color:#0a58b1;text-decoration:none}
+</style>
+<!-- Import map so three/examples can import "three" as a bare specifier -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="ui">
+  <b>Konoha Admin (Three.js)</b><br/>
+  Drag = orbit • Wheel = zoom • Right-drag = pan
+</div>
+
+<script type="module">
+// Module imports
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+/* Renderer */
+const renderer = new THREE.WebGLRenderer({ antialias:true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+document.body.appendChild(renderer.domElement);
+
+/* Scene & Camera */
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xe7dfd2); // light sand
+const camera = new THREE.PerspectiveCamera(55, innerWidth/innerHeight, 0.1, 2000);
+camera.position.set(80, 48, 108);
+
+/* Controls */
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.target.set(0, 18, 0);
+
+/* Lights */
+const hemi = new THREE.HemisphereLight(0xffffff, 0xd9cbb0, 0.6);
+scene.add(hemi);
+
+const sun = new THREE.DirectionalLight(0xffffff, 1.25);
+sun.position.set(70, 120, 60);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -180;
+sun.shadow.camera.right = 180;
+sun.shadow.camera.top = 180;
+sun.shadow.camera.bottom = -180;
+scene.add(sun);
+
+/* Ground */
+{
+  const g = new THREE.CircleGeometry(400, 96);
+  const m = new THREE.MeshStandardMaterial({ color: 0xd9cfbe, roughness: 1.0, metalness: 0.0 });
+  const ground = new THREE.Mesh(g, m);
+  ground.rotation.x = -Math.PI/2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+}
+
+/* Common materials (flat anime-ish palette) */
+const RED_PLASTER = new THREE.MeshStandardMaterial({ color: 0xb54434, roughness: 0.9 });
+const OCHRE_WOOD  = new THREE.MeshStandardMaterial({ color: 0xcd8a39, roughness: 0.8 });
+const TAN_STUCCO  = new THREE.MeshStandardMaterial({ color: 0xf1e6cf, roughness: 0.95 });
+const DARK_TRIM   = new THREE.MeshStandardMaterial({ color: 0x6c4b2a, roughness: 0.6, metalness: 0.0 });
+const GREY_METAL  = new THREE.MeshStandardMaterial({ color: 0xa7a9ac, roughness: 0.5, metalness: 0.2 });
+const BLACK_SIGN  = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9 });
+
+/* Helpers */
+function ring(radius, tube, segments=96, material=OCHRE_WOOD) {
+  const geo = new THREE.TorusGeometry(radius, tube, 12, segments);
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.castShadow = mesh.receiveShadow = true;
+  return mesh;
+}
+function tubeFrom(points, radius=0.25, material=GREY_METAL, tubularSegments=64){
+  const curve = new THREE.CatmullRomCurve3(points);
+  const geo = new THREE.TubeGeometry(curve, tubularSegments, radius, 8, false);
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.castShadow = true;
+  return mesh;
+}
+function slab(w, h, d, material=TAN_STUCCO) {
+  const geo = new THREE.BoxGeometry(w, h, d);
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.castShadow = mesh.receiveShadow = true;
+  return mesh;
+}
+function cylinder(rTop, rBot, h, radial=64, material=RED_PLASTER) {
+  const geo = new THREE.CylinderGeometry(rTop, rBot, h, radial, 1, false);
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.castShadow = mesh.receiveShadow = true;
+  return mesh;
+}
+function disk(radius, material=TAN_STUCCO){
+  const geo = new THREE.CircleGeometry(radius, 64);
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.castShadow = mesh.receiveShadow = true;
+  return mesh;
+}
+
+/* Plaque with symbol (circle + stylized "fire" rune) */
+function makePlaque() {
+  const group = new THREE.Group();
+
+  const back = slab(14, 7, 0.7, TAN_STUCCO);
+  back.position.z = 0;
+  group.add(back);
+
+  const ringG = new THREE.RingGeometry(0, 5.1, 64, 1, 0, Math.PI*2);
+  const ringM = new THREE.MeshStandardMaterial({ color: 0xf4dac1, roughness: 0.9 });
+  const rim = new THREE.Mesh(ringG, ringM);
+  rim.position.z = 0.36;
+  group.add(rim);
+
+  const face = disk(4.6, RED_PLASTER);
+  face.position.z = 0.37;
+  group.add(face);
+
+  // Simple stylized "fire" (curve + teardrop)
+  const fire = new THREE.Shape();
+  fire.moveTo(0, -2.2);
+  fire.bezierCurveTo(1.2, -1.2, 0.8, 0.6, 0.2, 1.0);
+  fire.bezierCurveTo(-0.6, 1.7, -0.2, 2.3, 0.0, 2.1);
+  fire.bezierCurveTo(0.9, 1.5, 1.5, 0.2, 1.2, -1.1);
+  fire.bezierCurveTo(0.9, -2.3, -0.3, -2.4, 0, -2.2);
+  const extrude = new THREE.ExtrudeGeometry(fire, { depth: 0.5, bevelEnabled:false, steps:1 });
+  const fireMesh = new THREE.Mesh(extrude, BLACK_SIGN);
+  fireMesh.rotation.x = Math.PI/2;
+  fireMesh.position.set(0, 0, 0.6);
+  group.add(fireMesh);
+
+  return group;
+}
+
+/* Rooftop arches on the center dome */
+function makeArches(radius=18, height=10, count=6) {
+  const arches = new THREE.Group();
+  for (let i=0;i<count;i++) {
+    const a = (i / count) * Math.PI * 2;
+    const x = Math.cos(a) * radius * 0.78;
+    const z = Math.sin(a) * radius * 0.78;
+
+    const p0 = new THREE.Vector3(x, 0.2, z);
+    const p1 = new THREE.Vector3(x * 0.6, height, z * 0.6);
+    const p2 = new THREE.Vector3(0, height*0.85, 0);
+    const arch = tubeFrom([p0, p1, p2], 0.6, TAN_STUCCO, 72);
+    arch.position.y = 44.5; // atop main dome
+    arches.add(arch);
+  }
+  return arches;
+}
+
+/* Round building with layered eaves, windows, pipes, door */
+function makeRoundBuilding({
+  baseRadius=26, baseHeight=22, innerTaper=0.88,
+  roofBands=2, hasTopDeck=true, addWindows=true, addPipes=true, addDoor=true
+} = {}) {
+  const g = new THREE.Group();
+
+  // Base stacked cylinders (slight taper)
+  const lower = cylinder(baseRadius, baseRadius, baseHeight*0.55);
+  lower.position.y = baseHeight*0.275;
+  g.add(lower);
+
+  const upper = cylinder(baseRadius*innerTaper, baseRadius*innerTaper, baseHeight*0.45);
+  upper.position.y = baseHeight*0.55 + baseHeight*0.225;
+  g.add(upper);
+
+  // Eave/balcony ring(s)
+  for (let i=0;i<roofBands;i++){
+    const r = baseRadius * (i===0 ? 1.08 : 0.96);
+    const t = i===0 ? 1.6 : 1.4;
+    const band = ring(r, t, 96, OCHRE_WOOD);
+    band.rotation.x = Math.PI/2;
+    band.position.y = i===0 ? baseHeight*0.55 : baseHeight*0.98;
+    g.add(band);
+  }
+
+  // Top deck
+  if (hasTopDeck) {
+    const cap = disk(baseRadius*innerTaper*0.95, TAN_STUCCO);
+    cap.rotation.x = -Math.PI/2;
+    cap.position.y = baseHeight + 1.2;
+    g.add(cap);
+    // safety rim
+    const rim = ring(baseRadius*innerTaper*0.95, 0.25, 64, GREY_METAL);
+    rim.rotation.x = Math.PI/2;
+    rim.position.y = baseHeight + 1.6;
+    g.add(rim);
+  }
+
+  // Door
+  if (addDoor) {
+    const d = slab(8, 10, 1.2, TAN_STUCCO);
+    d.position.set(0, 5, baseRadius*0.995);
+    g.add(d);
+
+    // small porch canopy
+    const porch = slab(14, 1, 6, OCHRE_WOOD);
+    porch.position.set(0, 11.5, baseRadius*0.96);
+    g.add(porch);
+  }
+
+  // Windows (curved)
+  if (addWindows) {
+    const winMat = new THREE.MeshStandardMaterial({ color: 0xbfd4e5, roughness: 0.1, metalness: 0.0, envMapIntensity: 0.4 });
+    const thickness = 0.6;
+    const w1 = slab(10, 3.2, thickness, winMat);
+    w1.rotation.y = Math.PI/18;
+    const ang = Math.PI/6;
+    w1.position.set(Math.cos(ang)*(baseRadius*0.98), baseHeight*0.70, Math.sin(ang)*(baseRadius*0.98));
+    g.add(w1);
+
+    const w2 = slab(6.5, 2.6, thickness, winMat);
+    w2.rotation.y = -Math.PI/12;
+    const ang2 = -Math.PI/4;
+    w2.position.set(Math.cos(ang2)*(baseRadius*0.98), baseHeight*0.60, Math.sin(ang2)*(baseRadius*0.98));
+    g.add(w2);
+  }
+
+  // Pipes/cables
+  if (addPipes) {
+    const rad = baseRadius*0.96;
+    const y = baseHeight*0.52;
+    const pts1 = [
+      new THREE.Vector3(rad, y+1, -8),
+      new THREE.Vector3(rad*0.9, y+2, -2),
+      new THREE.Vector3(rad*0.85, y, 4),
+      new THREE.Vector3(rad, y+1.5, 9),
+    ];
+    g.add(tubeFrom(pts1, 0.35, GREY_METAL));
+
+    const pts2 = [
+      new THREE.Vector3(-rad, y+1.2, 7),
+      new THREE.Vector3(-rad*0.92, y+0.2, 0),
+      new THREE.Vector3(-rad*0.86, y+0.6, -6),
+      new THREE.Vector3(-rad, y+1.2, -10),
+    ];
+    g.add(tubeFrom(pts2, 0.35, GREY_METAL));
+  }
+
+  return g;
+}
+
+/* Build cluster */
+const root = new THREE.Group();
+scene.add(root);
+
+// Main central building (largest)
+const center = makeRoundBuilding({
+  baseRadius: 28,
+  baseHeight: 46,
+  innerTaper: 0.90,
+  roofBands: 2,
+  hasTopDeck: true,
+  addWindows: true,
+  addPipes: true,
+  addDoor: true
+});
+root.add(center);
+
+// Rooftop structural arches and central deck details
+{
+  const arches = makeArches(20, 12, 6);
+  root.add(arches);
+
+  // rooftop hatch
+  const hatch = slab(6, 1.2, 10, GREY_METAL);
+  hatch.position.set(0, 46.5, 0);
+  root.add(hatch);
+}
+
+// Side buildings
+const left = makeRoundBuilding({
+  baseRadius: 20,
+  baseHeight: 34,
+  innerTaper: 0.9,
+  roofBands: 2,
+  hasTopDeck: true,
+  addWindows: false,
+  addPipes: true,
+  addDoor: false
+});
+left.position.set(-48, 0, -6);
+root.add(left);
+
+const right = makeRoundBuilding({
+  baseRadius: 20,
+  baseHeight: 34,
+  innerTaper: 0.9,
+  roofBands: 2,
+  hasTopDeck: true,
+  addWindows: false,
+  addPipes: true,
+  addDoor: true
+});
+right.position.set(48, 0, -6);
+root.add(right);
+
+// Curved corridor connectors (simple arcs)
+function connector(a, b, radius=3.2){
+  const pA = a.clone();
+  const pB = b.clone();
+  const mid = pA.clone().lerp(pB, 0.5).add(new THREE.Vector3(0, 3, 0));
+  const mesh = tubeFrom([pA, mid, pB], radius*0.5, OCHRE_WOOD, 48);
+  return mesh;
+}
+{
+  const y = 18;
+  root.add(connector(new THREE.Vector3(-28, y, -8), new THREE.Vector3(-48+20, y, -8)));
+  root.add(connector(new THREE.Vector3( 28, y, -8), new THREE.Vector3( 48-20, y, -8)));
+}
+
+// Central plaque
+{
+  const plaque = makePlaque();
+  plaque.position.set(0, 26, 27.6);
+  root.add(plaque);
+
+  // small side banners
+  const bannerL = slab(2, 6, 0.5, TAN_STUCCO); bannerL.position.set(-10, 6, 28);
+  const bannerR = slab(2, 6, 0.5, TAN_STUCCO); bannerR.position.set( 10, 6, 28);
+  root.add(bannerL, bannerR);
+}
+
+// Right building entry canopy (torii-like)
+{
+  const canopy = new THREE.Group();
+  const beam = slab(16, 1.6, 6, OCHRE_WOOD); beam.position.y = 8.8;
+  const legL = slab(1.6, 8, 1.6, DARK_TRIM); legL.position.set(-7, 4, 0);
+  const legR = slab(1.6, 8, 1.6, DARK_TRIM); legR.position.set( 7, 4, 0);
+  canopy.add(beam, legL, legR);
+  canopy.position.set(48, 0, -6 + 20.2);
+  root.add(canopy);
+}
+
+// Perimeter inner wall segment (background curve)
+(function makePerimeter(){
+  const r = 120;
+  const h = 16;
+  const thickness = 6;
+  const segs = 48;
+  const geom = new THREE.CylinderGeometry(r, r, h, segs, 1, false, Math.PI*0.05, Math.PI*0.9);
+  const wall = new THREE.Mesh(geom, OCHRE_WOOD);
+  wall.position.y = h/2;
+  wall.rotation.y = Math.PI;
+  wall.castShadow = wall.receiveShadow = true;
+
+  // top cap
+  const cap = new THREE.Mesh(new THREE.CylinderGeometry(r+thickness, r+thickness, 2, segs, 1, false, Math.PI*0.05, Math.PI*0.9), TAN_STUCCO);
+  cap.position.y = h + 1;
+  cap.rotation.y = Math.PI;
+
+  scene.add(wall, cap);
+})();
+
+/* Subtle shrubs on side roofs (hemisphere blobs) */
+function shrubCluster(x, y, z, count=6) {
+  const grp = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({ color: 0x5bab4c, roughness: 0.95 });
+  for (let i=0;i<count;i++){
+    const r = 2 + Math.random()*1.4;
+    const sph = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), mat);
+    sph.position.set((Math.random()-0.5)*8, r*0.6, (Math.random()-0.5)*8);
+    sph.scale.y = 0.66;
+    sph.castShadow = sph.receiveShadow = true;
+    grp.add(sph);
+  }
+  grp.position.set(x, y, z);
+  scene.add(grp);
+}
+shrubCluster(-48, 35.5, -6-4, 7);
+shrubCluster( 48, 35.5, -6-4, 7);
+
+/* Subtle cables across roofs */
+function randomCable(around, y, loops=3, rad=0.25) {
+  const pts = [];
+  for (let i=0;i<=loops;i++){
+    const t = (i/loops) * Math.PI * 2 * (0.8 + Math.random()*0.25);
+    const r = around * (0.95 + (Math.random()-0.5)*0.05);
+    pts.push(new THREE.Vector3(Math.cos(t)*r, y + Math.sin(t*2)*0.7, Math.sin(t)*r));
+  }
+  scene.add(tubeFrom(pts, rad, GREY_METAL, 128));
+}
+randomCable(20.2, 35.5); randomCable(20.2, 36.0, 4, 0.2);
+randomCable(20.2, 35.2); randomCable(28.5, 28.8, 4, 0.2);
+
+/* Shadow toggles */
+scene.traverse(o => { if (o.isMesh) o.castShadow = o.castShadow ?? true; });
+
+/* Render loop */
+function tick(){
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+tick();
+
+/* Resize */
+addEventListener("resize", () => {
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
