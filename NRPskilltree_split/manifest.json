@@ -1,0 +1,9 @@
+{
+  "source": "narutopedia_pages/index.json",
+  "class_count": 7,
+  "group_count": 14,
+  "jutsu_chunks": 12,
+  "jutsu_chunk_size": 250,
+  "license": "CC BY-SA 3.0",
+  "description": "Naruto Role-Play skill tree derived from Narutopedia content."
+}

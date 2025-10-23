@@ -1,0 +1,59 @@
+{
+  "name": "Amegakure Operatives",
+  "village": "Amegakure",
+  "base_chakra_control": 26,
+  "base_ninjutsu": 23,
+  "base_taijutsu": 21,
+  "specializations": [
+    {
+      "id": "akatsuki_leaders",
+      "name": "Akatsuki Leadership",
+      "description": "Shadow rulers who command the Rain Village with god-like abilities and unmatched jutsu versatility.",
+      "signature_techniques": [
+        "Rinnegan Techniques",
+        "Rain Tiger at Will Technique",
+        "Six Paths of Pain"
+      ],
+      "notable_members": [
+        "Nagato",
+        "Konan",
+        "Yahiko"
+      ]
+    },
+    {
+      "id": "rain_anbu",
+      "name": "Amegakure ANBU",
+      "description": "Covert operatives who master sensor-baffling cloaks, silent infiltration, and weather-based sabotage.",
+      "signature_techniques": [
+        "Hidden Rain Technique",
+        "Water Release: Violent Rain Tiger",
+        "Electromagnetic Murder"
+      ],
+      "notable_members": [
+        "Hanzō's Elite Guard",
+        "Amegakure ANBU Captains",
+        "Rain Interrogation Units"
+      ]
+    },
+    {
+      "id": "rain_sensor_corps",
+      "name": "Rain Sensor Corps",
+      "description": "Specialists who maintain Amegakure's perpetual rain barrier to detect intruders across the village.",
+      "signature_techniques": [
+        "Rain Tiger at Will Technique",
+        "Water Release: Hiding in Water Technique",
+        "Chakra-Sensing Rain"
+      ],
+      "notable_members": [
+        "Konan",
+        "Amegakure Sensor Platoons",
+        "Barrier Surveillance Teams"
+      ]
+    }
+  ],
+  "notable_traits": [
+    "Perpetual rain surveillance",
+    "Frequent proxy warfare",
+    "Home of the Akatsuki"
+  ]
+}

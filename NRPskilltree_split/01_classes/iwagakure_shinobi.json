@@ -1,0 +1,59 @@
+{
+  "name": "Iwagakure Shinobi",
+  "village": "Iwagakure",
+  "base_chakra_control": 21,
+  "base_ninjutsu": 27,
+  "base_taijutsu": 24,
+  "specializations": [
+    {
+      "id": "stone_fist_specialists",
+      "name": "Stone Fist Specialists",
+      "description": "Close-quarters fighters who harden their bodies with Earth Release to deliver crushing blows.",
+      "signature_techniques": [
+        "Earth Release: Hardening Technique",
+        "Earth Release: Rock Fist Technique",
+        "Earth Release: Fissure"
+      ],
+      "notable_members": [
+        "Kitsuchi",
+        "Kurotsuchi",
+        "Ittan"
+      ]
+    },
+    {
+      "id": "explosion_corps",
+      "name": "Explosion Corps",
+      "description": "Demolitions experts who wield Explosion Release for devastating ranged detonations and traps.",
+      "signature_techniques": [
+        "Explosion Release: Landmine Fist",
+        "C3",
+        "C4 Karura"
+      ],
+      "notable_members": [
+        "Deidara",
+        "Gari",
+        "Explosion Corps Units"
+      ]
+    },
+    {
+      "id": "tsuchikage_guard",
+      "name": "Tsuchikage Guard",
+      "description": "Elite bodyguards tasked with shielding the Tsuchikage using particle style barriers and seismic control.",
+      "signature_techniques": [
+        "Dust Release: Detachment of the Primitive World Technique",
+        "Earth Release: Particle Shield",
+        "Earth Release: Fissure Formation"
+      ],
+      "notable_members": [
+        "Akatsuchi",
+        "Kurotsuchi",
+        "Mū"
+      ]
+    }
+  ],
+  "notable_traits": [
+    "Expertise with Earth Release",
+    "High-altitude fortifications",
+    "Fields a notorious demolition corps"
+  ]
+}

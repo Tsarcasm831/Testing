@@ -1,0 +1,1261 @@
+{
+  "category": "jutsu",
+  "chunk_index": 5,
+  "count": 250,
+  "range": {
+    "first": "Gelel Beast Mode",
+    "last": "Insect Webbing"
+  },
+  "entries": [
+    {
+      "title": "Gelel Beast Mode",
+      "slug": "Gelel Beast Mode",
+      "file": "narutopedia_pages/jutsu/Gelel Beast Mode.html"
+    },
+    {
+      "title": "Gelel Blast",
+      "slug": "Gelel Blast",
+      "file": "narutopedia_pages/jutsu/Gelel Blast.html"
+    },
+    {
+      "title": "Gelel Laser",
+      "slug": "Gelel Laser",
+      "file": "narutopedia_pages/jutsu/Gelel Laser.html"
+    },
+    {
+      "title": "Gelel Rasengan",
+      "slug": "Gelel Rasengan",
+      "file": "narutopedia_pages/jutsu/Gelel Rasengan.html"
+    },
+    {
+      "title": "Genes of the First",
+      "slug": "Genes of the First",
+      "file": "narutopedia_pages/jutsu/Genes of the First.html"
+    },
+    {
+      "title": "Genjutsu Ball Trap",
+      "slug": "Genjutsu Ball Trap",
+      "file": "narutopedia_pages/jutsu/Genjutsu Ball Trap.html"
+    },
+    {
+      "title": "Genjutsu Binding",
+      "slug": "Genjutsu Binding",
+      "file": "narutopedia_pages/jutsu/Genjutsu Binding.html"
+    },
+    {
+      "title": "Genjutsu Communication",
+      "slug": "Genjutsu Communication",
+      "file": "narutopedia_pages/jutsu/Genjutsu Communication.html"
+    },
+    {
+      "title": "Genjutsu Cursed Seal",
+      "slug": "Genjutsu Cursed Seal",
+      "file": "narutopedia_pages/jutsu/Genjutsu Cursed Seal.html"
+    },
+    {
+      "title": "Genjutsu Kiss",
+      "slug": "Genjutsu Kiss",
+      "file": "narutopedia_pages/jutsu/Genjutsu Kiss.html"
+    },
+    {
+      "title": "Genjutsu Protect",
+      "slug": "Genjutsu Protect",
+      "file": "narutopedia_pages/jutsu/Genjutsu Protect.html"
+    },
+    {
+      "title": "Genjutsu: Bell Sound Clone",
+      "slug": "Genjutsu Bell Sound Clone",
+      "file": "narutopedia_pages/jutsu/Genjutsu Bell Sound Clone.html"
+    },
+    {
+      "title": "Genjutsu: Flower Hill",
+      "slug": "Genjutsu Flower Hill",
+      "file": "narutopedia_pages/jutsu/Genjutsu Flower Hill.html"
+    },
+    {
+      "title": "Genjutsu: Flower Petal Escape",
+      "slug": "Genjutsu Flower Petal Escape",
+      "file": "narutopedia_pages/jutsu/Genjutsu Flower Petal Escape.html"
+    },
+    {
+      "title": "Genjutsu: Ghost Fire",
+      "slug": "Genjutsu Ghost Fire",
+      "file": "narutopedia_pages/jutsu/Genjutsu Ghost Fire.html"
+    },
+    {
+      "title": "Genjutsu: Ketsuryūgan",
+      "slug": "Genjutsu Ketsuryūgan",
+      "file": "narutopedia_pages/jutsu/Genjutsu Ketsuryūgan.html"
+    },
+    {
+      "title": "Genjutsu: Mirage",
+      "slug": "Genjutsu Mirage",
+      "file": "narutopedia_pages/jutsu/Genjutsu Mirage.html"
+    },
+    {
+      "title": "Genjutsu: Sharingan",
+      "slug": "Genjutsu Sharingan",
+      "file": "narutopedia_pages/jutsu/Genjutsu Sharingan.html"
+    },
+    {
+      "title": "Genjutsu: Unknown Fire",
+      "slug": "Genjutsu Unknown Fire",
+      "file": "narutopedia_pages/jutsu/Genjutsu Unknown Fire.html"
+    },
+    {
+      "title": "Genjutsu: Yaksha Shark and Birds",
+      "slug": "Genjutsu Yaksha Shark and Birds",
+      "file": "narutopedia_pages/jutsu/Genjutsu Yaksha Shark and Birds.html"
+    },
+    {
+      "title": "Gentle Fist",
+      "slug": "Gentle Fist",
+      "file": "narutopedia_pages/jutsu/Gentle Fist.html"
+    },
+    {
+      "title": "Gentle Fist Art One Blow Body",
+      "slug": "Gentle Fist Art One Blow Body",
+      "file": "narutopedia_pages/jutsu/Gentle Fist Art One Blow Body.html"
+    },
+    {
+      "title": "Gentle Fist Art: Exorcism",
+      "slug": "Gentle Fist Art Exorcism",
+      "file": "narutopedia_pages/jutsu/Gentle Fist Art Exorcism.html"
+    },
+    {
+      "title": "Gentle Fist Instruction",
+      "slug": "Gentle Fist Instruction",
+      "file": "narutopedia_pages/jutsu/Gentle Fist Instruction.html"
+    },
+    {
+      "title": "Gentle Fist: Tenketsu Needle",
+      "slug": "Gentle Fist Tenketsu Needle",
+      "file": "narutopedia_pages/jutsu/Gentle Fist Tenketsu Needle.html"
+    },
+    {
+      "title": "Gentle Phoenix Spiralling Twin Lion Fists",
+      "slug": "Gentle Phoenix Spiralling Twin Lion Fists",
+      "file": "narutopedia_pages/jutsu/Gentle Phoenix Spiralling Twin Lion Fists.html"
+    },
+    {
+      "title": "Gentle Step Tailed Beast Twin Lion Fists",
+      "slug": "Gentle Step Tailed Beast Twin Lion Fists",
+      "file": "narutopedia_pages/jutsu/Gentle Step Tailed Beast Twin Lion Fists.html"
+    },
+    {
+      "title": "Gentle Step Twin Lion Fists",
+      "slug": "Gentle Step Twin Lion Fists",
+      "file": "narutopedia_pages/jutsu/Gentle Step Twin Lion Fists.html"
+    },
+    {
+      "title": "Gentle Step Twin Palms",
+      "slug": "Gentle Step Twin Palms",
+      "file": "narutopedia_pages/jutsu/Gentle Step Twin Palms.html"
+    },
+    {
+      "title": "Gentle Wind Spiralling Twin Lion Fists: Snow White",
+      "slug": "Gentle Wind Spiralling Twin Lion Fists Snow White",
+      "file": "narutopedia_pages/jutsu/Gentle Wind Spiralling Twin Lion Fists Snow White.html"
+    },
+    {
+      "title": "Giant Insect Fang: Sixty-Four Palms",
+      "slug": "Giant Insect Fang Sixty-Four Palms",
+      "file": "narutopedia_pages/jutsu/Giant Insect Fang Sixty-Four Palms.html"
+    },
+    {
+      "title": "Giant Sphere",
+      "slug": "Giant Sphere",
+      "file": "narutopedia_pages/jutsu/Giant Sphere.html"
+    },
+    {
+      "title": "Giant Spider Drop",
+      "slug": "Giant Spider Drop",
+      "file": "narutopedia_pages/jutsu/Giant Spider Drop.html"
+    },
+    {
+      "title": "Giant Swing",
+      "slug": "Giant Swing",
+      "file": "narutopedia_pages/jutsu/Giant Swing.html"
+    },
+    {
+      "title": "Giant Tree Strong Drop",
+      "slug": "Giant Tree Strong Drop",
+      "file": "narutopedia_pages/jutsu/Giant Tree Strong Drop.html"
+    },
+    {
+      "title": "God of Tides",
+      "slug": "God of Tides",
+      "file": "narutopedia_pages/jutsu/God of Tides.html"
+    },
+    {
+      "title": "God: Nativity of a World of Trees",
+      "slug": "God Nativity of a World of Trees",
+      "file": "narutopedia_pages/jutsu/God Nativity of a World of Trees.html"
+    },
+    {
+      "title": "Goemon Hellfire",
+      "slug": "Goemon Hellfire",
+      "file": "narutopedia_pages/jutsu/Goemon Hellfire.html"
+    },
+    {
+      "title": "Gold Dust Cloud Spear: Thrust Away",
+      "slug": "Gold Dust Cloud Spear Thrust Away",
+      "file": "narutopedia_pages/jutsu/Gold Dust Cloud Spear Thrust Away.html"
+    },
+    {
+      "title": "Gold Dust Drizzle",
+      "slug": "Gold Dust Drizzle",
+      "file": "narutopedia_pages/jutsu/Gold Dust Drizzle.html"
+    },
+    {
+      "title": "Gold Dust Imperial Funeral",
+      "slug": "Gold Dust Imperial Funeral",
+      "file": "narutopedia_pages/jutsu/Gold Dust Imperial Funeral.html"
+    },
+    {
+      "title": "Gold Dust Press",
+      "slug": "Gold Dust Press",
+      "file": "narutopedia_pages/jutsu/Gold Dust Press.html"
+    },
+    {
+      "title": "Gold Dust Strong Spear",
+      "slug": "Gold Dust Strong Spear",
+      "file": "narutopedia_pages/jutsu/Gold Dust Strong Spear.html"
+    },
+    {
+      "title": "Gold Dust Twin Spear",
+      "slug": "Gold Dust Twin Spear",
+      "file": "narutopedia_pages/jutsu/Gold Dust Twin Spear.html"
+    },
+    {
+      "title": "Gold Dust World Method Ball",
+      "slug": "Gold Dust World Method Ball",
+      "file": "narutopedia_pages/jutsu/Gold Dust World Method Ball.html"
+    },
+    {
+      "title": "Gold and Silver Training: Treasured Tools Wild Dance",
+      "slug": "Gold and Silver Training Treasured Tools Wild Dance",
+      "file": "narutopedia_pages/jutsu/Gold and Silver Training Treasured Tools Wild Dance.html"
+    },
+    {
+      "title": "Golden Wheel Reincarnation Explosion",
+      "slug": "Golden Wheel Reincarnation Explosion",
+      "file": "narutopedia_pages/jutsu/Golden Wheel Reincarnation Explosion.html"
+    },
+    {
+      "title": "Gospel of the Angel",
+      "slug": "Gospel of the Angel",
+      "file": "narutopedia_pages/jutsu/Gospel of the Angel.html"
+    },
+    {
+      "title": "Gozu Tennō",
+      "slug": "Gozu Tennō",
+      "file": "narutopedia_pages/jutsu/Gozu Tennō.html"
+    },
+    {
+      "title": "Grass Shadow-Style Emit Destroy Palm",
+      "slug": "Grass Shadow-Style Emit Destroy Palm",
+      "file": "narutopedia_pages/jutsu/Grass Shadow-Style Emit Destroy Palm.html"
+    },
+    {
+      "title": "Great Barrage Strike",
+      "slug": "Great Barrage Strike",
+      "file": "narutopedia_pages/jutsu/Great Barrage Strike.html"
+    },
+    {
+      "title": "Great Burial Bullet",
+      "slug": "Great Burial Bullet",
+      "file": "narutopedia_pages/jutsu/Great Burial Bullet.html"
+    },
+    {
+      "title": "Great Cat Claw Attack",
+      "slug": "Great Cat Claw Attack",
+      "file": "narutopedia_pages/jutsu/Great Cat Claw Attack.html"
+    },
+    {
+      "title": "Great Crushing Funeral",
+      "slug": "Great Crushing Funeral",
+      "file": "narutopedia_pages/jutsu/Great Crushing Funeral.html"
+    },
+    {
+      "title": "Great Dance Slash",
+      "slug": "Great Dance Slash",
+      "file": "narutopedia_pages/jutsu/Great Dance Slash.html"
+    },
+    {
+      "title": "Great Entrance of Burning Spirit",
+      "slug": "Great Entrance of Burning Spirit",
+      "file": "narutopedia_pages/jutsu/Great Entrance of Burning Spirit.html"
+    },
+    {
+      "title": "Great Fire Lightning Flash",
+      "slug": "Great Fire Lightning Flash",
+      "file": "narutopedia_pages/jutsu/Great Fire Lightning Flash.html"
+    },
+    {
+      "title": "Great Gunpowder Attack",
+      "slug": "Great Gunpowder Attack",
+      "file": "narutopedia_pages/jutsu/Great Gunpowder Attack.html"
+    },
+    {
+      "title": "Great Harem Technique",
+      "slug": "Great Harem Technique",
+      "file": "narutopedia_pages/jutsu/Great Harem Technique.html"
+    },
+    {
+      "title": "Great Roar",
+      "slug": "Great Roar",
+      "file": "narutopedia_pages/jutsu/Great Roar.html"
+    },
+    {
+      "title": "Great Rotating Pushing Kick (Failed…)",
+      "slug": "Great Rotating Pushing Kick (Failed…)",
+      "file": "narutopedia_pages/jutsu/Great Rotating Pushing Kick (Failed…).html"
+    },
+    {
+      "title": "Great Sand Downpour",
+      "slug": "Great Sand Downpour",
+      "file": "narutopedia_pages/jutsu/Great Sand Downpour.html"
+    },
+    {
+      "title": "Great Sand Eater",
+      "slug": "Great Sand Eater",
+      "file": "narutopedia_pages/jutsu/Great Sand Eater.html"
+    },
+    {
+      "title": "Great Sandstorm Technique",
+      "slug": "Great Sandstorm Technique",
+      "file": "narutopedia_pages/jutsu/Great Sandstorm Technique.html"
+    },
+    {
+      "title": "Great Sickle Weasel Technique",
+      "slug": "Great Sickle Weasel Technique",
+      "file": "narutopedia_pages/jutsu/Great Sickle Weasel Technique.html"
+    },
+    {
+      "title": "Great Snake Binding",
+      "slug": "Great Snake Binding",
+      "file": "narutopedia_pages/jutsu/Great Snake Binding.html"
+    },
+    {
+      "title": "Great Snake Charmer Technique",
+      "slug": "Great Snake Charmer Technique",
+      "file": "narutopedia_pages/jutsu/Great Snake Charmer Technique.html"
+    },
+    {
+      "title": "Great Snake Thrust",
+      "slug": "Great Snake Thrust",
+      "file": "narutopedia_pages/jutsu/Great Snake Thrust.html"
+    },
+    {
+      "title": "Great Spiralling Ring",
+      "slug": "Great Spiralling Ring",
+      "file": "narutopedia_pages/jutsu/Great Spiralling Ring.html"
+    },
+    {
+      "title": "Great Strike Outburst",
+      "slug": "Great Strike Outburst",
+      "file": "narutopedia_pages/jutsu/Great Strike Outburst.html"
+    },
+    {
+      "title": "Great Trample Circle",
+      "slug": "Great Trample Circle",
+      "file": "narutopedia_pages/jutsu/Great Trample Circle.html"
+    },
+    {
+      "title": "Great Tree Spear",
+      "slug": "Great Tree Spear",
+      "file": "narutopedia_pages/jutsu/Great Tree Spear.html"
+    },
+    {
+      "title": "Great Tree World Method",
+      "slug": "Great Tree World Method",
+      "file": "narutopedia_pages/jutsu/Great Tree World Method.html"
+    },
+    {
+      "title": "Great Twin Circles",
+      "slug": "Great Twin Circles",
+      "file": "narutopedia_pages/jutsu/Great Twin Circles.html"
+    },
+    {
+      "title": "Great Vacuum Cannon",
+      "slug": "Great Vacuum Cannon",
+      "file": "narutopedia_pages/jutsu/Great Vacuum Cannon.html"
+    },
+    {
+      "title": "Great Wild Snake",
+      "slug": "Great Wild Snake",
+      "file": "narutopedia_pages/jutsu/Great Wild Snake.html"
+    },
+    {
+      "title": "Great Wind Violent Wall",
+      "slug": "Great Wind Violent Wall",
+      "file": "narutopedia_pages/jutsu/Great Wind Violent Wall.html"
+    },
+    {
+      "title": "Green Egg Bombs",
+      "slug": "Green Egg Bombs",
+      "file": "narutopedia_pages/jutsu/Green Egg Bombs.html"
+    },
+    {
+      "title": "Green Impact",
+      "slug": "Green Impact",
+      "file": "narutopedia_pages/jutsu/Green Impact.html"
+    },
+    {
+      "title": "Green Rain Ground Levelling",
+      "slug": "Green Rain Ground Levelling",
+      "file": "narutopedia_pages/jutsu/Green Rain Ground Levelling.html"
+    },
+    {
+      "title": "Green Roar",
+      "slug": "Green Roar",
+      "file": "narutopedia_pages/jutsu/Green Roar.html"
+    },
+    {
+      "title": "Ground Splitting",
+      "slug": "Ground Splitting",
+      "file": "narutopedia_pages/jutsu/Ground Splitting.html"
+    },
+    {
+      "title": "Ground Splitting Technique",
+      "slug": "Ground Splitting Technique",
+      "file": "narutopedia_pages/jutsu/Ground Splitting Technique.html"
+    },
+    {
+      "title": "Grudge Rain",
+      "slug": "Grudge Rain",
+      "file": "narutopedia_pages/jutsu/Grudge Rain.html"
+    },
+    {
+      "title": "Grudge Sand Cloud Rend",
+      "slug": "Grudge Sand Cloud Rend",
+      "file": "narutopedia_pages/jutsu/Grudge Sand Cloud Rend.html"
+    },
+    {
+      "title": "Grudge Sand Cloud Tear",
+      "slug": "Grudge Sand Cloud Tear",
+      "file": "narutopedia_pages/jutsu/Grudge Sand Cloud Tear.html"
+    },
+    {
+      "title": "Guillotine Drop",
+      "slug": "Guillotine Drop",
+      "file": "narutopedia_pages/jutsu/Guillotine Drop.html"
+    },
+    {
+      "title": "Gunbai Fanned Wind",
+      "slug": "Gunbai Fanned Wind",
+      "file": "narutopedia_pages/jutsu/Gunbai Fanned Wind.html"
+    },
+    {
+      "title": "Gunpowder Fist",
+      "slug": "Gunpowder Fist",
+      "file": "narutopedia_pages/jutsu/Gunpowder Fist.html"
+    },
+    {
+      "title": "Guts Rasengan",
+      "slug": "Guts Rasengan",
+      "file": "narutopedia_pages/jutsu/Guts Rasengan.html"
+    },
+    {
+      "title": "Hair Binding Technique",
+      "slug": "Hair Binding Technique",
+      "file": "narutopedia_pages/jutsu/Hair Binding Technique.html"
+    },
+    {
+      "title": "Hair Camouflage",
+      "slug": "Hair Camouflage",
+      "file": "narutopedia_pages/jutsu/Hair Camouflage.html"
+    },
+    {
+      "title": "Hair Needle Senbon",
+      "slug": "Hair Needle Senbon",
+      "file": "narutopedia_pages/jutsu/Hair Needle Senbon.html"
+    },
+    {
+      "title": "Hanabi Style: Eight Trigrams Sixty-Four Palms",
+      "slug": "Hanabi Style Eight Trigrams Sixty-Four Palms",
+      "file": "narutopedia_pages/jutsu/Hanabi Style Eight Trigrams Sixty-Four Palms.html"
+    },
+    {
+      "title": "Hanabi Style: Revolving Heaven",
+      "slug": "Hanabi Style Revolving Heaven",
+      "file": "narutopedia_pages/jutsu/Hanabi Style Revolving Heaven.html"
+    },
+    {
+      "title": "Hands of Bonds",
+      "slug": "Hands of Bonds",
+      "file": "narutopedia_pages/jutsu/Hands of Bonds.html"
+    },
+    {
+      "title": "Hands of Flame",
+      "slug": "Hands of Flame",
+      "file": "narutopedia_pages/jutsu/Hands of Flame.html"
+    },
+    {
+      "title": "Harem Technique",
+      "slug": "Harem Technique",
+      "file": "narutopedia_pages/jutsu/Harem Technique.html"
+    },
+    {
+      "title": "Haze Clone Technique",
+      "slug": "Haze Clone Technique",
+      "file": "narutopedia_pages/jutsu/Haze Clone Technique.html"
+    },
+    {
+      "title": "Haze Ninja Art: Forbidden Technique: Afterlife Opening Gate",
+      "slug": "Haze Ninja Art Forbidden Technique Afterlife Opening Gate",
+      "file": "narutopedia_pages/jutsu/Haze Ninja Art Forbidden Technique Afterlife Opening Gate.html"
+    },
+    {
+      "title": "Haze Ninja Art: Forbidden Technique: Ephemeral Life",
+      "slug": "Haze Ninja Art Forbidden Technique Ephemeral Life",
+      "file": "narutopedia_pages/jutsu/Haze Ninja Art Forbidden Technique Ephemeral Life.html"
+    },
+    {
+      "title": "Haze Ninja Art: Forbidden Technique: Hellish Obliteration",
+      "slug": "Haze Ninja Art Forbidden Technique Hellish Obliteration",
+      "file": "narutopedia_pages/jutsu/Haze Ninja Art Forbidden Technique Hellish Obliteration.html"
+    },
+    {
+      "title": "Haze Ninja Art: Forbidden Technique: Red Spider Lily",
+      "slug": "Haze Ninja Art Forbidden Technique Red Spider Lily",
+      "file": "narutopedia_pages/jutsu/Haze Ninja Art Forbidden Technique Red Spider Lily.html"
+    },
+    {
+      "title": "Hazy Genjutsu",
+      "slug": "Hazy Genjutsu",
+      "file": "narutopedia_pages/jutsu/Hazy Genjutsu.html"
+    },
+    {
+      "title": "Hazy Moon",
+      "slug": "Hazy Moon",
+      "file": "narutopedia_pages/jutsu/Hazy Moon.html"
+    },
+    {
+      "title": "Hazy Moon Night",
+      "slug": "Hazy Moon Night",
+      "file": "narutopedia_pages/jutsu/Hazy Moon Night.html"
+    },
+    {
+      "title": "Headbutt",
+      "slug": "Headbutt",
+      "file": "narutopedia_pages/jutsu/Headbutt.html"
+    },
+    {
+      "title": "Headbutt (game)",
+      "slug": "Headbutt (game)",
+      "file": "narutopedia_pages/jutsu/Headbutt (game).html"
+    },
+    {
+      "title": "Heal Bite",
+      "slug": "Heal Bite",
+      "file": "narutopedia_pages/jutsu/Heal Bite.html"
+    },
+    {
+      "title": "Healing Resuscitation Regeneration Technique",
+      "slug": "Healing Resuscitation Regeneration Technique",
+      "file": "narutopedia_pages/jutsu/Healing Resuscitation Regeneration Technique.html"
+    },
+    {
+      "title": "Healing Technique",
+      "slug": "Healing Technique",
+      "file": "narutopedia_pages/jutsu/Healing Technique.html"
+    },
+    {
+      "title": "Heart Acceleration Technique",
+      "slug": "Heart Acceleration Technique",
+      "file": "narutopedia_pages/jutsu/Heart Acceleration Technique.html"
+    },
+    {
+      "title": "Heaven Collapse",
+      "slug": "Heaven Collapse",
+      "file": "narutopedia_pages/jutsu/Heaven Collapse.html"
+    },
+    {
+      "title": "Heaven Cutter",
+      "slug": "Heaven Cutter",
+      "file": "narutopedia_pages/jutsu/Heaven Cutter.html"
+    },
+    {
+      "title": "Heaven Twin Fang",
+      "slug": "Heaven Twin Fang",
+      "file": "narutopedia_pages/jutsu/Heaven Twin Fang.html"
+    },
+    {
+      "title": "Heaven and Earth Exploding Funeral",
+      "slug": "Heaven and Earth Exploding Funeral",
+      "file": "narutopedia_pages/jutsu/Heaven and Earth Exploding Funeral.html"
+    },
+    {
+      "title": "Heaven and Earth Lightning Roar",
+      "slug": "Heaven and Earth Lightning Roar",
+      "file": "narutopedia_pages/jutsu/Heaven and Earth Lightning Roar.html"
+    },
+    {
+      "title": "Heaven's Blessing",
+      "slug": "Heaven's Blessing",
+      "file": "narutopedia_pages/jutsu/Heaven's Blessing.html"
+    },
+    {
+      "title": "Heaven's Needle Barrage",
+      "slug": "Heaven's Needle Barrage",
+      "file": "narutopedia_pages/jutsu/Heaven's Needle Barrage.html"
+    },
+    {
+      "title": "Heaven-Bending Bomb Assault",
+      "slug": "Heaven-Bending Bomb Assault",
+      "file": "narutopedia_pages/jutsu/Heaven-Bending Bomb Assault.html"
+    },
+    {
+      "title": "Heavenly Advent",
+      "slug": "Heavenly Advent",
+      "file": "narutopedia_pages/jutsu/Heavenly Advent.html"
+    },
+    {
+      "title": "Heavenly Chidori: Cherry Blossom",
+      "slug": "Heavenly Chidori Cherry Blossom",
+      "file": "narutopedia_pages/jutsu/Heavenly Chidori Cherry Blossom.html"
+    },
+    {
+      "title": "Heavenly Defending Foot",
+      "slug": "Heavenly Defending Foot",
+      "file": "narutopedia_pages/jutsu/Heavenly Defending Foot.html"
+    },
+    {
+      "title": "Heavenly Foot of Pain",
+      "slug": "Heavenly Foot of Pain",
+      "file": "narutopedia_pages/jutsu/Heavenly Foot of Pain.html"
+    },
+    {
+      "title": "Heavenly Foot of Pain: Kirin",
+      "slug": "Heavenly Foot of Pain Kirin",
+      "file": "narutopedia_pages/jutsu/Heavenly Foot of Pain Kirin.html"
+    },
+    {
+      "title": "Heavenly Ice Chamber",
+      "slug": "Heavenly Ice Chamber",
+      "file": "narutopedia_pages/jutsu/Heavenly Ice Chamber.html"
+    },
+    {
+      "title": "Heavenly Insertion Hammering Star",
+      "slug": "Heavenly Insertion Hammering Star",
+      "file": "narutopedia_pages/jutsu/Heavenly Insertion Hammering Star.html"
+    },
+    {
+      "title": "Heavenly Kick Wild Dance",
+      "slug": "Heavenly Kick Wild Dance",
+      "file": "narutopedia_pages/jutsu/Heavenly Kick Wild Dance.html"
+    },
+    {
+      "title": "Heavenly Lightning",
+      "slug": "Heavenly Lightning",
+      "file": "narutopedia_pages/jutsu/Heavenly Lightning.html"
+    },
+    {
+      "title": "Heavenly Palm Wild Dance",
+      "slug": "Heavenly Palm Wild Dance",
+      "file": "narutopedia_pages/jutsu/Heavenly Palm Wild Dance.html"
+    },
+    {
+      "title": "Heavenly Prison Fire Sword",
+      "slug": "Heavenly Prison Fire Sword",
+      "file": "narutopedia_pages/jutsu/Heavenly Prison Fire Sword.html"
+    },
+    {
+      "title": "Heavenly Punishment",
+      "slug": "Heavenly Punishment",
+      "file": "narutopedia_pages/jutsu/Heavenly Punishment.html"
+    },
+    {
+      "title": "Heavenly Spear Foot",
+      "slug": "Heavenly Spear Foot",
+      "file": "narutopedia_pages/jutsu/Heavenly Spear Foot.html"
+    },
+    {
+      "title": "Heavenly Transfer Technique",
+      "slug": "Heavenly Transfer Technique",
+      "file": "narutopedia_pages/jutsu/Heavenly Transfer Technique.html"
+    },
+    {
+      "title": "Heavenly Weeping",
+      "slug": "Heavenly Weeping",
+      "file": "narutopedia_pages/jutsu/Heavenly Weeping.html"
+    },
+    {
+      "title": "Heavy Hammer Spark",
+      "slug": "Heavy Hammer Spark",
+      "file": "narutopedia_pages/jutsu/Heavy Hammer Spark.html"
+    },
+    {
+      "title": "Heel Falling Attack",
+      "slug": "Heel Falling Attack",
+      "file": "narutopedia_pages/jutsu/Heel Falling Attack.html"
+    },
+    {
+      "title": "Hell Dark Formation",
+      "slug": "Hell Dark Formation",
+      "file": "narutopedia_pages/jutsu/Hell Dark Formation.html"
+    },
+    {
+      "title": "Hell Drop",
+      "slug": "Hell Drop",
+      "file": "narutopedia_pages/jutsu/Hell Drop.html"
+    },
+    {
+      "title": "Hell Stab",
+      "slug": "Hell Stab",
+      "file": "narutopedia_pages/jutsu/Hell Stab.html"
+    },
+    {
+      "title": "Hell Stab Four-Finger Spear Hand: Sky Drop",
+      "slug": "Hell Stab Four-Finger Spear Hand Sky Drop",
+      "file": "narutopedia_pages/jutsu/Hell Stab Four-Finger Spear Hand Sky Drop.html"
+    },
+    {
+      "title": "Hell Stab One-Finger Nukite: Ultimate",
+      "slug": "Hell Stab One-Finger Nukite Ultimate",
+      "file": "narutopedia_pages/jutsu/Hell Stab One-Finger Nukite Ultimate.html"
+    },
+    {
+      "title": "Hell Stab Three-Finger Spear Hand: Side Swipe",
+      "slug": "Hell Stab Three-Finger Spear Hand Side Swipe",
+      "file": "narutopedia_pages/jutsu/Hell Stab Three-Finger Spear Hand Side Swipe.html"
+    },
+    {
+      "title": "Hellfire Gale",
+      "slug": "Hellfire Gale",
+      "file": "narutopedia_pages/jutsu/Hellfire Gale.html"
+    },
+    {
+      "title": "Hero of the Hidden Sand",
+      "slug": "Hero of the Hidden Sand",
+      "file": "narutopedia_pages/jutsu/Hero of the Hidden Sand.html"
+    },
+    {
+      "title": "Hero of the Sharingan",
+      "slug": "Hero of the Sharingan",
+      "file": "narutopedia_pages/jutsu/Hero of the Sharingan.html"
+    },
+    {
+      "title": "Hidden Doorway Technique",
+      "slug": "Hidden Doorway Technique",
+      "file": "narutopedia_pages/jutsu/Hidden Doorway Technique.html"
+    },
+    {
+      "title": "Hidden Rock Trap",
+      "slug": "Hidden Rock Trap",
+      "file": "narutopedia_pages/jutsu/Hidden Rock Trap.html"
+    },
+    {
+      "title": "Hidden Shadow Snake Burial",
+      "slug": "Hidden Shadow Snake Burial",
+      "file": "narutopedia_pages/jutsu/Hidden Shadow Snake Burial.html"
+    },
+    {
+      "title": "Hidden Shadow Snake Hands",
+      "slug": "Hidden Shadow Snake Hands",
+      "file": "narutopedia_pages/jutsu/Hidden Shadow Snake Hands.html"
+    },
+    {
+      "title": "Hidden Shadow Wild Snake Hands",
+      "slug": "Hidden Shadow Wild Snake Hands",
+      "file": "narutopedia_pages/jutsu/Hidden Shadow Wild Snake Hands.html"
+    },
+    {
+      "title": "Hiden: Hiding in Scale Powder Technique",
+      "slug": "Hiden Hiding in Scale Powder Technique",
+      "file": "narutopedia_pages/jutsu/Hiden Hiding in Scale Powder Technique.html"
+    },
+    {
+      "title": "Hiden: Scale Powder Enfolding Attack Technique",
+      "slug": "Hiden Scale Powder Enfolding Attack Technique",
+      "file": "narutopedia_pages/jutsu/Hiden Scale Powder Enfolding Attack Technique.html"
+    },
+    {
+      "title": "Hiden: Scale Powder Technique",
+      "slug": "Hiden Scale Powder Technique",
+      "file": "narutopedia_pages/jutsu/Hiden Scale Powder Technique.html"
+    },
+    {
+      "title": "Hideout Destruction Trap",
+      "slug": "Hideout Destruction Trap",
+      "file": "narutopedia_pages/jutsu/Hideout Destruction Trap.html"
+    },
+    {
+      "title": "Hiding in Black Fog Technique",
+      "slug": "Hiding in Black Fog Technique",
+      "file": "narutopedia_pages/jutsu/Hiding in Black Fog Technique.html"
+    },
+    {
+      "title": "Hiding in Cloth Technique",
+      "slug": "Hiding in Cloth Technique",
+      "file": "narutopedia_pages/jutsu/Hiding in Cloth Technique.html"
+    },
+    {
+      "title": "Hiding in Frost Technique",
+      "slug": "Hiding in Frost Technique",
+      "file": "narutopedia_pages/jutsu/Hiding in Frost Technique.html"
+    },
+    {
+      "title": "Hiding in Mist Technique",
+      "slug": "Hiding in Mist Technique",
+      "file": "narutopedia_pages/jutsu/Hiding in Mist Technique.html"
+    },
+    {
+      "title": "Hiding in Shadow Technique",
+      "slug": "Hiding in Shadow Technique",
+      "file": "narutopedia_pages/jutsu/Hiding in Shadow Technique.html"
+    },
+    {
+      "title": "Hiding in Surface Technique",
+      "slug": "Hiding in Surface Technique",
+      "file": "narutopedia_pages/jutsu/Hiding in Surface Technique.html"
+    },
+    {
+      "title": "Hiding in a Toad Technique",
+      "slug": "Hiding in a Toad Technique",
+      "file": "narutopedia_pages/jutsu/Hiding in a Toad Technique.html"
+    },
+    {
+      "title": "Hiding with Camouflage Technique",
+      "slug": "Hiding with Camouflage Technique",
+      "file": "narutopedia_pages/jutsu/Hiding with Camouflage Technique.html"
+    },
+    {
+      "title": "Hinokagutsuchi",
+      "slug": "Hinokagutsuchi",
+      "file": "narutopedia_pages/jutsu/Hinokagutsuchi.html"
+    },
+    {
+      "title": "Hog Release: Crazed Fireworks",
+      "slug": "Hog Release Crazed Fireworks",
+      "file": "narutopedia_pages/jutsu/Hog Release Crazed Fireworks.html"
+    },
+    {
+      "title": "Hog Release: Tonton",
+      "slug": "Hog Release Tonton",
+      "file": "narutopedia_pages/jutsu/Hog Release Tonton.html"
+    },
+    {
+      "title": "Hokage-Style Sixty-Year-Old Technique — Kakuan Entering Society with Bliss-Bringing Hands",
+      "slug": "Hokage-Style Sixty-Year-Old Technique — Kakuan Entering Society with Bliss-Bringing Hands",
+      "file": "narutopedia_pages/jutsu/Hokage-Style Sixty-Year-Old Technique — Kakuan Entering Society with Bliss-Bringing Hands.html"
+    },
+    {
+      "title": "Holly",
+      "slug": "Holly",
+      "file": "narutopedia_pages/jutsu/Holly.html"
+    },
+    {
+      "title": "Honey Spit Trap",
+      "slug": "Honey Spit Trap",
+      "file": "narutopedia_pages/jutsu/Honey Spit Trap.html"
+    },
+    {
+      "title": "Horizon Meteor",
+      "slug": "Horizon Meteor",
+      "file": "narutopedia_pages/jutsu/Horizon Meteor.html"
+    },
+    {
+      "title": "Horn Breaking",
+      "slug": "Horn Breaking",
+      "file": "narutopedia_pages/jutsu/Horn Breaking.html"
+    },
+    {
+      "title": "Horror of Akatsuki",
+      "slug": "Horror of Akatsuki",
+      "file": "narutopedia_pages/jutsu/Horror of Akatsuki.html"
+    },
+    {
+      "title": "Host Transformation",
+      "slug": "Host Transformation",
+      "file": "narutopedia_pages/jutsu/Host Transformation.html"
+    },
+    {
+      "title": "Hot Sand Waterfall Funeral",
+      "slug": "Hot Sand Waterfall Funeral",
+      "file": "narutopedia_pages/jutsu/Hot Sand Waterfall Funeral.html"
+    },
+    {
+      "title": "Hot-Blooded Dynamic Entry",
+      "slug": "Hot-Blooded Dynamic Entry",
+      "file": "narutopedia_pages/jutsu/Hot-Blooded Dynamic Entry.html"
+    },
+    {
+      "title": "Howling Hair Sound Wave",
+      "slug": "Howling Hair Sound Wave",
+      "file": "narutopedia_pages/jutsu/Howling Hair Sound Wave.html"
+    },
+    {
+      "title": "Human Beast Combination Transformation: Double-Headed Wolf",
+      "slug": "Human Beast Combination Transformation Double-Headed Wolf",
+      "file": "narutopedia_pages/jutsu/Human Beast Combination Transformation Double-Headed Wolf.html"
+    },
+    {
+      "title": "Human Beast Mixture Transformation — Three-Headed Wolf",
+      "slug": "Human Beast Mixture Transformation — Three-Headed Wolf",
+      "file": "narutopedia_pages/jutsu/Human Beast Mixture Transformation — Three-Headed Wolf.html"
+    },
+    {
+      "title": "Human Bullet Big Tank",
+      "slug": "Human Bullet Big Tank",
+      "file": "narutopedia_pages/jutsu/Human Bullet Big Tank.html"
+    },
+    {
+      "title": "Human Bullet Heavy Tank",
+      "slug": "Human Bullet Heavy Tank",
+      "file": "narutopedia_pages/jutsu/Human Bullet Heavy Tank.html"
+    },
+    {
+      "title": "Human Bullet Tank",
+      "slug": "Human Bullet Tank",
+      "file": "narutopedia_pages/jutsu/Human Bullet Tank.html"
+    },
+    {
+      "title": "Human Bullet Yo-Yo",
+      "slug": "Human Bullet Yo-Yo",
+      "file": "narutopedia_pages/jutsu/Human Bullet Yo-Yo.html"
+    },
+    {
+      "title": "Human Cocoon Technique",
+      "slug": "Human Cocoon Technique",
+      "file": "narutopedia_pages/jutsu/Human Cocoon Technique.html"
+    },
+    {
+      "title": "Human Path",
+      "slug": "Human Path",
+      "file": "narutopedia_pages/jutsu/Human Path.html"
+    },
+    {
+      "title": "Human Shadow Simulation Technique",
+      "slug": "Human Shadow Simulation Technique",
+      "file": "narutopedia_pages/jutsu/Human Shadow Simulation Technique.html"
+    },
+    {
+      "title": "Hundred Blooming Flowers Technique",
+      "slug": "Hundred Blooming Flowers Technique",
+      "file": "narutopedia_pages/jutsu/Hundred Blooming Flowers Technique.html"
+    },
+    {
+      "title": "Hundred Furious Palms",
+      "slug": "Hundred Furious Palms",
+      "file": "narutopedia_pages/jutsu/Hundred Furious Palms.html"
+    },
+    {
+      "title": "Hundred Puppet Soul Binding",
+      "slug": "Hundred Puppet Soul Binding",
+      "file": "narutopedia_pages/jutsu/Hundred Puppet Soul Binding.html"
+    },
+    {
+      "title": "Hungry Shark Drop",
+      "slug": "Hungry Shark Drop",
+      "file": "narutopedia_pages/jutsu/Hungry Shark Drop.html"
+    },
+    {
+      "title": "Hunt",
+      "slug": "Hunt",
+      "file": "narutopedia_pages/jutsu/Hunt.html"
+    },
+    {
+      "title": "Hurricane Head Butt",
+      "slug": "Hurricane Head Butt",
+      "file": "narutopedia_pages/jutsu/Hurricane Head Butt.html"
+    },
+    {
+      "title": "Hurricane Thunderclap",
+      "slug": "Hurricane Thunderclap",
+      "file": "narutopedia_pages/jutsu/Hurricane Thunderclap.html"
+    },
+    {
+      "title": "Hurricane Thunderclap — Majestic Attire Sword Stroke",
+      "slug": "Hurricane Thunderclap — Majestic Attire Sword Stroke",
+      "file": "narutopedia_pages/jutsu/Hurricane Thunderclap — Majestic Attire Sword Stroke.html"
+    },
+    {
+      "title": "Husband and Wife Rasengan",
+      "slug": "Husband and Wife Rasengan",
+      "file": "narutopedia_pages/jutsu/Husband and Wife Rasengan.html"
+    },
+    {
+      "title": "Hydrification Technique",
+      "slug": "Hydrification Technique",
+      "file": "narutopedia_pages/jutsu/Hydrification Technique.html"
+    },
+    {
+      "title": "Hypnotic Genjutsu: Wild Beast Communication",
+      "slug": "Hypnotic Genjutsu Wild Beast Communication",
+      "file": "narutopedia_pages/jutsu/Hypnotic Genjutsu Wild Beast Communication.html"
+    },
+    {
+      "title": "Hyūga Great Combo Palm",
+      "slug": "Hyūga Great Combo Palm",
+      "file": "narutopedia_pages/jutsu/Hyūga Great Combo Palm.html"
+    },
+    {
+      "title": "Hyūga Main Family's Juinjutsu",
+      "slug": "Hyūga Main Family's Juinjutsu",
+      "file": "narutopedia_pages/jutsu/Hyūga Main Family's Juinjutsu.html"
+    },
+    {
+      "title": "Hyūga: Great Revolving Heaven",
+      "slug": "Hyūga Great Revolving Heaven",
+      "file": "narutopedia_pages/jutsu/Hyūga Great Revolving Heaven.html"
+    },
+    {
+      "title": "I Won't Let You Go!",
+      "slug": "I Won't Let You Go!",
+      "file": "narutopedia_pages/jutsu/I Won't Let You Go!.html"
+    },
+    {
+      "title": "IQ200",
+      "slug": "IQ200",
+      "file": "narutopedia_pages/jutsu/IQ200.html"
+    },
+    {
+      "title": "Iai Beheading",
+      "slug": "Iai Beheading",
+      "file": "narutopedia_pages/jutsu/Iai Beheading.html"
+    },
+    {
+      "title": "Iaidō",
+      "slug": "Iaidō",
+      "file": "narutopedia_pages/jutsu/Iaidō.html"
+    },
+    {
+      "title": "Ibuse's Poison Mist",
+      "slug": "Ibuse's Poison Mist",
+      "file": "narutopedia_pages/jutsu/Ibuse's Poison Mist.html"
+    },
+    {
+      "title": "Ice Disk Technique",
+      "slug": "Ice Disk Technique",
+      "file": "narutopedia_pages/jutsu/Ice Disk Technique.html"
+    },
+    {
+      "title": "Ice Prison Technique",
+      "slug": "Ice Prison Technique",
+      "file": "narutopedia_pages/jutsu/Ice Prison Technique.html"
+    },
+    {
+      "title": "Ice Release: Black Dragon Blizzard",
+      "slug": "Ice Release Black Dragon Blizzard",
+      "file": "narutopedia_pages/jutsu/Ice Release Black Dragon Blizzard.html"
+    },
+    {
+      "title": "Ice Release: Crystal Wall",
+      "slug": "Ice Release Crystal Wall",
+      "file": "narutopedia_pages/jutsu/Ice Release Crystal Wall.html"
+    },
+    {
+      "title": "Ice Release: Earthen Consecutive Chains of Ice",
+      "slug": "Ice Release Earthen Consecutive Chains of Ice",
+      "file": "narutopedia_pages/jutsu/Ice Release Earthen Consecutive Chains of Ice.html"
+    },
+    {
+      "title": "Ice Release: Frozen Capturing Field",
+      "slug": "Ice Release Frozen Capturing Field",
+      "file": "narutopedia_pages/jutsu/Ice Release Frozen Capturing Field.html"
+    },
+    {
+      "title": "Ice Release: Ice Peak Crumbling",
+      "slug": "Ice Release Ice Peak Crumbling",
+      "file": "narutopedia_pages/jutsu/Ice Release Ice Peak Crumbling.html"
+    },
+    {
+      "title": "Ice Release: Ice Rock Dome of Magnificent Nothingness",
+      "slug": "Ice Release Ice Rock Dome of Magnificent Nothingness",
+      "file": "narutopedia_pages/jutsu/Ice Release Ice Rock Dome of Magnificent Nothingness.html"
+    },
+    {
+      "title": "Ice Release: Ice-Breaking Sledgehammer",
+      "slug": "Ice Release Ice-Breaking Sledgehammer",
+      "file": "narutopedia_pages/jutsu/Ice Release Ice-Breaking Sledgehammer.html"
+    },
+    {
+      "title": "Ice Release: Icicle Combo",
+      "slug": "Ice Release Icicle Combo",
+      "file": "narutopedia_pages/jutsu/Ice Release Icicle Combo.html"
+    },
+    {
+      "title": "Ice Release: Icicle Swallow",
+      "slug": "Ice Release Icicle Swallow",
+      "file": "narutopedia_pages/jutsu/Ice Release Icicle Swallow.html"
+    },
+    {
+      "title": "Ice Release: One Horned White Whale",
+      "slug": "Ice Release One Horned White Whale",
+      "file": "narutopedia_pages/jutsu/Ice Release One Horned White Whale.html"
+    },
+    {
+      "title": "Ice Release: Swallow Snow Storm",
+      "slug": "Ice Release Swallow Snow Storm",
+      "file": "narutopedia_pages/jutsu/Ice Release Swallow Snow Storm.html"
+    },
+    {
+      "title": "Ice Release: Tearing Dragon Fierce Tiger",
+      "slug": "Ice Release Tearing Dragon Fierce Tiger",
+      "file": "narutopedia_pages/jutsu/Ice Release Tearing Dragon Fierce Tiger.html"
+    },
+    {
+      "title": "Ice Release: Ten Thousand Ice Petals",
+      "slug": "Ice Release Ten Thousand Ice Petals",
+      "file": "narutopedia_pages/jutsu/Ice Release Ten Thousand Ice Petals.html"
+    },
+    {
+      "title": "Ice Release: Twin Dragon Blizzard",
+      "slug": "Ice Release Twin Dragon Blizzard",
+      "file": "narutopedia_pages/jutsu/Ice Release Twin Dragon Blizzard.html"
+    },
+    {
+      "title": "Ice Release: Whirlwind",
+      "slug": "Ice Release Whirlwind",
+      "file": "narutopedia_pages/jutsu/Ice Release Whirlwind.html"
+    },
+    {
+      "title": "Ice Release: Wolf Fang Avalanche Technique",
+      "slug": "Ice Release Wolf Fang Avalanche Technique",
+      "file": "narutopedia_pages/jutsu/Ice Release Wolf Fang Avalanche Technique.html"
+    },
+    {
+      "title": "Ice Sword Technique",
+      "slug": "Ice Sword Technique",
+      "file": "narutopedia_pages/jutsu/Ice Sword Technique.html"
+    },
+    {
+      "title": "Ice-Breaking Fist",
+      "slug": "Ice-Breaking Fist",
+      "file": "narutopedia_pages/jutsu/Ice-Breaking Fist.html"
+    },
+    {
+      "title": "Illusionary Mist",
+      "slug": "Illusionary Mist",
+      "file": "narutopedia_pages/jutsu/Illusionary Mist.html"
+    },
+    {
+      "title": "Immortal Body",
+      "slug": "Immortal Body",
+      "file": "narutopedia_pages/jutsu/Immortal Body.html"
+    },
+    {
+      "title": "Impaling Spear Tree",
+      "slug": "Impaling Spear Tree",
+      "file": "narutopedia_pages/jutsu/Impaling Spear Tree.html"
+    },
+    {
+      "title": "Impermanence of Worldly Things",
+      "slug": "Impermanence of Worldly Things",
+      "file": "narutopedia_pages/jutsu/Impermanence of Worldly Things.html"
+    },
+    {
+      "title": "Improvised Secret Technique: Lightning Ball Shuriken Technique",
+      "slug": "Improvised Secret Technique Lightning Ball Shuriken Technique",
+      "file": "narutopedia_pages/jutsu/Improvised Secret Technique Lightning Ball Shuriken Technique.html"
+    },
+    {
+      "title": "Incursion of Clarity",
+      "slug": "Incursion of Clarity",
+      "file": "narutopedia_pages/jutsu/Incursion of Clarity.html"
+    },
+    {
+      "title": "Indra's Arrow",
+      "slug": "Indra's Arrow",
+      "file": "narutopedia_pages/jutsu/Indra's Arrow.html"
+    },
+    {
+      "title": "Infinite Embrace",
+      "slug": "Infinite Embrace",
+      "file": "narutopedia_pages/jutsu/Infinite Embrace.html"
+    },
+    {
+      "title": "Infinite Tsukuyomi",
+      "slug": "Infinite Tsukuyomi",
+      "file": "narutopedia_pages/jutsu/Infinite Tsukuyomi.html"
+    },
+    {
+      "title": "Infinite Wild Dance",
+      "slug": "Infinite Wild Dance",
+      "file": "narutopedia_pages/jutsu/Infinite Wild Dance.html"
+    },
+    {
+      "title": "Ink Bubble Explosion",
+      "slug": "Ink Bubble Explosion",
+      "file": "narutopedia_pages/jutsu/Ink Bubble Explosion.html"
+    },
+    {
+      "title": "Ink Clone Technique",
+      "slug": "Ink Clone Technique",
+      "file": "narutopedia_pages/jutsu/Ink Clone Technique.html"
+    },
+    {
+      "title": "Ink Creation",
+      "slug": "Ink Creation",
+      "file": "narutopedia_pages/jutsu/Ink Creation.html"
+    },
+    {
+      "title": "Ink Flush",
+      "slug": "Ink Flush",
+      "file": "narutopedia_pages/jutsu/Ink Flush.html"
+    },
+    {
+      "title": "Ink Lariat",
+      "slug": "Ink Lariat",
+      "file": "narutopedia_pages/jutsu/Ink Lariat.html"
+    },
+    {
+      "title": "Ink Mist Technique",
+      "slug": "Ink Mist Technique",
+      "file": "narutopedia_pages/jutsu/Ink Mist Technique.html"
+    },
+    {
+      "title": "Inner Sakura",
+      "slug": "Inner Sakura",
+      "file": "narutopedia_pages/jutsu/Inner Sakura.html"
+    },
+    {
+      "title": "Insect Clone Technique",
+      "slug": "Insect Clone Technique",
+      "file": "narutopedia_pages/jutsu/Insect Clone Technique.html"
+    },
+    {
+      "title": "Insect Deception Technique",
+      "slug": "Insect Deception Technique",
+      "file": "narutopedia_pages/jutsu/Insect Deception Technique.html"
+    },
+    {
+      "title": "Insect Jamming Technique",
+      "slug": "Insect Jamming Technique",
+      "file": "narutopedia_pages/jutsu/Insect Jamming Technique.html"
+    },
+    {
+      "title": "Insect Jar Technique",
+      "slug": "Insect Jar Technique",
+      "file": "narutopedia_pages/jutsu/Insect Jar Technique.html"
+    },
+    {
+      "title": "Insect Pillar",
+      "slug": "Insect Pillar",
+      "file": "narutopedia_pages/jutsu/Insect Pillar.html"
+    },
+    {
+      "title": "Insect Pillar Technique",
+      "slug": "Insect Pillar Technique",
+      "file": "narutopedia_pages/jutsu/Insect Pillar Technique.html"
+    },
+    {
+      "title": "Insect Rope Technique",
+      "slug": "Insect Rope Technique",
+      "file": "narutopedia_pages/jutsu/Insect Rope Technique.html"
+    },
+    {
+      "title": "Insect Spying Technique",
+      "slug": "Insect Spying Technique",
+      "file": "narutopedia_pages/jutsu/Insect Spying Technique.html"
+    },
+    {
+      "title": "Insect Webbing",
+      "slug": "Insect Webbing",
+      "file": "narutopedia_pages/jutsu/Insect Webbing.html"
+    }
+  ]
+}
