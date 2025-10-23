@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Sage Mode — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Sage Mode</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Sage%20Mode" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="box headnote">
+<tbody><tr>
+<td>This article is about the technique. For the chapter, see <a href="https://naruto.fandom.com/wiki/Sage_Mode!!" title="Sage Mode!!">Sage Mode!!</a>.
+</td></tr></tbody></table>
+<p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Sage Mode<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Sage+Mode&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Sage Mode"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Sage_Mode" title="Special:FormEdit/Jutsu/Sage Mode">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">仙人モード</rb></ruby>­ <dfn lang="ja-Latn">(Sennin Mōdo)</dfn></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/5/50/Sage_mode.png/revision/latest?cb=20150125202353" title="Sage mode">
+<img alt="Sage mode" class="pi-image-thumbnail" data-image-key="Sage_mode.png" data-image-name="Sage mode.png" data-relevant="1" height="151" src="https://static.wikia.nocookie.net/naruto/images/5/50/Sage_mode.png/revision/latest/scale-to-width-down/267?cb=20150125202353" srcset="https://static.wikia.nocookie.net/naruto/images/5/50/Sage_mode.png/revision/latest/scale-to-width-down/267?cb=20150125202353 1x, https://static.wikia.nocookie.net/naruto/images/5/50/Sage_mode.png/revision/latest/scale-to-width-down/536?cb=20150125202353 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="viz manga">
+<h3 class="pi-data-label pi-secondary-font">Viz print media</h3>
+<div class="pi-data-value pi-font">Honoured Sage Mode</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="other names">
+<h3 class="pi-data-label pi-secondary-font">Alternative names</h3>
+<div class="pi-data-value pi-font">Hermit Mode</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut manga">
+<h3 class="pi-data-label pi-secondary-font">Manga</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Jiraiya%27s_Choice!!_(volume)" title="Jiraiya's Choice!! (volume)">Volume #41</a>, <a href="https://naruto.fandom.com/wiki/The_Two_Great_Sages%E2%80%A6!!" title="The Two Great Sages…!!"><i>Naruto</i> Chapter #375</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Honoured_Sage_Mode!" title="Honoured Sage Mode!"><i>Naruto Shippūden</i> Episode #131</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="novel debut">
+<h3 class="pi-data-label pi-secondary-font">Novel</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_the_Movie:_Blood_Prison" title="Naruto the Movie: Blood Prison">Naruto the Movie: Blood Prison</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="movie debut">
+<h3 class="pi-data-label pi-secondary-font">Movie</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_the_Movie:_Blood_Prison" title="Naruto the Movie: Blood Prison">Naruto the Movie: Blood Prison</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Heroes_3" title="Naruto Shippūden: Ultimate Ninja Heroes 3">Naruto Shippūden: Ultimate Ninja Heroes 3</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="ova debut">
+<h3 class="pi-data-label pi-secondary-font">OVA</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_x_UT" title="Naruto x UT">Naruto x UT</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Manga, Novel, Game, Movie</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Senjutsu" title="Senjutsu">Senjutsu</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Supplementary</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Parent&amp;value=Sage_Mode" rel="noreferrer noopener" target="_blank">Derived jutsu</a></h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Big_Ball_Rasenshuriken" title="Big Ball Rasenshuriken">Big Ball Rasenshuriken</a></li><li><a href="https://naruto.fandom.com/wiki/Demonic_Illusion:_Toad_Confrontation_Chant" title="Demonic Illusion: Toad Confrontation Chant">Demonic Illusion: Toad Confrontation Chant</a></li><li><a href="https://naruto.fandom.com/wiki/Fighting_Tongue_Bind" title="Fighting Tongue Bind">Fighting Tongue Bind</a></li><li><a href="https://naruto.fandom.com/wiki/Fighting_Tongue_Slash" title="Fighting Tongue Slash">Fighting Tongue Slash</a></li><li><a href="https://naruto.fandom.com/wiki/Fire_Release:_Big_Flame_Bullet" title="Fire Release: Big Flame Bullet">Fire Release: Big Flame Bullet</a></li><li><a href="https://naruto.fandom.com/wiki/Frog_Kata" title="Frog Kata">Frog Kata</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Frog_Strike" title="Frog Strike">Frog Strike</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Great_Snake_Thrust" title="Great Snake Thrust">Great Snake Thrust</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art_Wood_Release:_True_Several_Thousand_Hands" title="Sage Art Wood Release: True Several Thousand Hands">Sage Art Wood Release: True Several Thousand Hands</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Kanzeon_Lotus_King" title="Kanzeon Lotus King">Kanzeon Lotus King</a></li><li><a href="https://naruto.fandom.com/wiki/Top_Transformed_Buddha" title="Top Transformed Buddha">Top Transformed Buddha</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Amphibian_Technique" title="Sage Art: Amphibian Technique">Sage Art: Amphibian Technique</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Five_Fire_Gods%27_Fan_of_Flames" title="Sage Art: Five Fire Gods' Fan of Flames">Sage Art: Five Fire Gods' Fan of Flames</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Frog_Call" title="Sage Art: Frog Call">Sage Art: Frog Call</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Gate_of_the_Great_God" title="Sage Art: Gate of the Great God">Sage Art: Gate of the Great God</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Great_Snake_Lightning" title="Sage Art: Great Snake Lightning">Sage Art: Great Snake Lightning</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Inorganic_Reincarnation" title="Sage Art: Inorganic Reincarnation">Sage Art: Inorganic Reincarnation</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Many_Ultra-Big_Ball_Spiralling_Serial_Spheres" title="Sage Art: Many Ultra-Big Ball Spiralling Serial Spheres">Sage Art: Many Ultra-Big Ball Spiralling Serial Spheres</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_White_Rage_Technique" title="Sage Art: White Rage Technique">Sage Art: White Rage Technique</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Wind_Release_Dust_Cloud" title="Sage Art: Wind Release Dust Cloud">Sage Art: Wind Release Dust Cloud</a></li><li><a href="https://naruto.fandom.com/wiki/Starch_Syrup_Gun" title="Starch Syrup Gun">Starch Syrup Gun</a></li><li><a href="https://naruto.fandom.com/wiki/Strange_Transmission_Distant_Shadow" title="Strange Transmission Distant Shadow">Strange Transmission Distant Shadow</a></li><li><a href="https://naruto.fandom.com/wiki/Super_Compression_Rasengan" title="Super Compression Rasengan">Super Compression Rasengan</a></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Related jutsu</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="related jutsu">
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Sage_Transformation" title="Sage Transformation">Sage Transformation</a>, <a href="https://naruto.fandom.com/wiki/Six_Paths_Senjutsu" title="Six Paths Senjutsu">Six Paths Senjutsu</a>, <a href="https://naruto.fandom.com/wiki/Six_Paths_Sage_Mode" title="Six Paths Sage Mode">Six Paths Sage Mode</a></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Fukasaku" title="Fukasaku">Fukasaku</a></li><li><a href="https://naruto.fandom.com/wiki/Gamakichi" title="Gamakichi">Gamakichi</a></li><li><a href="https://naruto.fandom.com/wiki/Hashirama_Senju" title="Hashirama Senju">Hashirama Senju</a></li><li><a href="https://naruto.fandom.com/wiki/Jiraiya" title="Jiraiya">Jiraiya</a></li><li><a href="https://naruto.fandom.com/wiki/J%C5%ABgo" title="Jūgo">Jūgo</a></li><li><a href="https://naruto.fandom.com/wiki/Kabuto_Yakushi" title="Kabuto Yakushi">Kabuto Yakushi</a></li><li><a href="https://naruto.fandom.com/wiki/Minato_Namikaze" title="Minato Namikaze">Minato Namikaze</a></li><li><a href="https://naruto.fandom.com/wiki/Mitsuki" title="Mitsuki">Mitsuki</a></li><li><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a></li><li><a href="https://naruto.fandom.com/wiki/Shima" title="Shima">Shima</a></li><li><a href="https://naruto.fandom.com/wiki/White_Snake_Sage" title="White Snake Sage">White Snake Sage</a></li><li><a href="https://naruto.fandom.com/wiki/Koji_Kashin" title="Koji Kashin">Koji Kashin</a></li><li><a href="https://naruto.fandom.com/wiki/Gamamaru" title="Gamamaru">Gamamaru</a><sup> (Anime only)</sup></li></ul></div></div>
+</div>
+</section>
+</aside>
+<b>Sage Mode</b> is an empowered state that can be entered by blending <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Natural_energy" title="Natural energy">natural energy</a> with one's <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a>, creating <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Senjutsu_chakra" title="Senjutsu chakra">senjutsu chakra</a>. Sage Mode allows users to tap into the natural force of the world, opening up new techniques to them and allowing them to power up existing ones with the new senjutsu chakra.
+<p></p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Training"><span class="tocnumber">1</span> <span class="toctext">Training</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Attributes"><span class="tocnumber">2</span> <span class="toctext">Attributes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="about:blank#Advantages"><span class="tocnumber">2.1</span> <span class="toctext">Advantages</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="about:blank#Disadvantages"><span class="tocnumber">2.2</span> <span class="toctext">Disadvantages</span></a>
+<ul>
+<li class="toclevel-3 tocsection-5"><a href="about:blank#Bypassing_the_Disadvantages"><span class="tocnumber">2.2.1</span> <span class="toctext">Bypassing the Disadvantages</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="about:blank#Forms"><span class="tocnumber">3</span> <span class="toctext">Forms</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="about:blank#Sage_Mode"><span class="tocnumber">3.1</span> <span class="toctext">Sage Mode</span></a>
+<ul>
+<li class="toclevel-3 tocsection-8"><a href="about:blank#Sage_Transformation"><span class="tocnumber">3.1.1</span> <span class="toctext">Sage Transformation</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="about:blank#Tailed_Beast_Sage_Mode"><span class="tocnumber">3.2</span> <span class="toctext">Tailed Beast Sage Mode</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="about:blank#Six_Paths_Sage_Mode"><span class="tocnumber">3.3</span> <span class="toctext">Six Paths Sage Mode</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-11"><a href="about:blank#Techniques"><span class="tocnumber">4</span> <span class="toctext">Techniques</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="about:blank#Trivia"><span class="tocnumber">5</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="about:blank#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Training">Training</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/6/60/Perfect_Balance.PNG/revision/latest?cb=20160224021229"><img alt="Perfect Balance" class="thumbimage lazyload" data-image-key="Perfect_Balance.PNG" data-image-name="Perfect Balance.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/60/Perfect_Balance.PNG/revision/latest/scale-to-width-down/180?cb=20160224021229" decoding="async" height="100" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/6/60/Perfect_Balance.PNG/revision/latest?cb=20160224021229"><img alt="Perfect Balance" class="thumbimage" data-image-key="Perfect_Balance.PNG" data-image-name="Perfect Balance.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/60/Perfect_Balance.PNG/revision/latest/scale-to-width-down/180?cb=20160224021229" decoding="async" height="100" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/6/60/Perfect_Balance.PNG/revision/latest/scale-to-width-down/180?cb=20160224021229" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Perfect_Balance.PNG"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Jiraiya training to master senjutsu.</p> </figcaption> </figure>
+<p>Sage Mode is known to be taught in two places: at <a href="https://naruto.fandom.com/wiki/Mount_My%C5%8Dboku" title="Mount Myōboku">Mount Myōboku</a> by the <a href="https://naruto.fandom.com/wiki/Toad" title="Toad">toads</a> and at <a href="https://naruto.fandom.com/wiki/Ry%C5%ABchi_Cave" title="Ryūchi Cave">Ryūchi Cave</a> by the <a href="https://naruto.fandom.com/wiki/Snake" title="Snake">snakes</a>. Users of Sage Mode must possess "extreme chakra levels" to invoke senjutsu. It is also important that their bodies be strong enough to support the increased power. Orochimaru, who discovered the <a href="https://naruto.fandom.com/wiki/Ry%C5%ABchi_Cave" title="Ryūchi Cave">Ryūchi Cave</a> and gained the ability to mould Senjutsu chakra, was not able to use Sage Transformation to enter Sage Mode for this reason.
+</p><p>In order to enter Sage Mode, the gatherer must remain absolutely still in order to be one with nature and balance the natural energy with their own physical and spiritual energies. If the user puts too little natural energy into using senjutsu, the technique will not work. Conversely, if too much natural energy is taken in, their body will turn to stone forever; humans will also be transformed into whichever animal's school the senjutsu was learned from.
+</p><p>The toads of Mount Myōboku have devised several tools to make learning Sage Mode easier. By applying a special oil, the applicant's body will start passively taking in natural energy. This oil will evaporate if taken outside Mount Myōboku, thus rendering it useful only for learning purposes. The toads also have a special staff that, when struck with, knocks all the natural energy out of the gatherer, thus reversing any transformations before they can become permanent and the user turns to stone.
+</p><p>At Ryūchi Cave, one must be bitten by the <a href="https://naruto.fandom.com/wiki/White_Snake_Sage" title="White Snake Sage">White Snake Sage</a>, who injects them with natural energy. According to legend, if one's body is strong enough to withstand said injection, it will accept the power without reservation. If not, the snake will devour the person whole.
+</p>
+<h2><span class="mw-headline" id="Attributes">Attributes</span></h2>
+<h3><span class="mw-headline" id="Advantages">Advantages</span></h3>
+<ul><li>The user's physical strength, speed, <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">stamina</a>, reflexes, perception, and durability are enhanced.</li>
+<li>The user's <a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Genjutsu" title="Genjutsu">genjutsu</a>, and <a href="https://naruto.fandom.com/wiki/Taijutsu" title="Taijutsu">taijutsu</a> become more powerful.</li>
+<li>The user can manipulate natural energy.
+<ul><li>Those who have mastered the Sage Techniques of <a href="https://naruto.fandom.com/wiki/Mount_My%C5%8Dboku" title="Mount Myōboku">Mount Myōboku</a> have shown the ability to turn the natural energy around them into an <a href="https://naruto.fandom.com/wiki/Frog_Kata" title="Frog Kata">extension</a> of their body to increase the reach of their attacks.</li>
+<li>Those who have mastered the Sage Techniques of the <a href="https://naruto.fandom.com/wiki/Ry%C5%ABchi_Cave" title="Ryūchi Cave">Ryūchi Cave</a> have shown the ability to use natural energy to <a href="https://naruto.fandom.com/wiki/Sage_Art:_Inorganic_Reincarnation" title="Sage Art: Inorganic Reincarnation">breathe life</a> into inorganic substances and control them.</li></ul></li>
+<li>The user can <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sensor" title="Sensor">sense</a> <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a> around them and can sense attacks without the need to see them.</li>
+<li>When facing an opponent that can drain chakra, this can prove to be fatal to the opponent if they absorbed too much chakra and will be turned to stone if they haven't had training with Sage Mode in the past. Furthermore, the user of Sage Mode can hold still to absorb more natural energy for the opponent to absorb and turn their own chakra absorption against them.</li></ul>
+<h3><span class="mw-headline" id="Disadvantages">Disadvantages</span></h3>
+<ul><li>In order to gather enough natural energy to initiate the transformation into Sage Mode, the user must remain perfectly still, leaving them vulnerable. Users have at times been shown entering Sage Mode without this preparation.</li>
+<li>Because the user needs to move during combat, the senjutsu chakra cannot be replenished, which means the user can't stay within this state for extended periods of time. Naruto states it is possible to lengthen the time limit.</li></ul>
+<h4><span class="mw-headline" id="Bypassing_the_Disadvantages">Bypassing the Disadvantages</span></h4>
+<p>These weaknesses, however, can be compensated for through various methods and techniques such as:
+</p>
+<ul><li>The <a href="https://naruto.fandom.com/wiki/Sage_Art:_Amphibian_Technique" title="Sage Art: Amphibian Technique">Sage Art: Amphibian Technique</a>, where one or more toads fuse with the user's shoulders and gathers natural energy for them to use, splitting the stillness aspect of senjutsu chakra moulding from the user, allowing them to move in a fight.</li>
+<li>Another option is to employ <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Shadow_clone" title="Shadow clone">shadow clones</a>. The clones can gather natural energy elsewhere and are dispelled when the energy is needed, thus transferring the gathered energy to the original. For Naruto, this limited the number of shadow clones that he can have active at a time to five, for as long as the clones are gathering natural energy, creating any more than that would disrupt the clones' focus.</li>
+<li><a href="https://naruto.fandom.com/wiki/Kabuto_Yakushi" title="Kabuto Yakushi">Kabuto Yakushi</a> assimilated the DNA of <a href="https://naruto.fandom.com/wiki/J%C5%ABgo" title="Jūgo">Jūgo</a> to replicate his <a href="https://naruto.fandom.com/wiki/J%C5%ABgo%27s_Clan" title="Jūgo's Clan">clan</a>'s ability to <a href="https://naruto.fandom.com/wiki/Sage_Transformation" title="Sage Transformation">passively absorb</a> natural energy, thus allowing him to continuously collect the energy even while moving, bypassing these particular weaknesses.</li>
+<li>If the user continually practices the use of their Sage Mode, then the time needed to recharge their sage chakra can be drastically shortened.</li>
+<li>If the user is also a jinchūriki that has achieved harmony with their tailed beast, they can drastically speed up their ability to gather natural energy in tailed beast mode to the point of only needing a few seconds to fully charge or recharge their sage chakra. Tailed beasts can also assist their jinchūriki in gathering natural energy with their own chakra reserves.</li></ul>
+<h2><span class="mw-headline" id="Forms">Forms</span></h2>
+<h3><span class="mw-headline" id="Sage_Mode">Sage Mode</span></h3>
+<p>Users that can properly balance their own chakra with natural energy will not experience any animalistic transformations to their body. The one exception is a dark pigmentation around their eyes and the eyes themselves, which usually differ based on where the user learned Sage Mode.
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Jiraiya" title="Jiraiya">Jiraiya</a> was not able to properly balance his own chakra with natural energy, and as a result his appearance took on a number of toad-like traits when using Sage Mode: his nose grew bigger and gained warts, his teeth turned sharp, he grew a goatee, and acquired toad-like eyes. Because of these traits, Jiraiya did not like to use Sage Mode as it "displeased the ladies". Some of the physical alterations, such as the toad posture and the webbed feet, were beneficial and improved his manoeuvrability, and he could consciously manifest the alterations in order to take advantage of them.</li>
+<li><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> has yellow irides and toad-like pupils, with orange pigmentation around his eyes.</li>
+<li><a href="https://naruto.fandom.com/wiki/Hashirama_Senju" title="Hashirama Senju">Hashirama Senju</a> had yellow irides, with black pigmentation around his eyes that extended to his ears, as well as an additional round marking on his forehead with a dot in its centre (red on the cover of <i>Weekly Shōnen Jump 2014 Issue #9</i>, and green in the video game series as well as in <i>Boruto: Naruto Next Generations</i>).</li>
+<li><a href="https://naruto.fandom.com/wiki/Minato_Namikaze" title="Minato Namikaze">Minato Namikaze</a> had yellow irides and toad-like pupils, with orange pigmentation around his eyes.</li>
+<li><a href="https://naruto.fandom.com/wiki/Koji_Kashin" title="Koji Kashin">Koji Kashin</a> has toad-like irides, with dark pigmentation around his eyes.</li></ul>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-center wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="1" hash="ddecc6421eee05a546c50449a2882153" id="gallery-1"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Amphibian_Technique-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Amphibian_Technique.png" style="height:185px; width:185px;" title="Amphibian Technique.png (1.32 MB)"><noscript><img alt="Jiraiya's Sage Mode." class="thumbimage" data-caption="Jiraiya's Sage Mode." data-image-key="Amphibian_Technique.png" data-image-name="Amphibian Technique.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/0/04/Amphibian_Technique.png/revision/latest/scale-to-width-down/329?cb=20150207111512" style="" title="Amphibian Technique.png (1.32 MB)" width="329"/></noscript><img alt="Jiraiya's Sage Mode." class="thumbimage lazyload" data-caption="Jiraiya's Sage Mode." data-image-key="Amphibian_Technique.png" data-image-name="Amphibian Technique.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/0/04/Amphibian_Technique.png/revision/latest/scale-to-width-down/329?cb=20150207111512" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Amphibian Technique.png (1.32 MB)" width="329"/></a></div></div><div class="lightbox-caption" style="width:185px;">Jiraiya's Sage Mode.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Naruto-s_Sage_Mode-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Naruto%27s_Sage_Mode.png" style="height:185px; width:185px;" title="Naruto's Sage Mode.png (1.29 MB)"><noscript><img alt="Naruto's Sage Mode." class="thumbimage" data-caption="Naruto's Sage Mode." data-image-key="Naruto%27s_Sage_Mode.png" data-image-name="Naruto's Sage Mode.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/d/dc/Naruto%27s_Sage_Mode.png/revision/latest/scale-to-width-down/329?cb=20150124180545" style="" title="Naruto's Sage Mode.png (1.29 MB)" width="329"/></noscript><img alt="Naruto's Sage Mode." class="thumbimage lazyload" data-caption="Naruto's Sage Mode." data-image-key="Naruto%27s_Sage_Mode.png" data-image-name="Naruto's Sage Mode.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/d/dc/Naruto%27s_Sage_Mode.png/revision/latest/scale-to-width-down/329?cb=20150124180545" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Naruto's Sage Mode.png (1.29 MB)" width="329"/></a></div></div><div class="lightbox-caption" style="width:185px;">Naruto's Sage Mode.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Hashirama-s_Sage_Mode-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Hashirama%27s_Sage_Mode.png" style="height:185px; width:185px;" title="Hashirama's Sage Mode.png (894 KB)"><noscript><img alt="Hashirama's Sage Mode." class="thumbimage" data-caption="Hashirama's Sage Mode." data-image-key="Hashirama%27s_Sage_Mode.png" data-image-name="Hashirama's Sage Mode.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/2/20/Hashirama%27s_Sage_Mode.png/revision/latest/scale-to-width-down/328?cb=20150112025603" style="" title="Hashirama's Sage Mode.png (894 KB)" width="328"/></noscript><img alt="Hashirama's Sage Mode." class="thumbimage lazyload" data-caption="Hashirama's Sage Mode." data-image-key="Hashirama%27s_Sage_Mode.png" data-image-name="Hashirama's Sage Mode.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/20/Hashirama%27s_Sage_Mode.png/revision/latest/scale-to-width-down/328?cb=20150112025603" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Hashirama's Sage Mode.png (894 KB)" width="328"/></a></div></div><div class="lightbox-caption" style="width:185px;">Hashirama's Sage Mode.</div></div></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Minato-s_Sage_Mode-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Minato%27s_Sage_Mode.png" style="height:185px; width:185px;" title="Minato's Sage Mode.png (1.31 MB)"><noscript><img alt="Minato's Sage Mode." class="thumbimage" data-caption="Minato's Sage Mode." data-image-key="Minato%27s_Sage_Mode.png" data-image-name="Minato's Sage Mode.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/a/ab/Minato%27s_Sage_Mode.png/revision/latest/scale-to-width-down/329?cb=20150604113414" style="" title="Minato's Sage Mode.png (1.31 MB)" width="329"/></noscript><img alt="Minato's Sage Mode." class="thumbimage lazyload" data-caption="Minato's Sage Mode." data-image-key="Minato%27s_Sage_Mode.png" data-image-name="Minato's Sage Mode.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/ab/Minato%27s_Sage_Mode.png/revision/latest/scale-to-width-down/329?cb=20150604113414" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Minato's Sage Mode.png (1.31 MB)" width="329"/></a></div></div><div class="lightbox-caption" style="width:185px;">Minato's Sage Mode.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Sage_Mode_Koji-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Sage_Mode_Koji.png" style="height:185px; width:185px;" title="Sage Mode Koji.png (1.58 MB)"><noscript><img alt="Koji's Sage Mode." class="thumbimage" data-caption="Koji's Sage Mode." data-image-key="Sage_Mode_Koji.png" data-image-name="Sage Mode Koji.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/e/e7/Sage_Mode_Koji.png/revision/latest/scale-to-width-down/329?cb=20210905163137" style="" title="Sage Mode Koji.png (1.58 MB)" width="329"/></noscript><img alt="Koji's Sage Mode." class="thumbimage lazyload" data-caption="Koji's Sage Mode." data-image-key="Sage_Mode_Koji.png" data-image-name="Sage Mode Koji.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/e/e7/Sage_Mode_Koji.png/revision/latest/scale-to-width-down/329?cb=20210905163137" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Sage Mode Koji.png (1.58 MB)" width="329"/></a></div></div><div class="lightbox-caption" style="width:185px;">Koji's Sage Mode.</div></div></div></div>
+<h4><span class="mw-headline" id="Sage_Transformation">Sage Transformation</span></h4>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Sage_Transformation" title="Sage Transformation">Sage Transformation</a></span>
+</p><p><b>Sage Transformation</b> (<span lang="ja">仙人化</span>, <i>Senninka</i>) is a way of attaining Sage Mode, using a bodily reaction exhibited by members of <a class="mw-redirect" href="https://naruto.fandom.com/wiki/J%C5%ABgo%27s_clan" title="Jūgo's clan">Jūgo's clan</a>. By exposing their special body fluids to <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Natural_energy" title="Natural energy">natural energy</a>, they gain increased physical capabilities and the ability to perform various shape-shifting feats.
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/J%C5%ABgo" title="Jūgo">Jūgo</a>'s skin tone darkens and his sclerae turn black. He also gains a black stripe running from the middle of his forehead and down the bridge of his nose. He receives a massive boost in overall ability, but loses his mind to his murderous side, signified by a change in his voice.</li>
+<li><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Kabuto" title="Kabuto">Kabuto</a> has yellow, snake-like irides and blackened sclerae, as well as purple pigmentation around his eyes that extends down to his shoulder blades. His snake-like characteristics progress further in Sage Mode with him growing four horns, leading him to state that he had metaphorically transcended from a "snake" to a "dragon".</li>
+<li><a href="https://naruto.fandom.com/wiki/Mitsuki" title="Mitsuki">Mitsuki</a> gains a cyan chakra shroud that forms into ethereal snakes around his body to aid in his attack range. A single horn juts from his forehead and he gains black markings (green in the anime) around his eyes.</li></ul>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-center wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="2" hash="800365b4a89fe0cc30d5c53151e9f4eb" id="gallery-2"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="J--go-s_Sage_Mode-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:J%C5%ABgo%27s_Sage_Mode.png" style="height:185px; width:185px;" title="Jūgo's Sage Mode.png (1.37 MB)"><noscript><img alt="Jūgo's Sage Mode." class="thumbimage" data-caption="Jūgo's Sage Mode." data-image-key="J%C5%ABgo%27s_Sage_Mode.png" data-image-name="Jūgo's Sage Mode.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/7/7c/J%C5%ABgo%27s_Sage_Mode.png/revision/latest/scale-to-width-down/330?cb=20201009095117" style="" title="Jūgo's Sage Mode.png (1.37 MB)" width="330"/></noscript><img alt="Jūgo's Sage Mode." class="thumbimage lazyload" data-caption="Jūgo's Sage Mode." data-image-key="J%C5%ABgo%27s_Sage_Mode.png" data-image-name="Jūgo's Sage Mode.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/7c/J%C5%ABgo%27s_Sage_Mode.png/revision/latest/scale-to-width-down/330?cb=20201009095117" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Jūgo's Sage Mode.png (1.37 MB)" width="330"/></a></div></div><div class="lightbox-caption" style="width:185px;">Jūgo's Sage Mode.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Kabuto-s_Sage_Mode-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Kabuto%27s_Sage_Mode.png" style="height:185px; width:185px;" title="Kabuto's Sage Mode.png (4.93 MB)"><noscript><img alt="Kabuto's Sage Mode." class="thumbimage" data-caption="Kabuto's Sage Mode." data-image-key="Kabuto%27s_Sage_Mode.png" data-image-name="Kabuto's Sage Mode.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/7/7f/Kabuto%27s_Sage_Mode.png/revision/latest/scale-to-width-down/328?cb=20160808054103" style="" title="Kabuto's Sage Mode.png (4.93 MB)" width="328"/></noscript><img alt="Kabuto's Sage Mode." class="thumbimage lazyload" data-caption="Kabuto's Sage Mode." data-image-key="Kabuto%27s_Sage_Mode.png" data-image-name="Kabuto's Sage Mode.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/7f/Kabuto%27s_Sage_Mode.png/revision/latest/scale-to-width-down/328?cb=20160808054103" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Kabuto's Sage Mode.png (4.93 MB)" width="328"/></a></div></div><div class="lightbox-caption" style="width:185px;">Kabuto's Sage Mode.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Mitsuki-s_Sage_Mode-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Mitsuki%27s_Sage_Mode.png" style="height:185px; width:185px;" title="Mitsuki's Sage Mode.png (1.43 MB)"><noscript><img alt="Mitsuki's Sage Mode." class="thumbimage" data-caption="Mitsuki's Sage Mode." data-image-key="Mitsuki%27s_Sage_Mode.png" data-image-name="Mitsuki's Sage Mode.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/5/51/Mitsuki%27s_Sage_Mode.png/revision/latest/scale-to-width-down/330?cb=20200921114225" style="" title="Mitsuki's Sage Mode.png (1.43 MB)" width="330"/></noscript><img alt="Mitsuki's Sage Mode." class="thumbimage lazyload" data-caption="Mitsuki's Sage Mode." data-image-key="Mitsuki%27s_Sage_Mode.png" data-image-name="Mitsuki's Sage Mode.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/51/Mitsuki%27s_Sage_Mode.png/revision/latest/scale-to-width-down/330?cb=20200921114225" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Mitsuki's Sage Mode.png (1.43 MB)" width="330"/></a></div></div><div class="lightbox-caption" style="width:185px;">Mitsuki's Sage Mode.</div></div></div></div>
+<h3><span class="mw-headline" id="Tailed_Beast_Sage_Mode">Tailed Beast Sage Mode</span></h3>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/24/TBM_combines_with_SM.png/revision/latest?cb=20141009133727"><img alt="TBM combines with SM" class="thumbimage lazyload" data-image-key="TBM_combines_with_SM.png" data-image-name="TBM combines with SM.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/24/TBM_combines_with_SM.png/revision/latest/scale-to-width-down/180?cb=20141009133727" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/24/TBM_combines_with_SM.png/revision/latest?cb=20141009133727"><img alt="TBM combines with SM" class="thumbimage" data-image-key="TBM_combines_with_SM.png" data-image-name="TBM combines with SM.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/24/TBM_combines_with_SM.png/revision/latest/scale-to-width-down/180?cb=20141009133727" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/2/24/TBM_combines_with_SM.png/revision/latest/scale-to-width-down/180?cb=20141009133727" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:TBM_combines_with_SM.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Naruto's Tailed Beast Sage Mode.</p> </figcaption> </figure>
+<p>After earning the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Nine-Tails" title="Nine-Tails">Nine-Tails</a>' cooperation, Naruto becomes able to combine Sage Mode with his <a href="https://naruto.fandom.com/wiki/Nine-Tails_Chakra_Mode#Tailed_Beast_Mode" title="Nine-Tails Chakra Mode">Tailed Beast Mode</a>. The red irides turn orange, and the slitted pupils characteristic of normal Nine-Tails transformations merge with the Sage Mode's eye pattern, creating a design reminiscent of a cross. While using the combined form, Naruto gains simultaneous access to both forms' advantages, such as augmenting <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Balls</a> with senjutsu chakra. The combination of both forms allows for a greater power than either Tailed Beast Mode or Sage Mode individually, which allowed Naruto to hold his own against the likes of <a href="https://naruto.fandom.com/wiki/Obito_Uchiha" title="Obito Uchiha">Obito Uchiha</a> as the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a>' <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki" title="Jinchūriki">Jinchūriki</a>. Two years after the War, Naruto's skill with this form had increased to the point where he could fly within it, and easily shatter <a href="https://naruto.fandom.com/wiki/Truth-Seeking_Ball" title="Truth-Seeking Ball">Truth-Seeking Balls</a> during his battle with <a href="https://naruto.fandom.com/wiki/Toneri_%C5%8Ctsutsuki" title="Toneri Ōtsutsuki">Toneri Ōtsutsuki</a>.
+</p>
+<div style="clear: both;"></div>
+<h3><span class="mw-headline" id="Six_Paths_Sage_Mode">Six Paths Sage Mode</span></h3>
+<figure class="thumb mw-halign-right show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/22/Naruto%27s_SPSM.png/revision/latest?cb=20150730222303"><img alt="Naruto's SPSM" class="thumbimage lazyload" data-image-key="Naruto%27s_SPSM.png" data-image-name="Naruto's SPSM.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/22/Naruto%27s_SPSM.png/revision/latest/scale-to-width-down/180?cb=20150730222303" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/22/Naruto%27s_SPSM.png/revision/latest?cb=20150730222303"><img alt="Naruto's SPSM" class="thumbimage" data-image-key="Naruto%27s_SPSM.png" data-image-name="Naruto's SPSM.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/22/Naruto%27s_SPSM.png/revision/latest/scale-to-width-down/180?cb=20150730222303" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/2/22/Naruto%27s_SPSM.png/revision/latest/scale-to-width-down/180?cb=20150730222303" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Naruto%27s_SPSM.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Naruto's Six Paths Sage Mode.</p> </figcaption> </figure>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Six_Paths_Sage_Mode" title="Six Paths Sage Mode">Six Paths Sage Mode</a></span>
+<b>Six Paths Sage Mode</b> (<span lang="ja">六道仙人モード</span>, <i>Rikudō Sennin Mōdo</i>) is a divine transformation gifted by <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a> to those who have an iron faith and the will to never give up. It significantly enhances the user's powers and allows them to use a number of new techniques.
+</p>
+<h2><span class="mw-headline" id="Techniques">Techniques</span></h2>
+<ul><li><a class="text" href="https://naruto.fandom.com/wiki/Special:BrowseData/Jutsu?Classification=Senjutsu" rel="noreferrer noopener" target="_blank">List of senjutsu</a></li></ul>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>The manifestation of animal-like traits is a reference to the Japanese folktale <i><a class="extiw" href="https://en.wikipedia.org/wiki/Jiraiya_Goketsu_Monogatari" title="wikipedia:Jiraiya Goketsu Monogatari">Jiraiya Goketsu Monogatari</a></i>, where Jiraiya, Tsunade, and Orochimaru came to study specific animal magic into their ninjutsu use.</li>
+<li>The sage training method used by the Toads of Mt. Myōboku resembles the practices of Shugendō, a highly syncretic religion that originated in Heian Japan in which enlightenment is equated with attaining oneness with the kami. This perception of experiential "awakening" is obtained through the understanding of the relationship between humanity and nature, centred on an ascetic, mountain-dwelling practice. In some Japanese myths, supernatural creatures often appeared as Yamabushi (mountain hermits) of Shugendō, which the Toad Sages of Mt. Myōboku and White Sage Snake bear some resemblance.</li>
+<li>In the anime, the term "Honoured Sage Mode" was only used by Jiraiya. This was corrected to "Sage Mode" in later uses, presumably to create a distinction between Jiraiya's use of the technique.</li>
+<li>Despite granting the user the ability to sense chakra, Jiraiya, Shima, and Fukasaku seemingly didn't display this ability during their fight against the Six Paths of Pain.</li>
+<li>In <i><a href="https://naruto.fandom.com/wiki/Naruto_the_Movie:_Blood_Prison" title="Naruto the Movie: Blood Prison">Naruto the Movie: Blood Prison</a></i>, the red coat Naruto wore during <a href="https://naruto.fandom.com/wiki/Pain%27s_Assault" title="Pain's Assault">Pain's Assault</a> appears when he enters Sage Mode and disappears when he turns back to normal.</li>
+<li>In the anime, before life on Earth had chakra with which to infuse it, the <a href="https://naruto.fandom.com/wiki/Secret_Treasure_of_the_Toads" title="Secret Treasure of the Toads">use</a> of natural energy was called <b>Sage Power</b> (仙力, <i>senriki</i>).</li>
+<li>In the anime, the snakes of Ryūchi Cave note that <a href="https://naruto.fandom.com/wiki/Boruto_Uzumaki" title="Boruto Uzumaki">Boruto Uzumaki</a> has the potential for senjutsu, having passed trials that proved his strength of body and could handle natural energy.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251009131945
+Cache expiry: 2592000
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.392 seconds
+Real time usage: 0.571 seconds
+Preprocessor visited node count: 909/1000000
+Post‐expand include size: 5940/2097152 bytes
+Template argument size: 352/2097152 bytes
+Highest expansion depth: 10/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 21105/5000000 bytes
+Lua time usage: 0.239/7.000 seconds
+Lua memory usage: 1896145/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  527.001      1 -total
+ 90.38%  476.289      1 Template:Infobox/Jutsu
+  3.92%   20.641      2 Template:Main_with-include
+  2.19%   11.552      2 Template:Transclude_section
+  1.06%    5.588      2 Template:Translation
+  0.37%    1.968      1 Template:Drilldown
+  0.34%    1.787      2 Template:Var
+  0.29%    1.521      1 Template:Looking_for
+  0.29%    1.511      1 Template:-
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:3533-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251009131945 and revision id 1454186. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span><span class="footer-divider">•</span><span class="footer-category">•</span><span class="footer-divider">•</span><span class="footer-category">Pages_transcluding_nonexistent_sections</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Sage%20Mode">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

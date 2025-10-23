@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Nine Masked Beasts — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Nine Masked Beasts</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Nine%20Masked%20Beasts" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Nine Masked Beasts<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Nine+Masked+Beasts&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Nine Masked Beasts"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Nine_Masked_Beasts" title="Special:FormEdit/Jutsu/Nine Masked Beasts">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">九面獣</rb></ruby>­ <dfn lang="ja-Latn">(Kumenjū)</dfn></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/4/43/Nine_Masked_Beasts.png/revision/latest?cb=20150130202937" title="Nine Masked Beasts">
+<img alt="Nine Masked Beasts" class="pi-image-thumbnail" data-image-key="Nine_Masked_Beasts.png" data-image-name="Nine Masked Beasts.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/4/43/Nine_Masked_Beasts.png/revision/latest/scale-to-width-down/268?cb=20150130202937" srcset="https://static.wikia.nocookie.net/naruto/images/4/43/Nine_Masked_Beasts.png/revision/latest/scale-to-width-down/268?cb=20150130202937 1x, https://static.wikia.nocookie.net/naruto/images/4/43/Nine_Masked_Beasts.png/revision/latest/scale-to-width-down/536?cb=20150130202937 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="movie debut">
+<h3 class="pi-data-label pi-secondary-font">Movie</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Road_to_Ninja:_Naruto_the_Movie" title="Road to Ninja: Naruto the Movie">Road to Ninja: Naruto the Movie</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Mobile" title="Naruto Mobile">Naruto Mobile</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Game, Movie</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Clone_Techniques" title="Clone Techniques">Clone Techniques</a>, <a href="https://naruto.fandom.com/wiki/Barrier_Ninjutsu" title="Barrier Ninjutsu">Barrier Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Chakra_Absorption_Techniques" title="Chakra Absorption Techniques">Chakra Absorption Techniques</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Supplementary</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="hand signs">
+<h3 class="pi-data-label pi-secondary-font">Hand seals</h3>
+<div class="pi-data-value pi-font">Tiger</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Menma_Uzumaki" title="Menma Uzumaki">Menma Uzumaki</a></li></ul></div></div>
+</div>
+</section>
+</aside>
+
+The <b>Nine Masked Beasts</b> (<span lang="ja">九面獣</span>, <i>Kumenjū</i>) are entities created by <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Menma" title="Menma">Menma</a> through the use of the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Black_Nine-Tails" title="Black Nine-Tails">Black Nine-Tails</a>' <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a>. Five of these beasts are described as divine beasts (<span lang="ja">神獣</span>, <i>shinjū</i>), while the other four are referred to as divine priests (<span lang="ja">神官</span>, <i>shinkan</i>).
+<p></p><p>Menma summons them by forming a tiger seal, declaring "Nine Mask Svāhā" (<span lang="ja">「九面蘇婆訶」</span>, <i>"Kumen Sowaka"</i>) and chanting the <a class="extiw" href="https://en.wikipedia.org/wiki/Kuji-in" title="wikipedia:Kuji-in">kuji-in</a>, which conjures a massive mandala featuring each kanji of the kuji-in encircled by nine rings, arrayed in the same cross pattern he wears on his cloak. Each of the masked beasts emerges from a specific ring.
+</p>
+<ul><li><b>Seiryū</b> (<span lang="ja">青龍</span>, <i>literally meaning:</i> Azure Dragon), a dragon that resembles a <a class="extiw" href="https://en.wikipedia.org/wiki/seahorse" title="wikipedia:seahorse">seahorse</a>. Emerges from the ring bearing the kanji 青 (<span lang="ja">sei</span>, <i>"azure"</i>).</li>
+<li><b>Byakko</b> (<span lang="ja">白虎</span>, <i>literally meaning:</i> White Tiger), a lean and slender tiger. Emerges from the ring bearing the kanji 白 (<span lang="ja">byaku</span>, <i>"white"</i>).</li>
+<li><b>Suzaku</b> (<span lang="ja">朱雀</span>, <i>literally meaning:</i> Vermilion Bird), a bird with elegant and dramatic plumage. Emerges from the ring bearing the kanji 朱 (<span lang="ja">shu</span>, <i>"vermilion"</i>).</li>
+<li><b>Genbu</b> (<span lang="ja">玄武</span>, <i>literally meaning:</i> Black Tortoise), a tortoise with a shell made of overlapping plates. Emerges from the ring bearing the kanji 玄 (<span lang="ja">gen</span>, <i>"black"</i>).</li>
+<li><b>Kinja</b> (<span lang="ja">金蛇</span>, <i>literally meaning:</i> Golden Snake), a massive serpent with golden scales. It can bind opponents by wrapping its body around them. Emerges from the ring bearing the kanji 空 (<span lang="ja">kū</span>, <i>"sky"</i>).</li>
+<li><b>Tennyo</b> (<span lang="ja">天女</span>, <i>literally meaning:</i> Celestial Maiden), an angelic priestess with flowing robes. It uses translucent ribbons to whip at opponents. Like the Kinja, it can also bind opponents. Emerges from the ring bearing the kanji 玉 (<span lang="ja">gyoku</span>, <i>"jewel"</i>).</li>
+<li><b>Shinigami</b> (<span lang="ja">死神</span>, <i>literally meaning:</i> Death God), a priest that resembles a skeleton and carries a scythe. A swing of this scythe unleashes sickle-like energy waves which <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Chakra_Absorption_Technique" title="Chakra Absorption Technique">drain targets of their chakra</a> once they have passed through them. The waves can bypass the barriers set up by Hokuto Sennin and Nanto Sennin. Emerges from the ring bearing the kanji 三 (<span lang="ja">san</span>, <i>"three"</i>).</li>
+<li><b>Hokuto Sennin</b> (<span lang="ja">北斗仙人</span>, <i>literally meaning:</i> Northern Sage), a priest with a fox staff. In unison with the Nanto Sennin, it can trap opponents in purple cylindrical <a href="https://naruto.fandom.com/wiki/Barrier_Ninjutsu" title="Barrier Ninjutsu">barriers</a>. Emerges from the ring bearing the kanji 北 (<span lang="ja">hoku</span>, <i>"north"</i>).</li>
+<li><b>Nanto Sennin</b> (<span lang="ja">南斗仙人</span>, <i>literally meaning:</i> Southern Sage), the matching counterpart of Hokuto Sennin. In unison with the Hokuto Sennin, it can trap opponents in purple cylindrical barriers. Emerges from the ring bearing the kanji 南 (<span lang="ja">nan</span>, <i>"south"</i>).</li></ul>
+<p>When defeated, they revert to their true forms, which are nine masked fox kits (<span lang="ja">子狐</span>, <i>kogitsune</i>) that each possess a single tail. They can also convert back into chakra that will arc through the air from their present location back to Menma. Once they collide with Menma, they reform into the Black Nine-Tails. 
+</p>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-left wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="1" hash="7ef413e2e8ebe3196ac7cb3e204d95a6" id="gallery-1"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:202px; "><div class="thumb" style="height:202px;"><div class="gallery-image-wrapper accent" id="Seiry---png" style="position: relative; height:199px; width:170px; top:0.5px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Seiry%C5%AB.png" style="height:199px; width:170px;" title="Seiryū.png (828 KB)"><noscript><img alt="Seiryū" class="thumbimage" data-caption="Seiryū" data-image-key="Seiry%C5%AB.png" data-image-name="Seiryū.png" data-relevant="1" height="200" src="https://static.wikia.nocookie.net/naruto/images/b/bb/Seiry%C5%AB.png/revision/latest/scale-to-width-down/171?cb=20130509212558" style="" title="Seiryū.png (828 KB)" width="200"/></noscript><img alt="Seiryū" class="thumbimage lazyload" data-caption="Seiryū" data-image-key="Seiry%C5%AB.png" data-image-name="Seiryū.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Seiry%C5%AB.png/revision/latest/scale-to-width-down/171?cb=20130509212558" height="200" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Seiryū.png (828 KB)" width="200"/></a></div></div><div class="lightbox-caption" style="width:200px;">Seiryū</div></div><div class="wikia-gallery-item" style="width:202px; "><div class="thumb" style="height:202px;"><div class="gallery-image-wrapper accent" id="Byakko-png" style="position: relative; height:171px; width:200px; top:14.5px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Byakko.png" style="height:171px; width:200px;" title="Byakko.png (1.33 MB)"><noscript><img alt="Byakko" class="thumbimage" data-caption="Byakko" data-image-key="Byakko.png" data-image-name="Byakko.png" data-relevant="1" height="200" src="https://static.wikia.nocookie.net/naruto/images/0/07/Byakko.png/revision/latest/scale-to-width-down/200?cb=20130509212438" style="" title="Byakko.png (1.33 MB)" width="200"/></noscript><img alt="Byakko" class="thumbimage lazyload" data-caption="Byakko" data-image-key="Byakko.png" data-image-name="Byakko.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/0/07/Byakko.png/revision/latest/scale-to-width-down/200?cb=20130509212438" height="200" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Byakko.png (1.33 MB)" width="200"/></a></div></div><div class="lightbox-caption" style="width:200px;">Byakko</div></div><div class="wikia-gallery-item" style="width:202px; "><div class="thumb" style="height:202px;"><div class="gallery-image-wrapper accent" id="Suzaku-png" style="position: relative; height:112px; width:200px; top:44px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Suzaku.png" style="height:112px; width:200px;" title="Suzaku.png (1.71 MB)"><noscript><img alt="Suzaku" class="thumbimage" data-caption="Suzaku" data-image-key="Suzaku.png" data-image-name="Suzaku.png" data-relevant="1" height="200" src="https://static.wikia.nocookie.net/naruto/images/1/1a/Suzaku.png/revision/latest/scale-to-width-down/200?cb=20130509212458" style="" title="Suzaku.png (1.71 MB)" width="200"/></noscript><img alt="Suzaku" class="thumbimage lazyload" data-caption="Suzaku" data-image-key="Suzaku.png" data-image-name="Suzaku.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/1a/Suzaku.png/revision/latest/scale-to-width-down/200?cb=20130509212458" height="200" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Suzaku.png (1.71 MB)" width="200"/></a></div></div><div class="lightbox-caption" style="width:200px;">Suzaku</div></div></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:202px; "><div class="thumb" style="height:202px;"><div class="gallery-image-wrapper accent" id="Genbu-png" style="position: relative; height:112px; width:200px; top:44px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Genbu.png" style="height:112px; width:200px;" title="Genbu.png (2.17 MB)"><noscript><img alt="Genbu" class="thumbimage" data-caption="Genbu" data-image-key="Genbu.png" data-image-name="Genbu.png" data-relevant="1" height="200" src="https://static.wikia.nocookie.net/naruto/images/c/c1/Genbu.png/revision/latest/scale-to-width-down/200?cb=20160513082623" style="" title="Genbu.png (2.17 MB)" width="200"/></noscript><img alt="Genbu" class="thumbimage lazyload" data-caption="Genbu" data-image-key="Genbu.png" data-image-name="Genbu.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c1/Genbu.png/revision/latest/scale-to-width-down/200?cb=20160513082623" height="200" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Genbu.png (2.17 MB)" width="200"/></a></div></div><div class="lightbox-caption" style="width:200px;">Genbu</div></div><div class="wikia-gallery-item" style="width:202px; "><div class="thumb" style="height:202px;"><div class="gallery-image-wrapper accent" id="Kinja-png" style="position: relative; height:112px; width:200px; top:44px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Kinja.png" style="height:112px; width:200px;" title="Kinja.png (2.24 MB)"><noscript><img alt="Kinja" class="thumbimage" data-caption="Kinja" data-image-key="Kinja.png" data-image-name="Kinja.png" data-relevant="1" height="200" src="https://static.wikia.nocookie.net/naruto/images/4/41/Kinja.png/revision/latest/scale-to-width-down/200?cb=20130509212425" style="" title="Kinja.png (2.24 MB)" width="200"/></noscript><img alt="Kinja" class="thumbimage lazyload" data-caption="Kinja" data-image-key="Kinja.png" data-image-name="Kinja.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/41/Kinja.png/revision/latest/scale-to-width-down/200?cb=20130509212425" height="200" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Kinja.png (2.24 MB)" width="200"/></a></div></div><div class="lightbox-caption" style="width:200px;">Kinja</div></div><div class="wikia-gallery-item" style="width:202px; "><div class="thumb" style="height:202px;"><div class="gallery-image-wrapper accent" id="Tennyo-png" style="position: relative; height:112px; width:200px; top:44px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Tennyo.png" style="height:112px; width:200px;" title="Tennyo.png (2.03 MB)"><noscript><img alt="Tennyo" class="thumbimage" data-caption="Tennyo" data-image-key="Tennyo.png" data-image-name="Tennyo.png" data-relevant="1" height="200" src="https://static.wikia.nocookie.net/naruto/images/1/18/Tennyo.png/revision/latest/scale-to-width-down/200?cb=20130509212315" style="" title="Tennyo.png (2.03 MB)" width="200"/></noscript><img alt="Tennyo" class="thumbimage lazyload" data-caption="Tennyo" data-image-key="Tennyo.png" data-image-name="Tennyo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/18/Tennyo.png/revision/latest/scale-to-width-down/200?cb=20130509212315" height="200" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Tennyo.png (2.03 MB)" width="200"/></a></div></div><div class="lightbox-caption" style="width:200px;">Tennyo</div></div></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:202px; "><div class="thumb" style="height:202px;"><div class="gallery-image-wrapper accent" id="Shinigami-png" style="position: relative; height:112px; width:200px; top:44px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Shinigami.png" style="height:112px; width:200px;" title="Shinigami.png (1.44 MB)"><noscript><img alt="Shinigami" class="thumbimage" data-caption="Shinigami" data-image-key="Shinigami.png" data-image-name="Shinigami.png" data-relevant="1" height="200" src="https://static.wikia.nocookie.net/naruto/images/3/37/Shinigami.png/revision/latest/scale-to-width-down/200?cb=20130509212247" style="" title="Shinigami.png (1.44 MB)" width="200"/></noscript><img alt="Shinigami" class="thumbimage lazyload" data-caption="Shinigami" data-image-key="Shinigami.png" data-image-name="Shinigami.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/37/Shinigami.png/revision/latest/scale-to-width-down/200?cb=20130509212247" height="200" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Shinigami.png (1.44 MB)" width="200"/></a></div></div><div class="lightbox-caption" style="width:200px;">Shinigami</div></div><div class="wikia-gallery-item" style="width:202px; "><div class="thumb" style="height:202px;"><div class="gallery-image-wrapper accent" id="Hokuto_Sennin_and_Nanto_Sennin-png" style="position: relative; height:112px; width:200px; top:44px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Hokuto_Sennin_and_Nanto_Sennin.png" style="height:112px; width:200px;" title="Hokuto Sennin and Nanto Sennin.png (1.92 MB)"><noscript><img alt="Hokuto Sennin and Nanto Sennin" class="thumbimage" data-caption="Hokuto Sennin and Nanto Sennin" data-image-key="Hokuto_Sennin_and_Nanto_Sennin.png" data-image-name="Hokuto Sennin and Nanto Sennin.png" data-relevant="1" height="200" src="https://static.wikia.nocookie.net/naruto/images/8/8b/Hokuto_Sennin_and_Nanto_Sennin.png/revision/latest/scale-to-width-down/200?cb=20130509212240" style="" title="Hokuto Sennin and Nanto Sennin.png (1.92 MB)" width="200"/></noscript><img alt="Hokuto Sennin and Nanto Sennin" class="thumbimage lazyload" data-caption="Hokuto Sennin and Nanto Sennin" data-image-key="Hokuto_Sennin_and_Nanto_Sennin.png" data-image-name="Hokuto Sennin and Nanto Sennin.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/8b/Hokuto_Sennin_and_Nanto_Sennin.png/revision/latest/scale-to-width-down/200?cb=20130509212240" height="200" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Hokuto Sennin and Nanto Sennin.png (1.92 MB)" width="200"/></a></div></div><div class="lightbox-caption" style="width:200px;">Hokuto Sennin and Nanto Sennin</div></div><div class="wikia-gallery-item" style="width:202px; "><div class="thumb" style="height:202px;"><div class="gallery-image-wrapper accent" id="Defeated_Nine_Masked_Beast-PNG" style="position: relative; height:112px; width:200px; top:44px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Defeated_Nine_Masked_Beast.PNG" style="height:112px; width:200px;" title="Defeated Nine Masked Beast.PNG (2.17 MB)"><noscript><img alt="A Masked Beast's true form" class="thumbimage" data-caption="A Masked Beast's true form" data-image-key="Defeated_Nine_Masked_Beast.PNG" data-image-name="Defeated Nine Masked Beast.PNG" data-relevant="1" height="200" src="https://static.wikia.nocookie.net/naruto/images/1/1f/Defeated_Nine_Masked_Beast.PNG/revision/latest/scale-to-width-down/200?cb=20130509212632" style="" title="Defeated Nine Masked Beast.PNG (2.17 MB)" width="200"/></noscript><img alt="A Masked Beast's true form" class="thumbimage lazyload" data-caption="A Masked Beast's true form" data-image-key="Defeated_Nine_Masked_Beast.PNG" data-image-name="Defeated Nine Masked Beast.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/1f/Defeated_Nine_Masked_Beast.PNG/revision/latest/scale-to-width-down/200?cb=20130509212632" height="200" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Defeated Nine Masked Beast.PNG (2.17 MB)" width="200"/></a></div></div><div class="lightbox-caption" style="width:200px;">A Masked Beast's true form</div></div></div></div>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>Among the Nine Masked Beasts, Seiryū, Byakko, Suzaku, and Genbu are based on the group of divine beasts known as the <a class="extiw" href="https://en.wikipedia.org/wiki/Four_Symbols_(Chinese_constellation)" title="wikipedia:Four Symbols (Chinese constellation)">Four Symbols</a>, and Kinja is based on the legendary <a class="extiw" href="https://en.wikipedia.org/wiki/Yellow_Dragon" title="wikipedia:Yellow Dragon">Huang Long</a> itself. Tennyo and Shinigami are based on the <a class="extiw" href="https://en.wikipedia.org/wiki/Tennin" title="wikipedia:Tennin">heavenly messengers</a> and the <a class="extiw" href="https://en.wikipedia.org/wiki/Shinigami" title="wikipedia:Shinigami">death god</a> of Japanese folklore, respectively. Hokuto Sennin and Nanto Sennin, which are named after the <a class="extiw" href="https://en.wikipedia.org/wiki/Ursa_Major" title="wikipedia:Ursa Major">Northern</a> and <a class="extiw" href="https://en.wikipedia.org/wiki/Sagitarrius_(constellation)" title="wikipedia:Sagitarrius (constellation)">Southern Dippers</a>, are original concepts designed to round out the group.
+<ul><li>The seahorse-like appearance of Seiryū is based on the Japanese legends that seahorses are children of dragons. The Japanese word for "seahorse" literally means "baby dragon" (<span lang="ja">竜の落し子</span>, <i>tatsu no otoshigo</i>).</li></ul></li>
+<li>While summoning the Nine Masked Beasts, Menma refers to <a class="extiw" href="https://en.wikipedia.org/wiki/Sv%C4%81h%C4%81" title="wikipedia:Svāhā">svāhā</a> (<span lang="ja">薩婆訶</span>, <i>sowaka</i>), a Buddhist term roughly meaning "calling" which is used in mantras. He also chants the <a class="extiw" href="https://en.wikipedia.org/wiki/Kuji-in" title="wikipedia:Kuji-in">kuji-in</a>, which are featured as kanji on the portals. The kanji also corresponds to the nine rings worn by the <a href="https://naruto.fandom.com/wiki/Akatsuki" title="Akatsuki">Akatsuki</a> members.
+<ul><li>Interestingly, the orientation of the portals appears to be reverse that of the traditional. In Menma's mandala, north points south while south points north. In addition, the Four Symbols traditionally have Seiryū point east, Byakko point west, Suzaku point south, and Genbu point north; these are flipped for the Nine Masked Beasts. However, Kinja emerges from the central portal, which conforms to tradition as a parallel to the Huang Long.</li></ul></li>
+<li>Menma uses the Nine Masked Beasts to overwhelm his opponents with numbers, similar to <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Naruto" title="Naruto">Naruto</a>'s use of the <a href="https://naruto.fandom.com/wiki/Shadow_Clone_Technique" title="Shadow Clone Technique">Shadow Clone Technique</a> or <a href="https://naruto.fandom.com/wiki/Nagato" title="Nagato">Nagato</a>'s use of the <a href="https://naruto.fandom.com/wiki/Six_Paths_of_Pain" title="Six Paths of Pain">Six Paths of Pain</a>.</li></ul>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li><a href="https://naruto.fandom.com/wiki/Creation_of_All_Things_Technique" title="Creation of All Things Technique">Creation of All Things Technique</a></li>
+<li><a href="https://naruto.fandom.com/wiki/Six_Paths_of_Pain" title="Six Paths of Pain">Six Paths of Pain</a></li>
+<li><a href="https://naruto.fandom.com/wiki/White_Secret_Technique:_The_Chikamatsu_Collection_of_Ten_Puppets" title="White Secret Technique: The Chikamatsu Collection of Ten Puppets">White Secret Technique: The Chikamatsu Collection of Ten Puppets</a></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251008035244
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: []
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.128 seconds
+Real time usage: 0.253 seconds
+Preprocessor visited node count: 534/1000000
+Post‐expand include size: 4587/2097152 bytes
+Template argument size: 30/2097152 bytes
+Highest expansion depth: 5/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 13164/5000000 bytes
+Lua time usage: 0.063/7.000 seconds
+Lua memory usage: 1893723/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  223.375      1 -total
+ 70.22%  156.852      1 Template:Infobox/Jutsu
+ 25.11%   56.081     26 Template:Translation
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:106579-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251008035244 and revision id 1422382. Rendering was triggered because: unknown
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Nine%20Masked%20Beasts">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

@@ -1,0 +1,44 @@
+{
+  "name": "Shadow",
+  "base_str": 14,
+  "base_dex": 23,
+  "base_int": 23,
+  "ascendancies": [
+    {
+      "id": "Assassin",
+      "name": "Assassin",
+      "flavourText": "Death is a banquet. \n It's up to the murderer \n to write the menu.",
+      "flavourTextColour": "72818d",
+      "flavourTextRect": {
+        "x": 650,
+        "y": 845,
+        "width": 976,
+        "height": 429
+      }
+    },
+    {
+      "id": "Trickster",
+      "name": "Trickster",
+      "flavourText": "  Everyone knows how to die. \n Some just need a little nudge \nto get them started.",
+      "flavourTextColour": "72818d",
+      "flavourTextRect": {
+        "x": 315,
+        "y": 150,
+        "width": 976,
+        "height": 429
+      }
+    },
+    {
+      "id": "Saboteur",
+      "name": "Saboteur",
+      "flavourText": "The artist need not be present \n to make a lasting impression.",
+      "flavourTextColour": "72818d",
+      "flavourTextRect": {
+        "x": 355,
+        "y": 970,
+        "width": 976,
+        "height": 429
+      }
+    }
+  ]
+}

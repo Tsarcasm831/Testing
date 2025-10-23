@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Summoning: Impure World Reincarnation — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Summoning: Impure World Reincarnation</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Summoning%3A%20Impure%20World%20Reincarnation" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Summoning: Impure World Reincarnation<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Summoning%3A+Impure+World+Reincarnation&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Summoning: Impure World Reincarnation"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Summoning:_Impure_World_Reincarnation" title="Special:FormEdit/Jutsu/Summoning: Impure World Reincarnation">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">口寄せ・穢土転生</rb></ruby>­ <dfn lang="ja-Latn">(Kuchiyose: Edo Tensei)</dfn></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/0/03/Hokage_reincarnated.png/revision/latest?cb=20140612141309" title="Hokage reincarnated">
+<img alt="Hokage reincarnated" class="pi-image-thumbnail" data-image-key="Hokage_reincarnated.png" data-image-name="Hokage reincarnated.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/0/03/Hokage_reincarnated.png/revision/latest/scale-to-width-down/268?cb=20140612141309" srcset="https://static.wikia.nocookie.net/naruto/images/0/03/Hokage_reincarnated.png/revision/latest/scale-to-width-down/268?cb=20140612141309 1x, https://static.wikia.nocookie.net/naruto/images/0/03/Hokage_reincarnated.png/revision/latest/scale-to-width-down/536?cb=20140612141309 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="viz manga">
+<h3 class="pi-data-label pi-secondary-font">Viz print media</h3>
+<div class="pi-data-value pi-font">Summoning: Worldly Resurrection</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="english tv">
+<h3 class="pi-data-label pi-secondary-font">English anime</h3>
+<div class="pi-data-value pi-font">Summoning Jutsu: Reanimation</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game names">
+<h3 class="pi-data-label pi-secondary-font">English games</h3>
+<div class="pi-data-value pi-font">Forbidden Jutsu: Return from the Dead</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="other names">
+<h3 class="pi-data-label pi-secondary-font">Alternative names</h3>
+<div class="pi-data-value pi-font">Summoning: Reanimation</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut manga">
+<h3 class="pi-data-label pi-secondary-font">Manga</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/The_Ch%C5%ABnin_Exams,_Concluded%E2%80%A6!!_(volume)" title="The Chūnin Exams, Concluded…!! (volume)">Volume #13</a>, <a href="https://naruto.fandom.com/wiki/The_Mission_Given%E2%80%A6!!" title="The Mission Given…!!"><i>Naruto</i> Chapter #117</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Village_in_Distress:_A_New_A-Ranked_Mission!" title="Village in Distress: A New A-Ranked Mission!"><i>Naruto</i> Episode #69</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="novel debut">
+<h3 class="pi-data-label pi-secondary-font">Novel</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Sasuke_Shinden:_Book_of_Sunrise" title="Sasuke Shinden: Book of Sunrise">Sasuke Shinden: Book of Sunrise</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto:_Ultimate_Ninja" title="Naruto: Ultimate Ninja">Naruto: Ultimate Ninja</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Manga, Novel, Game</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Kinjutsu" title="Kinjutsu">Kinjutsu</a>, <a href="https://naruto.fandom.com/wiki/Reincarnation_Ninjutsu" title="Reincarnation Ninjutsu">Reincarnation Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Space%E2%80%93Time_Ninjutsu" title="Space–Time Ninjutsu">Space–Time Ninjutsu</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu rank">
+<h3 class="pi-data-label pi-secondary-font">Rank</h3>
+<div class="pi-data-value pi-font">S-rank</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Supplementary</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="hand signs">
+<h3 class="pi-data-label pi-secondary-font">Hand seals</h3>
+<div class="pi-data-value pi-font">Tiger → Snake → Dog → Dragon → Clap hands</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Other jutsu</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="parent jutsu">
+<h3 class="pi-data-label pi-secondary-font">Parent jutsu</h3>
+<div class="pi-data-value pi-font"><div class="plainlist"><ul><li><a href="https://naruto.fandom.com/wiki/Summoning_Technique" title="Summoning Technique">Summoning Technique</a></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Parent&amp;value=Summoning%3A_Impure_World_Reincarnation" rel="noreferrer noopener" target="_blank">Derived jutsu</a></h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<div class="pi-data-value pi-font"><center class="smwsearch"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?value=Summoning%3A_Impure_World_Reincarnation&amp;property=Parent" rel="noreferrer noopener" target="_blank">All derived jutsu</a></center></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Kabuto_Yakushi" title="Kabuto Yakushi">Kabuto Yakushi</a></li><li><a href="https://naruto.fandom.com/wiki/Orochimaru" title="Orochimaru">Orochimaru</a></li><li><a href="https://naruto.fandom.com/wiki/Tobirama_Senju" title="Tobirama Senju">Tobirama Senju</a></li></ul></div></div>
+</div>
+</section>
+</aside>
+
+The <b>Summoning: Impure World Reincarnation</b> is a jutsu that binds the <a href="https://naruto.fandom.com/wiki/Soul" title="Soul">soul</a> of a deceased person to a living vessel, restoring them as they were in the last moments of their lives in order to do their summoner's bidding. It was originally created by <a href="https://naruto.fandom.com/wiki/Tobirama_Senju" title="Tobirama Senju">Tobirama Senju</a>, some time after which he declared it a <a href="https://naruto.fandom.com/wiki/Kinjutsu" title="Kinjutsu">kinjutsu</a>. <a href="https://naruto.fandom.com/wiki/Orochimaru" title="Orochimaru">Orochimaru</a> would discover the technique decades later and improve on its use, while his subordinate <a href="https://naruto.fandom.com/wiki/Kabuto_Yakushi" title="Kabuto Yakushi">Kabuto Yakushi</a> nearly perfected it.
+<p></p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Usage"><span class="tocnumber">1</span> <span class="toctext">Usage</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="about:blank#Control"><span class="tocnumber">1.1</span> <span class="toctext">Control</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Attributes"><span class="tocnumber">2</span> <span class="toctext">Attributes</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="about:blank#Enhancements"><span class="tocnumber">2.1</span> <span class="toctext">Enhancements</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="about:blank#Countering"><span class="tocnumber">3</span> <span class="toctext">Countering</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="about:blank#Known_Reincarnated"><span class="tocnumber">4</span> <span class="toctext">Known Reincarnated</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="about:blank#Orochimaru"><span class="tocnumber">4.1</span> <span class="toctext">Orochimaru</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="about:blank#Kabuto_Yakushi"><span class="tocnumber">4.2</span> <span class="toctext">Kabuto Yakushi</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="about:blank#Trivia"><span class="tocnumber">5</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="about:blank#See_Also"><span class="tocnumber">6</span> <span class="toctext">See Also</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="about:blank#References"><span class="tocnumber">7</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Usage">Usage</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/5a/Kabuto_Demonstrates_Edo_Tensei.png/revision/latest?cb=20120524120506"><img alt="Kabuto Demonstrates Edo Tensei" class="thumbimage" data-image-key="Kabuto_Demonstrates_Edo_Tensei.png" data-image-name="Kabuto Demonstrates Edo Tensei.png" data-relevant="1" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/5a/Kabuto_Demonstrates_Edo_Tensei.png/revision/latest/scale-to-width-down/180?cb=20120524120506" width="180"/></a> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Kabuto_Demonstrates_Edo_Tensei.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The seal for the ritual.</p> </figcaption> </figure>
+<p>Before this technique can be performed, the user must first acquire some of the <a class="extiw" href="https://en.wikipedia.org/wiki/DNA" title="wikipedia:DNA">DNA</a> of the person they intend to reincarnate. Kabuto remarks that this essentially results in grave-robbing, although blood stains or organs salvaged after the target's death can also be used. The soul of the intended reincarnated must also reside in the <a href="https://naruto.fandom.com/wiki/Pure_Land" title="Pure Land">Pure Land</a>; souls trapped in the stomach of the <a href="https://naruto.fandom.com/wiki/Shinigami" title="Shinigami">Shinigami</a>, for example, cannot be reincarnated so long as they reside there. A living sacrifice is also required for the reincarnated soul to use as a vessel. If the souls are readily available in the Impure World, such as was the case with the first four Hokage who were freshly freed from the Shinigami's stomach, they can be reincarnated through this technique.
+</p>
+<table align="right"><tbody><tr><th></th><td><figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a href="https://naruto.fandom.com/wiki/File:Fu_sacrifice.png" title="File:Fu sacrifice.png"><img alt="Fu sacrifice" class="thumbimage lazyload" data-image-key="Fu_sacrifice.png" data-image-name="Fu sacrifice.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/6d/Fu_sacrifice.png/revision/latest/scale-to-width-down/180?cb=20150203065459" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a href="https://naruto.fandom.com/wiki/File:Fu_sacrifice.png" title="File:Fu sacrifice.png"><img alt="Fu sacrifice" class="thumbimage" data-image-key="Fu_sacrifice.png" data-image-name="Fu sacrifice.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/6d/Fu_sacrifice.png/revision/latest/scale-to-width-down/180?cb=20150203065459" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/6/6d/Fu_sacrifice.png/revision/latest/scale-to-width-down/180?cb=20150203065459" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Fu_sacrifice.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Torune being reincarnated with Fū as the sacrifice.</p> </figcaption> </figure></td></tr></tbody></table>
+<p>To actually perform the Impure World Reincarnation, the DNA of the person to be reincarnated is smeared on a special scroll. Once the scroll is activated, the remains spread out in the form of a special seal with the living sacrifice in the centre. Then dust and ash encase the sacrifice's body, giving them the same appearance that the reincarnated had at the time of their death; the process is apparently painful for the sacrifice. The sacrifice's chakra signature is completely overridden with the chakra of the one being reincarnated. Although the sacrifice is still technically alive so long as the technique is active, their body will never again be theirs and they will die when the reincarnated soul is released.
+</p><p>Although Tobirama was the technique's creator, his usage had two flaws: the reincarnated souls were greatly diminished in power compared to when they were alive and he could only control a small number at a time. Orochimaru was able to somewhat improve on the power restriction, although the power of the shinobi he reincarnated was still not anywhere close to when they were alive. Ultimately, it was Kabuto who almost completely eliminated all flaws, bettering the Impure World Reincarnation to such a degree that the reincarnations' power levels were nearly identical to how they were during life, as well as allowing the caster to control as many reincarnations at a time as they wished, resources permitting. His improvements, combined with the fact that performing the Impure World Reincarnation requires no chakra from the user, causes Kabuto to declare it the most powerful jutsu in history. Following his revival, Orochimaru used Kabuto's refinements and was therefore able to reincarnate beings who nearly had their original levels of power.
+</p><p>Reincarnations can be mobilised like standard infantry, where they must travel to their destination. Alternatively, coffins that contain them can be summoned to a location, assuming someone is there to perform the summoning; the anime does not consistently require this. Reincarnations can be recalled in a similar way, with a coffin emerging around them to take them back.
+</p>
+<h3><span class="mw-headline" id="Control">Control</span></h3>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c1/Zabuza_Being_Controlled.png/revision/latest?cb=20160328043451"><img alt="Zabuza Being Controlled" class="thumbimage lazyload" data-image-key="Zabuza_Being_Controlled.png" data-image-name="Zabuza Being Controlled.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c1/Zabuza_Being_Controlled.png/revision/latest/scale-to-width-down/180?cb=20160328043451" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c1/Zabuza_Being_Controlled.png/revision/latest?cb=20160328043451"><img alt="Zabuza Being Controlled" class="thumbimage" data-image-key="Zabuza_Being_Controlled.png" data-image-name="Zabuza Being Controlled.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c1/Zabuza_Being_Controlled.png/revision/latest/scale-to-width-down/180?cb=20160328043451" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/c/c1/Zabuza_Being_Controlled.png/revision/latest/scale-to-width-down/180?cb=20160328043451" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Zabuza_Being_Controlled.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The talisman used to control the reincarnated.</p> </figcaption> </figure>
+<p>The only discretion a user needs to exercise for the Impure World Reincarnation is how much control to exert over the reincarnated soul. After first performing it the user is only able to restrict their movements. In general, this limited control is not an issue for the summoner, and they will typically "deactivate" the reincarnation, placing them in a coffin for storage and transportation until they're needed. However, when the perfected Impure World Reincarnation is used to revive somebody, there comes a possibility that they will be strong enough to resist this control; Tobirama was able to resist this control prior to Orochimaru using Hashirama's cells to strengthen the binding and Orochimaru notes <a href="https://naruto.fandom.com/wiki/Hashirama_Senju" title="Hashirama Senju">Hashirama Senju</a> could break free if he chose to, even with the enhanced binding from Hashirama's cells.
+</p><p>In order to actually be able to control their actions, the user must implant a special talisman - generally attached to the end of a kunai - within the reincarnation's brain. The talisman's design determines how strong the control is:
+</p>
+<ul><li>At its most basic, the reincarnated souls retain their personality, giving them the freedom to approach a given task however they like so long as it broadly carries out the summoner's bidding. On the one hand, this makes them more useful in combat because they know how best to use their own abilities and, if deployed against somebody they knew when they were alive, there is a possibility for psychological warfare. On the other hand, although they are compelled to do as their summoner wishes and act without reluctance, they can undermine their summoner to a degree, either by making poor decisions that opponents can take advantage of or by giving opponents advice about how to defeat them. Despite its risks, Kabuto prefers this level of control.</li>
+<li>At its strongest level, the reincarnated soul's personality is entirely eliminated. The summoner instead controls all of their actions, even permitting them to speak through the reincarnation or summon other reincarnated souls to their location. Although this guarantees the reincarnated soul will only ever act as desired, they are less resourceful and it requires the summoner's attention for every action that must be taken, making it difficult for them to multi-task depending on the circumstances. Orochimaru prefers this level of control. Kabuto has at times rewritten talismans remotely in order switch to this level of control when the situation calls for it.</li></ul>
+<p>Kabuto and Orochimaru are able to strengthen the bindings they use through external means: Kabuto siphons chakra from the <a href="https://naruto.fandom.com/wiki/Orochimaru%27s_Juinjutsu" title="Orochimaru's Juinjutsu">cursed seal</a> <a href="https://naruto.fandom.com/wiki/Anko_Mitarashi" title="Anko Mitarashi">Anko Mitarashi</a> is branded with; Orochimaru uses <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Senju" title="Senju">Senju</a> <a href="https://naruto.fandom.com/wiki/White_Zetsu_Army" title="White Zetsu Army">cells</a>. On a related note, any level of control creates a traceable chakra signature between the reincarnated soul and their summoner, allowing reincarnated <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sensor" title="Sensor">sensors</a> to trace the summoner's location.
+</p>
+<h2><span class="mw-headline" id="Attributes">Attributes</span></h2>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/7/76/Edo_Tensei_2.png/revision/latest?cb=20120328223315"><img alt="Edo Tensei 2" class="thumbimage lazyload" data-image-key="Edo_Tensei_2.png" data-image-name="Edo Tensei 2.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/76/Edo_Tensei_2.png/revision/latest/scale-to-width-down/180?cb=20120328223315" decoding="async" height="92" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/7/76/Edo_Tensei_2.png/revision/latest?cb=20120328223315"><img alt="Edo Tensei 2" class="thumbimage" data-image-key="Edo_Tensei_2.png" data-image-name="Edo Tensei 2.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/76/Edo_Tensei_2.png/revision/latest/scale-to-width-down/180?cb=20120328223315" decoding="async" height="92" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/7/76/Edo_Tensei_2.png/revision/latest/scale-to-width-down/180?cb=20120328223315" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Edo_Tensei_2.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Deidara being rejuvenated.</p> </figcaption> </figure>
+<p>When first summoned, the body will appear grey and in a state of minor decay: marred by cracks and other imperfections. If the summoner chooses to, they can rejuvenate the reincarnation while planting their control talisman, restoring their complexion and reducing some of the imperfections; this is merely aesthetic and the signs of decay do not inhibit their abilities. An unavoidable characteristic of a reincarnated body is the darkened sclerae, with a soul that retains its personality having grey sclerae and a soul with a suppressed personality having black sclerae.
+</p><p>A reincarnated individual will have all the abilities they had during their life, including <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Kekkei_genkai" title="Kekkei genkai">kekkei genkai</a> and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Kekkei_t%C5%8Dta" title="Kekkei tōta">kekkei tōta</a>, along with all of the memories they had when they were alive, although their memories of the <a href="https://naruto.fandom.com/wiki/Pure_Land" title="Pure Land">Pure Land</a> are not accessible. They are also physically restored as they were at the time of their death, including certain physical handicaps they may have possessed, such as <a href="https://naruto.fandom.com/wiki/Nagato" title="Nagato">Nagato</a>'s damaged legs, although <a href="https://naruto.fandom.com/wiki/Itachi_Uchiha" title="Itachi Uchiha">Itachi Uchiha</a> was restored with perfect vision rather than the deteriorating vision he had during the final stages of his life. Other exceptions also exist: illnesses they had will not be retained, nor will any physical damage that contributed to their death. There is some inconsistency of whether or not foreign body matter will be restored as well: <a href="https://naruto.fandom.com/wiki/Hanz%C5%8D" title="Hanzō">Hanzō</a> retains the poison gland of the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Black_salamander" title="Black salamander">black salamander</a>, but <a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a> did not have access to Hashirama Senju's genetic material when he was reanimated and thus Kabuto grafted artificially recreated Hashirama cells onto Madara's reincarnated body to restore those abilities.
+</p><p>Clothing is reproduced according to what they wore when they died, although it is merely a superficial aspect of their reincarnated body; armour offers no actual protection, being of the same ashen material as the rest of their body. Reincarnated members of <a href="https://naruto.fandom.com/wiki/Akatsuki" title="Akatsuki">Akatsuki</a> are, however, outfitted with different cloaks than they used to wear. Weaponry is usually not retained and must instead be gathered by the summoner; the reincarnated <a href="https://naruto.fandom.com/wiki/Seven_Ninja_Swordsmen_of_the_Mist" title="Seven Ninja Swordsmen of the Mist">Seven Ninja Swordsmen of the Mist</a> only have access to those swords Kabuto is able to acquire. One exception seems to be the <a href="https://naruto.fandom.com/wiki/Gold_and_Silver_Brothers" title="Gold and Silver Brothers">Gold and Silver Brothers</a>' <a href="https://naruto.fandom.com/wiki/Treasured_Tools_of_the_Sage_of_Six_Paths" title="Treasured Tools of the Sage of Six Paths">Treasured Tools of the Sage of Six Paths</a>, which are still seemingly stored within the brothers' bodies.
+</p><p>The vast majority of the reincarnated were able to achieve the same power they had at life, such as <a href="https://naruto.fandom.com/wiki/M%C5%AB" title="Mū">Mū</a>. But a few of the reincarnated, such as Madara Uchiha's full abilities were limited by the technique. For example, even with the perfected Impure World Reincarnation; Madara's reincarnated body is successfully bound by the <a href="https://naruto.fandom.com/wiki/Sage_Art:_Gate_of_the_Great_God" title="Sage Art: Gate of the Great God">Sage Art: Gate of the Great God</a>, which he easily breaks free of as soon as he is <a href="https://naruto.fandom.com/wiki/Outer_Path_%E2%80%94_Samsara_of_Heavenly_Life_Technique" title="Outer Path — Samsara of Heavenly Life Technique">restored to life</a>. Likewise, there are some things a reincarnated body simply cannot do, such as access all the abilities of the <a href="https://naruto.fandom.com/wiki/Rinnegan" title="Rinnegan">Rinnegan</a> or become the <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki" title="Jinchūriki">jinchūriki</a> of the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a>.
+</p>
+<h3><span class="mw-headline" id="Enhancements">Enhancements</span></h3>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/8/80/Goj%C5%8D_Kibaku_Fuda_1.png/revision/latest?cb=20140918125411"><img alt="Gojō Kibaku Fuda 1" class="thumbimage lazyload" data-image-key="Goj%C5%8D_Kibaku_Fuda_1.png" data-image-name="Gojō Kibaku Fuda 1.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/80/Goj%C5%8D_Kibaku_Fuda_1.png/revision/latest/scale-to-width-down/180?cb=20140918125411" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/8/80/Goj%C5%8D_Kibaku_Fuda_1.png/revision/latest?cb=20140918125411"><img alt="Gojō Kibaku Fuda 1" class="thumbimage" data-image-key="Goj%C5%8D_Kibaku_Fuda_1.png" data-image-name="Gojō Kibaku Fuda 1.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/80/Goj%C5%8D_Kibaku_Fuda_1.png/revision/latest/scale-to-width-down/180?cb=20140918125411" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/8/80/Goj%C5%8D_Kibaku_Fuda_1.png/revision/latest/scale-to-width-down/180?cb=20140918125411" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Goj%C5%8D_Kibaku_Fuda_1.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Tobirama using the Mutually Multiplying Explosive Tags.</p> </figcaption> </figure>
+<p>One of the major benefits of the Impure World Reincarnation is that it grants immortal bodies to those who are reincarnated. Any damage they receive will regenerate in time and, assuming the damage is not too debilitating, they can continue attacking even before their body recovers. This was one of the main purposes Tobirama created the technique for, as he would use one or more reincarnated souls to perform a series of <a class="extiw" href="https://en.wikipedia.org/wiki/Kamikaze" title="wikipedia:Kamikaze">Kamikaze</a>-like attacks until the opposition was wiped out; he created the <a href="https://naruto.fandom.com/wiki/Mutually_Multiplying_Explosive_Tags" title="Mutually Multiplying Explosive Tags">Mutually Multiplying Explosive Tags</a> specifically for this purpose. Reincarnated bodies do not bleed, except in those cases where blood is needed to perform the <a href="https://naruto.fandom.com/wiki/Summoning_Technique" title="Summoning Technique">Summoning Technique</a>.
+</p><p>A second benefit is the limitless refilling of their diminished chakra reserves that the reincarnated individuals have access to; they can fight eternally and perform ordinarily physically demanding or chakra-intensive jutsu without issue, knowing their current reserves will infinitely refill. They are still subject to certain inherent demands of the jutsu itself, such as the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Second_Tsuchikage" title="Second Tsuchikage">Second Tsuchikage</a>'s chakra supply being cut in half after using the <a href="https://naruto.fandom.com/wiki/Fission_Technique" title="Fission Technique">Fission Technique</a> or only being able to create a certain number of <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Clone" title="Clone">clones</a>. Other side-effects may still manifest, such as when Itachi's eyes bleed from using his <a href="https://naruto.fandom.com/wiki/Mangeky%C5%8D_Sharingan" title="Mangekyō Sharingan">Mangekyō Sharingan</a>, although he does not suffer vision loss and is also otherwise not inhabited by the bleeding.
+</p><p>The reincarnated body can be further enhanced to "beyond their prime". When Madara Uchiha was brought back, Kabuto put his body through a selective evolution, combing the best attributes from different points of his life. In addition to his body being restored to its physical prime rather than the withered state it had when he died, he also retained the various abilities he gained only during the last years of his natural life; he retained the graft of Hashirama Senju's DNA so he could still access the First Hokage's abilities, and he has access to <a href="https://naruto.fandom.com/wiki/D%C5%8Djutsu" title="Dōjutsu">dōjutsu</a> he gave up during his life. The reincarnated jinchūriki similarly have their respective <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beasts" title="Tailed beasts">tailed beasts</a> sealed back into them.
+</p><p>Reincarnated individuals are immune to the <a href="https://naruto.fandom.com/wiki/Infinite_Tsukuyomi" title="Infinite Tsukuyomi">Infinite Tsukuyomi</a>.
+</p>
+<h2><span class="mw-headline" id="Countering">Countering</span></h2>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/a9/Itachi%27s_soul.png/revision/latest?cb=20131128131916"><img alt="Itachi's soul" class="thumbimage lazyload" data-image-key="Itachi%27s_soul.png" data-image-name="Itachi's soul.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/a9/Itachi%27s_soul.png/revision/latest/scale-to-width-down/180?cb=20131128131916" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/a9/Itachi%27s_soul.png/revision/latest?cb=20131128131916"><img alt="Itachi's soul" class="thumbimage" data-image-key="Itachi%27s_soul.png" data-image-name="Itachi's soul.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/a9/Itachi%27s_soul.png/revision/latest/scale-to-width-down/180?cb=20131128131916" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/a9/Itachi%27s_soul.png/revision/latest/scale-to-width-down/180?cb=20131128131916" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Itachi%27s_soul.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Itachi Uchiha's soul ascending.</p> </figcaption> </figure>
+<p>Killing the summoner does not release the Impure World Reincarnation, and in fact that can be considered inadvisable. There are only three guaranteed ways to end the technique:
+</p>
+<ol><li>Remove the soul from the reincarnated body, such as with the <a href="https://naruto.fandom.com/wiki/Dead_Demon_Consuming_Seal" title="Dead Demon Consuming Seal">Dead Demon Consuming Seal</a>.</li>
+<li>Have the summoner end the technique. As they are unlikely to do this voluntarily, using a <a href="https://naruto.fandom.com/wiki/Genjutsu" title="Genjutsu">genjutsu</a> to trick them into cancelling the technique is ideal. The sequence of <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Hand_seals" title="Hand seals">hand seals</a> for cancelling the technique is <i>Rat → Ox → Monkey → Tiger → Dragon → Boar</i> and saying "release" (<span lang="ja">解</span>, <i>kai</i>). (When demonstrating the technique to <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tobi" title="Tobi">Tobi</a>, Kabuto lied that the seals to release it are <i>Dog → Horse → Tiger</i>.) The <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sage_of_the_Six_Paths" title="Sage of the Six Paths">Sage of the Six Paths</a> has demonstrated the ability to release the Impure World Reincarnation despite not being the summoner.</li>
+<li>A less reliable, though equally effective method is to have the reincarnated soul be affected in some emotional way that gives them closure, allowing their soul to break free of the Impure World Reincarnation's influence.</li></ol>
+<p>When a soul is released from the Impure World Reincarnation, their body disintegrates back into dust and the sacrifice's corpse will be left lying in the debris. The soul may linger briefly - with their personality restored if it was being suppressed - to leave parting words or take final actions. Souls released by their summoner will be enveloped in light throughout the process.
+</p><p>Even if the Impure World Reincarnation cannot be broken conventionally, reincarnated bodies can still be neutralised. During the <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War" title="Fourth Shinobi World War">Fourth Shinobi World War</a>, the <a href="https://naruto.fandom.com/wiki/Allied_Shinobi_Forces" title="Allied Shinobi Forces">Allied Shinobi Forces</a> develop the method of binding the reincarnations' bodies so that they can't move and then placing a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Seal" title="Seal">seal</a> on the bindings so that they no longer pose a threat. The Benihisago and Kohaku no Jōhei are able to seal the reincarnated bodies to such a degree that even the release of the jutsu won't affect the seal. <a href="https://naruto.fandom.com/wiki/Yin%E2%80%93Yang_Release" title="Yin–Yang Release">Yin–Yang Release</a>, as manifested in <a href="https://naruto.fandom.com/wiki/Truth-Seeking_Ball" title="Truth-Seeking Ball">Truth-Seeking Balls</a>, can negate the regenerative properties of reincarnated bodies, reducing their effectiveness and, if used to strike a vital spot, kill them for all intents and purposes. The spirits of those reincarnated by the technique will remain damaged even if the jutsu is released, as shown with <a href="https://naruto.fandom.com/wiki/Minato_Namikaze" title="Minato Namikaze">Minato Namikaze</a>. Itachi also used his <a href="https://naruto.fandom.com/wiki/Sword_of_Totsuka" title="Sword of Totsuka">Sword of Totsuka</a> to seal Nagato, his ultimate fate unclear after Itachi had Kabuto released the technique.
+</p><p>There are also other instances of a reincarnated body escaping their summoner's influence. <a href="https://naruto.fandom.com/wiki/Itachi_Uchiha" title="Itachi Uchiha">Itachi Uchiha</a> was targeted with <a href="https://naruto.fandom.com/wiki/Kotoamatsukami" title="Kotoamatsukami">Kotoamatsukami</a> by <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Shisui" title="Shisui">Shisui</a>'s eye transplanted into a <a href="https://naruto.fandom.com/wiki/Itachi%27s_Crow" title="Itachi's Crow">crow</a> which was stored in Naruto, displacing Kabuto's commands with different orders. Kabuto can regain control of Itachi by gaining access to the control talisman, and in fact is still able to release him from the Impure World Reincarnation. Conversely, if the reincarnated soul knows the hand seals, they can sever the summoner's contract with them; in the anime, the seals are <i>Snake → Ram → Boar → Dog → Tiger</i>. This grants them full control of their own actions, all the benefits of an immortal body, and prevents the summoner from releasing them from the Impure World Reincarnation. <a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a> describes this as "the one risk of the technique". Another way to take over the control of reincarnated bodies is through the usage of the <a href="https://naruto.fandom.com/wiki/Six_Paths_Technique" title="Six Paths Technique">Six Paths Technique</a>, as in the case of Obito's Six Paths jinchūriki. Because of Obito's <a href="https://naruto.fandom.com/wiki/Black_Receiver" title="Black Receiver">Black Receivers</a> being embedded into the left side of each jinchūriki's chests, he was able to wrest Kabuto's control over the revived jinchūriki, and thus control the revived jinchūriki's near-perfectly. However, it should be noted that Kabuto is still able to release them from the Impure World Reincarnation.
+</p>
+<h2><span class="mw-headline" id="Known_Reincarnated">Known Reincarnated</span></h2>
+<h3><span class="mw-headline" id="Orochimaru">Orochimaru</span></h3>
+<table class="wikitable sortable">
+<tbody><tr>
+<th>Name
+</th>
+<th>Village of origin
+</th>
+<th>Sacrifice used
+</th></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Hashirama_Senju" title="Hashirama Senju">Hashirama Senju</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kin_Tsuchi" title="Kin Tsuchi">Kin Tsuchi</a>/<a href="https://naruto.fandom.com/wiki/White_Zetsu" title="White Zetsu">White Zetsu</a> <a href="https://naruto.fandom.com/wiki/Parasite_Clone" title="Parasite Clone">clone</a>
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Hiruzen_Sarutobi" title="Hiruzen Sarutobi">Hiruzen Sarutobi</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td><a href="https://naruto.fandom.com/wiki/White_Zetsu" title="White Zetsu">White Zetsu</a> <a href="https://naruto.fandom.com/wiki/Parasite_Clone" title="Parasite Clone">clone</a>
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Minato_Namikaze" title="Minato Namikaze">Minato Namikaze</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td><a href="https://naruto.fandom.com/wiki/White_Zetsu" title="White Zetsu">White Zetsu</a> <a href="https://naruto.fandom.com/wiki/Parasite_Clone" title="Parasite Clone">clone</a>
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Osoi" title="Osoi">Osoi</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a> shinobi
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Third_Kazekage" title="Third Kazekage">Third Kazekage</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Sunagakure" title="Sunagakure">Sunagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Tobirama_Senju" title="Tobirama Senju">Tobirama Senju</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Zaku_Abumi" title="Zaku Abumi">Zaku Abumi</a>/<a href="https://naruto.fandom.com/wiki/White_Zetsu" title="White Zetsu">White Zetsu</a> <a href="https://naruto.fandom.com/wiki/Parasite_Clone" title="Parasite Clone">clone</a>
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Yota" title="Yota">Yota</a> <sup>(Anime only)</sup></td>
+<td>Unknown</td>
+<td>Unknown
+</td></tr></tbody></table>
+<dl><dt>Notes</dt></dl>
+<ul><li>During the <a href="https://naruto.fandom.com/wiki/Konoha_Crush" title="Konoha Crush">Konoha Crush</a>, Orochimaru attempted to reincarnate Minato Namikaze, unaware that his soul did not reside in the <a href="https://naruto.fandom.com/wiki/Pure_Land" title="Pure Land">Pure Land</a>. For that reason the summon failed. The failed coffin is not seen in the manga, but in the anime it briefly appears with "four" (<span lang="ja">四</span>, <i>Yon</i>) written on it.</li>
+<li>In the anime, Orochimaru's reincarnation of <a href="https://naruto.fandom.com/wiki/Osoi" title="Osoi">Osoi</a> was an accident, as he intended to reincarnate <a href="https://naruto.fandom.com/wiki/Toroi" title="Toroi">Toroi</a>.</li></ul>
+<h3><span class="mw-headline" id="Kabuto_Yakushi">Kabuto Yakushi</span></h3>
+<table class="wikitable sortable">
+<tbody><tr>
+<th>Name
+</th>
+<th>Village of origin
+</th>
+<th>Sacrifice used
+</th></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/A_(Third_Raikage)" title="A (Third Raikage)">A</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Ameyuri_Ringo" title="Ameyuri Ringo">Ameyuri Ringo</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Asuma_Sarutobi" title="Asuma Sarutobi">Asuma Sarutobi</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Blue_B" title="Blue B">Blue B</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Chen" title="Chen">Chen</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Chiyo" title="Chiyo">Chiyo</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Sunagakure" title="Sunagakure">Sunagakure</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a> shinobi
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Ch%C5%ABkaku" title="Chūkaku">Chūkaku</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Fire_Temple" title="Fire Temple">Fire Temple</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Ch%C5%ABkichi" title="Chūkichi">Chūkichi</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Dan_Kat%C5%8D" title="Dan Katō">Dan Katō</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Daimaru" title="Daimaru">Daimaru</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Sunagakure" title="Sunagakure">Sunagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Deidara" title="Deidara">Deidara</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Iwagakure" title="Iwagakure">Iwagakure</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a> shinobi
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/F%C5%AB" title="Fū">Fū</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Takigakure" title="Takigakure">Takigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Fuguki_Suikazan" title="Fuguki Suikazan">Fuguki Suikazan</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Gari" title="Gari">Gari</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Iwagakure" title="Iwagakure">Iwagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Gengetsu_H%C5%8Dzuki" title="Gengetsu Hōzuki">Gengetsu Hōzuki</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Ginkaku" title="Ginkaku">Ginkaku</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Haku" title="Haku">Haku</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Han" title="Han">Han</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Iwagakure" title="Iwagakure">Iwagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Hanz%C5%8D" title="Hanzō">Hanzō</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Amegakure" title="Amegakure">Amegakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Hayate_Gekk%C5%8D" title="Hayate Gekkō">Hayate Gekkō</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Heiji" title="Heiji">Heiji</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Amegakure" title="Amegakure">Amegakure</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a> shinobi
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Hizashi_Hy%C5%ABga" title="Hizashi Hyūga">Hizashi Hyūga</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Inabi_Uchiha" title="Inabi Uchiha">Inabi Uchiha</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Itachi_Uchiha" title="Itachi Uchiha">Itachi Uchiha</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a> shinobi
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Jinin_Akebino" title="Jinin Akebino">Jinin Akebino</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Jinpachi_Munashi" title="Jinpachi Munashi">Jinpachi Munashi</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Jir%C5%8Db%C5%8D" title="Jirōbō">Jirōbō</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Otogakure" title="Otogakure">Otogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Kakuzu" title="Kakuzu">Kakuzu</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Takigakure" title="Takigakure">Takigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Kid%C5%8Dmaru" title="Kidōmaru">Kidōmaru</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Otogakure" title="Otogakure">Otogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Kimimaro" title="Kimimaro">Kimimaro</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Otogakure" title="Otogakure">Otogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Kinkaku" title="Kinkaku">Kinkaku</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><i><a href="https://naruto.fandom.com/wiki/Kumo_Reincarnated_Shinobi" title="Kumo Reincarnated Shinobi">Kumo Reincarnated Shinobi</a></i> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Kushimaru_Kuriarare" title="Kushimaru Kuriarare">Kushimaru Kuriarare</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Mangetsu_H%C5%8Dzuki" title="Mangetsu Hōzuki">Mangetsu Hōzuki</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/M%C5%AB" title="Mū">Mū</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Iwagakure" title="Iwagakure">Iwagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Nagato" title="Nagato">Nagato</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Amegakure" title="Amegakure">Amegakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Osoi" title="Osoi">Osoi</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Pakura" title="Pakura">Pakura</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Sunagakure" title="Sunagakure">Sunagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Rasa" title="Rasa">Rasa</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Sunagakure" title="Sunagakure">Sunagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/R%C5%8Dshi" title="Rōshi">Rōshi</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Iwagakure" title="Iwagakure">Iwagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Sakon_and_Ukon" title="Sakon and Ukon">Sakon and Ukon</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Otogakure" title="Otogakure">Otogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Sasori" title="Sasori">Sasori</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Sunagakure" title="Sunagakure">Sunagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Shin" title="Shin">Shin</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><i><a href="https://naruto.fandom.com/wiki/Suna_Reincarnated_Shinobi" title="Suna Reincarnated Shinobi">Suna Reincarnated Shinobi</a></i> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Sunagakure" title="Sunagakure">Sunagakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Tatewaki" title="Tatewaki">Tatewaki</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Land_of_Iron" title="Land of Iron">Land of Iron</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Tayuya" title="Tayuya">Tayuya</a> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Otogakure" title="Otogakure">Otogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><i><a href="https://naruto.fandom.com/wiki/Tonika_Village_Head" title="Tonika Village Head">Tonika Village Head</a></i> <sup>(Anime only)</sup></td>
+<td><a href="https://naruto.fandom.com/wiki/Tonika_Village" title="Tonika Village">Tonika Village</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Toroi" title="Toroi">Toroi</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Torune_Aburame" title="Torune Aburame">Torune Aburame</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a></td>
+<td><a href="https://naruto.fandom.com/wiki/F%C5%AB_Yamanaka" title="Fū Yamanaka">Fū Yamanaka</a>
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Utakata" title="Utakata">Utakata</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Yagura_Karatachi" title="Yagura Karatachi">Yagura Karatachi</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Yota" title="Yota">Yota</a> <sup>(Anime only)</sup></td>
+<td>Unknown</td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Yugito_Nii" title="Yugito Nii">Yugito Nii</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a></td>
+<td>Unknown
+</td></tr>
+<tr>
+<td><a href="https://naruto.fandom.com/wiki/Zabuza_Momochi" title="Zabuza Momochi">Zabuza Momochi</a></td>
+<td><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></td>
+<td>Unknown
+</td></tr></tbody></table>
+<dl><dt>Notes</dt></dl>
+<ul><li>Kabuto mentions his desire to reincarnate certain shinobi:
+<ul><li><a href="https://naruto.fandom.com/wiki/Jiraiya" title="Jiraiya">Jiraiya</a>, though his body lies at the bottom of the ocean where the water pressure is too great to reach. However, he claimed that the bloodstains on the <a href="https://naruto.fandom.com/wiki/Six_Paths_of_Pain" title="Six Paths of Pain">Six Paths of Pain</a>'s weapons may provide enough DNA. <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tobi" title="Tobi">Tobi</a> denies him this request on the basis that doing so would be "pushing [his] luck".</li>
+<li><a href="https://naruto.fandom.com/wiki/Shisui_Uchiha" title="Shisui Uchiha">Shisui Uchiha</a>, but Kabuto could not find his body. He suggested that one of Shisui's eyes that was crushed by <a href="https://naruto.fandom.com/wiki/Danz%C5%8D_Shimura" title="Danzō Shimura">Danzō Shimura</a>, whose corpse was in Tobi's possession, would be sufficient. As with Jiraiya's case, Tobi threatened him not to push his luck.</li>
+<li>In the anime, Kabuto planned to reincarnate <a href="https://naruto.fandom.com/wiki/Baki" title="Baki">Baki</a>, if he died during his fight with Hayate Gekkō.</li></ul></li>
+<li>In the anime, Kabuto's reincarnation of Chūkaku and Heiji are accidents, as he intended to reincarnate <a href="https://naruto.fandom.com/wiki/Chiriku" title="Chiriku">Chiriku</a> and Hanzō, respectively.
+<ul><li>Kabuto deploys these and other mistaken reincarnations to try and release more important reincarnations from their bindings. As most are no stronger than <a href="https://naruto.fandom.com/wiki/Genin" title="Genin">genin</a>, they all fail.</li></ul></li></ul>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/8/82/Kabuto_controlling_the_revived.png/revision/latest?cb=20120531114104"><img alt="Kabuto controlling the revived" class="thumbimage lazyload" data-image-key="Kabuto_controlling_the_revived.png" data-image-name="Kabuto controlling the revived.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/82/Kabuto_controlling_the_revived.png/revision/latest/scale-to-width-down/180?cb=20120531114104" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/8/82/Kabuto_controlling_the_revived.png/revision/latest?cb=20120531114104"><img alt="Kabuto controlling the revived" class="thumbimage" data-image-key="Kabuto_controlling_the_revived.png" data-image-name="Kabuto controlling the revived.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/82/Kabuto_controlling_the_revived.png/revision/latest/scale-to-width-down/180?cb=20120531114104" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/8/82/Kabuto_controlling_the_revived.png/revision/latest/scale-to-width-down/180?cb=20120531114104" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Kabuto_controlling_the_revived.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The pebbles and grid Kabuto uses.</p> </figcaption> </figure>
+<ul><li>Kabuto is seen using a grid to keep track of all the reincarnated individuals he controls, with a pebble representing each shinobi. It is not clear if there is some actual connection between the grid and those he reincarnates or if it's a mere convenience for him. In the anime, the pebbles crumble when the reincarnation is sealed. All of the pebbles are light-coloured except for <a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a>'s, whose is black. In the anime, the failed reincarnations are represented by piles of sand.</li>
+<li>"Edo" (<span lang="ja">穢土</span>, <i>literally meaning:</i> Dirty Soil) is what Japanese Buddhists call the normal world, where unenlightened people live. The current, living world. The world of the people who have not yet have escaped the polluting thoughts (greed, hatred, delusion, etc.) that result in suffering.</li>
+<li>A possible translation of <i>Tensei</i> is "Resurrection". In terms of this technique, both "Reincarnation" and "Resurrection" can be found; the sacrificed body is <i>reincarnated</i> into the body of the summoned shinobi, while the reincarnated shinobi is <i>resurrected</i> from the dead.</li>
+<li>Due to the mechanics of this technique, Orochimaru's attempt to summon the Fourth should not have been feasible, as the limitations of the ritual would have been apparent during the initial summoning process, making such an action fundamentally impossible within the framework of the technique.</li>
+<li>In <i><a href="https://naruto.fandom.com/wiki/Naruto:_Ultimate_Ninja_2" title="Naruto: Ultimate Ninja 2">Naruto: Ultimate Ninja 2</a></i>, Orochimaru reincarnates the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Third_Hokage" title="Third Hokage">Third Hokage</a> despite his soul not being in the <a href="https://naruto.fandom.com/wiki/Pure_Land" title="Pure Land">Pure Land</a>.
+<ul><li>Orochimaru also reincarnates <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Zabuza" title="Zabuza">Zabuza</a> and <a href="https://naruto.fandom.com/wiki/Haku" title="Haku">Haku</a> to aid him in a second <a href="https://naruto.fandom.com/wiki/Konoha_Crush" title="Konoha Crush">Konoha Crush</a>.</li></ul></li>
+<li>During the original <i>Naruto</i> anime, a reincarnated target's eyes appear normal, albeit glazed over. In <i>Naruto: Shippūden</i>, the eyes are corrected to match the manga.</li>
+<li>Starting in <i><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Ultimate_Ninja_Storm_Generations" title="Ultimate Ninja Storm Generations">Ultimate Ninja Storm Generations</a></i>, Kabuto Yakushi (Snake Cloak Form) uses the Impure World Reincarnation as his ultimate technique. He summons Kakuzu, Itachi, and Deidara, who attack the opponent using the <a href="https://naruto.fandom.com/wiki/Lightning_Release:_False_Darkness" title="Lightning Release: False Darkness">Lightning Release: False Darkness</a>, <a href="https://naruto.fandom.com/wiki/Fire_Release:_Great_Fireball_Technique" title="Fire Release: Great Fireball Technique">Fire Release: Great Fireball Technique</a>, and <a href="https://naruto.fandom.com/wiki/C1" title="C1">C1</a>, respectively.</li>
+<li>In the anime, when eradicating the personality of Hanzō, Kabuto used several hand seals instead of just one.</li>
+<li>In <i><a href="https://naruto.fandom.com/wiki/Konoha_Shinden:_Steam_Ninja_Scrolls" title="Konoha Shinden: Steam Ninja Scrolls">Konoha Shinden: Steam Ninja Scrolls</a></i>, <a href="https://naruto.fandom.com/wiki/Ry%C5%ABki" title="Ryūki">Ryūki</a> claimed to have redesigned this technique as a means to communicate with the dead without actually sacrificing anyone. This was ultimately a lie to gather sacrifices for his goal in gaining immortality from <a href="https://naruto.fandom.com/wiki/Jashin" title="Jashin">Jashin</a>.</li>
+<li>In the <a href="https://naruto.fandom.com/wiki/Jiraiya_Shinobi_Handbook:_The_Tale_of_Naruto_the_Hero" title="Jiraiya Shinobi Handbook: The Tale of Naruto the Hero">anime</a> within Tsunade's <a href="https://naruto.fandom.com/wiki/Infinite_Tsukuyomi" title="Infinite Tsukuyomi">Infinite Tsukuyomi</a> dream, Sasori used this technique to revive an army of shinobi puppeteers, which could all use <a href="https://naruto.fandom.com/wiki/Red_Secret_Technique:_Performance_of_a_Hundred_Puppets" title="Red Secret Technique: Performance of a Hundred Puppets">Red Secret Technique: Performance of a Hundred Puppets</a>.</li>
+<li>In <i><a href="https://naruto.fandom.com/wiki/Sasuke_Retsuden:_The_Uchiha_Descendants_and_the_Heavenly_Stardust" title="Sasuke Retsuden: The Uchiha Descendants and the Heavenly Stardust">Sasuke Retsuden: The Uchiha Descendants and the Heavenly Stardust</a></i>, Zansūru claimed that the Impure World Reincarnation is merely a regional variant of <a href="https://naruto.fandom.com/wiki/Redaku_Reincarnation_Ninjutsu" title="Redaku Reincarnation Ninjutsu">Redaku Reincarnation Ninjutsu</a>. Decades prior to Sasuke's time in the <a href="https://naruto.fandom.com/wiki/Astronomy_Research_Institute" title="Astronomy Research Institute">Astronomy Research Institute</a>, Orochimaru visited the Institute to research this technique, ultimately stealing a few of the more valuable documents for his own purposes and using what he learned to improve upon Tobirama's Impure World Reincarnation.</li></ul>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Body_Recreation_Technique" title="Body Recreation Technique">Body Recreation Technique</a></i></li>
+<li><a href="https://naruto.fandom.com/wiki/Earth_Release_Resurrection_Technique:_Corpse_Soil" title="Earth Release Resurrection Technique: Corpse Soil">Earth Release Resurrection Technique: Corpse Soil</a></li>
+<li><a href="https://naruto.fandom.com/wiki/Redaku_Reincarnation_Ninjutsu" title="Redaku Reincarnation Ninjutsu">Redaku Reincarnation Ninjutsu</a></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251003070855
+Cache expiry: 2592000
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.264 seconds
+Real time usage: 0.394 seconds
+Preprocessor visited node count: 1307/1000000
+Post‐expand include size: 2282/2097152 bytes
+Template argument size: 187/2097152 bytes
+Highest expansion depth: 5/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 17406/5000000 bytes
+Lua time usage: 0.108/7.000 seconds
+Lua memory usage: 1889734/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  310.295      1 -total
+ 76.18%  236.389      1 Template:Infobox/Jutsu
+ 14.72%   45.664      3 Template:Translation
+  0.52%    1.627      1 Template:ImgRight
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:3354-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251003070855 and revision id 1454515. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Summoning%3A%20Impure%20World%20Reincarnation">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

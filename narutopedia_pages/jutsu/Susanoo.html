@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Susanoo — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Susanoo</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Susanoo" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="box headnote">
+<tbody><tr>
+<td>This article is about the technique. For the chapter, see <a href="https://naruto.fandom.com/wiki/Susanoo%E2%80%A6!!" title="Susanoo…!!">Susanoo…!!</a>.
+</td></tr></tbody></table>
+<p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Susanoo<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Susanoo&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Susanoo"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Susanoo" title="Special:FormEdit/Jutsu/Susanoo">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani"><ruby>須佐能乎<rt>スサノオ</rt></ruby></rb></ruby>­ <dfn lang="ja-Latn">(Susanoo)</dfn></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/2/2b/Susanoo.png/revision/latest?cb=20150207103348" title="Susanoo">
+<img alt="Susanoo" class="pi-image-thumbnail" data-image-key="Susanoo.png" data-image-name="Susanoo.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/2/2b/Susanoo.png/revision/latest/scale-to-width-down/268?cb=20150207103348" srcset="https://static.wikia.nocookie.net/naruto/images/2/2b/Susanoo.png/revision/latest/scale-to-width-down/268?cb=20150207103348 1x, https://static.wikia.nocookie.net/naruto/images/2/2b/Susanoo.png/revision/latest/scale-to-width-down/536?cb=20150207103348 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="literal english">
+<h3 class="pi-data-label pi-secondary-font">Literal English</h3>
+<div class="pi-data-value pi-font">He with the ability to help by all means</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="other names">
+<h3 class="pi-data-label pi-secondary-font">Alternative names</h3>
+<div class="pi-data-value pi-font">Tempestuous God of Valour (<span lang="ja">勇武の荒神</span>, <i>Yūbu no Aragami</i>)</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut manga">
+<h3 class="pi-data-label pi-secondary-font">Manga</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/The_One_Who_Knows_the_Truth_(volume)" title="The One Who Knows the Truth (volume)">Volume #43</a>, <a href="https://naruto.fandom.com/wiki/Together_with_the_Thunder%E2%80%A6!!" title="Together with the Thunder…!!"><i>Naruto</i> Chapter #391</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/The_End" title="The End"><i>Naruto Shippūden</i> Episode #138</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="novel debut">
+<h3 class="pi-data-label pi-secondary-font">Novel</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Boruto:_Naruto_the_Movie" title="Boruto: Naruto the Movie">Boruto: Naruto the Movie</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="movie debut">
+<h3 class="pi-data-label pi-secondary-font">Movie</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Boruto:_Naruto_the_Movie" title="Boruto: Naruto the Movie">Boruto: Naruto the Movie</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Heroes_3" title="Naruto Shippūden: Ultimate Ninja Heroes 3">Naruto Shippūden: Ultimate Ninja Heroes 3</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="ova debut">
+<h3 class="pi-data-label pi-secondary-font">OVA</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_Generations#Anime_Cutscenes" title="Naruto Shippūden: Ultimate Ninja Storm Generations">Naruto Shippūden: UNSG anime cutscenes</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Manga, Novel, Game, Movie</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Mangeky%C5%8D_Sharingan" title="Mangekyō Sharingan"><img class="mw-file-element" data-image-key="Mangeky%C5%8D_Sharingan_Itachi.svg" data-image-name="Mangekyō Sharingan Itachi.svg" data-relevant="0" decoding="async" height="18" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/52/Mangeky%C5%8D_Sharingan_Itachi.svg/revision/latest/scale-to-width-down/18?cb=20110803151309" width="18"/></a></span><a href="https://naruto.fandom.com/wiki/Kekkei_Genkai" title="Kekkei Genkai">Kekkei Genkai</a>, <a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/D%C5%8Djutsu" title="Dōjutsu">Dōjutsu</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Offensive, Defensive</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu range">
+<h3 class="pi-data-label pi-secondary-font">Range</h3>
+<div class="pi-data-value pi-font">All ranges</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Parent&amp;value=Susanoo" rel="noreferrer noopener" target="_blank">Derived jutsu</a></h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Amaterasu:_Flame_Wrapping_Fire" title="Amaterasu: Flame Wrapping Fire">Amaterasu: Flame Wrapping Fire</a></li><li><a href="https://naruto.fandom.com/wiki/Blaze_Release:_Susanoo_Kagutsuchi" title="Blaze Release: Susanoo Kagutsuchi">Blaze Release: Susanoo Kagutsuchi</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Blaze_Release:_Yasaka_Magatama" title="Blaze Release: Yasaka Magatama">Blaze Release: Yasaka Magatama</a></li><li><a href="https://naruto.fandom.com/wiki/Scorch_Release:_Halo_Hurricane_Jet_Black_Arrow_Style_Zero" title="Scorch Release: Halo Hurricane Jet Black Arrow Style Zero">Scorch Release: Halo Hurricane Jet Black Arrow Style Zero</a></li><li><a href="https://naruto.fandom.com/wiki/Sword_of_Kagutsuchi" title="Sword of Kagutsuchi">Sword of Kagutsuchi</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Indra%27s_Arrow" title="Indra's Arrow">Indra's Arrow</a></li><li><a href="https://naruto.fandom.com/wiki/Kamui_Shuriken" title="Kamui Shuriken">Kamui Shuriken</a></li><li><a href="https://naruto.fandom.com/wiki/Majestic_Attire:_Susanoo" title="Majestic Attire: Susanoo">Majestic Attire: Susanoo</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Evil_Disturbance_Waltz" title="Evil Disturbance Waltz">Evil Disturbance Waltz</a></li><li><a href="https://naruto.fandom.com/wiki/Hurricane_Thunderclap_%E2%80%94_Majestic_Attire_Sword_Stroke" title="Hurricane Thunderclap — Majestic Attire Sword Stroke">Hurricane Thunderclap — Majestic Attire Sword Stroke</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Susanoo:_Captive_Slash" title="Susanoo: Captive Slash">Susanoo: Captive Slash</a></li><li><a href="https://naruto.fandom.com/wiki/Susanoo:_Chidori" title="Susanoo: Chidori">Susanoo: Chidori</a></li><li><a href="https://naruto.fandom.com/wiki/Susanoo:_Crush" title="Susanoo: Crush">Susanoo: Crush</a></li><li><a href="https://naruto.fandom.com/wiki/Susanoo:_Fist" title="Susanoo: Fist">Susanoo: Fist</a></li><li><i><a href="https://naruto.fandom.com/wiki/Susanoo:_Great_Fireball_Technique" title="Susanoo: Great Fireball Technique">Susanoo: Great Fireball Technique</a></i></li><li><a href="https://naruto.fandom.com/wiki/Susanoo:_Tsukumo" title="Susanoo: Tsukumo">Susanoo: Tsukumo</a></li><li><a href="https://naruto.fandom.com/wiki/Tengai_Shinsei" title="Tengai Shinsei">Tengai Shinsei</a></li><li><a href="https://naruto.fandom.com/wiki/Yasaka_Magatama" title="Yasaka Magatama">Yasaka Magatama</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Yasaka_Magatama:_Tailed_Beast_Noka" title="Yasaka Magatama: Tailed Beast Noka">Yasaka Magatama: Tailed Beast Noka</a></li></ul></div></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Indra_%C5%8Ctsutsuki" title="Indra Ōtsutsuki">Indra Ōtsutsuki</a></li><li><a href="https://naruto.fandom.com/wiki/Itachi_Uchiha" title="Itachi Uchiha">Itachi Uchiha</a></li><li><a href="https://naruto.fandom.com/wiki/Kakashi_Hatake" title="Kakashi Hatake">Kakashi Hatake</a></li><li><a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a></li><li><a href="https://naruto.fandom.com/wiki/Sasuke_Uchiha" title="Sasuke Uchiha">Sasuke Uchiha</a></li><li><a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Merz" title="Merz">Merz</a> (with artificial Sharingan)<sup> (Game only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Shisui_Uchiha" title="Shisui Uchiha">Shisui Uchiha</a><sup> (Game only)</sup></li></ul></div></div>
+</div>
+</section>
+</aside>
+<b>Susanoo</b> is the strongest ability available to those who have awakened the <a href="https://naruto.fandom.com/wiki/Mangeky%C5%8D_Sharingan" title="Mangekyō Sharingan">Mangekyō Sharingan</a> in both eyes, having been passed down through the <a href="https://naruto.fandom.com/wiki/Uchiha_Clan" title="Uchiha Clan">Uchiha Clan</a>'s generations. It manifests as a gigantic, humanoid avatar made of the user's <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a>, which surrounds them and fights on their behalf.
+<p></p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Attributes"><span class="tocnumber">1</span> <span class="toctext">Attributes</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Development"><span class="tocnumber">2</span> <span class="toctext">Development</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Versions"><span class="tocnumber">3</span> <span class="toctext">Versions</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="about:blank#Itachi_Uchiha"><span class="tocnumber">3.1</span> <span class="toctext">Itachi Uchiha</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="about:blank#Sasuke_Uchiha"><span class="tocnumber">3.2</span> <span class="toctext">Sasuke Uchiha</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="about:blank#Madara_Uchiha"><span class="tocnumber">3.3</span> <span class="toctext">Madara Uchiha</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="about:blank#Indra_%C5%8Ctsutsuki"><span class="tocnumber">3.4</span> <span class="toctext">Indra Ōtsutsuki</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="about:blank#Shisui_Uchiha"><span class="tocnumber">3.5</span> <span class="toctext">Shisui Uchiha</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="about:blank#Kakashi_Hatake"><span class="tocnumber">3.6</span> <span class="toctext">Kakashi Hatake</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="about:blank#Hagoromo_%C5%8Ctsutsuki"><span class="tocnumber">3.7</span> <span class="toctext">Hagoromo Ōtsutsuki</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="about:blank#Merz"><span class="tocnumber">3.8</span> <span class="toctext">Merz</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="about:blank#Influence"><span class="tocnumber">4</span> <span class="toctext">Influence</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="about:blank#Trivia"><span class="tocnumber">5</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="about:blank#See_Also"><span class="tocnumber">6</span> <span class="toctext">See Also</span></a></li>
+<li class="toclevel-1 tocsection-15"><a href="about:blank#References"><span class="tocnumber">7</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Attributes">Attributes</span></h2>
+<p>When activated, Susanoo forms around the user and becomes an extension of their will, acting and attacking on their behalf. By default, Susanoo is anchored to its user and they to it: in its less developed forms it will move around with the user; in its more completed forms the user will be suspended within Susanoo, being brought with it as it moves around. This connection allows Susanoo to be a shield against physical attacks, one that becomes more difficult to penetrate as it is manifested more fully.
+</p><p>Although Susanoo is quite effective as a defence, it is able to distinguish in what it blocks. For example, the user can still perform <a href="https://naruto.fandom.com/wiki/Jutsu" title="Jutsu">jutsu</a> while within Susanoo, such attacks being able to pass through it to the outside without complications. Others can be brought within Susanoo with the user's permission, and users can likewise choose to leave Susanoo's protective structure. The latter characteristic can be used against the user; if an opponent can bypass Susanoo, however slightly, and latch onto them, they may be forcibly pulled out of Susanoo. With continued mastery, Susanoo can have increased defensive capabilities even at its ribcage stage, as seen when A was able to crack a rib of Sasuke's Susanoo, but conversely, could not crack Madara's. If it is damaged, Susanoo does not regenerate and it can only be repaired either by advancing it to the next developmental stage or by dispersing it and then forming it anew. Also, Susanoo is also only able to defend against physical attacks, so they are still vulnerable to <a href="https://naruto.fandom.com/wiki/Sage_Art:_White_Rage_Technique" title="Sage Art: White Rage Technique">visual</a> or <a href="https://naruto.fandom.com/wiki/Demonic_Flute:_Phantom_Sound_Chains" title="Demonic Flute: Phantom Sound Chains">auditory</a> attacks for example. Additionally, unless the legs of the Susanoo are fully manifested, the user's still vulnerable to attacks from below.
+</p><p>Susanoo draws on the user's chakra in large amounts so long as it is active. <a href="https://naruto.fandom.com/wiki/Sasuke_Uchiha" title="Sasuke Uchiha">Sasuke Uchiha</a> describes the sensation of using Susanoo as feeling pain in every cell in his body, which only increases over time of usage as well as at higher developmental stages. Being a Mangekyō Sharingan-based ability, it also places a strain on the user's eyes the more it is used, however, it is not actually necessary for one's Mangekyō Sharingan to be active while using Susanoo; in fact, <a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a> is able to use it without any eyes at all.
+</p>
+<h2><span class="mw-headline" id="Development">Development</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/7/79/Susanoo_Ribcage.png/revision/latest?cb=20160808044046"><img alt="Susanoo Ribcage" class="thumbimage lazyload" data-image-key="Susanoo_Ribcage.png" data-image-name="Susanoo Ribcage.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/79/Susanoo_Ribcage.png/revision/latest/scale-to-width-down/180?cb=20160808044046" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/7/79/Susanoo_Ribcage.png/revision/latest?cb=20160808044046"><img alt="Susanoo Ribcage" class="thumbimage" data-image-key="Susanoo_Ribcage.png" data-image-name="Susanoo Ribcage.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/79/Susanoo_Ribcage.png/revision/latest/scale-to-width-down/180?cb=20160808044046" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/7/79/Susanoo_Ribcage.png/revision/latest/scale-to-width-down/180?cb=20160808044046" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Susanoo_Ribcage.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Madara's Susanoo ribcage.</p> </figcaption> </figure>
+<p>As seen with Sasuke's learning how to use it, Susanoo has several developmental stages. Practised users go through all the stages every time they manifest it, layering more advanced stages over earlier ones or stripping them away as is needed; they can choose to stop at any developmental stage. At its simplest level, users only manifest aspects of Susanoo's skeletal structure, such as a ribcage for basic defence or an arm for interacting with the surroundings. Once a full skeleton is made, musculature and, later, skin forms until finally a complete humanoid is shaped. In these early stages, typically only the upper half of Susanoo is materialised, with legs becoming common once it reaches its full humanoid form; however, not all Susanoo users can accomplish the latter feat.
+</p><p>In its next stage, armour forms around the humanoid for further protection, causing it to resemble a <a class="extiw" href="https://en.wikipedia.org/wiki/Yamabushi" title="wikipedia:Yamabushi">yamabushi</a>. In its final stage, users stabilise the chakra that comprises Susanoo to create a colossal form known as the <b>Complete Body — Susanoo</b> (<span lang="ja">完成体　須佐能乎</span>, <i>Kanseitai — Susanoo</i>, <i>Viz:</i> Perfect Susanoo, <i>literally meaning:</i> Complete Body — He with the ability to help by all means), the ultimate ability of the Mangekyō Sharingan. In this state, Susanoo gains a <a class="extiw" href="https://en.wikipedia.org/wiki/Tengu" title="wikipedia:Tengu">tengu</a>-like nose, wings for flight, and is clad with robes and ornate armour. This form is generally the size of a tailed beast, with the exception of Hagoromo's, which was roughly the size of the Ten-Tails. This form also possesses power comparable to that of a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beast" title="Tailed beast">tailed beast</a>, capable of levelling giant mountains and, when enhanced by <a href="https://naruto.fandom.com/wiki/Chakra#Six_Paths_Chakra" title="Chakra">Six Paths Chakra</a>, <a href="https://naruto.fandom.com/wiki/Chibaku_Tensei" title="Chibaku Tensei">small planetoids</a> with ease. Users can also channel their own techniques into the Complete Body — Susanoo, as well as <a href="https://naruto.fandom.com/wiki/Majestic_Attire:_Susanoo" title="Majestic Attire: Susanoo">shape</a> it around the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Nine-Tails" title="Nine-Tails">Nine-Tails</a> to improve its offensive and defensive capabilities.
+</p>
+<figure class="thumb mw-halign-right show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/50/Senjutsu_Susanoo.png/revision/latest?cb=20141026161754"><img alt="Senjutsu Susanoo" class="thumbimage lazyload" data-image-key="Senjutsu_Susanoo.png" data-image-name="Senjutsu Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/50/Senjutsu_Susanoo.png/revision/latest/scale-to-width-down/180?cb=20141026161754" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/50/Senjutsu_Susanoo.png/revision/latest?cb=20141026161754"><img alt="Senjutsu Susanoo" class="thumbimage" data-image-key="Senjutsu_Susanoo.png" data-image-name="Senjutsu Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/50/Senjutsu_Susanoo.png/revision/latest/scale-to-width-down/180?cb=20141026161754" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/50/Senjutsu_Susanoo.png/revision/latest/scale-to-width-down/180?cb=20141026161754" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Senjutsu_Susanoo.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Sasuke's Senjutsu Susanoo.</p> </figcaption> </figure>
+<p>Users are able to mingle the chakra that makes Susanoo with chakra from other sources. Sasuke uses the chakra from <a href="https://naruto.fandom.com/wiki/J%C5%ABgo" title="Jūgo">Jūgo</a>'s <a href="https://naruto.fandom.com/wiki/Sage_Transformation" title="Sage Transformation">Sage Transformation</a> to make a "<a href="https://naruto.fandom.com/wiki/Senjutsu" title="Senjutsu">Senjutsu</a> Susanoo" (<span lang="ja">仙術須佐能乎</span>, <i>literally meaning:</i> Sage Technique He with the ability to help by all means), with markings reminiscent of the <a href="https://naruto.fandom.com/wiki/Cursed_Seal_of_Heaven" title="Cursed Seal of Heaven">Cursed Seal of Heaven</a> spreading across it. He later stores the chakra of the nine <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beasts" title="Tailed beasts">tailed beasts</a> within his Susanoo, drastically improving its strength and causing <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Lightning" title="Lightning">lightning</a> to emanate from its back.
+</p>
+<h2><span class="mw-headline" id="Versions">Versions</span></h2>
+<p>Susanoo differs between users, in terms of colour, design, and weaponry. Some features are consistent, however, all Susanoo constructs are deviations of the Japanese <a class="extiw" href="https://en.wikipedia.org/wiki/Tengu" title="wikipedia:Tengu">tengu</a>, and have two sets of arms — one of which can form wings as part of its Complete Body form — and six fingers on each of its hands. All Susanoo wield at least one sword.
+</p>
+<h3><span class="mw-headline" id="Itachi_Uchiha">Itachi Uchiha</span></h3>
+<p><a href="https://naruto.fandom.com/wiki/Itachi_Uchiha" title="Itachi Uchiha">Itachi Uchiha</a>'s Susanoo was yellow in the manga; in the anime, its skeletal and armoured forms were red and its humanoid form was orange. In its humanoid form, its face was framed by locks of hair, with an appendage on its chin reminiscent of a <a class="extiw" href="https://en.wikipedia.org/wiki/Pharaoh" title="wikipedia:Pharaoh">Pharaoh</a>'s false beard. When its armour was formed, Itachi's Susanoo resembled a long-nosed tengu and it wore a pair of magatama earrings.
+</p><p>Itachi's Susanoo possessed a curved blade that resembled a dagger or <a href="https://naruto.fandom.com/wiki/Tant%C5%8D" title="Tantō">tantō</a>. He rarely used this, preferring his <a href="https://naruto.fandom.com/wiki/Sword_of_Totsuka" title="Sword of Totsuka">Sword of Totsuka</a>, wielded in its primary right hand and sheathed in a sake jar held by its second right hand. The Sword of Totsuka is an ethereal weapon with an enchanted blade that, in addition to standard cutting, can <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Seal" title="Seal">seal</a> anyone it pierces, trapping them in a <a href="https://naruto.fandom.com/wiki/Genjutsu" title="Genjutsu">genjutsu</a>-like "world of drunken dreams" for all eternity. In its primary left hand, Itachi's Susanoo wielded the <a href="https://naruto.fandom.com/wiki/Yata_Mirror" title="Yata Mirror">Yata Mirror</a>, a shield that can change its <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Nature" title="Nature">nature</a> depending on the attack it receives, thus nullifying it. According to <a href="https://naruto.fandom.com/wiki/Black_Zetsu" title="Black Zetsu">Black Zetsu</a>, the simultaneous use of the Sword of Totsuka and the Yata Mirror made Itachi essentially invincible. For long-range attacks, Itachi could use Susanoo to perform <a href="https://naruto.fandom.com/wiki/Yasaka_Magatama" title="Yasaka Magatama">Yasaka Magatama</a>. In <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_4" title="Naruto Shippūden: Ultimate Ninja Storm 4">Naruto Shippūden: Ultimate Ninja Storm 4</a></i>, Itachi has an exclusive Complete Body — Susanoo form that retains the traits of his previous forms, including a retractable version of the Yata Mirror, and a broadsword version of the Sword of Totsuka.
+</p>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-center wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="1" hash="a5e43072575854d8ca6c5240ca1d4c28" id="gallery-1"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Itachi-s_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Itachi%27s_Susanoo.png" style="height:185px; width:185px;" title="Itachi's Susanoo.png (3.35 MB)"><noscript><img alt="Itachi's skeletal Susanoo." class="thumbimage" data-caption="Itachi's skeletal Susanoo." data-image-key="Itachi%27s_Susanoo.png" data-image-name="Itachi's Susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/1/19/Itachi%27s_Susanoo.png/revision/latest/scale-to-width-down/255?cb=20160808044335" style="" title="Itachi's Susanoo.png (3.35 MB)" width="255"/></noscript><img alt="Itachi's skeletal Susanoo." class="thumbimage lazyload" data-caption="Itachi's skeletal Susanoo." data-image-key="Itachi%27s_Susanoo.png" data-image-name="Itachi's Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/19/Itachi%27s_Susanoo.png/revision/latest/scale-to-width-down/255?cb=20160808044335" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Itachi's Susanoo.png (3.35 MB)" width="255"/></a></div></div><div class="lightbox-caption" style="width:185px;">Itachi's skeletal Susanoo.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Itachi-s_Yasaka_Magatama-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Itachi%27s_Yasaka_Magatama.png" style="height:185px; width:185px;" title="Itachi's Yasaka Magatama.png (2.06 MB)"><noscript><img alt="Itachi's humanoid Susanoo." class="thumbimage" data-caption="Itachi's humanoid Susanoo." data-image-key="Itachi%27s_Yasaka_Magatama.png" data-image-name="Itachi's Yasaka Magatama.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/2/22/Itachi%27s_Yasaka_Magatama.png/revision/latest/scale-to-width-down/328?cb=20150310043225" style="" title="Itachi's Yasaka Magatama.png (2.06 MB)" width="328"/></noscript><img alt="Itachi's humanoid Susanoo." class="thumbimage lazyload" data-caption="Itachi's humanoid Susanoo." data-image-key="Itachi%27s_Yasaka_Magatama.png" data-image-name="Itachi's Yasaka Magatama.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/22/Itachi%27s_Yasaka_Magatama.png/revision/latest/scale-to-width-down/328?cb=20150310043225" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Itachi's Yasaka Magatama.png (2.06 MB)" width="328"/></a></div></div><div class="lightbox-caption" style="width:185px;">Itachi's humanoid Susanoo.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Itachi-s_armoured_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Itachi%27s_armoured_Susanoo.png" style="height:185px; width:185px;" title="Itachi's armoured Susanoo.png (821 KB)"><noscript><img alt="Itachi's armoured Susanoo." class="thumbimage" data-caption="Itachi's armoured Susanoo." data-image-key="Itachi%27s_armoured_Susanoo.png" data-image-name="Itachi's armoured Susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/1/18/Itachi%27s_armoured_Susanoo.png/revision/latest/scale-to-width-down/256?cb=20141016104444" style="" title="Itachi's armoured Susanoo.png (821 KB)" width="256"/></noscript><img alt="Itachi's armoured Susanoo." class="thumbimage lazyload" data-caption="Itachi's armoured Susanoo." data-image-key="Itachi%27s_armoured_Susanoo.png" data-image-name="Itachi's armoured Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/18/Itachi%27s_armoured_Susanoo.png/revision/latest/scale-to-width-down/256?cb=20141016104444" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Itachi's armoured Susanoo.png (821 KB)" width="256"/></a></div></div><div class="lightbox-caption" style="width:185px;">Itachi's armoured Susanoo.</div></div></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Susanoo_Itachi_complete-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Susanoo_Itachi_complete.png" style="height:185px; width:185px;" title="Susanoo Itachi complete.png (2.28 MB)"><noscript><img alt="Itachi's Complete Body — Susanoo, game only." class="thumbimage" data-caption="Itachi's Complete Body — Susanoo, game only." data-image-key="Susanoo_Itachi_complete.png" data-image-name="Susanoo Itachi complete.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/8/80/Susanoo_Itachi_complete.png/revision/latest/scale-to-width-down/262?cb=20151228072117" style="" title="Susanoo Itachi complete.png (2.28 MB)" width="262"/></noscript><img alt="Itachi's Complete Body — Susanoo, game only." class="thumbimage lazyload" data-caption="Itachi's Complete Body — Susanoo, game only." data-image-key="Susanoo_Itachi_complete.png" data-image-name="Susanoo Itachi complete.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/80/Susanoo_Itachi_complete.png/revision/latest/scale-to-width-down/262?cb=20151228072117" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Susanoo Itachi complete.png (2.28 MB)" width="262"/></a></div></div><div class="lightbox-caption" style="width:185px;">Itachi's Complete Body — Susanoo, game only.</div></div></div></div>
+<h3><span class="mw-headline" id="Sasuke_Uchiha">Sasuke Uchiha</span></h3>
+<p><a href="https://naruto.fandom.com/wiki/Sasuke_Uchiha" title="Sasuke Uchiha">Sasuke Uchiha</a>'s Susanoo was initially depicted as a dark shade of blue in the manga, though it is purple in all other medias. Because Sasuke's development has often been marked by intense feelings of hatred, his Susanoo is noted to be much darker in composition compared to Itachi's. Whereas Itachi's Susanoo appears relatively "normal", Sasuke's possesses demonic horns, a long appendage on its chin, and a malevolent grin. Its armoured form initially appears largely the same as Itachi's save for having jagged teeth around its hood. After Sasuke gains the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Eternal_Mangeky%C5%8D_Sharingan" title="Eternal Mangekyō Sharingan">Eternal Mangekyō Sharingan</a>, however, its appearance changes, the armour's mouth taking on a beak-like shape and generally becoming ghastly-looking.In its Complete Body form, Sasuke's Susanoo has a helmet that features a long tengu nose, two spikes over each eye, a slit stretching across its mouth, three gaps on each of its cheeks and one additional gap on its chin. Like Madara's, it is massive, comparable in size to <a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a> after <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> got <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>'s chakra.
+</p><p>Because of his <a href="https://naruto.fandom.com/wiki/Rinnegan" title="Rinnegan">Rinnegan</a>, Sasuke can use the wings of his Complete Body Susanoo to block out the light of the <a href="https://naruto.fandom.com/wiki/Infinite_Tsukuyomi" title="Infinite Tsukuyomi">Infinite Tsukuyomi</a> (and in <i><a href="https://naruto.fandom.com/wiki/Naruto_x_Boruto:_Ultimate_Ninja_Storm_Connections" title="Naruto x Boruto: Ultimate Ninja Storm Connections">Naruto x Boruto: Ultimate Ninja Storm Connections</a></i> the <a href="https://naruto.fandom.com/wiki/Engraved_Tsukuyomi" title="Engraved Tsukuyomi">Engraved Tsukuyomi</a>). When drawing on the power of the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beasts" title="Tailed beasts">tailed beasts</a>, the armour of his so-called "Indra Susanoo" (<span lang="ja">インドラ須佐能乎</span>, <i>Indora Susanoo</i>) is reduced somewhat, exposing the humanoid within. This form is capable of generating a sword instead of having it form alongside the Complete Body — Susanoo, enabling him to catch opponents off guard. It can be used as a projectile and can explode into massive pillars on lightning large enough to engulf Kurama.
+</p><p>Sasuke's Susanoo has a blade in all its forms: a <a class="extiw" href="https://en.wikipedia.org/wiki/Sabre" title="wikipedia:Sabre">sabre</a> in its developmental forms, an <a class="extiw" href="https://en.wikipedia.org/wiki/Nodachi" title="wikipedia:Nodachi">ōdachi</a> in its humanoid form, wielded with its second right hand, and finally a pair of katana in its Complete Body form. Its primary weapon, though, is a <a class="extiw" href="https://en.wikipedia.org/wiki/Bow_and_arrow" title="wikipedia:Bow and arrow">bow</a>, manifested on the wrist of its left arm; the bow can double as a shield, a function that becomes more visually apparent in its armoured form. Arrows are drawn from an orb held by its primary right hand and can be fired very quickly, such that only <a href="https://naruto.fandom.com/wiki/Kabuto_Yakushi" title="Kabuto Yakushi">Kabuto Yakushi</a>, while utilising <a href="https://naruto.fandom.com/wiki/Sage_Mode" title="Sage Mode">Sage Mode</a>, has been able to avoid one. Weapon properties can be augmented, either with <a href="https://naruto.fandom.com/wiki/Blaze_Release:_Susanoo_Kagutsuchi" title="Blaze Release: Susanoo Kagutsuchi">black flames</a> in its armoured form or <a href="https://naruto.fandom.com/wiki/Indra%27s_Arrow" title="Indra's Arrow">lightning</a> in its Complete Body state. Sasuke is able to perform techniques through his Susanoo, such as <a href="https://naruto.fandom.com/wiki/Susanoo:_Chidori" title="Susanoo: Chidori">Chidori</a> and <a href="https://naruto.fandom.com/wiki/Susanoo:_Great_Fireball_Technique" title="Susanoo: Great Fireball Technique">Great Fireball Technique</a>.
+</p>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-center wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="2" hash="9531a8c057ad6ab37441f7b21a5c9a23" id="gallery-2"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Sasuke-s_susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Sasuke%27s_susanoo.png" style="height:185px; width:185px;" title="Sasuke's susanoo.png (5.54 MB)"><noscript><img alt="Sasuke's skeletal Susanoo." class="thumbimage" data-caption="Sasuke's skeletal Susanoo." data-image-key="Sasuke%27s_susanoo.png" data-image-name="Sasuke's susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/5/58/Sasuke%27s_susanoo.png/revision/latest/scale-to-width-down/330?cb=20160920101604" style="" title="Sasuke's susanoo.png (5.54 MB)" width="330"/></noscript><img alt="Sasuke's skeletal Susanoo." class="thumbimage lazyload" data-caption="Sasuke's skeletal Susanoo." data-image-key="Sasuke%27s_susanoo.png" data-image-name="Sasuke's susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/58/Sasuke%27s_susanoo.png/revision/latest/scale-to-width-down/330?cb=20160920101604" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Sasuke's susanoo.png (5.54 MB)" width="330"/></a></div></div><div class="lightbox-caption" style="width:185px;">Sasuke's skeletal Susanoo.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Sasuke-s_Fully_body_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Sasuke%27s_Fully_body_Susanoo.png" style="height:185px; width:185px;" title="Sasuke's Fully body Susanoo.png (951 KB)"><noscript><img alt="Sasuke's humanoid Susanoo." class="thumbimage" data-caption="Sasuke's humanoid Susanoo." data-image-key="Sasuke%27s_Fully_body_Susanoo.png" data-image-name="Sasuke's Fully body Susanoo.png" data-relevant="1" height="204" src="https://static.wikia.nocookie.net/naruto/images/2/28/Sasuke%27s_Fully_body_Susanoo.png/revision/latest/scale-to-width-down/185?cb=20141016124203" style="" title="Sasuke's Fully body Susanoo.png (951 KB)" width="185"/></noscript><img alt="Sasuke's humanoid Susanoo." class="thumbimage lazyload" data-caption="Sasuke's humanoid Susanoo." data-image-key="Sasuke%27s_Fully_body_Susanoo.png" data-image-name="Sasuke's Fully body Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/28/Sasuke%27s_Fully_body_Susanoo.png/revision/latest/scale-to-width-down/185?cb=20141016124203" height="204" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Sasuke's Fully body Susanoo.png (951 KB)" width="185"/></a></div></div><div class="lightbox-caption" style="width:185px;">Sasuke's humanoid Susanoo.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Susanoo_484_RAW-jpeg" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Susanoo_484_RAW.jpeg" style="height:185px; width:185px;" title="Susanoo 484 RAW.jpeg (101 KB)"><noscript><img alt="Sasuke's armoured Susanoo." class="thumbimage" data-caption="Sasuke's armoured Susanoo." data-image-key="Susanoo_484_RAW.jpeg" data-image-name="Susanoo 484 RAW.jpeg" data-relevant="1" height="196" src="https://static.wikia.nocookie.net/naruto/images/d/d6/Susanoo_484_RAW.jpeg/revision/latest/scale-to-width-down/185?cb=20140419224753" style="" title="Susanoo 484 RAW.jpeg (101 KB)" width="185"/></noscript><img alt="Sasuke's armoured Susanoo." class="thumbimage lazyload" data-caption="Sasuke's armoured Susanoo." data-image-key="Susanoo_484_RAW.jpeg" data-image-name="Susanoo 484 RAW.jpeg" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/d/d6/Susanoo_484_RAW.jpeg/revision/latest/scale-to-width-down/185?cb=20140419224753" height="196" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Susanoo 484 RAW.jpeg (101 KB)" width="185"/></a></div></div><div class="lightbox-caption" style="width:185px;">Sasuke's armoured Susanoo.</div></div></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Eternal_Mangeky--_Armoured_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Eternal_Mangeky%C5%8D_Armoured_Susanoo.png" style="height:185px; width:185px;" title="Eternal Mangekyō Armoured Susanoo.png (1.06 MB)"><noscript><img alt="Sasuke's armoured Susanoo (Eternal Mangekyō Sharingan version)." class="thumbimage" data-caption="Sasuke's armoured Susanoo (Eternal Mangekyō Sharingan version)." data-image-key="Eternal_Mangeky%C5%8D_Armoured_Susanoo.png" data-image-name="Eternal Mangekyō Armoured Susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/7/79/Eternal_Mangeky%C5%8D_Armoured_Susanoo.png/revision/latest/scale-to-width-down/238?cb=20160226075459" style="" title="Eternal Mangekyō Armoured Susanoo.png (1.06 MB)" width="238"/></noscript><img alt="Sasuke's armoured Susanoo (Eternal Mangekyō Sharingan version)." class="thumbimage lazyload" data-caption="Sasuke's armoured Susanoo (Eternal Mangekyō Sharingan version)." data-image-key="Eternal_Mangeky%C5%8D_Armoured_Susanoo.png" data-image-name="Eternal Mangekyō Armoured Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/79/Eternal_Mangeky%C5%8D_Armoured_Susanoo.png/revision/latest/scale-to-width-down/238?cb=20160226075459" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Eternal Mangekyō Armoured Susanoo.png (1.06 MB)" width="238"/></a></div></div><div class="lightbox-caption" style="width:185px;">Sasuke's armoured Susanoo (Eternal Mangekyō Sharingan version).</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Sasuke-s_Flying_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Sasuke%27s_Flying_Susanoo.png" style="height:185px; width:185px;" title="Sasuke's Flying Susanoo.png (2.15 MB)"><noscript><img alt="Sasuke's Complete Body — Susanoo." class="thumbimage" data-caption="Sasuke's Complete Body — Susanoo." data-image-key="Sasuke%27s_Flying_Susanoo.png" data-image-name="Sasuke's Flying Susanoo.png" data-relevant="1" height="197" src="https://static.wikia.nocookie.net/naruto/images/4/4d/Sasuke%27s_Flying_Susanoo.png/revision/latest/scale-to-width-down/185?cb=20160930054158" style="" title="Sasuke's Flying Susanoo.png (2.15 MB)" width="185"/></noscript><img alt="Sasuke's Complete Body — Susanoo." class="thumbimage lazyload" data-caption="Sasuke's Complete Body — Susanoo." data-image-key="Sasuke%27s_Flying_Susanoo.png" data-image-name="Sasuke's Flying Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/4d/Sasuke%27s_Flying_Susanoo.png/revision/latest/scale-to-width-down/185?cb=20160930054158" height="197" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Sasuke's Flying Susanoo.png (2.15 MB)" width="185"/></a></div></div><div class="lightbox-caption" style="width:185px;">Sasuke's Complete Body — Susanoo.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Tailed_Beast_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_Susanoo.png" style="height:185px; width:185px;" title="Tailed Beast Susanoo.png (5.59 MB)"><noscript><img alt="Sasuke's Indra Susanoo." class="thumbimage" data-caption="Sasuke's Indra Susanoo." data-image-key="Tailed_Beast_Susanoo.png" data-image-name="Tailed Beast Susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/f/ff/Tailed_Beast_Susanoo.png/revision/latest/scale-to-width-down/330?cb=20160929122110" style="" title="Tailed Beast Susanoo.png (5.59 MB)" width="330"/></noscript><img alt="Sasuke's Indra Susanoo." class="thumbimage lazyload" data-caption="Sasuke's Indra Susanoo." data-image-key="Tailed_Beast_Susanoo.png" data-image-name="Tailed Beast Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/f/ff/Tailed_Beast_Susanoo.png/revision/latest/scale-to-width-down/330?cb=20160929122110" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Tailed Beast Susanoo.png (5.59 MB)" width="330"/></a></div></div><div class="lightbox-caption" style="width:185px;">Sasuke's Indra Susanoo.</div></div></div></div>
+<h3><span class="mw-headline" id="Madara_Uchiha">Madara Uchiha</span></h3>
+<p><a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a>'s Susanoo was dark blue in colour. His Susanoo was made up of two entirely different sides that were conjoined along their spine, both of which had a distinct face: the front face had elongated <a class="extiw" href="https://en.wikipedia.org/wiki/Canine_tooth" title="wikipedia:Canine tooth">canine teeth</a> in its lower jaw bracket and two tusks growing from said jaw, while the back face had similarly elongated canine teeth in its upper jaw bracket and a single horn protruding from its forehead. In its armoured form, the usual tengu-like armour splits from its forehead down, revealing Susanoo's eyes while obscuring the rest of its face. Curiously, his armoured Susanoo appeared to always form the Tiger hand seal with its front hands, and was the largest of its variation. In its Complete Body form, its head gained a long tengu nose and two lines running down from its mouth to its chin area, as well as hair which was tied up at the sides, and dwarfs a mountain-sized meteor that he had brought down on the <a href="https://naruto.fandom.com/wiki/Fourth_Division" title="Fourth Division">Fourth Division</a> during the war show it was at least several hundred meters tall.
+</p><p>Madara's Susanoo wielded distinct, undulating blades that resembled <a class="extiw" href="https://en.wikipedia.org/wiki/Kris" title="wikipedia:Kris">kris</a>, held in the right hand of each side. He was able to throw the blades as guided projectiles. In the anime, Madara was able to manifest swords in all four of Susanoo's arms; the blades left traces of blue, fire-like chakra in the ground after impacting and could unleash shockwaves capable of obliterating numerous shinobi in a single strike. In its Complete Body form, the swords more closely resembled traditional katana or tachi, complete with sheaths held in the secondary arms. One of the swords could cut cleanly bisect several mountains with a single stroke and from far away. For long-range attacks, Madara could use Susanoo to perform <a href="https://naruto.fandom.com/wiki/Yasaka_Magatama" title="Yasaka Magatama">Yasaka Magatama</a>.
+</p>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-center wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="3" hash="25486617069b8c26c9a63c048a4bffc3" id="gallery-3"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Madara_incomplete_ep368-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Madara_incomplete_ep368.png" style="height:185px; width:185px;" title="Madara incomplete ep368.png (1.85 MB)"><noscript><img alt="Madara's skeletal Susanoo." class="thumbimage" data-caption="Madara's skeletal Susanoo." data-image-key="Madara_incomplete_ep368.png" data-image-name="Madara incomplete ep368.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/5/5a/Madara_incomplete_ep368.png/revision/latest/scale-to-width-down/328?cb=20140710230124" style="" title="Madara incomplete ep368.png (1.85 MB)" width="328"/></noscript><img alt="Madara's skeletal Susanoo." class="thumbimage lazyload" data-caption="Madara's skeletal Susanoo." data-image-key="Madara_incomplete_ep368.png" data-image-name="Madara incomplete ep368.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/5a/Madara_incomplete_ep368.png/revision/latest/scale-to-width-down/328?cb=20140710230124" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Madara incomplete ep368.png (1.85 MB)" width="328"/></a></div></div><div class="lightbox-caption" style="width:185px;">Madara's skeletal Susanoo.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Madara-s_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Madara%27s_Susanoo.png" style="height:185px; width:185px;" title="Madara's Susanoo.png (7.73 MB)"><noscript><img alt="Madara's humanoid Susanoo." class="thumbimage" data-caption="Madara's humanoid Susanoo." data-image-key="Madara%27s_Susanoo.png" data-image-name="Madara's Susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/5/5b/Madara%27s_Susanoo.png/revision/latest/scale-to-width-down/329?cb=20160718230315" style="" title="Madara's Susanoo.png (7.73 MB)" width="329"/></noscript><img alt="Madara's humanoid Susanoo." class="thumbimage lazyload" data-caption="Madara's humanoid Susanoo." data-image-key="Madara%27s_Susanoo.png" data-image-name="Madara's Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/5b/Madara%27s_Susanoo.png/revision/latest/scale-to-width-down/329?cb=20160718230315" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Madara's Susanoo.png (7.73 MB)" width="329"/></a></div></div><div class="lightbox-caption" style="width:185px;">Madara's humanoid Susanoo.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="MadaraPS-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:MadaraPS.png" style="height:185px; width:185px;" title="MadaraPS.png (1.54 MB)"><noscript><img alt="Madara's armoured Susanoo." class="thumbimage" data-caption="Madara's armoured Susanoo." data-image-key="MadaraPS.png" data-image-name="MadaraPS.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/2/2f/MadaraPS.png/revision/latest/scale-to-width-down/277?cb=20131121124838" style="" title="MadaraPS.png (1.54 MB)" width="277"/></noscript><img alt="Madara's armoured Susanoo." class="thumbimage lazyload" data-caption="Madara's armoured Susanoo." data-image-key="MadaraPS.png" data-image-name="MadaraPS.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/2f/MadaraPS.png/revision/latest/scale-to-width-down/277?cb=20131121124838" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="MadaraPS.png (1.54 MB)" width="277"/></a></div></div><div class="lightbox-caption" style="width:185px;">Madara's armoured Susanoo.</div></div></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Madara-s_perfect_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Madara%27s_perfect_Susanoo.png" style="height:185px; width:185px;" title="Madara's perfect Susanoo.png (742 KB)"><noscript><img alt="Madara's Complete Body — Susanoo." class="thumbimage" data-caption="Madara's Complete Body — Susanoo." data-image-key="Madara%27s_perfect_Susanoo.png" data-image-name="Madara's perfect Susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/9/93/Madara%27s_perfect_Susanoo.png/revision/latest/scale-to-width-down/199?cb=20141030224402" style="" title="Madara's perfect Susanoo.png (742 KB)" width="199"/></noscript><img alt="Madara's Complete Body — Susanoo." class="thumbimage lazyload" data-caption="Madara's Complete Body — Susanoo." data-image-key="Madara%27s_perfect_Susanoo.png" data-image-name="Madara's perfect Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/9/93/Madara%27s_perfect_Susanoo.png/revision/latest/scale-to-width-down/199?cb=20141030224402" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Madara's perfect Susanoo.png (742 KB)" width="199"/></a></div></div><div class="lightbox-caption" style="width:185px;">Madara's Complete Body — Susanoo.</div></div></div></div>
+<h3><span id="Indra_.C5.8Ctsutsuki"></span><span class="mw-headline" id="Indra_Ōtsutsuki">Indra Ōtsutsuki</span></h3>
+<p><a href="https://naruto.fandom.com/wiki/Indra_%C5%8Ctsutsuki" title="Indra Ōtsutsuki">Indra Ōtsutsuki</a>'s Susanoo, named <b>Origin: Susanoo</b> (<span lang="ja">根源・須佐能乎</span>, <i>Kongen: Susanoo</i>), was purple in colour. In its Complete Body form, it had accentuated eye-holes, a long tengu nose, a spike over each eye, a slit across its mouth and three gaps on each of its cheeks. In the anime, the skeletal form of Indra's Susanoo was also shown.
+</p>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-center wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="4" hash="dad4a4c117b7584135213a8a9a1afc11" id="gallery-4"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Indra-s_susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Indra%27s_susanoo.png" style="height:185px; width:185px;" title="Indra's susanoo.png (3.82 MB)"><noscript><img alt="Indra's skeletal Susanoo." class="thumbimage" data-caption="Indra's skeletal Susanoo." data-image-key="Indra%27s_susanoo.png" data-image-name="Indra's susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/5/58/Indra%27s_susanoo.png/revision/latest/scale-to-width-down/193?cb=20160721141312" style="" title="Indra's susanoo.png (3.82 MB)" width="193"/></noscript><img alt="Indra's skeletal Susanoo." class="thumbimage lazyload" data-caption="Indra's skeletal Susanoo." data-image-key="Indra%27s_susanoo.png" data-image-name="Indra's susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/58/Indra%27s_susanoo.png/revision/latest/scale-to-width-down/193?cb=20160721141312" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Indra's susanoo.png (3.82 MB)" width="193"/></a></div></div><div class="lightbox-caption" style="width:185px;">Indra's skeletal Susanoo.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Indra-s_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Indra%27s_Susanoo.png" style="height:185px; width:185px;" title="Indra's Susanoo.png (3.79 MB)"><noscript><img alt="Indra's Complete Body — Susanoo." class="thumbimage" data-caption="Indra's Complete Body — Susanoo." data-image-key="Indra%27s_Susanoo.png" data-image-name="Indra's Susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/2/28/Indra%27s_Susanoo.png/revision/latest/scale-to-width-down/203?cb=20160721140709" style="" title="Indra's Susanoo.png (3.79 MB)" width="203"/></noscript><img alt="Indra's Complete Body — Susanoo." class="thumbimage lazyload" data-caption="Indra's Complete Body — Susanoo." data-image-key="Indra%27s_Susanoo.png" data-image-name="Indra's Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/28/Indra%27s_Susanoo.png/revision/latest/scale-to-width-down/203?cb=20160721140709" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Indra's Susanoo.png (3.79 MB)" width="203"/></a></div></div><div class="lightbox-caption" style="width:185px;">Indra's Complete Body — Susanoo.</div></div></div></div>
+<div style="clear: both;"></div>
+<h3><span class="mw-headline" id="Shisui_Uchiha">Shisui Uchiha</span></h3>
+<p>In <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_Revolution" title="Naruto Shippūden: Ultimate Ninja Storm Revolution">Naruto Shippūden: Ultimate Ninja Storm Revolution</a></i>, <a href="https://naruto.fandom.com/wiki/Shisui_Uchiha" title="Shisui Uchiha">Shisui Uchiha</a> can use a green Susanoo. It has blade-like appendages on its shoulders, the side of its face, and along its forearms. Its right arm wields a drill-like lance that Shisui can coat with <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fire" title="Fire">fire</a> to create a vortex of flames. It is also able to unleash a <a href="https://naruto.fandom.com/wiki/Susanoo:_Tsukumo" title="Susanoo: Tsukumo">barrage of chakra needles</a>. In <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_4" title="Naruto Shippūden: Ultimate Ninja Storm 4">Naruto Shippūden: Ultimate Ninja Storm 4</a></i>, Shisui has an exclusive Complete Body — Susanoo form, complete with a second pair of wing-shaped arms, tengu like features, and wielding a large drill-like sword. 
+</p>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-center wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="5" hash="0db3d0ed4b81998d4cf3ef05e71e54bc" id="gallery-5"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Susanoo_Shisui_Humanoid-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Susanoo_Shisui_Humanoid.png" style="height:185px; width:185px;" title="Susanoo Shisui Humanoid.png (8.68 MB)"><noscript><img alt="Shisui's humanoid Susanoo." class="thumbimage" data-caption="Shisui's humanoid Susanoo." data-image-key="Susanoo_Shisui_Humanoid.png" data-image-name="Susanoo Shisui Humanoid.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/d/d7/Susanoo_Shisui_Humanoid.png/revision/latest/scale-to-width-down/262?cb=20210305235558" style="" title="Susanoo Shisui Humanoid.png (8.68 MB)" width="262"/></noscript><img alt="Shisui's humanoid Susanoo." class="thumbimage lazyload" data-caption="Shisui's humanoid Susanoo." data-image-key="Susanoo_Shisui_Humanoid.png" data-image-name="Susanoo Shisui Humanoid.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/d/d7/Susanoo_Shisui_Humanoid.png/revision/latest/scale-to-width-down/262?cb=20210305235558" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Susanoo Shisui Humanoid.png (8.68 MB)" width="262"/></a></div></div><div class="lightbox-caption" style="width:185px;">Shisui's humanoid Susanoo.</div></div><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Susanoo_Shisui_complete-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Susanoo_Shisui_complete.png" style="height:185px; width:185px;" title="Susanoo Shisui complete.png (2.19 MB)"><noscript><img alt="Shisui's Complete Body — Susanoo, game only." class="thumbimage" data-caption="Shisui's Complete Body — Susanoo, game only." data-image-key="Susanoo_Shisui_complete.png" data-image-name="Susanoo Shisui complete.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/5/5a/Susanoo_Shisui_complete.png/revision/latest/scale-to-width-down/262?cb=20170630212958" style="" title="Susanoo Shisui complete.png (2.19 MB)" width="262"/></noscript><img alt="Shisui's Complete Body — Susanoo, game only." class="thumbimage lazyload" data-caption="Shisui's Complete Body — Susanoo, game only." data-image-key="Susanoo_Shisui_complete.png" data-image-name="Susanoo Shisui complete.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/5a/Susanoo_Shisui_complete.png/revision/latest/scale-to-width-down/262?cb=20170630212958" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Susanoo Shisui complete.png (2.19 MB)" width="262"/></a></div></div><div class="lightbox-caption" style="width:185px;">Shisui's Complete Body — Susanoo, game only.</div></div></div></div>
+<div style="clear: both;"></div>
+<h3><span class="mw-headline" id="Kakashi_Hatake">Kakashi Hatake</span></h3>
+<p><a href="https://naruto.fandom.com/wiki/Kakashi_Hatake" title="Kakashi Hatake">Kakashi Hatake</a>'s Susanoo is light blue in colour. The Susanoo he uses has only been seen in a Complete Body form. It had the characteristic tengu nose, a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Forehead_protector" title="Forehead protector">forehead protector</a>-like plating on its head, two locks of hair falling on either side of its face, a hole in its chin, and a vertical mark extending across its left eye, similar to Kakashi's own signature scar. It wields a katana, but its most notable weaponry are the <a href="https://naruto.fandom.com/wiki/Kamui_Shuriken" title="Kamui Shuriken">Mangekyō-shaped shuriken</a> that can warp away targets on contact.
+</p>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-center wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="6" hash="b2f8212f79bc77bbc99f42c3c9dd31d1" id="gallery-6"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Kakashi-s_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Kakashi%27s_Susanoo.png" style="height:185px; width:185px;" title="Kakashi's Susanoo.png (6.99 MB)"><noscript><img alt="Kakashi's Complete Body — Susanoo." class="thumbimage" data-caption="Kakashi's Complete Body — Susanoo." data-image-key="Kakashi%27s_Susanoo.png" data-image-name="Kakashi's Susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/f/f6/Kakashi%27s_Susanoo.png/revision/latest/scale-to-width-down/329?cb=20160825181700" style="" title="Kakashi's Susanoo.png (6.99 MB)" width="329"/></noscript><img alt="Kakashi's Complete Body — Susanoo." class="thumbimage lazyload" data-caption="Kakashi's Complete Body — Susanoo." data-image-key="Kakashi%27s_Susanoo.png" data-image-name="Kakashi's Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/f/f6/Kakashi%27s_Susanoo.png/revision/latest/scale-to-width-down/329?cb=20160825181700" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Kakashi's Susanoo.png (6.99 MB)" width="329"/></a></div></div><div class="lightbox-caption" style="width:185px;">Kakashi's Complete Body — Susanoo.</div></div></div></div>
+<div style="clear: both;"></div>
+<h3><span id="Hagoromo_.C5.8Ctsutsuki"></span><span class="mw-headline" id="Hagoromo_Ōtsutsuki">Hagoromo Ōtsutsuki</span></h3>
+<p>In the anime, <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a> showed a light blue Susanoo capable of entering its Complete Body form and utilising chakra blades. Two locks of hair fell on each side of the face and a single horn protruded from the chin, resembling Hagoromo's facial hair. It possessed a sharp tengu-like nose and a jagged mouth, giving it a demonic appearance. His Susanoo was much larger than other users, reaching a size comparable to the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a>.
+</p>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-center wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="7" hash="fabdc02a842fc762d928461d3762adaf" id="gallery-7"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-row"><div class="wikia-gallery-item" style="width:187px; "><div class="thumb" style="height:187px;"><div class="gallery-image-wrapper accent" id="Hagoromo_Susanoo-png" style="position: relative; height:185px; width:185px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:Hagoromo_Susanoo.png" style="height:185px; width:185px;" title="Hagoromo Susanoo.png (2.83 MB)"><noscript><img alt="Hagoromo's Complete Body — Susanoo." class="thumbimage" data-caption="Hagoromo's Complete Body — Susanoo." data-image-key="Hagoromo_Susanoo.png" data-image-name="Hagoromo Susanoo.png" data-relevant="1" height="185" src="https://static.wikia.nocookie.net/naruto/images/9/92/Hagoromo_Susanoo.png/revision/latest/scale-to-width-down/288?cb=20160527182017" style="" title="Hagoromo Susanoo.png (2.83 MB)" width="288"/></noscript><img alt="Hagoromo's Complete Body — Susanoo." class="thumbimage lazyload" data-caption="Hagoromo's Complete Body — Susanoo." data-image-key="Hagoromo_Susanoo.png" data-image-name="Hagoromo Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/9/92/Hagoromo_Susanoo.png/revision/latest/scale-to-width-down/288?cb=20160527182017" height="185" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="Hagoromo Susanoo.png (2.83 MB)" width="288"/></a></div></div><div class="lightbox-caption" style="width:185px;">Hagoromo's Complete Body — Susanoo.</div></div></div></div>
+<div style="clear: both;"></div>
+<h3><span class="mw-headline" id="Merz">Merz</span></h3>
+<p>In <i><a href="https://naruto.fandom.com/wiki/Naruto_x_Boruto:_Ultimate_Ninja_Storm_Connections" title="Naruto x Boruto: Ultimate Ninja Storm Connections">Naruto x Boruto: Ultimate Ninja Storm Connections</a></i>, <a href="https://naruto.fandom.com/wiki/Merz" title="Merz">Merz</a> had attained the Mangekyō Sharingan state in both his <a href="https://naruto.fandom.com/wiki/Artificial_Sharingan" title="Artificial Sharingan">artificial Sharingan</a>. This allowed him to use Susanoo, surprising <a href="https://naruto.fandom.com/wiki/Sasuke_Uchiha" title="Sasuke Uchiha">Sasuke Uchiha</a>. His Susanoo had some minor visual differences from that of other Susanoo users, as it was more skeletal in appearance, and its back and arms were covered in black flames resembling those of <a href="https://naruto.fandom.com/wiki/Amaterasu" title="Amaterasu">Amaterasu</a>, while its blade was coated in red flames. Having trained to master the eyes, Merz's Susanoo was a Complete Body — Susanoo. By tapping into Nanashi's <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a> acquired through Yachihoko, it took a gargantuan size, dwarfing even Sasuke's Susanoo and Naruto's <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_Beast_Mode" title="Tailed Beast Mode">Tailed Beast Mode</a>. With his Susanoo, Merz could use <a href="https://naruto.fandom.com/wiki/Yasaka_Magatama" title="Yasaka Magatama">Yasaka Magatama</a>, and fend off a weakened <a href="https://naruto.fandom.com/wiki/Majestic_Attire:_Susanoo" title="Majestic Attire: Susanoo">Majestic Attire: Susanoo</a> from Naruto and Sasuke. He could also use <a href="https://naruto.fandom.com/wiki/Susanoo:_Blade_of_Yachihoko" title="Susanoo: Blade of Yachihoko">Susanoo: Blade of Yachihoko</a> to absorb the chakra from all those affected by the <a href="https://naruto.fandom.com/wiki/Engraved_Tsukuyomi" title="Engraved Tsukuyomi">Engraved Tsukuyomi</a> in order to increase the size of his sword, and repair any damage to his Susanoo unlike other users, though doing so took some time.
+</p>
+<h2><span class="mw-headline" id="Influence">Influence</span></h2>
+<ul><li>Similar to other Mangekyō Sharingan abilities, Susanoo was taken from Japanese mythology: <a class="extiw" href="https://en.wikipedia.org/wiki/Susanoo" title="wikipedia:Susanoo">Susanoo</a> is the wild god of sea and storms, brother to <a class="extiw" href="https://en.wikipedia.org/wiki/Amaterasu" title="wikipedia:Amaterasu">Amaterasu</a> and <a class="extiw" href="https://en.wikipedia.org/wiki/Tsukuyomi" title="wikipedia:Tsukuyomi">Tsukuyomi</a>. He was born from <a class="extiw" href="https://en.wikipedia.org/wiki/Izanagi" title="wikipedia:Izanagi">Izanagi</a> washing his nose. Susanoo inherited his father's sword <a class="extiw" href="https://en.wikipedia.org/wiki/Totsuka-no-Tsurugi" title="wikipedia:Totsuka-no-Tsurugi">Totsuka no Tsurugi</a>, which Izanagi used to kill his newborn son, <a class="extiw" href="https://en.wikipedia.org/wiki/Kagu-Tsuchi" title="wikipedia:Kagu-Tsuchi">Kagu-Tsuchi</a> after his birth burned his mother, <a class="extiw" href="https://en.wikipedia.org/wiki/Izanami" title="wikipedia:Izanami">Izanami</a>, to death. After his exile for his relentless harassment of Amaterasu, Susanoo redeemed himself when he used Totsuka to slay the serpent <a class="extiw" href="https://en.wikipedia.org/wiki/Yamata_no_Orochi" title="wikipedia:Yamata no Orochi">Yamata no Orochi</a> and obtained the Sword of Kusanagi from the monster's corpse. He later gave the acquired blade to Amaterasu as a peace offering.</li>
+<li>Susanoo's designs are based on <i><a class="extiw" href="https://en.wikipedia.org/wiki/Tengu" title="wikipedia:Tengu">Tengu</a></i> (<span lang="ja">天狗</span>), well known <i>yokai</i> that are associated with the ascetic practice of <a class="extiw" href="https://en.wikipedia.org/wiki/Shugend%C5%8D" title="wikipedia:Shugendō"><i>shugendō</i></a>. In their final forms, the Susanoo are garbed in the attire of <i>shugendō</i> practioners, known as <a class="extiw" href="https://en.wikipedia.org/wiki/Yamabushi" title="wikipedia:Yamabushi"><i>yamabushi</i></a>, and wear hoods that resemble tengu masks, with Itachi's and Madara's appearing as long-nosed <i>Hanataka Tengu</i> and Sasuke's as a crow-billed <i>Karasu Tengu</i>. In Japanese myth, Susanoo produced the fiend <a class="extiw" href="https://en.wikipedia.org/wiki/Amanozako" title="wikipedia:Amanozako">Amanozako</a> who is said to have been the progenitor of the Tengu.</li>
+<li>Madara's Susanoo design may be influenced by <i>Ryomen Sukuna</i> (<span lang="ja">両面宿儺</span>), a human-like being described in the <i><a class="extiw" href="https://en.wikipedia.org/wiki/Nihon_Shoki" title="wikipedia:Nihon Shoki">Nihon Shoki</a></i> (<span lang="ja">日本書紀</span>) as having one body with two faces back-to-back, each with its own set of arms and legs.</li>
+<li>The <a class="extiw" href="https://en.wikipedia.org/wiki/Yata_no_Kagami" title="wikipedia:Yata no Kagami">Yata no Kagami</a> (<span lang="ja">八咫鏡</span>, <i>literally meaning:</i> Eight Span Mirror) is one of the <a class="extiw" href="https://en.wikipedia.org/wiki/Imperial_Regalia_of_Japan" title="wikipedia:Imperial Regalia of Japan">Three Imperial Regalia of Japan</a> (<span lang="ja">三種の神器</span>, <i>Sanshu no Jingi</i>), together with the <a class="mw-disambig" href="https://naruto.fandom.com/wiki/Sword_of_Kusanagi" title="Sword of Kusanagi">Sword of Kusanagi</a> and the <a class="extiw" href="https://en.wikipedia.org/wiki/Yasakani_no_Magatama" title="wikipedia:Yasakani no Magatama">Yasakani no Magatama</a> (<span lang="ja">八尺瓊曲玉</span>, <i>literally meaning:</i> Eight <a class="extiw" href="https://en.wikipedia.org/wiki/Shaku_(unit)" title="wikipedia:Shaku (unit)">Shaku</a> Curved Jewel).</li>
+<li>Itachi's Susanoo carries the Sword of Totsuka in a gourd. An ethereal weapon inside a gourd could be a reference to the hyōtan-kozō, a gourd spirit from Japanese folklore.</li>
+<li>Susanoo's skeletal stages also resemble the <a class="extiw" href="https://en.wikipedia.org/wiki/Gashadokuro" title="wikipedia:Gashadokuro">Gashadokuro</a> (<span lang="ja">餓者髑髏</span>, <i>literally meaning:</i> Starving Skeleton), a <i>yokai</i> composed of the vengeful souls of fallen soldiers who were not properly buried, taking the form of a skeleton fifteen times the size of a regular person.</li></ul>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<figure class="thumb mw-halign-right show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/4/46/Sasuke%27s_armoured_Susanoo.png/revision/latest?cb=20150124101816"><img alt="Sasuke's armoured Susanoo" class="thumbimage lazyload" data-image-key="Sasuke%27s_armoured_Susanoo.png" data-image-name="Sasuke's armoured Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/46/Sasuke%27s_armoured_Susanoo.png/revision/latest/scale-to-width-down/180?cb=20150124101816" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/4/46/Sasuke%27s_armoured_Susanoo.png/revision/latest?cb=20150124101816"><img alt="Sasuke's armoured Susanoo" class="thumbimage" data-image-key="Sasuke%27s_armoured_Susanoo.png" data-image-name="Sasuke's armoured Susanoo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/46/Sasuke%27s_armoured_Susanoo.png/revision/latest/scale-to-width-down/180?cb=20150124101816" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/4/46/Sasuke%27s_armoured_Susanoo.png/revision/latest/scale-to-width-down/180?cb=20150124101816" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Sasuke%27s_armoured_Susanoo.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Sasuke's armoured Susanoo in the anime.</p> </figcaption> </figure>
+<ul><li>In the anime, Sasuke's armoured Susanoo is depicted as being identical to Itachi's, even wielding weapons identical to the Sword of Totsuka and Yata Mirror. Its appearance and weapons were changed to match the manga in subsequent appearances.</li>
+<li>Although the <a href="https://naruto.fandom.com/wiki/Sha_no_Sho" title="Sha no Sho">third databook</a> states that the user must first unlock <a href="https://naruto.fandom.com/wiki/Tsukuyomi" title="Tsukuyomi">Tsukuyomi</a> and <a href="https://naruto.fandom.com/wiki/Amaterasu" title="Amaterasu">Amaterasu</a> before they can gain Susanoo, it appears that this was only the case for Itachi. According to the <a href="https://naruto.fandom.com/wiki/Jin_no_Sho" title="Jin no Sho">fourth databook</a>, acquiring this technique is done through the user simply manifesting the Mangekyō Sharingan in both eyes.</li>
+<li>Prior to the completion of Sasuke's Susanoo, its humanoid form was glimpsed as a shadowy figure in a <a href="https://naruto.fandom.com/wiki/Genjutsu:_Sharingan" title="Genjutsu: Sharingan">genjutsu</a> he used.</li>
+<li>Sasuke's humanoid Susanoo bears a great resemblance to <a class="extiw" href="https://en.wikipedia.org/wiki/Brave_Raideen" title="wikipedia:Brave Raideen">Raideen the Brave</a>, one of a number of <a class="extiw" href="https://en.wikipedia.org/wiki/Yoshiyuki_Tomino" title="wikipedia:Yoshiyuki Tomino">Yoshiyuki Tomino</a> references in the series (another being the <i><a class="extiw" href="https://en.wikipedia.org/wiki/Mobile_Suit_Gundam" title="wikipedia:Mobile Suit Gundam">Gundam</a></i>-derived names of <a href="https://naruto.fandom.com/wiki/Kakuzu" title="Kakuzu">Kakuzu</a>'s techniques).</li>
+<li>Shisui's Susanoo resembles the eponymous mecha from the anime <i><a class="extiw" href="https://en.wikipedia.org/wiki/Steel_Jeeg" title="wikipedia:Steel Jeeg">Steel Jeeg</a></i>.</li>
+<li>Despite Madara, Indra, Sasuke and Kakashi all being shown to manifest a stabilised Susanoo in the manga, only Madara is listed as a user of the Complete Body — Susanoo in the fourth databook.</li>
+<li>In <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_3" title="Naruto Shippūden: Ultimate Ninja Storm 3">Ultimate Ninja Storm 3</a></i>, Madara's Susanoo swords are capable of spinning, giving them a drill-like ability.</li>
+<li>In <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_4" title="Naruto Shippūden: Ultimate Ninja Storm 4">Ultimate Ninja Storm 4</a></i>, Itachi and Shisui's Susanoo are given Complete Body — Susanoo forms, designed by Kishimoto himself, making it so all known Susanoo users have access to its highest form across different media. Also in the game, Madara's <a href="https://naruto.fandom.com/wiki/Limbo:_Border_Jail" title="Limbo: Border Jail">Limbo clones</a> possess the ability to use Susanoo, while Madara himself, empowered as the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a> <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki" title="Jinchūriki">jinchūriki</a>, was shown using a larger form of the Complete Body — Susanoo. For an Ultimate Jutsu, the version of Sasuke from <i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i> manifests a Susanoo arm in the place of his own missing arm.</li>
+<li>Indra's Susanoo was given its unique name in <i><a href="https://naruto.fandom.com/wiki/Naruto:_Shinobi_Collection_Shipp%C5%AB_Ranbu" title="Naruto: Shinobi Collection Shippū Ranbu">Naruto: Shinobi Collection Shippū Ranbu</a></i>.</li></ul>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li><a href="https://naruto.fandom.com/wiki/Cat_God_Possession:_Monster_Cat_Beckoning_Technique" title="Cat God Possession: Monster Cat Beckoning Technique">Cat God Possession: Monster Cat Beckoning Technique</a></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251010120935
+Cache expiry: 2592000
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.396 seconds
+Real time usage: 0.571 seconds
+Preprocessor visited node count: 1328/1000000
+Post‐expand include size: 6263/2097152 bytes
+Template argument size: 213/2097152 bytes
+Highest expansion depth: 7/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 52353/5000000 bytes
+Lua time usage: 0.199/7.000 seconds
+Lua memory usage: 2146182/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  487.498      1 -total
+ 87.93%  428.659      1 Template:Infobox/Jutsu
+  5.43%   26.462     12 Template:Translation
+  0.36%    1.744      1 Template:Looking_for
+  0.26%    1.255      4 Template:-
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:4696-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251010120935 and revision id 1455301. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Susanoo">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

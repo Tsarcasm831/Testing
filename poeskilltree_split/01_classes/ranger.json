@@ -1,0 +1,44 @@
+{
+  "name": "Ranger",
+  "base_str": 14,
+  "base_dex": 32,
+  "base_int": 14,
+  "ascendancies": [
+    {
+      "id": "Raider",
+      "name": "Warden",
+      "flavourText": "A sacred duty. An ancestral promise.\nDeliver the fury of the wilds and\ntear evil asunder.",
+      "flavourTextColour": "7cb376",
+      "flavourTextRect": {
+        "x": 365,
+        "y": 965,
+        "width": 900,
+        "height": 1250
+      }
+    },
+    {
+      "id": "Deadeye",
+      "name": "Deadeye",
+      "flavourText": "A woman can change the world \nwith a single well-placed arrow.",
+      "flavourTextColour": "7cb376",
+      "flavourTextRect": {
+        "x": 335,
+        "y": 1045,
+        "width": 870,
+        "height": 1330
+      }
+    },
+    {
+      "id": "Pathfinder",
+      "name": "Pathfinder",
+      "flavourText": "There are venoms and virtues aplenty in \n the wilds, if you know where to look.",
+      "flavourTextColour": "7cb376",
+      "flavourTextRect": {
+        "x": 265,
+        "y": 975,
+        "width": 900,
+        "height": 1250
+      }
+    }
+  ]
+}

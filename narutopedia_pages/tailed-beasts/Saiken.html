@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Saiken — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Saiken</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Saiken" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="infobox box colored bordered innerbordered fill-td type-character list-noicon float-right-clear"><tbody><tr><th class="mainheader" colspan="2"><span class="plainlinks edit-infobox"><a class="text" href="https://naruto.fandom.com/wiki/Infobox:Saiken?action=formedit" rel="noreferrer noopener" target="_blank">edit</a></span>Saiken <a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bcharacters%5D=Saiken&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Saiken"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a> <span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Special:Browse/Saiken" title="Special:Browse/Saiken"><img class="mw-file-element" data-image-key="Browse_Information.svg" data-image-name="Browse Information.svg" data-relevant="0" decoding="async" height="19" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/ab/Browse_Information.svg/revision/latest?cb=20221026163711" width="19"/></a></span></th></tr>
+<tr>
+<td class="imagecell" colspan="2"><span typeof="mw:File"><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/58/Saiken.png/revision/latest?cb=20140211075946"><img class="mw-file-element" data-image-key="Saiken.png" data-image-name="Saiken.png" data-relevant="1" decoding="async" height="242" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/58/Saiken.png/revision/latest/scale-to-width-down/300?cb=20140211075946" width="300"/></a></span></td></tr>
+<tr><th class="mainheader lightheader" colspan="2"><span class="title" lang="ja">犀犬 Saiken</span>
+<p><span class="title other">
+</span></p>
+<ul><li>Six-Tails (<span lang="ja">六尾</span>, <i>Rokubi</i>)</li></ul>
+</th></tr><tr><th class="mainheader" colspan="2">Debut
+	</th></tr><tr><th>Manga
+      </th><td><a href="https://naruto.fandom.com/wiki/Declaration_of_War" title="Declaration of War"><i>Naruto</i> Chapter #467</a>
+</td></tr><tr><th>Anime
+      </th><td><a href="https://naruto.fandom.com/wiki/Master_and_Student" title="Master and Student"><i>Naruto Shippūden</i> Episode #151</a>
+</td></tr><tr><th>Novel
+      </th><td><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i>
+</td></tr><tr><th>Movie
+      </th><td><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i>
+</td></tr><tr><th>Game
+      </th><td><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_3" title="Naruto Shippūden: Ultimate Ninja Storm 3">Naruto Shippūden: Ultimate Ninja Storm 3</a></i>
+</td></tr><tr><th>Appears in
+	</th><td>Anime, Manga, Novel, Game, Movie
+	</td></tr><tr><th class="mainheader" colspan="2">Voice Actors
+	</th></tr><tr><th>Japanese
+        </th><td>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Miyu_Irino" title="wikipedia:Miyu Irino">Miyu Irino</a> <span title='Search the other 2 pages containing the property "Voice Actors" with the value "Miyu Irino"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Miyu+Irino" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span></li></ul>
+</td></tr><tr><th>English
+        </th><td>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Todd_Haberkorn" title="wikipedia:Todd Haberkorn">Todd Haberkorn</a> <span title='Search the other 25 pages containing the property "Voice Actors" with the value "Todd Haberkorn"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Todd+Haberkorn" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span></li></ul>
+</td></tr><tr><th class="mainheader" colspan="2">Personal
+	</th></tr><tr><th>Species
+	</th><td><a href="https://naruto.fandom.com/wiki/Slug" title="Slug">Slug</a>
+</td></tr><tr><th>Classification
+        </th><td>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast" title="Tailed Beast">Tailed Beast</a></li></ul>
+</td></tr><tr><th>Jinchūriki
+	</th><td>
+<ul><li><a href="https://naruto.fandom.com/wiki/Utakata" title="Utakata">Utakata</a> </li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> </li></ul>
+</td></tr><tr><th>Affiliation
+        </th><td>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure"><img class="mw-file-element lazyload" data-image-key="Kirigakure_Symbol.svg" data-image-name="Kirigakure Symbol.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/e/e5/Kirigakure_Symbol.svg/revision/latest/scale-to-width-down/18?cb=20090830222755" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></li>
+<li class="mw-empty-elt"></li></ul>
+</td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Family
+	</th></tr><tr><td class="">
+<ul><li><a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a> (Creator)</li>
+<li><a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Isobu" title="Isobu">Isobu</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Son_Gok%C5%AB" title="Son Gokū">Son Gokū</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Ch%C5%8Dmei" title="Chōmei">Chōmei</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Gy%C5%ABki" title="Gyūki">Gyūki</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a> (Sibling)</li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Nature Type
+        </th></tr><tr><td class="">
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Water_Release" title="Water Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Water.svg" data-image-name="Nature Icon Water.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/a/ab/Nature_Icon_Water.svg/revision/latest/scale-to-width-down/18?cb=20091012165923" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Water_Release" title="Water Release">Water Release</a></li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Unique Traits
+	</th></tr><tr><td class="">
+<ul><li><a href="https://naruto.fandom.com/wiki/Wisdom_Wolf_Decay" title="Wisdom Wolf Decay">Secretes corrosive alkali</a></li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible mw-collapsed"><tbody><tr><th class="mainheader"><a class="text" href="https://naruto.fandom.com/index.php?title=Special%3AAsk&amp;offset=0&amp;limit=500&amp;q=%5B%5BConcept%3AJutsu%5D%5D%5B%5BUser+tech%3A%3ASaiken%5D%5D&amp;po=%3FAppears+in%3DMedia%0A%3FJutsu+classification%3DClassification%0A%3FChakra+Nature%0A%3FJutsu+class+type%3DClass%0A%3FJutsu+range%3DRange" rel="noreferrer noopener" target="_blank">Jutsu</a></th></tr><tr><td class="">
+<p class="mw-empty-elt">
+</p>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Chakra_Transfer_Technique" title="Chakra Transfer Technique">Chakra Transfer Technique</a></i></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Cooperation_Tailed_Beast_Ball" title="Cooperation Tailed Beast Ball">Cooperation Tailed Beast Ball</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Leech_Gap" title="Leech Gap">Leech Gap</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Soap_Bubble_Ninjutsu" title="Soap Bubble Ninjutsu">Soap Bubble Ninjutsu</a> <sup>(Anime only)</sup></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Full_Charge" title="Tailed Beast Full Charge">Tailed Beast Full Charge</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Telepathy" title="Tailed Beast Telepathy">Tailed Beast Telepathy</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Water_Release:_Starch_Syrup_Capturing_Field" title="Water Release: Starch Syrup Capturing Field">Water Release: Starch Syrup Capturing Field</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Wisdom_Wolf_Decay" title="Wisdom Wolf Decay">Wisdom Wolf Decay</a></li></ul></td></tr></tbody></table></td></tr></tbody></table>
+<p><b>Saiken</b> (<span lang="ja">犀犬</span>), more commonly known as the <b>Six-Tails</b> (<span lang="ja">六尾</span>, <i>Rokubi</i>), is one of the nine <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beasts" title="Tailed beasts">tailed beasts</a>. It was last sealed within <a href="https://naruto.fandom.com/wiki/Utakata" title="Utakata">Utakata</a> of <a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a>.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Background"><span class="tocnumber">1</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Personality"><span class="tocnumber">2</span> <span class="toctext">Personality</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Appearance"><span class="tocnumber">3</span> <span class="toctext">Appearance</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="about:blank#Abilities"><span class="tocnumber">4</span> <span class="toctext">Abilities</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="about:blank#Part_II"><span class="tocnumber">5</span> <span class="toctext">Part II</span></a>
+<ul>
+<li class="toclevel-2 tocsection-6"><a href="about:blank#Six-Tails_Unleashed"><span class="tocnumber">5.1</span> <span class="toctext">Six-Tails Unleashed</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="about:blank#Fourth_Shinobi_World_War:_Climax"><span class="tocnumber">5.2</span> <span class="toctext">Fourth Shinobi World War: Climax</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="about:blank#Birth_of_the_Ten-Tails'_Jinch%C5%ABriki"><span class="tocnumber">5.3</span> <span class="toctext">Birth of the Ten-Tails' Jinchūriki</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="about:blank#Kaguya_%C5%8Ctsutsuki_Strikes"><span class="tocnumber">5.4</span> <span class="toctext">Kaguya Ōtsutsuki Strikes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="about:blank#New_Era"><span class="tocnumber">6</span> <span class="toctext">New Era</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="about:blank#One-Tail_Escort_Arc"><span class="tocnumber">6.1</span> <span class="toctext">One-Tail Escort Arc</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="about:blank#Kawaki_Arc"><span class="tocnumber">6.2</span> <span class="toctext">Kawaki Arc</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="about:blank#In_Other_Media"><span class="tocnumber">7</span> <span class="toctext">In Other Media</span></a>
+<ul>
+<li class="toclevel-2 tocsection-14"><a href="about:blank#Video_Games"><span class="tocnumber">7.1</span> <span class="toctext">Video Games</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="about:blank#Trivia"><span class="tocnumber">8</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="about:blank#References"><span class="tocnumber">9</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Background">Background</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest?cb=20150728221849"><img alt="Young Bijuu and Hagoromo" class="thumbimage lazyload" data-image-key="Young_Bijuu_and_Hagoromo.png" data-image-name="Young Bijuu and Hagoromo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest?cb=20150728221849"><img alt="Young Bijuu and Hagoromo" class="thumbimage" data-image-key="Young_Bijuu_and_Hagoromo.png" data-image-name="Young Bijuu and Hagoromo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Young_Bijuu_and_Hagoromo.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The young tailed beasts with their creator Hagoromo.</p> </figcaption> </figure>
+<p>Saiken and the tailed beasts first came into being in the waning days of <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>, who used his <a href="https://naruto.fandom.com/wiki/Creation_of_All_Things_Technique" title="Creation of All Things Technique">Creation of All Things Technique</a> to divide the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a>' chakra into nine separate bodies and giving each a name. Some time after being created, the Sage explained to the young tailed beasts that a link existed between them despite their separation. He also foretold of a day when they would be brought together again - though not as they were - and that at that time someone would emerge to show them what true power is. In the anime, before his death, Hagoromo sent Saiken to live in a temple built for the purpose of protecting it in a humid cavernous region.
+</p><p>During the <a href="https://naruto.fandom.com/wiki/First_Shinobi_World_War" title="First Shinobi World War">First Shinobi World War</a>, <a href="https://naruto.fandom.com/wiki/Hashirama_Senju" title="Hashirama Senju">Hashirama Senju</a> captured eight of the tailed beasts and sold Saiken and <a href="https://naruto.fandom.com/wiki/Isobu" title="Isobu">Isobu</a> to Kirigakure at the <a href="https://naruto.fandom.com/wiki/Five_Kage_Summit" title="Five Kage Summit">Five Kage Summit</a>, as a sign of friendship and to ensure a balance of power amongst their new villages. The tailed beast would end up being sealed within Utakata decades later. In the anime, <a href="https://naruto.fandom.com/wiki/Harusame" title="Harusame">Harusame</a> tried and failed to remove Saiken from within his student, intending to save his Utakata from being a living weapon for their village. Utakata, however, having not heard what his master had said to him, later came under the assumption after the incident that his master had tried to kill him. This failed removal resulted in Utakata transforming into Saiken and killing Harusame.
+</p>
+<h2><span class="mw-headline" id="Personality">Personality</span></h2>
+<p>Though much has not been seen of Saiken's personality, the giant slug uses "ore" (<span lang="ja">オレ</span>) when referring to itself, "ore" being a boastful way of saying "I". It also speaks with a dialect which may possibly be <a class="extiw" href="https://en.wikipedia.org/wiki/Kansai_dialect" title="wikipedia:Kansai dialect">Ōsakaben</a> in origin. In the anime, Saiken also seemed to be kinder and not as self-serving and malicious as most other tailed beasts, as when Utakata asked for its help to save Hotaru it seemed to willingly comply; and later it simply receded back into Utakata without trying to take him over. However, it was not above killing for self-preservation, as seen when it killed <a href="https://naruto.fandom.com/wiki/Harusame" title="Harusame">Harusame</a> when he attempted to extract it from its jinchūriki. In the anime, it speaks with a high pitched voice and appears to be very energetic.
+</p>
+<h2><span class="mw-headline" id="Appearance">Appearance</span></h2>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/4/43/Young_Saiken.png/revision/latest?cb=20130913103248"><img alt="Young Saiken" class="thumbimage lazyload" data-image-key="Young_Saiken.png" data-image-name="Young Saiken.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/43/Young_Saiken.png/revision/latest/scale-to-width-down/180?cb=20130913103248" decoding="async" height="167" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/4/43/Young_Saiken.png/revision/latest?cb=20130913103248"><img alt="Young Saiken" class="thumbimage" data-image-key="Young_Saiken.png" data-image-name="Young Saiken.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/43/Young_Saiken.png/revision/latest/scale-to-width-down/180?cb=20130913103248" decoding="async" height="167" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/4/43/Young_Saiken.png/revision/latest/scale-to-width-down/180?cb=20130913103248" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Young_Saiken.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">A young Saiken.</p> </figcaption> </figure>
+<p>Saiken is an enormous white — with a light blueish tint  — bipedal <a href="https://naruto.fandom.com/wiki/Slug" title="Slug">slug</a> with stubby arms, feet and six long tails. It has two prominent optical tentacles (eyes) and hole-like openings as a mouth. Its entire body is covered in a thick, slimy substance.
+</p><p>When seen during the last days of the Sage of Six Paths' life, Saiken was much smaller than its present-day self, but was still much larger than the Sage.
+</p>
+<div style="clear: left;"></div>
+<h2><span class="mw-headline" id="Abilities">Abilities</span></h2>
+<p><span class="box headnote"><i>See also: <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki_Forms" title="Jinchūriki Forms">Jinchūriki Forms</a></i></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/7/75/Water_Release_Starch_Syrup_Capturing_Field.png/revision/latest?cb=20160110005745"><img alt="Water Release Starch Syrup Capturing Field" class="thumbimage lazyload" data-image-key="Water_Release_Starch_Syrup_Capturing_Field.png" data-image-name="Water Release Starch Syrup Capturing Field.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/75/Water_Release_Starch_Syrup_Capturing_Field.png/revision/latest/scale-to-width-down/180?cb=20160110005745" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/7/75/Water_Release_Starch_Syrup_Capturing_Field.png/revision/latest?cb=20160110005745"><img alt="Water Release Starch Syrup Capturing Field" class="thumbimage" data-image-key="Water_Release_Starch_Syrup_Capturing_Field.png" data-image-name="Water Release Starch Syrup Capturing Field.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/75/Water_Release_Starch_Syrup_Capturing_Field.png/revision/latest/scale-to-width-down/180?cb=20160110005745" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/7/75/Water_Release_Starch_Syrup_Capturing_Field.png/revision/latest/scale-to-width-down/180?cb=20160110005745" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Water_Release_Starch_Syrup_Capturing_Field.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Saiken using Water Release: Starch Syrup Capturing Field.</p> </figcaption> </figure>
+<p>As a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beast" title="Tailed beast">tailed beast</a>, Saiken has a massive amount of <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a> that it can freely <a href="https://naruto.fandom.com/wiki/Chakra_Transfer_Technique" title="Chakra Transfer Technique">share with others</a>. It also has powerful healing capacities, able to mend injuries in themselves and others in seconds. Likewise, Saiken is effectively immortal, as when it dies, it will eventually revive, albeit in a younger form. Saiken has shown the ability to emit corrosive substances that can instantly disintegrate its target on contact in the form of <a href="https://naruto.fandom.com/wiki/Leech_Gap" title="Leech Gap">liquid</a> or <a href="https://naruto.fandom.com/wiki/Wisdom_Wolf_Decay" title="Wisdom Wolf Decay">gas</a>.
+</p><p>Saiken is seen having a great deal of tremendous durability, able to withstand being thrown a great distance by Kurama. Saiken possesses an affinity for <a href="https://naruto.fandom.com/wiki/Water_Release" title="Water Release">Water Release</a>. It can expel a <a href="https://naruto.fandom.com/wiki/Water_Release:_Starch_Syrup_Capturing_Field" title="Water Release: Starch Syrup Capturing Field">sticky, adhesive substance</a> from its mouth, which is capable of trapping its targets. In the anime, it can use <a href="https://naruto.fandom.com/wiki/Soap_Bubble_Ninjutsu" title="Soap Bubble Ninjutsu">Soap Bubble Ninjutsu</a>. Like the rest of its kind, Saiken can create a <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a>.
+</p>
+<h2><span class="mw-headline" id="Part_II">Part II</span></h2>
+<h3><span class="mw-headline" id="Six-Tails_Unleashed">Six-Tails Unleashed</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Six-Tails_Unleashed" title="Six-Tails Unleashed">Six-Tails Unleashed</a></span>
+In the anime, in an attempt to stop the <a href="https://naruto.fandom.com/wiki/Fury" title="Fury">Fury</a> technique from causing untold destruction, Utakata went into his full Six-Tails form to shield the blast. Later, Utakata was confronted and captured by <a href="https://naruto.fandom.com/wiki/Nagato" title="Nagato">Nagato</a>'s <a href="https://naruto.fandom.com/wiki/Six_Paths_of_Pain" title="Six Paths of Pain">Six Paths of Pain</a>. Afterwards, Saiken was extracted from Utakata's body, being sealed into the <a href="https://naruto.fandom.com/wiki/Demonic_Statue_of_the_Outer_Path" title="Demonic Statue of the Outer Path">Demonic Statue of the Outer Path</a>, thus killing the jinchūriki in the process.
+</p>
+<h3><span class="mw-headline" id="Fourth_Shinobi_World_War:_Climax">Fourth Shinobi World War: Climax</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War:_Climax" title="Fourth Shinobi World War: Climax">Fourth Shinobi World War: Climax</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c8/Acid_Spray.png/revision/latest?cb=20130823190816"><img alt="Acid Spray" class="thumbimage lazyload" data-image-key="Acid_Spray.png" data-image-name="Acid Spray.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c8/Acid_Spray.png/revision/latest/scale-to-width-down/180?cb=20130823190816" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c8/Acid_Spray.png/revision/latest?cb=20130823190816"><img alt="Acid Spray" class="thumbimage" data-image-key="Acid_Spray.png" data-image-name="Acid Spray.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c8/Acid_Spray.png/revision/latest/scale-to-width-down/180?cb=20130823190816" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/c/c8/Acid_Spray.png/revision/latest/scale-to-width-down/180?cb=20130823190816" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Acid_Spray.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Saiken being forced by Tobi to attack Kakashi and Guy.</p> </figcaption> </figure>
+<p>After Utakata's full transformation into Six-Tails, he attacks <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Kakashi" title="Kakashi">Kakashi</a> and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Guy" title="Guy">Guy</a>, emitting a corrosive alkali from its mouth, which Kakashi warned Guy not to touch. After Guy dissipated the gas with his <a href="https://naruto.fandom.com/wiki/Morning_Peacock" title="Morning Peacock">Morning Peacock</a> technique, the Six-Tails prepared to attack him again. After <a href="https://naruto.fandom.com/wiki/Son_Gok%C5%AB" title="Son Gokū">Son Gokū</a> was resealed into the Demonic Statue of the Outer Path, Tobi, who was intent on going all-out from that point on, forced Utakata to fully transform into the Six-Tails. The opposing tailed beasts prepared to attack the shinobi, but they were <a href="https://naruto.fandom.com/wiki/Great_Roar" title="Great Roar">rebuffed</a> by a fully-transformed Naruto. 
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/6/6b/Seishin_Sekai.png/revision/latest?cb=20130905162801"><img alt="Seishin Sekai" class="thumbimage lazyload" data-image-key="Seishin_Sekai.png" data-image-name="Seishin Sekai.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/6b/Seishin_Sekai.png/revision/latest/scale-to-width-down/180?cb=20130905162801" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/6/6b/Seishin_Sekai.png/revision/latest?cb=20130905162801"><img alt="Seishin Sekai" class="thumbimage" data-image-key="Seishin_Sekai.png" data-image-name="Seishin Sekai.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/6b/Seishin_Sekai.png/revision/latest/scale-to-width-down/180?cb=20130905162801" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/6/6b/Seishin_Sekai.png/revision/latest/scale-to-width-down/180?cb=20130905162801" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Seishin_Sekai.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts and jinchūriki encounter Naruto.</p> </figcaption> </figure>
+<p>Wasting no time in their attacks, the Six-Tails incapacitated Naruto and <a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a> by swallowing the arm, but the slug was slammed into the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Two-Tails" title="Two-Tails">Two-Tails</a>, sending them both flying away. The opposing beasts regrouped and then prepared a collaborative Tailed Beast Ball, which was met by one from Naruto and Kurama. As Naruto entered a deeper plain of the tailed beasts' consciousness, Saiken introduced itself to the young shinobi. Later, as Saiken was freed from the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Chakra_receiver" title="Chakra receiver">chakra receiver</a>, it affirmed Kurama's belief that Naruto was the person the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sage_of_the_Six_Paths" title="Sage of the Six Paths">Sage of the Six Paths</a> had spoken about so long ago before being resealed back into the Demonic Statue.
+</p>
+<h3><span id="Birth_of_the_Ten-Tails.27_Jinch.C5.ABriki"></span><span class="mw-headline" id="Birth_of_the_Ten-Tails'_Jinchūriki">Birth of the Ten-Tails' Jinchūriki</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Birth_of_the_Ten-Tails%27_Jinch%C5%ABriki" title="Birth of the Ten-Tails' Jinchūriki">Birth of the Ten-Tails' Jinchūriki</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest?cb=20250919211345"><img alt="Biju released" class="thumbimage lazyload" data-image-key="Biju_released.png" data-image-name="Biju released.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest?cb=20250919211345"><img alt="Biju released" class="thumbimage" data-image-key="Biju_released.png" data-image-name="Biju released.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Biju_released.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts being freed from Obito.</p> </figcaption> </figure>
+<p>Saiken appeared alongside with the other tailed beasts with the exception of <a href="https://naruto.fandom.com/wiki/Gy%C5%ABki" title="Gyūki">Gyūki</a> and <a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> when the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a> looked down at Naruto. The image of the tailed beasts, along with a silhouette of the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sage_of_the_Six_Paths" title="Sage of the Six Paths">Sage of the Six Paths</a>, drove the Ten-Tails to a fit as it evolved further. Later on, the <a href="https://naruto.fandom.com/wiki/Allied_Shinobi_Forces" title="Allied Shinobi Forces">Allied Shinobi Forces</a> managed to pull the tailed beasts out of Obito, thereby freeing them, including Saiken. When Madara ran towards the tailed beasts, both Shukaku and <a href="https://naruto.fandom.com/wiki/Gaara" title="Gaara">Gaara</a> conjured <a href="https://naruto.fandom.com/wiki/Wind_Release:_Sand_Buckshot" title="Wind Release: Sand Buckshot">numerous sand bullets</a> and were able to restrain the Uchiha's movements. 
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest?cb=20250919131223"><img alt="Tailed Beasts vs Madara" class="thumbimage lazyload" data-image-key="Tailed_Beasts_vs_Madara.png" data-image-name="Tailed Beasts vs Madara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest?cb=20250919131223"><img alt="Tailed Beasts vs Madara" class="thumbimage" data-image-key="Tailed_Beasts_vs_Madara.png" data-image-name="Tailed Beasts vs Madara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beasts_vs_Madara.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts working together to attack Madara.</p> </figcaption> </figure>
+<p>Using the opportunity to attack, the tailed beasts each took a swing at their opponent, giving sand-manipulating duo an opening to use their <a href="https://naruto.fandom.com/wiki/Desert_Layered_Imperial_Funeral_Seal" title="Desert Layered Imperial Funeral Seal">Desert Layered Imperial Funeral Seal</a>, but Madara managed to escape the sand pyramid with his Susanoo. As Naruto in <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_Beast_Mode" title="Tailed Beast Mode">Tailed Beast Mode</a> pinned Madara down with a tail, Saiken and the other tailed beasts joined in and did the same to increase the damage, but the Uchiha survived their attacks and retreated to a safe distance. After he received his own right Rinnegan eye from a White Zetsu clone, Madara quickly summoned the Demonic Statue of the Outer Path from Obito's body, and used the Rinnegan to <a href="https://naruto.fandom.com/wiki/Limbo:_Border_Jail" title="Limbo: Border Jail">repel</a> the tailed beasts. With the tailed beasts stunned, Madara then <a href="https://naruto.fandom.com/wiki/Demonic_Statue_Chains" title="Demonic Statue Chains">chained</a> them up and sealed them back into the Demonic Statue.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest?cb=20150730121101"><img alt="Tailed Beast Reunion" class="thumbimage lazyload" data-image-key="Tailed_Beast_Reunion.png" data-image-name="Tailed Beast Reunion.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest?cb=20150730121101"><img alt="Tailed Beast Reunion" class="thumbimage" data-image-key="Tailed_Beast_Reunion.png" data-image-name="Tailed Beast Reunion.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_Reunion.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts reunite with Hagoromo and Naruto.</p> </figcaption> </figure>
+<p>Later, the chakra Saiken transferred to Naruto earlier, manifested within Naruto's subconscious along with the other tailed beasts to speak with the young jinchūriki and the spirit of Hagoromo Ōtsutsuki. There, they all voiced their shared belief to the Sage that Naruto was the child of prophecy.
+</p>
+<h3><span id="Kaguya_.C5.8Ctsutsuki_Strikes"></span><span class="mw-headline" id="Kaguya_Ōtsutsuki_Strikes">Kaguya Ōtsutsuki Strikes</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki_Strikes" title="Kaguya Ōtsutsuki Strikes">Kaguya Ōtsutsuki Strikes</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest?cb=20160901155526"><img alt="Tailed Beast separate from Kaguya" class="thumbimage lazyload" data-image-key="Tailed_Beast_separate_from_Kaguya.png" data-image-name="Tailed Beast separate from Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest?cb=20160901155526"><img alt="Tailed Beast separate from Kaguya" class="thumbimage" data-image-key="Tailed_Beast_separate_from_Kaguya.png" data-image-name="Tailed Beast separate from Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_separate_from_Kaguya.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts being freed from the Ten-Tails.</p> </figcaption> </figure>
+<p>After Madara's ambitions were cut short by <a href="https://naruto.fandom.com/wiki/Black_Zetsu" title="Black Zetsu">Black Zetsu</a>, who revealed to be the silent manipulator of shinobi history since it was first created by <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki" title="Kaguya Ōtsutsuki">Kaguya Ōtsutsuki</a>, the black entity used Madara's body as a medium to resurrect its creator. During the battle against the tyrannical princess, Saiken and the other tailed beasts continued to support Naruto by giving him <a href="https://naruto.fandom.com/wiki/Sage_Art:_Super_Tailed_Beast_Rasenshuriken" title="Sage Art: Super Tailed Beast Rasenshuriken">their combined power</a> to overwhelm her. Ultimately, Kaguya was defeated by Naruto and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sasuke" title="Sasuke">Sasuke</a>, who used the <a href="https://naruto.fandom.com/wiki/Six_Paths_%E2%80%94_Chibaku_Tensei" title="Six Paths — Chibaku Tensei">Six Paths — Chibaku Tensei</a> to eject all the tailed beasts from her and seal her away inside a newly-created <a href="https://naruto.fandom.com/wiki/Moon" title="Moon">moon</a> within her own <a href="https://naruto.fandom.com/wiki/Kaguya%27s_Dimensions" title="Kaguya's Dimensions">dimension</a>.
+</p><p>After the spirits of Hagoromo and the past Kage summoned both the tailed beasts and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Team_Kakashi" title="Team Kakashi">Team 7</a> back to the real world, the tailed beasts began to discuss their plans for the future since they were finally free. Sasuke, however, made his own intentions known: removing as many people as possible who could get in the way of his plans of leading the world through a revolution to do away with current shinobi systems, including killing all the current Kage and tailed beasts. Just as Sasuke swiftly <a href="https://naruto.fandom.com/wiki/Genjutsu:_Sharingan" title="Genjutsu: Sharingan">subdued</a> the tailed beasts with his Rinnegan and sealed them within his <a href="https://naruto.fandom.com/wiki/Chibaku_Tensei" title="Chibaku Tensei">Chibaku Tensei</a>, Naruto reassured the tailed beasts that he would save them once again. After Naruto was able to defeat and reform Sasuke, the two dispelled the Infinite Tsukuyomi and Sasuke released Saiken, along with the other tailed beasts, from their prisons.
+</p>
+<h2><span class="mw-headline" id="New_Era">New Era</span></h2>
+<h3><span class="mw-headline" id="One-Tail_Escort_Arc">One-Tail Escort Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/One-Tail_Escort_Arc" title="One-Tail Escort Arc">One-Tail Escort Arc</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest?cb=20200604154217"><img alt="Biju Conference" class="thumbimage lazyload" data-image-key="Biju_Conference.png" data-image-name="Biju Conference.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest?cb=20200604154217"><img alt="Biju Conference" class="thumbimage" data-image-key="Biju_Conference.png" data-image-name="Biju Conference.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Biju_Conference.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Saiken, with the other tailed beasts in a meeting with Naruto.</p> </figcaption> </figure>
+<p>When <a href="https://naruto.fandom.com/wiki/Urashiki_%C5%8Ctsutsuki" title="Urashiki Ōtsutsuki">Urashiki Ōtsutsuki</a> began targeting <a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> for its chakra, it was deduced he was interested in all the tailed beasts' chakra. Naruto organised a telepathic meeting with the other tailed beasts, except for <a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a>, <a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a>, and <a href="https://naruto.fandom.com/wiki/Ch%C5%8Dmei" title="Chōmei">Chōmei</a>, who each refused to accept aid from humans in fear of being captured and used again by them, despite their trust in Naruto.
+</p>
+<h3><span class="mw-headline" id="Kawaki_Arc">Kawaki Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kawaki_Arc" title="Kawaki Arc">Kawaki Arc</a></span>
+In the anime, Saiken was gathered with the other tailed beasts as they sensed Kurama's chakra vanishing after it <a href="https://naruto.fandom.com/wiki/Baryon_Mode" title="Baryon Mode">sacrificed</a> its life in the battle against <a href="https://naruto.fandom.com/wiki/Isshiki_%C5%8Ctsutsuki" title="Isshiki Ōtsutsuki">Isshiki Ōtsutsuki</a>.
+</p>
+<h2><span class="mw-headline" id="In_Other_Media">In Other Media</span></h2>
+<h3><span class="mw-headline" id="Video_Games">Video Games</span></h3>
+<p>Saiken is playable as Utakata's awakening in <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_3" title="Naruto Shippūden: Ultimate Ninja Storm 3">Naruto Shippūden: Ultimate Ninja Storm 3</a></i>, <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_Revolution" title="Naruto Shippūden: Ultimate Ninja Storm Revolution">Naruto Shippūden: Ultimate Ninja Storm Revolution</a></i>, and <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_4" title="Naruto Shippūden: Ultimate Ninja Storm 4">Naruto Shippūden: Ultimate Ninja Storm 4</a></i>.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>"Saiken" (<span lang="ja">犀犬</span>) literally means "rhinoceros dog", apparently a kind of Chinese <a class="extiw" href="https://en.wikipedia.org/wiki/y%C5%8Dkai" title="wikipedia:yōkai">yōkai</a>.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251003212435
+Cache expiry: 2592000
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0.001 seconds
+CPU time usage: 0.639 seconds
+Real time usage: 1.076 seconds
+Preprocessor visited node count: 5491/1000000
+Post‐expand include size: 84215/2097152 bytes
+Template argument size: 15889/2097152 bytes
+Highest expansion depth: 26/100
+Expensive parser function count: 3/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2520/5000000 bytes
+Lua time usage: 0.046/7.000 seconds
+Lua memory usage: 1813491/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  933.386      1 -total
+ 98.17%  916.264      5 Template:Content_only
+ 97.94%  914.192      1 Template:Infobox
+ 97.25%  907.763      1 Infobox:Saiken
+ 97.01%  905.448      1 Template:Infobox/Naruto/Character
+ 71.39%  666.366      5 Template:IBox/Box
+ 18.32%  170.969     32 Template:IBox/Row
+  9.52%   88.839     11 Template:SemanticInputParser
+  8.81%   82.185      1 Template:Infobox/Debut
+  8.46%   78.967      7 Template:SemanticInputParser/Array
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:17108-0!dateformat=default!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251003212435 and revision id 1441466. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Characters</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Saiken">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

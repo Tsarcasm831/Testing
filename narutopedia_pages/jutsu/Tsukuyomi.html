@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Tsukuyomi — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Tsukuyomi</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Tsukuyomi" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Tsukuyomi<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Tsukuyomi&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Tsukuyomi"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Tsukuyomi" title="Special:FormEdit/Jutsu/Tsukuyomi">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">月読</rb></ruby>­ <dfn lang="ja-Latn">(Tsukuyomi)</dfn></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/1/14/Tsukuyomi.png/revision/latest?cb=20240821164745" title="Tsukuyomi">
+<img alt="Tsukuyomi" class="pi-image-thumbnail" data-image-key="Tsukuyomi.png" data-image-name="Tsukuyomi.png" data-relevant="1" height="203" src="https://static.wikia.nocookie.net/naruto/images/1/14/Tsukuyomi.png/revision/latest/scale-to-width-down/268?cb=20240821164745" srcset="https://static.wikia.nocookie.net/naruto/images/1/14/Tsukuyomi.png/revision/latest/scale-to-width-down/268?cb=20240821164745 1x, https://static.wikia.nocookie.net/naruto/images/1/14/Tsukuyomi.png/revision/latest/scale-to-width-down/536?cb=20240821164745 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="literal english">
+<h3 class="pi-data-label pi-secondary-font">Literal English</h3>
+<div class="pi-data-value pi-font">Moon Reader</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut manga">
+<h3 class="pi-data-label pi-secondary-font">Manga</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Konoha_Crush,_Ended!!_(volume)" title="Konoha Crush, Ended!! (volume)">Volume #16</a>, <a href="https://naruto.fandom.com/wiki/Kakashi_vs._Itachi" title="Kakashi vs. Itachi"><i>Naruto</i> Chapter #142</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Eye_to_Eye:_Sharingan_vs._Sharingan!" title="Eye to Eye: Sharingan vs. Sharingan!"><i>Naruto</i> Episode #82</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="novel debut">
+<h3 class="pi-data-label pi-secondary-font">Novel</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Akatsuki_Hiden:_Evil_Flowers_in_Full_Bloom" title="Akatsuki Hiden: Evil Flowers in Full Bloom">Akatsuki Hiden: Evil Flowers in Full Bloom</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto:_Ultimate_Ninja_2" title="Naruto: Ultimate Ninja 2">Naruto: Ultimate Ninja 2</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="ova debut">
+<h3 class="pi-data-label pi-secondary-font">OVA</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_Generations#Anime_Cutscenes" title="Naruto Shippūden: Ultimate Ninja Storm Generations">Naruto Shippūden: UNSG anime cutscenes</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Manga, Novel, Game</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Mangeky%C5%8D_Sharingan" title="Mangekyō Sharingan"><img class="mw-file-element" data-image-key="Mangeky%C5%8D_Sharingan_Itachi.svg" data-image-name="Mangekyō Sharingan Itachi.svg" data-relevant="0" decoding="async" height="18" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/52/Mangeky%C5%8D_Sharingan_Itachi.svg/revision/latest/scale-to-width-down/18?cb=20110803151309" width="18"/></a></span><a href="https://naruto.fandom.com/wiki/Kekkei_Genkai" title="Kekkei Genkai">Kekkei Genkai</a>, <a href="https://naruto.fandom.com/wiki/Genjutsu" title="Genjutsu">Genjutsu</a>, <a href="https://naruto.fandom.com/wiki/D%C5%8Djutsu" title="Dōjutsu">Dōjutsu</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu type">
+<h3 class="pi-data-label pi-secondary-font">Nature</h3>
+<div class="pi-data-value pi-font"><div class="plainlist"><ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Yin_Release" title="Yin Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Yin.svg" data-image-name="Nature Icon Yin.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/d/de/Nature_Icon_Yin.svg/revision/latest/scale-to-width-down/18?cb=20100916093714" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span><a href="https://naruto.fandom.com/wiki/Yin_Release" title="Yin Release">Yin Release</a></li></ul></div></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Supplementary</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu range">
+<h3 class="pi-data-label pi-secondary-font">Range</h3>
+<div class="pi-data-value pi-font">Short range (0-5m)</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Parent&amp;value=Tsukuyomi" rel="noreferrer noopener" target="_blank">Derived jutsu</a></h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<div class="pi-data-value pi-font"><center class="smwsearch"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?value=Tsukuyomi&amp;property=Parent" rel="noreferrer noopener" target="_blank">All derived jutsu</a></center></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Itachi_Uchiha" title="Itachi Uchiha">Itachi Uchiha</a></li><li><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Nanashi_Uchiha" title="Nanashi Uchiha">Nanashi Uchiha</a><sup> (Game only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Merz" title="Merz">Merz</a> (with artificial Sharingan)<sup> (Game only)</sup></li></ul></div></div>
+</div>
+</section>
+</aside>
+<b>Tsukuyomi</b> is a <a href="https://naruto.fandom.com/wiki/Mangeky%C5%8D_Sharingan" title="Mangekyō Sharingan">Mangekyō Sharingan</a> <a href="https://naruto.fandom.com/wiki/D%C5%8Djutsu" title="Dōjutsu">dōjutsu</a> and one of the most powerful <a href="https://naruto.fandom.com/wiki/Genjutsu" title="Genjutsu">genjutsu</a> in existence. Said to represent the "Spiritual World and Darkness" (<span lang="ja">精神界と闇</span>, <i>Seishinkai to Yami</i>), it is the antipode to <a href="https://naruto.fandom.com/wiki/Amaterasu" title="Amaterasu">Amaterasu</a>.
+<p></p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Influence"><span class="tocnumber">2</span> <span class="toctext">Influence</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Trivia"><span class="tocnumber">3</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="about:blank#See_Also"><span class="tocnumber">4</span> <span class="toctext">See Also</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="about:blank#References"><span class="tocnumber">5</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>After making eye contact with a target, <a href="https://naruto.fandom.com/wiki/Itachi_Uchiha" title="Itachi Uchiha">Itachi Uchiha</a> traps them in an illusion of his design. Through his unprecedented ability to alter targets' perception of time, he uses Tsukuyomi to subject victims to days' worth of torture in a matter of seconds; examples include continual stabbing or reliving traumatic events over and over. Tsukuyomi's illusions are usually represented as an inverted grey scale; in the anime, there is usually also a red moon in a red sky. Because of the power of the Mangekyō Sharingan and the speed with which Tsukuyomi works, normal methods of countering genjutsu are ineffective against it.
+</p><p>Using Tsukuyomi requires a great deal of <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a>, making it inadvisable for Itachi to continue fighting after using it. Like all Mangekyō Sharingan abilities, Tsukuyomi also places strain on Itachi's eyes when performed, blurring his vision. However, victims of Tsukuyomi have it far worse, as they are ordinarily rendered comatose as soon as Tsukuyomi's illusion is completed. <a href="https://naruto.fandom.com/wiki/Sharingan" title="Sharingan">Sharingan</a> users can briefly resist unconsciousness, but only particularly skilled Sharingan users can actually break free of Tsukuyomi's influence. <a href="https://naruto.fandom.com/wiki/Tsunade" title="Tsunade">Tsunade</a> is the only person known to be capable of <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Medical_ninjutsu" title="Medical ninjutsu">healing</a> the psychological damage caused by Tsukuyomi. In <i><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Akatsuki_Hiden" title="Akatsuki Hiden">Akatsuki Hiden</a></i>, Itachi theorises that love can be used to revive victims, his reasoning being that, since Tsukuyomi destroys the spirit, feelings that reconnect the spirit can undo Tsukuyomi; <a href="https://naruto.fandom.com/wiki/Kodaka" title="Kodaka">Kodaka</a> does indeed do this in order to resuscitate his younger brother, <a href="https://naruto.fandom.com/wiki/Kiiro" title="Kiiro">Kiiro</a>.
+</p><p>According to <i><a href="https://naruto.fandom.com/wiki/Itachi_Shinden:_Book_of_Dark_Night" title="Itachi Shinden: Book of Dark Night">Itachi Shinden: Book of Dark Night</a></i>, "the time that passed within this genjutsu was one one-hundredth of one one-thousandth of one one-millionth of that of the real world." In the novel, Itachi uses Tsukuyomi on <a href="https://naruto.fandom.com/wiki/Izumi_Uchiha" title="Izumi Uchiha">Izumi Uchiha</a>, causing her to live through decades of a happy life in the span of a few moments. When she dies of old age within the illusion, her actual body dies as well.
+</p>
+<h2><span class="mw-headline" id="Influence">Influence</span></h2>
+<p>Tsukuyomi-no-Mikoto (<span lang="ja"><ruby>月読命<rt>ツクヨミノミコト</rt></ruby></span>, lit. "Moon-Reading Lord") is the <i><a class="extiw" href="https://en.wikipedia.org/wiki/Kami" title="wikipedia:Kami">kami</a></i> of the moon in ancient Japanese myth and the Shintō religion. He is one of the "three noble children" (alongside the sun goddess <a class="extiw" href="https://en.wikipedia.org/wiki/Amaterasu" title="wikipedia:Amaterasu">Amaterasu</a> and the sea and storm god <a class="extiw" href="https://en.wikipedia.org/wiki/Susanoo" title="wikipedia:Susanoo">Susanoo</a>) born when <a class="extiw" href="https://en.wikipedia.org/wiki/Izanagi" title="wikipedia:Izanagi">Izanagi</a> <a class="extiw" href="https://en.wikipedia.org/wiki/Misogi" title="wikipedia:Misogi">cleansed</a> himself of <a class="extiw" href="https://en.wikipedia.org/wiki/Kegare" title="wikipedia:Kegare">defilement</a> after escaping from the <a class="extiw" href="https://en.wikipedia.org/wiki/Yomi" title="wikipedia:Yomi">underworld</a>, with Tsukuyomi born when Izanagi washed out his right eye. According to the <i><a class="extiw" href="https://en.wikipedia.org/wiki/Nihon_Shoki" title="wikipedia:Nihon Shoki">Nihon Shoki</a></i>, Amaterasu's wrath over Tsukuyomi's killing of the <a class="extiw" href="https://en.wikipedia.org/wiki/Ukemochi" title="wikipedia:Ukemochi">goddess of food</a> led to the sun goddess refusing to ever look at Tsukuyomi's face again, forever moving to another part of the sky while Tsukuyomi's fear of his sister's wrath makes him hide during the day (hence explaining why day and night are separate).
+</p><p>According to some modern interpretations, Tsukuyomi is thought of as a god of time, or at least of the calendar; the basis for this is the interpretation of "moon reading" as reading the movements of the moon, an act paired with reading the calender(=day), and the verb <i>read</i> (<span lang="ja">読み</span>, <i>yomi</i>) being used in the <i><a class="extiw" href="https://en.wikipedia.org/wiki/Man%27y%C5%8Dsh%C5%AB" title="wikipedia:Man'yōshū">Man'yōshū</a></i> and other books to refer to counting the days of the month. This connection may be referenced by Itachi's ability to manipulate a victim's sense of time within Tsukuyomi's dreamscape.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>During the <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War" title="Fourth Shinobi World War">Fourth Shinobi World War</a>, Itachi states his intention to use Tsukuyomi on <a href="https://naruto.fandom.com/wiki/Kabuto_Yakushi" title="Kabuto Yakushi">Kabuto Yakushi</a> in order to find out how to stop the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Impure_World_Reincarnation" title="Impure World Reincarnation">Impure World Reincarnation</a>. It's unclear if the genjutsu he ends up using is in fact Tsukuyomi, as such a form of information-gathering is usually done with <a href="https://naruto.fandom.com/wiki/Genjutsu:_Sharingan" title="Genjutsu: Sharingan">Genjutsu: Sharingan</a>.</li>
+<li>In <i><a href="https://naruto.fandom.com/wiki/Naruto:_Ultimate_Ninja_Storm" title="Naruto: Ultimate Ninja Storm">Naruto: Ultimate Ninja Storm</a></i>, Itachi uses Tsukuyomi by having the red moon crush the opponent while the image of the moon warps into a copy of his Mangekyō Sharingan.</li></ul>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li><a href="https://naruto.fandom.com/wiki/Infinite_Tsukuyomi" title="Infinite Tsukuyomi">Infinite Tsukuyomi</a></li>
+<li><a href="https://naruto.fandom.com/wiki/Kotoamatsukami" title="Kotoamatsukami">Kotoamatsukami</a></li>
+<li><i><a href="https://naruto.fandom.com/wiki/Kurama_Clan%27s_Kekkei_Genkai" title="Kurama Clan's Kekkei Genkai">Kurama Clan's Kekkei Genkai</a></i></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251010020925
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.252 seconds
+Real time usage: 0.347 seconds
+Preprocessor visited node count: 514/1000000
+Post‐expand include size: 2310/2097152 bytes
+Template argument size: 24/2097152 bytes
+Highest expansion depth: 5/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5243/5000000 bytes
+Lua time usage: 0.125/7.000 seconds
+Lua memory usage: 1889587/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  284.130      1 -total
+ 90.16%  256.173      1 Template:Infobox/Jutsu
+  3.63%   10.308      3 Template:Translation
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:2089-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251010020925 and revision id 1451183. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Tsukuyomi">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

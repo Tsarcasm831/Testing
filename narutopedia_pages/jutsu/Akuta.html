@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Akuta — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Akuta</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Akuta" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Akuta<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Akuta&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Akuta"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Akuta" title="Special:FormEdit/Jutsu/Akuta">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">芥</rb></ruby>­ <dfn lang="ja-Latn">(Akuta)</dfn></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/c/cd/Akuta.png/revision/latest?cb=20181203051848" title="Akuta">
+<img alt="Akuta" class="pi-image-thumbnail" data-image-key="Akuta.png" data-image-name="Akuta.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/c/cd/Akuta.png/revision/latest/scale-to-width-down/268?cb=20181203051848" srcset="https://static.wikia.nocookie.net/naruto/images/c/cd/Akuta.png/revision/latest/scale-to-width-down/268?cb=20181203051848 1x, https://static.wikia.nocookie.net/naruto/images/c/cd/Akuta.png/revision/latest/scale-to-width-down/536?cb=20181203051848 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="literal english">
+<h3 class="pi-data-label pi-secondary-font">Literal English</h3>
+<div class="pi-data-value pi-font">Trash</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Mitsuki%27s_Will" title="Mitsuki's Will"><i>Boruto</i> Episode #72</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Mobile" title="Naruto Mobile">Naruto Mobile</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Game</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Kinjutsu" title="Kinjutsu">Kinjutsu</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu type">
+<h3 class="pi-data-label pi-secondary-font">Nature</h3>
+<div class="pi-data-value pi-font"><div class="plainlist"><ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Earth_Release" title="Earth Release"><img class="mw-file-element" data-image-key="Nature_Icon_Earth.svg" data-image-name="Nature Icon Earth.svg" data-relevant="0" decoding="async" height="18" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/52/Nature_Icon_Earth.svg/revision/latest/scale-to-width-down/18?cb=20091012162502" width="18"/></a></span><a href="https://naruto.fandom.com/wiki/Earth_Release" title="Earth Release">Earth Release</a></li></ul></div></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Supplementary</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/K%C5%AB" title="Kū">Kū</a></li><li><a href="https://naruto.fandom.com/wiki/%C5%8Cnoki" title="Ōnoki">Ōnoki</a></li></ul></div></div>
+</div>
+</section>
+</aside>
+<b>Akuta</b> is an <a href="https://naruto.fandom.com/wiki/Earth_Release" title="Earth Release">Earth Release</a> technique that's created from a <a href="https://naruto.fandom.com/wiki/Land_of_Earth" title="Land of Earth">Land of Earth</a>'s <a href="https://naruto.fandom.com/wiki/Kinjutsu" title="Kinjutsu">kinjutsu</a>, which is seemingly inspired by a <a href="https://naruto.fandom.com/wiki/Jutsu" title="Jutsu">jutsu</a> that was unearthed by <a href="https://naruto.fandom.com/wiki/%C5%8Cnoki" title="Ōnoki">Ōnoki</a>. It was a technique designed by Ōnoki to protect the <a href="https://naruto.fandom.com/wiki/Iwagakure" title="Iwagakure">village</a> from attackers while lowering the number of casualties.
+<p></p>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>The Akuta creates living organisms made of clay that are weaponised. They are able to phase through the earthen ground for travel and drag their enemies with them, as well as extend their limbs. While they have no fear, they have a limited lifespan and intelligence, being capable of obeying instructions and communicating with <a href="https://naruto.fandom.com/wiki/Fabrication" title="Fabrication">fabrications</a>. Their masks are their weakness, the destruction of which would lead to their deaths.
+</p><p>While deemed to have no will, this was proven false in <a href="https://naruto.fandom.com/wiki/Akkun" title="Akkun">Akkun</a>'s existence, a small Akuta who gained affection to <a href="https://naruto.fandom.com/wiki/Inojin_Yamanaka" title="Inojin Yamanaka">Inojin Yamanaka</a>, and even defied its comrades to protect him. <a href="https://naruto.fandom.com/wiki/Kirara" title="Kirara">Kirara</a> deemed Akkun as a defect for such traits. When the fabrications decided to take matters into their own hands, the Akuta produced even went against Ōnoki's orders.
+</p>
+<h2><span class="mw-headline" id="Development">Development</span></h2>
+<p>Ōnoki created this technique in response to a <a href="https://naruto.fandom.com/wiki/Missing-nin" title="Missing-nin">missing-nin</a>'s attack claiming the lives of many young <a href="https://naruto.fandom.com/wiki/Shinobi" title="Shinobi">shinobi</a>. When he first demonstrated it, they suddenly disobeyed him and attempted to attack the audience, which led <a href="https://naruto.fandom.com/wiki/Kurotsuchi" title="Kurotsuchi">Kurotsuchi</a> to reject the technique's further development. Despite this, Ōnoki continued to hone this technique in secrecy, eventually managing to create more obedient creatures.
+</p><p>Iwagakure housed an underground facility where more Akuta are being mass produced. It was later destroyed by <a href="https://naruto.fandom.com/wiki/Konohamaru_Sarutobi" title="Konohamaru Sarutobi">Konohamaru Sarutobi</a>.
+</p>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap"></div>
+<!-- 
+NewPP limit report
+Cached time: 20250927005022
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: []
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.136 seconds
+Real time usage: 0.174 seconds
+Preprocessor visited node count: 271/1000000
+Post‐expand include size: 794/2097152 bytes
+Template argument size: 13/2097152 bytes
+Highest expansion depth: 5/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1555/5000000 bytes
+Lua time usage: 0.077/7.000 seconds
+Lua memory usage: 1901369/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  151.887      1 Template:Infobox/Jutsu
+100.00%  151.887      1 -total
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:270318-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20250927005022 and revision id 1446391. Rendering was triggered because: unknown
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span><span class="footer-divider">•</span><span class="footer-category">•</span><span class="footer-divider">•</span><span class="footer-category">Species</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Akuta">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

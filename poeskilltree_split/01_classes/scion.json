@@ -1,0 +1,12 @@
+{
+  "name": "Scion",
+  "base_str": 20,
+  "base_dex": 20,
+  "base_int": 20,
+  "ascendancies": [
+    {
+      "id": "Ascendant",
+      "name": "Ascendant"
+    }
+  ]
+}

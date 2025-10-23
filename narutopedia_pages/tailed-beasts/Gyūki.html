@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Gyūki — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Gyūki</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Gy%C5%ABki" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="infobox box colored bordered innerbordered fill-td type-character list-noicon float-right-clear"><tbody><tr><th class="mainheader" colspan="2"><span class="plainlinks edit-infobox"><a class="text" href="https://naruto.fandom.com/wiki/Infobox:Gy%C5%ABki?action=formedit" rel="noreferrer noopener" target="_blank">edit</a></span>Gyūki <a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bcharacters%5D=Gy%C5%ABki&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Gyūki"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a> <span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Special:Browse/Gy%C5%ABki" title="Special:Browse/Gyūki"><img class="mw-file-element" data-image-key="Browse_Information.svg" data-image-name="Browse Information.svg" data-relevant="0" decoding="async" height="19" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/ab/Browse_Information.svg/revision/latest?cb=20221026163711" width="19"/></a></span></th></tr>
+<tr>
+<td class="imagecell" colspan="2"><span typeof="mw:File"><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/d/d7/Gyuki.png/revision/latest?cb=20140817221249"><img class="mw-file-element" data-image-key="Gyuki.png" data-image-name="Gyuki.png" data-relevant="1" decoding="async" height="180" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d7/Gyuki.png/revision/latest/scale-to-width-down/300?cb=20140817221249" width="300"/></a></span></td></tr>
+<tr><th class="mainheader lightheader" colspan="2"><span class="title" lang="ja">牛鬼 Gyūki</span>
+<p><span class="title other">
+</span></p>
+<ul><li>Eight-Tails (<span lang="ja">八尾</span>, <i>Hachibi</i>)</li>
+<li>Giant Ox (<span lang="ja">巨牛</span>, <i>Kyogyū</i>)</li>
+<li>Eight-O</li></ul>
+</th></tr><tr><th class="mainheader" colspan="2">Debut
+	</th></tr><tr><th>Manga
+      </th><td><a href="https://naruto.fandom.com/wiki/Crumbling" title="Crumbling"><i>Naruto</i> Chapter #413</a>
+</td></tr><tr><th>Anime
+      </th><td><a href="https://naruto.fandom.com/wiki/The_Eight-Tails_vs._Sasuke" title="The Eight-Tails vs. Sasuke"><i>Naruto Shippūden</i> Episode #143</a>
+</td></tr><tr><th>Novel
+      </th><td><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i>
+</td></tr><tr><th>Movie
+      </th><td><i><a href="https://naruto.fandom.com/wiki/Naruto_the_Movie:_Blood_Prison" title="Naruto the Movie: Blood Prison">Naruto the Movie: Blood Prison</a></i>
+</td></tr><tr><th>Game
+      </th><td><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_2" title="Naruto Shippūden: Ultimate Ninja Storm 2">Naruto Shippūden: Ultimate Ninja Storm 2</a></i>
+</td></tr><tr><th>Appears in
+	</th><td>Anime, Manga, Novel, Game, Movie
+	</td></tr><tr><th class="mainheader" colspan="2">Voice Actors
+	</th></tr><tr><th>Japanese
+        </th><td>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Masaki_Aizawa" title="wikipedia:Masaki Aizawa">Masaki Aizawa</a> <span title='Search the other 1 pages containing the property "Voice Actors" with the value "Masaki Aizawa"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Masaki+Aizawa" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span></li></ul>
+</td></tr><tr><th>English
+        </th><td>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Matthew_Mercer" title="wikipedia:Matthew Mercer">Matthew Mercer</a> <span title='Search the other 13 pages containing the property "Voice Actors" with the value "Matthew Mercer"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Matthew+Mercer" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span></li></ul>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Fred_Tatasciore" title="wikipedia:Fred Tatasciore">Fred Tatasciore</a> <span title='Search the other 5 pages containing the property "Voice Actors" with the value "Fred Tatasciore"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Fred+Tatasciore" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span> <sup>(<a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_3" title="Naruto Shippūden: Ultimate Ninja Storm 3">Naruto Shippūden: Ultimate Ninja Storm 3</a>)</sup></li></ul>
+</td></tr><tr><th class="mainheader" colspan="2">Personal
+	</th></tr><tr><th>Species
+	</th><td><a href="https://naruto.fandom.com/wiki/Ushi-oni" title="Ushi-oni">Ushi-oni</a>
+</td></tr><tr><th>Classification
+        </th><td>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast" title="Tailed Beast">Tailed Beast</a></li></ul>
+</td></tr><tr><th>Jinchūriki
+	</th><td>
+<ul><li><a href="https://naruto.fandom.com/wiki/Blue_B" title="Blue B">Blue B</a> </li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Killer_B" title="Killer B">Killer B</a> </li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Obito_Uchiha" title="Obito Uchiha">Obito Uchiha</a> </li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> </li></ul>
+</td></tr><tr><th>Affiliation
+        </th><td>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure"><img class="mw-file-element lazyload" data-image-key="Kumogakure_Symbol.svg" data-image-name="Kumogakure Symbol.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/c/c9/Kumogakure_Symbol.svg/revision/latest/scale-to-width-down/18?cb=20110124122229" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a></li></ul>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Allied_Shinobi_Forces" title="Allied Shinobi Forces"><img class="mw-file-element lazyload" data-image-key="Allied_Shinobi_Forces_Symbol.svg" data-image-name="Allied Shinobi Forces Symbol.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/2/2e/Allied_Shinobi_Forces_Symbol.svg/revision/latest/scale-to-width-down/18?cb=20101119082226" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Allied_Shinobi_Forces" title="Allied Shinobi Forces">Allied Shinobi Forces</a></li>
+<li class="mw-empty-elt"></li></ul>
+<ul><li class="mw-empty-elt"></li></ul>
+</td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Family
+	</th></tr><tr><td class="">
+<ul><li><a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a> (Creator)</li>
+<li><a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Isobu" title="Isobu">Isobu</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Son_Gok%C5%AB" title="Son Gokū">Son Gokū</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Saiken" title="Saiken">Saiken</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Ch%C5%8Dmei" title="Chōmei">Chōmei</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a> (Sibling)</li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Unique Traits
+	</th></tr><tr><td class="">
+<ul><li><a href="https://naruto.fandom.com/wiki/Ink_Creation" title="Ink Creation">Produces ink</a></li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible mw-collapsed"><tbody><tr><th class="mainheader"><a class="text" href="https://naruto.fandom.com/index.php?title=Special%3AAsk&amp;offset=0&amp;limit=500&amp;q=%5B%5BConcept%3AJutsu%5D%5D%5B%5BUser+tech%3A%3AGy%C5%ABki%5D%5D&amp;po=%3FAppears+in%3DMedia%0A%3FJutsu+classification%3DClassification%0A%3FChakra+Nature%0A%3FJutsu+class+type%3DClass%0A%3FJutsu+range%3DRange" rel="noreferrer noopener" target="_blank">Jutsu</a></th></tr><tr><td class="">
+<p class="mw-empty-elt">
+</p>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Chakra_Transfer_Technique" title="Chakra Transfer Technique">Chakra Transfer Technique</a></i></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Continuous_Tailed_Beast_Balls" title="Continuous Tailed Beast Balls">Continuous Tailed Beast Balls</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Cooperation_Tailed_Beast_Ball" title="Cooperation Tailed Beast Ball">Cooperation Tailed Beast Ball</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Ink_Creation" title="Ink Creation">Ink Creation</a></i></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Chakra_Arms" title="Tailed Beast Chakra Arms">Tailed Beast Chakra Arms</a></i></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Eight_Twists" title="Tailed Beast Eight Twists">Tailed Beast Eight Twists</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Full_Charge" title="Tailed Beast Full Charge">Tailed Beast Full Charge</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Heavy_Cannon" title="Tailed Beast Heavy Cannon">Tailed Beast Heavy Cannon</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Telepathy" title="Tailed Beast Telepathy">Tailed Beast Telepathy</a></li></ul></td></tr></tbody></table></td></tr></tbody></table>
+<p><b>Gyūki</b> (<span lang="ja">牛鬼</span>), more commonly known as the <b>Eight-Tails</b> (<span lang="ja">八尾</span>, <i>Hachibi</i>), is one of the nine <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beasts" title="Tailed beasts">tailed beasts</a>. It has been in the possession of <a href="https://naruto.fandom.com/wiki/Kumogakure" title="Kumogakure">Kumogakure</a> for decades, where it has been sealed into many <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki" title="Jinchūriki">jinchūriki</a>. Its most recent jinchūriki, and the first to have any success in cooperating with it, is <a href="https://naruto.fandom.com/wiki/Killer_B" title="Killer B">Killer B</a>.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Background"><span class="tocnumber">1</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Personality"><span class="tocnumber">2</span> <span class="toctext">Personality</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Appearance"><span class="tocnumber">3</span> <span class="toctext">Appearance</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="about:blank#Abilities"><span class="tocnumber">4</span> <span class="toctext">Abilities</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="about:blank#Chakra_and_Physical_Prowess"><span class="tocnumber">4.1</span> <span class="toctext">Chakra and Physical Prowess</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="about:blank#Ninjutsu"><span class="tocnumber">4.2</span> <span class="toctext">Ninjutsu</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="about:blank#Intelligence"><span class="tocnumber">4.3</span> <span class="toctext">Intelligence</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="about:blank#Part_II"><span class="tocnumber">5</span> <span class="toctext">Part II</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="about:blank#Pain's_Assault"><span class="tocnumber">5.1</span> <span class="toctext">Pain's Assault</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="about:blank#Five_Kage_Summit"><span class="tocnumber">5.2</span> <span class="toctext">Five Kage Summit</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="about:blank#Fourth_Shinobi_World_War:_Countdown"><span class="tocnumber">5.3</span> <span class="toctext">Fourth Shinobi World War: Countdown</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="about:blank#Fourth_Shinobi_World_War:_Confrontation"><span class="tocnumber">5.4</span> <span class="toctext">Fourth Shinobi World War: Confrontation</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="about:blank#Fourth_Shinobi_World_War:_Climax"><span class="tocnumber">5.5</span> <span class="toctext">Fourth Shinobi World War: Climax</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="about:blank#Birth_of_the_Ten-Tails'_Jinch%C5%ABriki"><span class="tocnumber">5.6</span> <span class="toctext">Birth of the Ten-Tails' Jinchūriki</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="about:blank#Kaguya_%C5%8Ctsutsuki_Strikes"><span class="tocnumber">5.7</span> <span class="toctext">Kaguya Ōtsutsuki Strikes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="about:blank#New_Era"><span class="tocnumber">6</span> <span class="toctext">New Era</span></a>
+<ul>
+<li class="toclevel-2 tocsection-17"><a href="about:blank#Versus_Momoshiki_Arc"><span class="tocnumber">6.1</span> <span class="toctext">Versus Momoshiki Arc</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="about:blank#One-Tail_Escort_Arc"><span class="tocnumber">6.2</span> <span class="toctext">One-Tail Escort Arc</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="about:blank#Kawaki_Arc"><span class="tocnumber">6.3</span> <span class="toctext">Kawaki Arc</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-20"><a href="about:blank#In_Other_Media"><span class="tocnumber">7</span> <span class="toctext">In Other Media</span></a>
+<ul>
+<li class="toclevel-2 tocsection-21"><a href="about:blank#Movies"><span class="tocnumber">7.1</span> <span class="toctext">Movies</span></a>
+<ul>
+<li class="toclevel-3 tocsection-22"><a href="about:blank#Naruto_the_Movie:_Blood_Prison"><span class="tocnumber">7.1.1</span> <span class="toctext">Naruto the Movie: Blood Prison</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-23"><a href="about:blank#Video_Games"><span class="tocnumber">7.2</span> <span class="toctext">Video Games</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-24"><a href="about:blank#Trivia"><span class="tocnumber">8</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="about:blank#Quotes"><span class="tocnumber">9</span> <span class="toctext">Quotes</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="about:blank#References"><span class="tocnumber">10</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Background">Background</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest?cb=20150728221849"><img alt="Young Bijuu and Hagoromo" class="thumbimage lazyload" data-image-key="Young_Bijuu_and_Hagoromo.png" data-image-name="Young Bijuu and Hagoromo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest?cb=20150728221849"><img alt="Young Bijuu and Hagoromo" class="thumbimage" data-image-key="Young_Bijuu_and_Hagoromo.png" data-image-name="Young Bijuu and Hagoromo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Young_Bijuu_and_Hagoromo.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The young tailed beasts with Hagoromo.</p> </figcaption> </figure>
+<p>Gyūki and the tailed beasts first came into being in the waning days of <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>, who used his <a href="https://naruto.fandom.com/wiki/Creation_of_All_Things_Technique" title="Creation of All Things Technique">Creation of All Things Technique</a> to divide the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a>' chakra into nine separate bodies and giving each a name. Some time after being created, the Sage explained to the young tailed beasts that a link existed between them despite their separation. He also foretold of a day when they would be brought together again - though not as they were - and that at that time someone would emerge to show them what true power is. In the anime, before his death, Hagoromo sent Gyūki to live in a temple built for the purpose of protecting it in a region surrounding a range of tall mountains between the clouds, that would later become part of the <a href="https://naruto.fandom.com/wiki/Land_of_Lightning" title="Land of Lightning">Land of Lightning</a>.
+</p><p>In an unknown time, <a href="https://naruto.fandom.com/wiki/Hashirama_Senju" title="Hashirama Senju">Hashirama Senju</a> captured eight of the tailed beasts and sold Gyūki and <a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a> to Kumogakure at the <a href="https://naruto.fandom.com/wiki/Five_Kage_Summit" title="Five Kage Summit">Five Kage Summit</a>, as a sign of friendship and to ensure a balance of power amongst their new villages. In a cavern behind the <a href="https://naruto.fandom.com/wiki/Falls_of_Truth" title="Falls of Truth">Falls of Truth</a>, where <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki" title="Jinchūriki">jinchūriki</a> learn to control their tailed beasts' power, there are wall murals of Gyūki and Matatabi, which indicates how long they were associated with the country. At some point in the past, one Kumo-nin attempted to mimic the <a href="https://naruto.fandom.com/wiki/Gold_and_Silver_Brothers" title="Gold and Silver Brothers">Gold and Silver Brothers</a> by eating one of Gyūki's chakra meat tentacles in the hopes of gaining jinchūriki-like power, but died in the process.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/A_vs_Eight-Tails.png/revision/latest?cb=20150821085634"><img alt="A vs Eight-Tails" class="thumbimage lazyload" data-image-key="A_vs_Eight-Tails.png" data-image-name="A vs Eight-Tails.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/A_vs_Eight-Tails.png/revision/latest/scale-to-width-down/180?cb=20150821085634" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/A_vs_Eight-Tails.png/revision/latest?cb=20150821085634"><img alt="A vs Eight-Tails" class="thumbimage" data-image-key="A_vs_Eight-Tails.png" data-image-name="A vs Eight-Tails.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/A_vs_Eight-Tails.png/revision/latest/scale-to-width-down/180?cb=20150821085634" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bd/A_vs_Eight-Tails.png/revision/latest/scale-to-width-down/180?cb=20150821085634" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:A_vs_Eight-Tails.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Gyūki and the Third Raikage collapse from exhaustion.</p> </figcaption> </figure>
+<p>Throughout the years, none of Gyūki's former jinchūriki - such as <a href="https://naruto.fandom.com/wiki/Blue_B" title="Blue B">Blue B</a>, and his uncle and father before him - could control its power and the ox would constantly go on a rampage, destroying the village and killing many of its inhabitants. Despite these setbacks, the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Third_Raikage" title="Third Raikage">Third Raikage</a> believed a jinchūriki for Gyūki was too valuable of a war deterrent and decided to keep looking for a compatible one, to which he would form a special coalition to subdue and seal it in the <a href="https://naruto.fandom.com/wiki/Kohaku_no_J%C5%8Dhei" title="Kohaku no Jōhei">Kohaku no Jōhei</a>. During one of its rampages, the Third fought Gyūki one-on-one until they both collapsed from exhaustion. During another, Gyūki had one of its four horns lost to <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fourth_Raikage" title="Fourth Raikage">A</a>, the offending horn having killed <a href="https://naruto.fandom.com/wiki/Furui" title="Furui">Furui</a>. In the anime, Blue B's rampage was stated to be orchestrated by <a href="https://naruto.fandom.com/wiki/Orochimaru" title="Orochimaru">Orochimaru</a>, who gave Blue B genjutsu-inducing pills to draw out Gyūki. Due to the pills, Gyūki had no recollection of the rampage.
+</p><p>Gyūki was ultimately sealed within <a href="https://naruto.fandom.com/wiki/Killer_B" title="Killer B">Killer B</a>, who was five at the time, through the <a href="https://naruto.fandom.com/wiki/Iron_Armour_Seal" title="Iron Armour Seal">Iron Armour Seal</a>. Through rigorous training within the Falls of Truth, B managed to defeat and eventually befriend Gyūki.
+</p>
+<h2><span class="mw-headline" id="Personality">Personality</span></h2>
+<p>Gyūki is characterised as a tough and serious individual. It uses "ore" (<span lang="ja">オレ</span>) when referring to itself and often speaks in a somewhat rude dialect. Gyūki was also shown to have a good analytical ability, as it told Killer B that if he left <a href="https://naruto.fandom.com/wiki/Ponta" title="Ponta">Ponta</a> and <a href="https://naruto.fandom.com/wiki/Sabu" title="Sabu">Sabu</a> and ran away from them, <a href="https://naruto.fandom.com/wiki/Kisame_Hoshigaki" title="Kisame Hoshigaki">Kisame Hoshigaki</a> and his water dome would follow him and they (Sabu and Ponta) would be freed. Although Gyūki mentioned that it and its brethren disliked <a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a> for its arrogance and belief that their strength are based on their number of tails, it insisted that was no reason for not helping <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> to control Kurama's power, hinting a benevolent side. Since then, both Gyūki and B have taken a liking to Naruto.
+</p><p>In the past, Gyūki was infamous in Kumo for being wild and violent, as it went on countless rampages whenever its former jinchūriki would lose control of it. This was most likely due to its hatred against humans for oppressing and sealing it away many times. Gyūki maintained this behaviour until it was sealed within B, who would later change it after he bested it in one-on-one combat. Since then, Gyūki's personality has become much more relaxed, becoming close friends with B; even allowing him to sit on top of its muzzle while talking to it leisurely. However, B tends to annoy Gyūki to comical effect, as its no-nonsense demeanour often contrasts with B's tendency to goof off whenever he likes, adding fuel to Gyūki's irritation to its vessel. 
+</p><p>As a result, Gyūki is not above bad-mouthing B and is also known to reprimand him in serious occasions. This was seen when Gyūki criticised B for rapping in his fight with Kisame when he should have been completely focused on their opponent, and later when it comically bumped B in the head when the latter started to mention in a perverted manner how <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Yugito" title="Yugito">Yugito</a>'s black receivers were embedded in her left breast and when Obito <a href="https://naruto.fandom.com/wiki/Kamui" title="Kamui">disappeared</a> B was wondering if he escaped only for Gyūki to tell B to find him. This somewhat contradicts the original point of having a jinchūriki which is to control a tailed beast, but Gyūki seems to be more of the one in control than B. Because of this, Gyūki appears to be much more noteworthy than B as far as responsibility is concerned. Nonetheless, Gyūki formed a very strong bond with B, as even after being extracted from its jinchūriki, the tailed beast severed a piece of itself to help sustain B's life. Following its release from Kaguya, Gyūki expressed a desire to return to B, noting it had gotten used to his awful rapping and felt odd not hearing it.
+</p><p>Gyūki's relationship with its B's predecessor Blue B was unknown in the manga, other than the fact it would pounce on the "hole" in Blue B's heart and assume control over him. In the anime, however, Gyūki stated it had high hopes for Blue B, indicating it bore no ill will towards its former host.
+</p>
+<h2><span class="mw-headline" id="Appearance">Appearance</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/be/Young_Gyuki.png/revision/latest?cb=20130913103418"><img alt="Young Gyuki" class="thumbimage lazyload" data-image-key="Young_Gyuki.png" data-image-name="Young Gyuki.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/be/Young_Gyuki.png/revision/latest/scale-to-width-down/180?cb=20130913103418" decoding="async" height="171" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/be/Young_Gyuki.png/revision/latest?cb=20130913103418"><img alt="Young Gyuki" class="thumbimage" data-image-key="Young_Gyuki.png" data-image-name="Young Gyuki.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/be/Young_Gyuki.png/revision/latest/scale-to-width-down/180?cb=20130913103418" decoding="async" height="171" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/be/Young_Gyuki.png/revision/latest/scale-to-width-down/180?cb=20130913103418" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Young_Gyuki.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">A young Gyūki.</p> </figcaption> </figure>
+<p>Gyūki is an <a class="extiw" href="https://en.wikipedia.org/wiki/ushi-oni" title="wikipedia:ushi-oni">ushi-oni</a> with four long horns on its head, similar to that of a <a class="extiw" href="https://en.wikipedia.org/wiki/Jacob_(sheep)" title="wikipedia:Jacob (sheep)">Jacob sheep</a>. As a tailed beast, it is extremely massive, dwarfing entire forests and towers over large rock formations and buildings and matching the <a href="https://naruto.fandom.com/wiki/Giant_Squid" title="Giant Squid">Giant Squid</a> in size. The lower left part of its horns was permanently sliced off in a battle with <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fourth_Raikage" title="Fourth Raikage">A</a>, and the right horns were destroyed by its own point-blank Tailed Beast Ball when fighting the Ten-Tails. It also has straight teeth, one of which was blown off during the point-blank Tailed Beast Ball. Following the Fourth Shinobi World War, it grew another tooth, along with its horns (albeit not completely). Gyūki also has a muscular upper-body structure, with a hunched back similar to an <a class="extiw" href="https://en.wikipedia.org/wiki/American_bison" title="wikipedia:American bison">American bison</a>, arms with spiked protrusions on the elbows, and hands with opposable thumbs like that of a human. Instead of hind-legs, its lower half consists of its eight tails, which resemble the <a class="extiw" href="https://en.wikipedia.org/wiki/Cephalopod_arm" title="wikipedia:Cephalopod arm">cephalopod arms of an octopus</a>. These tails will grow back in the event they are sliced off. During the last remaining days of Hagoromo Ōtsutsuki, Gyūki was smaller and its horns were much shorter.
+</p>
+<h2><span class="mw-headline" id="Abilities">Abilities</span></h2>
+<p><span class="box headnote"><i>See also: <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki_Forms" title="Jinchūriki Forms">Jinchūriki Forms</a></i></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/0/09/Hachibi_subduing_team.png/revision/latest?cb=20150821123445"><img alt="Hachibi subduing team" class="thumbimage lazyload" data-image-key="Hachibi_subduing_team.png" data-image-name="Hachibi subduing team.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/0/09/Hachibi_subduing_team.png/revision/latest/scale-to-width-down/180?cb=20150821123445" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/0/09/Hachibi_subduing_team.png/revision/latest?cb=20150821123445"><img alt="Hachibi subduing team" class="thumbimage" data-image-key="Hachibi_subduing_team.png" data-image-name="Hachibi subduing team.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/0/09/Hachibi_subduing_team.png/revision/latest/scale-to-width-down/180?cb=20150821123445" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/0/09/Hachibi_subduing_team.png/revision/latest/scale-to-width-down/180?cb=20150821123445" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Hachibi_subduing_team.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Gyūki rampages as several Kumo-nin attempt to seal it.</p> </figcaption> </figure>
+<p>Gyūki was noted by Kisame and Kurama to be the second most powerful of the nine tailed beasts. Even the Third Raikage, hailed as the greatest shinobi in Kumo's history, formed a <a href="https://naruto.fandom.com/wiki/Eight-Tails_Subduing_Team" title="Eight-Tails Subduing Team">special team</a> to subdue and seal it during its various rampages, with the ushi-oni fighting the Third to a stalemate on one occasion. The <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fourth_Raikage" title="Fourth Raikage">Fourth Raikage</a> also once forbade B from fully transforming into Gyūki due to its great power. During the <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War" title="Fourth Shinobi World War">Fourth Shinobi World War</a>, Gyūki held its own against two other tailed beasts despite suffering a past injury.
+</p>
+<h3><span class="mw-headline" id="Chakra_and_Physical_Prowess">Chakra and Physical Prowess</span></h3>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/4/41/Gyuki_punches_Kokuo.png/revision/latest?cb=20130920041110"><img alt="Gyuki punches Kokuo" class="thumbimage lazyload" data-image-key="Gyuki_punches_Kokuo.png" data-image-name="Gyuki punches Kokuo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/41/Gyuki_punches_Kokuo.png/revision/latest/scale-to-width-down/180?cb=20130920041110" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/4/41/Gyuki_punches_Kokuo.png/revision/latest?cb=20130920041110"><img alt="Gyuki punches Kokuo" class="thumbimage" data-image-key="Gyuki_punches_Kokuo.png" data-image-name="Gyuki punches Kokuo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/41/Gyuki_punches_Kokuo.png/revision/latest/scale-to-width-down/180?cb=20130920041110" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/4/41/Gyuki_punches_Kokuo.png/revision/latest/scale-to-width-down/180?cb=20130920041110" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Gyuki_punches_Kokuo.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Gyūki overwhelming Kokuō with its raw strength.</p> </figcaption> </figure>
+<p>As a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beast" title="Tailed beast">tailed beast</a>, Gyūki possesses a massive supply of powerful <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a> and can <a href="https://naruto.fandom.com/wiki/Chakra_Transfer_Technique" title="Chakra Transfer Technique">share it with others</a>. It can replenish its high reserves shortly after an entire day's usage. Should the need arise, it can disturb B's chakra with its own to dispel powerful genjutsu. Gyūki's tentacles, if severed, can be used as a medium for its chakra, such as creating a <a href="https://naruto.fandom.com/wiki/Octopus_Leg_Clone_Technique" title="Octopus Leg Clone Technique">clone</a> of its host, or transferring chakra to said host should the beast be extracted. It also has powerful healing capacities, able to mend injuries in themselves and others in seconds. Likewise, Gyūki is effectively immortal, as when it dies, it will eventually revive, albeit in a younger form. 
+</p><p>Gyūki has immense physical strength, being able to temporarily restrain Kurama, contain its Tailed Beast Ball, and overwhelm two charging <a href="https://naruto.fandom.com/wiki/Isobu" title="Isobu">tailed</a> <a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">beasts</a> simultaneously. It is deceptively quite fast, able to strike quickly with its tentacles and block <a href="https://naruto.fandom.com/wiki/Amaterasu" title="Amaterasu">Amaterasu</a> with its fist. Its incredibly sharp horns can easily impale a human being. Gyūki is also durable enough to survive its own Tailed Beast Ball, including a combined explosion of such attacks from itself and the Ten-Tails in the latter's mouth. It can rapidly spin its tentacles to create an <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Eight_Twists" title="Tailed Beast Eight Twists">enormous tornado</a>, or wrap them around its body for protection against enemy attacks, even holding back the Ten-Tails' massive Tailed Beast Ball. However, the tentacles can be severed by <a href="https://naruto.fandom.com/wiki/Chidori_Sharp_Spear" title="Chidori Sharp Spear">sharp</a> <a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_Kunai" title="Flying Thunder God Kunai">attacks</a> with enough force.
+</p>
+<h3><span class="mw-headline" id="Ninjutsu">Ninjutsu</span></h3>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/9/9f/Gyuki%27s_Bijudama.png/revision/latest?cb=20130919142021"><img alt="Gyuki's Bijudama" class="thumbimage lazyload" data-image-key="Gyuki%27s_Bijudama.png" data-image-name="Gyuki's Bijudama.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/9/9f/Gyuki%27s_Bijudama.png/revision/latest/scale-to-width-down/180?cb=20130919142021" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/9/9f/Gyuki%27s_Bijudama.png/revision/latest?cb=20130919142021"><img alt="Gyuki's Bijudama" class="thumbimage" data-image-key="Gyuki%27s_Bijudama.png" data-image-name="Gyuki's Bijudama.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/9/9f/Gyuki%27s_Bijudama.png/revision/latest/scale-to-width-down/180?cb=20130919142021" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/9/9f/Gyuki%27s_Bijudama.png/revision/latest/scale-to-width-down/180?cb=20130919142021" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Gyuki%27s_Bijudama.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Gyūki's Tailed Beast Ball.</p> </figcaption> </figure>
+<p>Gyūki can perform the <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a>, being able to fire it normally, <a href="https://naruto.fandom.com/wiki/Continuous_Tailed_Beast_Balls" title="Continuous Tailed Beast Balls">consecutively</a> or as a massive wave. It is strong enough to devastate an entire <a href="https://naruto.fandom.com/wiki/Valley_of_Clouds_and_Lightning" title="Valley of Clouds and Lightning">valley</a>, penetrate nine <a href="https://naruto.fandom.com/wiki/Self-Repairing_Barrier" title="Self-Repairing Barrier">barriers</a> without exploding, and even push the Ten-Tails' own Tailed Beast Ball back into its body. Unlike most tailed beasts, Gyūki can supercharge it, creating one many times its own size for much greater power. Going with its octopus theme, it can produce <a href="https://naruto.fandom.com/wiki/Ink_Creation" title="Ink Creation">ink</a> to blind its enemies or form <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Ink_clone" title="Ink clone">ink clones</a> to <a href="https://naruto.fandom.com/wiki/Sealing_Technique:_Octopus_Hold" title="Sealing Technique: Octopus Hold">seal</a> them.
+</p>
+<h3><span class="mw-headline" id="Intelligence">Intelligence</span></h3>
+<p>Gyūki is quite intelligent and can formulate tactics in the midst of battle, coaching B on how to counter Kisame Hoshigaki's techniques. It has great knowledge of the Tailed Beast Ball and explained the initial limitations of Naruto's <a href="https://naruto.fandom.com/wiki/Nine-Tails_Chakra_Mode" title="Nine-Tails Chakra Mode">Nine-Tails Chakra Mode</a>. Gyūki is also very perceptive; from witnessing Naruto sense Kurama's chakra coming from outside the <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Temple" title="Tailed Beast Temple">Tailed Beast Temple</a>, it correctly deduced that the <a href="https://naruto.fandom.com/wiki/Gold_and_Silver_Brothers" title="Gold and Silver Brothers">Gold and Silver Brothers</a> were <a href="https://naruto.fandom.com/wiki/Summoning:_Impure_World_Reincarnation" title="Summoning: Impure World Reincarnation">reincarnated</a> by <a href="https://naruto.fandom.com/wiki/Kabuto_Yakushi" title="Kabuto Yakushi">someone</a> using Orochimaru's <a href="https://naruto.fandom.com/wiki/Kinjutsu" title="Kinjutsu">kinjutsu</a> in the <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War" title="Fourth Shinobi World War">Fourth Shinobi World War</a>.
+</p>
+<h2><span class="mw-headline" id="Part_II">Part II</span></h2>
+<h3><span id="Pain.27s_Assault"></span><span class="mw-headline" id="Pain's_Assault">Pain's Assault</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Pain%27s_Assault_(Arc)" title="Pain's Assault (Arc)">Pain's Assault</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/7/74/Suigetsu_vs_8-Tails.png/revision/latest?cb=20150123171354"><img alt="Suigetsu vs 8-Tails" class="thumbimage lazyload" data-image-key="Suigetsu_vs_8-Tails.png" data-image-name="Suigetsu vs 8-Tails.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/74/Suigetsu_vs_8-Tails.png/revision/latest/scale-to-width-down/180?cb=20150123171354" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/7/74/Suigetsu_vs_8-Tails.png/revision/latest?cb=20150123171354"><img alt="Suigetsu vs 8-Tails" class="thumbimage" data-image-key="Suigetsu_vs_8-Tails.png" data-image-name="Suigetsu vs 8-Tails.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/74/Suigetsu_vs_8-Tails.png/revision/latest/scale-to-width-down/180?cb=20150123171354" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/7/74/Suigetsu_vs_8-Tails.png/revision/latest/scale-to-width-down/180?cb=20150123171354" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Suigetsu_vs_8-Tails.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The Eight-Tails vs Taka.</p> </figcaption> </figure>
+<p>When <a href="https://naruto.fandom.com/wiki/Taka" title="Taka">Taka</a> arrived at Kumogakure in an attempt to capture Killer B, he battled them to the point of annoyance. With his great control over his tailed beast, Killer B transformed himself into the Eight-Tails, and proceeded to terrorise Taka. As B attacked, <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Suigetsu" title="Suigetsu">Suigetsu</a> <a href="https://naruto.fandom.com/wiki/Water_Release:_Tate_Eboshi" title="Water Release: Tate Eboshi">commanded a wave of water</a>, attempting to defeat it. B understood that Suigetsu had the advantage given that they were surrounded by water, so it then charged a <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a> and fired it at Suigetsu, defeating him.
+</p><p>After <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sasuke" title="Sasuke">Sasuke</a> activated his <a href="https://naruto.fandom.com/wiki/Mangeky%C5%8D_Sharingan" title="Mangekyō Sharingan">Mangekyō Sharingan</a> and released Amaterasu on B, it fell into pain by its flames. As one of its tails was about to fall on Karin, Sasuke cut it with <a href="https://naruto.fandom.com/wiki/Chidori_Sharp_Spear" title="Chidori Sharp Spear">Chidori Sharp Spear</a>. Killer B disguised himself as the cut part of the tail and escaped. Killer B was then seemingly captured by Taka and was given to <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tobi" title="Tobi">Tobi</a>. Killer B's brother, the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fourth_Raikage" title="Fourth Raikage">Fourth Raikage</a>, swore that <a href="https://naruto.fandom.com/wiki/Akatsuki" title="Akatsuki">Akatsuki</a> would pay for what they had done.
+</p><p>It was later revealed that Killer B faked his capture. After Taka left, he and the Eight-Tails left the lake and Killer B took this opportunity to take a "vacation" from being a guardian. As the Eight-Tails commented that a new era was coming, Killer B thought it was going to be his singing career.
+</p>
+<h3><span class="mw-headline" id="Five_Kage_Summit">Five Kage Summit</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Five_Kage_Summit_(Arc)" title="Five Kage Summit (Arc)">Five Kage Summit</a></span>
+As Kisame attacked Killer B, the Eight-Tails demanded B to let him out. However, B reminded him that he would just kill Sabu and Ponta in the process of protecting itself. With this, the Eight-Tails begrudgingly let B use the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Version_2" title="Version 2">Version 2</a> form, as well as giving B advice during the battle. However, as Kisame knocked B out, the Eight-Tails yelled at him to wake up, as both B and it were nearly out of chakra. As Kisame then prepared to finish the battle, the Raikage and his bodyguards arrived and helped B kill "<a href="https://naruto.fandom.com/wiki/Substitute_Technique" title="Substitute Technique">Kisame</a>".
+</p>
+<h3><span class="mw-headline" id="Fourth_Shinobi_World_War:_Countdown">Fourth Shinobi World War: Countdown</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War:_Countdown" title="Fourth Shinobi World War: Countdown">Fourth Shinobi World War: Countdown</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/b1/Hachi-B_fights_Squid.png/revision/latest?cb=20150202192221"><img alt="Hachi-B fights Squid" class="thumbimage lazyload" data-image-key="Hachi-B_fights_Squid.png" data-image-name="Hachi-B fights Squid.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/b1/Hachi-B_fights_Squid.png/revision/latest/scale-to-width-down/180?cb=20150202192221" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/b1/Hachi-B_fights_Squid.png/revision/latest?cb=20150202192221"><img alt="Hachi-B fights Squid" class="thumbimage" data-image-key="Hachi-B_fights_Squid.png" data-image-name="Hachi-B fights Squid.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/b1/Hachi-B_fights_Squid.png/revision/latest/scale-to-width-down/180?cb=20150202192221" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/b1/Hachi-B_fights_Squid.png/revision/latest/scale-to-width-down/180?cb=20150202192221" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Hachi-B_fights_Squid.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">B in his Eight-Tails form attacks the Giant Squid.</p> </figcaption> </figure>
+<p>As <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> and <a href="https://naruto.fandom.com/wiki/Yamato" title="Yamato">Yamato</a> entered the <a href="https://naruto.fandom.com/wiki/Land_of_Lightning" title="Land of Lightning">Land of Lightning</a>, in the <a href="https://naruto.fandom.com/wiki/Allied_Shinobi_Forces" title="Allied Shinobi Forces">Allied Shinobi Forces</a>' efforts to keep the jinchūriki away from Akatsuki, they were attacked by a giant squid. Killer B, in his <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_Beast_Mode" title="Tailed Beast Mode">full Eight-Tails form</a>, forced the squid back and saved the ship. Upon seeing it, Naruto realised that the Eight-Tails and B were the "octopus" he had been looking for to guide him to control the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Nine-Tails" title="Nine-Tails">Nine-Tails</a>' power. He asked B to train him, but B refused. After B was done training with some bears in the forest, the Eight-Tails tried to convince B to train Naruto, stating that even though it wasn't fond of the Nine-Tails, it still thought B should train him since they are both jinchūriki.
+</p>
+<h3><span class="mw-headline" id="Fourth_Shinobi_World_War:_Confrontation">Fourth Shinobi World War: Confrontation</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War:_Confrontation" title="Fourth Shinobi World War: Confrontation">Fourth Shinobi World War: Confrontation</a></span>
+When Naruto failed to fully transform into the Nine-Tails, the Eight-Tails requested that B let it speak with Naruto. It explained the risks of using a tailed beast's chakra, and how using it meant that the fox could deplete Naruto's chakra, because whenever Naruto used the Nine-Tails' chakra, it could take his. It explained that Naruto wouldn't be able to transform fully until he could reach an agreement with Nine-Tails, which it recognised as unlikely, noting that it and B used to be like that. It also said that because of that, he wouldn't be able to learn the Tailed Beast Ball. When it was done, B changed back to his normal self.
+</p><p>The Eight-Tails was later surprised at how Naruto was able to discern the chakra coming from Kinkaku and Ginkaku despite being secured in the training zone and then told B to stop Naruto from leaving the temple, but failed as Naruto was able to trick B into letting him out. Later, after B and Naruto encountered <a href="https://naruto.fandom.com/wiki/Nagato" title="Nagato">Nagato</a> and <a href="https://naruto.fandom.com/wiki/Itachi_Uchiha" title="Itachi Uchiha">Itachi Uchiha</a> on the battlefield, Itachi trapped <a href="https://naruto.fandom.com/wiki/Killer_B" title="Killer B">Killer B</a> in a genjutsu, but Eight-Tails broke the genjutsu for B by disturbing his chakra flow. Ultimately, Itachi is able to break free of his control thanks to one of his crow that he stored inside Naruto using a <a href="https://naruto.fandom.com/wiki/Kotoamatsukami" title="Kotoamatsukami">powerful genjutsu</a>. Itachi then aided Naruto and B against Nagato, ultimately <a href="https://naruto.fandom.com/wiki/Sword_of_Totsuka" title="Sword of Totsuka">sealing</a> away Nagato. After Itachi explained the situation, he left Naruto and B to stop the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Impure_World_Reincarnation" title="Impure World Reincarnation">Impure World Reincarnation</a>.
+</p><p>The Eight-Tails later reprimanded B for taking too many breaks to urinate and for letting Naruto go ahead of them. When Naruto contacted them through <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Inoichi" title="Inoichi">Inoichi</a>, the Eight-Tails talked to him about the time it fought the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Third_Raikage" title="Third Raikage">Third Raikage</a>. When asked about the Third's scar, it initially thought that it had caused the scar with his <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a>, but then remembered that they both ended up collapsing from exhaustion during the battle, with both of their techniques still intact.
+</p><p>Later, in the anime, <a href="https://naruto.fandom.com/wiki/Motoi" title="Motoi">Motoi</a> arrived to aid B. They were then approached by the reincarnated <a href="https://naruto.fandom.com/wiki/Blue_B" title="Blue B">Blue B</a>, B's predecessor as the Eight-Tails jinchūriki. Blue B revealed, to the Eight-Tails' shock, the ability to still use the tailed beast chakra cloak, entering his Version 2 form. As B entered Version 2 and clashed with Blue B, the Eight-Tails insisted to know how Blue B can still use that power. Blue B explained that the Eight-Tails' rampage from thirty years ago was in fact manipulated by Orochimaru, using a genjutsu-inducing drug to force out the ox. During the chaos, the Sannin member also harvested some of the Eight-Tails' severed horn. It was from the genetic material that Blue B obtained a recreation of the ox's chakra. As they battled, Motoi was defeated but saved by B. Seeing that B accomplished what he could not, Blue B was able to let go of his past and return to the afterlife.
+</p>
+<h3><span class="mw-headline" id="Fourth_Shinobi_World_War:_Climax">Fourth Shinobi World War: Climax</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War:_Climax" title="Fourth Shinobi World War: Climax">Fourth Shinobi World War: Climax</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/d/d8/B_transformed_into_Gy%C5%ABki.png/revision/latest?cb=20130815125448"><img alt="B transformed into Gyūki" class="thumbimage lazyload" data-image-key="B_transformed_into_Gy%C5%ABki.png" data-image-name="B transformed into Gyūki.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/d/d8/B_transformed_into_Gy%C5%ABki.png/revision/latest/scale-to-width-down/180?cb=20130815125448" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/d/d8/B_transformed_into_Gy%C5%ABki.png/revision/latest?cb=20130815125448"><img alt="B transformed into Gyūki" class="thumbimage" data-image-key="B_transformed_into_Gy%C5%ABki.png" data-image-name="B transformed into Gyūki.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/d/d8/B_transformed_into_Gy%C5%ABki.png/revision/latest/scale-to-width-down/180?cb=20130815125448" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d8/B_transformed_into_Gy%C5%ABki.png/revision/latest/scale-to-width-down/180?cb=20130815125448" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:B_transformed_into_Gy%C5%ABki.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">B transforms into the Eight-Tails to level the forest.</p> </figcaption> </figure>
+<p>Later, when Naruto and B encountered <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tobi" title="Tobi">Tobi</a> and his Six Paths of Pain, the Eight-Tails recognised <a href="https://naruto.fandom.com/wiki/Yugito_Nii" title="Yugito Nii">Yugito Nii</a> among them and figured out the others were the other deceased jinchūriki. After the initial assault from the dead jinchūriki, it warned B to be careful or he would end up just like them. After the revived jinchūriki enter their tailed forms, the Eight-Tails explained to a bewildered B that Tobi must have turned them back into jinchūriki after reviving them. As B head out to attack them, it told him to be careful as he sensed a change in the other tailed beasts. After escaping Yugito's onslaught, the Eight-Tails surmised that with the aid of the Sharingan and the Rinnegan, the jinchūriki's abilities had been greatly enhanced. It asked to speak to Naruto as well begin to formulate a counter strategy. After B revealed the location of the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Black_receiver" title="Black receiver">black receivers</a> and Naruto's failed attempt to destroy Rōshi's, B in his <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_Beast_Mode" title="Tailed Beast Mode">Tailed Beast Mode</a> <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Eight_Twists" title="Tailed Beast Eight Twists">levelled</a> the entire forest to get rid of their disadvantage. He then attempted to <a href="https://naruto.fandom.com/wiki/Sealing_Technique:_Octopus_Hold" title="Sealing Technique: Octopus Hold">seal</a> them, but Tobi forced his Paths to enter their Version 2 forms, freeing themselves, and they started attacking Naruto and B. The latter caught a transformed <a href="https://naruto.fandom.com/wiki/Utakata" title="Utakata">Utakata</a>, who quickly freed himself by <a href="https://naruto.fandom.com/wiki/Leech_Gap" title="Leech Gap">oozing alkaline</a>. Next, B was attacked with <a href="https://naruto.fandom.com/wiki/Flower%E2%80%93Fruit_Mountain" title="Flower–Fruit Mountain">lava</a> from below by <a href="https://naruto.fandom.com/wiki/R%C5%8Dshi" title="Rōshi">Rōshi</a> and then <a href="https://naruto.fandom.com/wiki/Horn_Breaking" title="Horn Breaking">knocked out</a> by <a href="https://naruto.fandom.com/wiki/Han" title="Han">Han</a> who had fully transformed into the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Five-Tails" title="Five-Tails">Five-Tails</a>.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/ae/Tsunoori.png/revision/latest?cb=20130815130340"><img alt="Tsunoori" class="thumbimage lazyload" data-image-key="Tsunoori.png" data-image-name="Tsunoori.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/ae/Tsunoori.png/revision/latest/scale-to-width-down/180?cb=20130815130340" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/ae/Tsunoori.png/revision/latest?cb=20130815130340"><img alt="Tsunoori" class="thumbimage" data-image-key="Tsunoori.png" data-image-name="Tsunoori.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/ae/Tsunoori.png/revision/latest/scale-to-width-down/180?cb=20130815130340" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/ae/Tsunoori.png/revision/latest/scale-to-width-down/180?cb=20130815130340" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tsunoori.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">B and the Eight-Tails being wounded by the Five-Tails.</p> </figcaption> </figure>
+<p>As B and the Eight-Tails tried to find out if each other were all right, it later asked Naruto if he heard the Five-Tails' lamented voice. It then declared that the tailed beasts had their own emotions and watching one of their own being treated like that irritated them. The Nine-Tails, however, retorted that shinobi had always treated them like pets and that it and B were the only exceptions to this, causing the Eight-Tails to contemplate on its statement. The Nine-Tails then went on to state that according to number of tails, the Eight-Tails was second after it, so it should just hurry up and finish things, and then proceeded to fake going to sleep. After being cut off from revealing what was going on with the Nine-Tails, the Eight-Tails then chastised the fox for always ranking them based on their number of tails, something that the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/One-Tail" title="One-Tail">One-Tail</a> resented it for. As Naruto decided to reactivate the <a href="https://naruto.fandom.com/wiki/Nine-Tails_Chakra_Mode" title="Nine-Tails Chakra Mode">Nine-Tails Chakra Mode</a> and B advised against the use of shadow clones, the Eight-Tails explained to B that Naruto should have been in critical condition after using so much of the fox's chakra, leading the Eight-Tails to believe that it had stopped taking Naruto's chakra at some point. As the Eight-Tails asked the Nine-Tails what happened between the two of them, the fox remembered Naruto's words to resolve its hatred as well as his statement that having the tailed beast sealed within him wasn't always bad.
+</p><p>Rebounding from being flipped over, B attempted to stop the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Four-Tails" title="Four-Tails">Four-Tails</a> from swallowing Naruto, wrapping its tentacles around the beast. The Eight-Tails beseeched the Nine-Tails to lend Naruto its power as it did with one of his clones, but the fox stated that it would not cooperate with its jinchūriki as easily as the ox did with B, causing the Eight-Tails to question whether the Nine-Tails cared at all about what happened to Naruto. The Eight-Tails later watched in horror as Naruto was swallowed by the Four-Tails. After Naruto successfully removed <a href="https://naruto.fandom.com/wiki/Son_Gok%C5%AB" title="Son Gokū">Son Gokū</a>'s <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Black_receiver" title="Black receiver">black receiver</a>, the Eight-Tails watched on with shock as the beast was resealed into the <a href="https://naruto.fandom.com/wiki/Demonic_Statue_of_the_Outer_Path" title="Demonic Statue of the Outer Path">Demonic Statue of the Outer Path</a> in the blink of an eye. As Naruto rallied the Eight-Tails and B to get ready, the ox told him that it and B would be taking to front-line while Naruto could act as support because he was still unable to transform. After Naruto reassured them it'd be fine because they were a pair of duos, the Eight-Tails expressed shock after seeing Naruto entering his Tailed Beast Mode with <a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a>.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/8/8f/Gy%C5%ABki_intercepts_Isobu.png/revision/latest?cb=20130906021848"><img alt="Gyūki intercepts Isobu" class="thumbimage lazyload" data-image-key="Gy%C5%ABki_intercepts_Isobu.png" data-image-name="Gyūki intercepts Isobu.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/8f/Gy%C5%ABki_intercepts_Isobu.png/revision/latest/scale-to-width-down/180?cb=20130906021848" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/8/8f/Gy%C5%ABki_intercepts_Isobu.png/revision/latest?cb=20130906021848"><img alt="Gyūki intercepts Isobu" class="thumbimage" data-image-key="Gy%C5%ABki_intercepts_Isobu.png" data-image-name="Gyūki intercepts Isobu.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/8f/Gy%C5%ABki_intercepts_Isobu.png/revision/latest/scale-to-width-down/180?cb=20130906021848" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/8/8f/Gy%C5%ABki_intercepts_Isobu.png/revision/latest/scale-to-width-down/180?cb=20130906021848" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Gy%C5%ABki_intercepts_Isobu.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">B and the Eight-Tails stops the Three-Tails.</p> </figcaption> </figure>
+<p>Leaping into action to aid Naruto, who was already battling the opposing five beasts, the Eight-Tails used its tentacles to stop the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Three-Tails" title="Three-Tails">Three-Tails</a>' attempt to attack Naruto's blind spot. Simultaneously, the ox buffeted the Five-Tails, telling it that the same attack would not work twice. As the Three-Tails freed itself from the ox's grasp, it watches on in shock as the five beasts prepared a collaborative <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a> and wondered if Naruto was planning to negate the attack with a Tailed Beast Ball of his own even though he had never used it before.
+</p><p>As the two Tailed Beast Balls collided, Gyūki grabbed Rōshi's body and shielded itself from the after-effects of the blast. After Naruto successfully freed all the remaining tailed beasts, Gyūki congratulated him. Later, as Naruto mocked Tobi with the information he had just learned, B and, by extension, Gyūki looked on smirking. As the battle continued, B and Naruto launched a combination attack on the Demonic Statue of the Outer Path with a double uppercut, knocking the statue to the ground following <a href="https://naruto.fandom.com/wiki/Kakashi_Hatake" title="Kakashi Hatake">Kakashi Hatake</a> and <a href="https://naruto.fandom.com/wiki/Might_Guy" title="Might Guy">Might Guy</a>'s respective attacks. Gyūki later looked on as Tobi seemingly prepared to revive the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a>. After hearing Naruto's speech about his dreams, B revealed his sexual desires — leading Gyūki to be embarrassed for its jinchūriki.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/8/8a/B_attacks_Gedo_Mazo.png/revision/latest?cb=20131212124146"><img alt="B attacks Gedo Mazo" class="thumbimage lazyload" data-image-key="B_attacks_Gedo_Mazo.png" data-image-name="B attacks Gedo Mazo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/8a/B_attacks_Gedo_Mazo.png/revision/latest/scale-to-width-down/180?cb=20131212124146" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/8/8a/B_attacks_Gedo_Mazo.png/revision/latest?cb=20131212124146"><img alt="B attacks Gedo Mazo" class="thumbimage" data-image-key="B_attacks_Gedo_Mazo.png" data-image-name="B attacks Gedo Mazo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/8a/B_attacks_Gedo_Mazo.png/revision/latest/scale-to-width-down/180?cb=20131212124146" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/8/8a/B_attacks_Gedo_Mazo.png/revision/latest/scale-to-width-down/180?cb=20131212124146" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:B_attacks_Gedo_Mazo.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">B attacks the statue.</p> </figcaption> </figure>
+<p>While the shinobi regroup and discuss the gash in Tobi's mask, Gyūki used the opportunity to attack the statue. Moving in with a punch, it declared that the statue was wide open. However, its attack was deflected by Tobi's <a href="https://naruto.fandom.com/wiki/Uchiha_Flame_Formation" title="Uchiha Flame Formation">Uchiha Flame Formation</a> barrier, which burned its hand. Gyūki then prepared to launch the strategy that Kakashi had developed. Holding all the shinobi in his hands, Gyūki threw the trio towards Tobi. When they regrouped after Tobi's arm was hit by a seemingly unseen attack, B listened to Kakashi's explanation of Tobi's technique and then enquired if all <a href="https://naruto.fandom.com/wiki/Space%E2%80%93Time_Ninjutsu" title="Space–Time Ninjutsu">Space–Time Ninjutsu</a> shared the same dimension. When told no, B told Naruto that it still would not be easy to land an attack on an intangible person. When Kakashi stated that their belief that Tobi was becoming intangible was incorrect, B enquired once again how it was possible for their two Sharingan to share the same dimension. With Gyūki bound by Tobi's giant <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Black_receiver" title="Black receiver">black receivers</a>, the beast is shocked to see Madara arrive on their battlefield. When Naruto questioned Madara as to what had happened to the Kage, Gyūki surmised that if he was here, then the Kage must be in a bad situation. The beast later thanked Naruto as the young man freed him from the stakes. As the battle with Madara ensued, Gyūki was seemingly knocked to the ground, leading it to comment on Madara's power. When an injured Guy told it that was why Madara was worth fighting, the beast told him that he shouldn't be pushing himself so hard.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/7/74/Gyuki_ambushes_Jubi.png/revision/latest?cb=20140522121716"><img alt="Gyuki ambushes Jubi" class="thumbimage lazyload" data-image-key="Gyuki_ambushes_Jubi.png" data-image-name="Gyuki ambushes Jubi.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/74/Gyuki_ambushes_Jubi.png/revision/latest/scale-to-width-down/180?cb=20140522121716" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/7/74/Gyuki_ambushes_Jubi.png/revision/latest?cb=20140522121716"><img alt="Gyuki ambushes Jubi" class="thumbimage" data-image-key="Gyuki_ambushes_Jubi.png" data-image-name="Gyuki ambushes Jubi.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/7/74/Gyuki_ambushes_Jubi.png/revision/latest/scale-to-width-down/180?cb=20140522121716" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/7/74/Gyuki_ambushes_Jubi.png/revision/latest/scale-to-width-down/180?cb=20140522121716" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Gyuki_ambushes_Jubi.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Gyūki ambushes the Ten-Tails with a Tailed Beast Ball.</p> </figcaption> </figure>
+<p>As the battle waged on, the beast and Guy were restrained by Madara, before the Uchiha can land the finishing blow, he is intercepted by Naruto. After Might Guy's <a href="https://naruto.fandom.com/wiki/Daytime_Tiger" title="Daytime Tiger">Daytime Tiger</a> sends the legendary ninja flying away from them, Gyūki noted that Guy wasn't just acting tough. After breaking free of its constraints, Gyūki warned Naruto that the wood could suppress a tailed beast's power before turning its attention to the statue. Forming a collaborative tailed beast ball with Naruto, Gyūki fires it at the statue and believed it to be destroyed. Their celebration, however, was cut short when the smoke cleared and the Ten-Tails appeared on the battlefield. Questioning Kurama whether or not it really wanted to fight what stood before them, the ushi-oni is told by the fox that hiding wouldn't help anything. Standing alongside Kurama, who had taken charge of the situation, the beasts were attacked by the Ten-Tails before they could follow through with their strategy. Launching a <a href="https://naruto.fandom.com/wiki/Continuous_Tailed_Beast_Balls" title="Continuous Tailed Beast Balls">continuous</a> stream of Tailed Beast Balls at the beast, their attack was thwarted by the Ten-Tails and when the smoke cleared, Gyūki was missing. It was later revealed that it was warped away by Kakashi who releases the beast above the tailed beast launching a point-blank Tailed Beast Ball overhead the beast. After the Ten-Tails flicked the Tailed Beast Ball right back at Gyūki, Kurama was able to save both Gyūki and B before both tailed beasts ran out of power and proceeded to recuperate in order to regain their powers.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/ad/B_stops_the_Ten_Tails.png/revision/latest?cb=20140605133243"><img alt="B stops the Ten Tails" class="thumbimage lazyload" data-image-key="B_stops_the_Ten_Tails.png" data-image-name="B stops the Ten Tails.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/ad/B_stops_the_Ten_Tails.png/revision/latest/scale-to-width-down/180?cb=20140605133243" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/ad/B_stops_the_Ten_Tails.png/revision/latest?cb=20140605133243"><img alt="B stops the Ten Tails" class="thumbimage" data-image-key="B_stops_the_Ten_Tails.png" data-image-name="B stops the Ten Tails.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/ad/B_stops_the_Ten_Tails.png/revision/latest/scale-to-width-down/180?cb=20140605133243" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/ad/B_stops_the_Ten_Tails.png/revision/latest/scale-to-width-down/180?cb=20140605133243" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:B_stops_the_Ten_Tails.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Gyūki clashing Tailed Beast Balls with the Ten-Tails.</p> </figcaption> </figure>
+<p>Having generated enough chakra, Gyūki and B jumped into action to protect the shinobi from a Tailed Beast Ball that the Ten-Tails was going to launch at them. Now fully transformed, B recklessly stuffed Gyūki's head into the Ten-Tails' mouth and launched his own Tailed Beast Ball, both of which detonated in the beasts' body causing it to fall and writhe in pain.
+</p><p>With the chakra shrouds protecting them dissipated, Naruto being healed, and Kurama kneading more chakra, B and Gyūki announced that it was time for them to take centre-stage once again to buy the duo some time to recover as Gyūki noted that the Ten-Tails would become unstoppable if it underwent its final transformation. With <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Shikamaru" title="Shikamaru">Shikamaru</a>'s strategy initiated, and the shinobi begin to construct <a href="https://naruto.fandom.com/wiki/Earth_Release:_Practice_Brick_Technique" title="Earth Release: Practice Brick Technique">earthen</a> — albeit feeble — defences, B interceded and attempted to throw the attack off-trajectory. However, with none of their combined efforts seemingly working, and the situation looking dire, the Alliance is saved by the arrival of the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fourth_Hokage" title="Fourth Hokage">Fourth Hokage</a>, unbeknownst to them as B looked on puzzled that the attack had seemingly just vanished.
+</p>
+<h3><span id="Birth_of_the_Ten-Tails.27_Jinch.C5.ABriki"></span><span class="mw-headline" id="Birth_of_the_Ten-Tails'_Jinchūriki">Birth of the Ten-Tails' Jinchūriki</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Birth_of_the_Ten-Tails%27_Jinch%C5%ABriki" title="Birth of the Ten-Tails' Jinchūriki">Birth of the Ten-Tails' Jinchūriki</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest?cb=20250919211345"><img alt="Biju released" class="thumbimage lazyload" data-image-key="Biju_released.png" data-image-name="Biju released.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest?cb=20250919211345"><img alt="Biju released" class="thumbimage" data-image-key="Biju_released.png" data-image-name="Biju released.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Biju_released.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Gyūki reunited with the tailed beasts after freeing them from Obito.</p> </figcaption> </figure>
+<p>As Obito emerged within the barrier some time later after <a href="https://naruto.fandom.com/wiki/Six_Paths_Ten-Tails_Coffin_Seal" title="Six Paths Ten-Tails Coffin Seal">sealing</a> the beast inside himself, B asked Gyūki whether or not that was the beast's final form. It told him that it was not and that from all appearances, it seemed that the beast had been sealed before reaching its final form. When B asked if he could feel Kurama's <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Yin" title="Yin">Yin</a> and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Yang" title="Yang">Yang</a> chakra, Gyūki noted that it wasn't just Kurama's chakra. When Obito recreated a full-blown replica of the Ten-Tails' tree form, its roots started chasing and absorbing chakra from anyone in its path. Ultimately, while worn out, B with Samehada's aid was able to destroy the roots that had confronted him. After Naruto, with the help of Sasuke and the <a href="https://naruto.fandom.com/wiki/Konoha_11" title="Konoha 11">Konoha 11</a>, delivered a devastating blow against Obito, it forced the chakra of all the tailed beasts to come out of his body. B then grabbed Gyūki's chakra while Naruto, Gaara, and the rest of the Shinobi Alliance pulled the others to reduce Obito to a shell of the Ten-Tails' tree form and prevent the flower atop the tree from blooming.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest?cb=20250919131223"><img alt="Tailed Beasts vs Madara" class="thumbimage lazyload" data-image-key="Tailed_Beasts_vs_Madara.png" data-image-name="Tailed Beasts vs Madara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest?cb=20250919131223"><img alt="Tailed Beasts vs Madara" class="thumbimage" data-image-key="Tailed_Beasts_vs_Madara.png" data-image-name="Tailed Beasts vs Madara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beasts_vs_Madara.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts working together to attack Madara.</p> </figcaption> </figure>
+<p>When Madara ran towards the tailed beasts, both Shukaku and <a href="https://naruto.fandom.com/wiki/Gaara" title="Gaara">Gaara</a> conjured <a href="https://naruto.fandom.com/wiki/Wind_Release:_Sand_Buckshot" title="Wind Release: Sand Buckshot">numerous sand bullets</a> and were able to restrain the Uchiha's movements. Using the opportunity to attack, the tailed beasts each took a swing at their opponent, giving sand-manipulating duo an opening to use their <a href="https://naruto.fandom.com/wiki/Desert_Layered_Imperial_Funeral_Seal" title="Desert Layered Imperial Funeral Seal">Desert Layered Imperial Funeral Seal</a>, but Madara managed to escape the sand pyramid with his Susanoo. After evacuating the wounded shinobi from the battlefield, Gyūki and the other tailed beasts joined Naruto and Kurama in assaulting Madara, but the Uchiha survived their attacks and retreated to a safe distance. After he received his own right Rinnegan eye from a White Zetsu clone, Madara quickly summoned the Demonic Statue of the Outer Path from Obito's body, and used the Rinnegan to <a href="https://naruto.fandom.com/wiki/Limbo:_Border_Jail" title="Limbo: Border Jail">repel</a> the tailed beasts. With the tailed beasts stunned, Madara then proceeded to <a href="https://naruto.fandom.com/wiki/Demonic_Statue_Chains" title="Demonic Statue Chains">chain</a> them up and prepared to remove Yang-Kurama and Gyūki from their jinchūriki. Struggling against its confines, Gyūki apologised to B as it was extracted and sealed within the statue along with the other tailed beasts, but not before cutting off one of its tentacles, letting B survive through the chakra within it.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest?cb=20150730121101"><img alt="Tailed Beast Reunion" class="thumbimage lazyload" data-image-key="Tailed_Beast_Reunion.png" data-image-name="Tailed Beast Reunion.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest?cb=20150730121101"><img alt="Tailed Beast Reunion" class="thumbimage" data-image-key="Tailed_Beast_Reunion.png" data-image-name="Tailed Beast Reunion.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_Reunion.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts reunite with Hagoromo and Naruto.</p> </figcaption> </figure>
+<p>Later, after Madara succeeded in becoming the Ten-Tails' jinchūriki, a reformed Obito managed to steal some of Gyūki's chakra along with some of Shukaku's. When Obito sealed <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Yin" title="Yin">Yin</a> half of Kurama into a dying Naruto to save his life, Obito also sealed the Gyūki and Shukaku's chakra portion into Naruto. Inside Naruto's subconscious, Gyūki, Shukaku, and Yin-Kurama found the young jinchūriki talking with the spirit of <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>. As the other six tailed beasts manifested to join in the meeting, they all voiced their shared belief to the Sage that Naruto was the child of prophecy.
+</p>
+<h3><span id="Kaguya_.C5.8Ctsutsuki_Strikes"></span><span class="mw-headline" id="Kaguya_Ōtsutsuki_Strikes">Kaguya Ōtsutsuki Strikes</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki_Strikes" title="Kaguya Ōtsutsuki Strikes">Kaguya Ōtsutsuki Strikes</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest?cb=20160901155526"><img alt="Tailed Beast separate from Kaguya" class="thumbimage lazyload" data-image-key="Tailed_Beast_separate_from_Kaguya.png" data-image-name="Tailed Beast separate from Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest?cb=20160901155526"><img alt="Tailed Beast separate from Kaguya" class="thumbimage" data-image-key="Tailed_Beast_separate_from_Kaguya.png" data-image-name="Tailed Beast separate from Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_separate_from_Kaguya.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts being freed from the Ten-Tails.</p> </figcaption> </figure>
+<p>After Madara's ambitions were cut short by <a href="https://naruto.fandom.com/wiki/Black_Zetsu" title="Black Zetsu">Black Zetsu</a>, who revealed to be the silent manipulator of shinobi history since it was first created by <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki" title="Kaguya Ōtsutsuki">Kaguya Ōtsutsuki</a>, the black entity used Madara's body as a medium to resurrect its creator. During the battle against the tyrannical princess, Gyūki and the other tailed beasts continued to support Naruto by giving him <a href="https://naruto.fandom.com/wiki/Sage_Art:_Super_Tailed_Beast_Rasenshuriken" title="Sage Art: Super Tailed Beast Rasenshuriken">their combined power</a> to overwhelm her. Ultimately, Kaguya was defeated by Naruto and Sasuke, who used the <a href="https://naruto.fandom.com/wiki/Six_Paths_%E2%80%94_Chibaku_Tensei" title="Six Paths — Chibaku Tensei">Six Paths — Chibaku Tensei</a> to eject all the tailed beasts from her and seal her away inside a newly-created <a href="https://naruto.fandom.com/wiki/Moon" title="Moon">moon</a> within her own <a href="https://naruto.fandom.com/wiki/Kaguya%27s_Dimensions" title="Kaguya's Dimensions">dimension</a>.
+</p><p>After the spirits of Hagoromo and the past Kage summoned both the tailed beasts and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Team_Kakashi" title="Team Kakashi">Team 7</a> back to the real world, the tailed beasts began to discuss their plans for the future since they were finally free. Gyūki, who was asked by Yang-Kurama on the subject, surprised the fox when it expressed its desire to return to B. Sasuke, however, made his own intentions known: removing as many people as possible who could get in the way of his plans of leading the world through a revolution to do away with current shinobi systems, including killing all the current Kage and tailed beasts. Just as Sasuke swiftly <a href="https://naruto.fandom.com/wiki/Genjutsu:_Sharingan" title="Genjutsu: Sharingan">subdued</a> the tailed beasts with his Rinnegan and sealed them within his <a href="https://naruto.fandom.com/wiki/Chibaku_Tensei" title="Chibaku Tensei">Chibaku Tensei</a>, Naruto reassured the tailed beasts that he would save them once again. After Naruto was able to defeat and reform Sasuke, the two dispelled the Infinite Tsukuyomi and Sasuke released Gyūki along with the other tailed beasts from their prisons.
+</p>
+<h2><span class="mw-headline" id="New_Era">New Era</span></h2>
+<p>At some point after the war, Gyūki was resealed into B. Fifteen years after the Fourth Shinobi World War, B complained about how he felt bored and, as such, should go and see how Naruto was doing, only for Gyūki to note that Naruto was busy, unlike B.
+</p>
+<h3><span class="mw-headline" id="Versus_Momoshiki_Arc">Versus Momoshiki Arc</span></h3>
+<p><span class="box headnote">Main articles: <a href="https://naruto.fandom.com/wiki/Boruto:_Naruto_the_Movie" title="Boruto: Naruto the Movie">Boruto: Naruto the Movie</a> and <a href="https://naruto.fandom.com/wiki/Versus_Momoshiki_Arc" title="Versus Momoshiki Arc">Versus Momoshiki Arc</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/6/60/Gy%C5%ABki_Restrained.png/revision/latest?cb=20160729101151"><img alt="Gyūki Restrained" class="thumbimage lazyload" data-image-key="Gy%C5%ABki_Restrained.png" data-image-name="Gyūki Restrained.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/60/Gy%C5%ABki_Restrained.png/revision/latest/scale-to-width-down/180?cb=20160729101151" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/6/60/Gy%C5%ABki_Restrained.png/revision/latest?cb=20160729101151"><img alt="Gyūki Restrained" class="thumbimage" data-image-key="Gy%C5%ABki_Restrained.png" data-image-name="Gyūki Restrained.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/60/Gy%C5%ABki_Restrained.png/revision/latest/scale-to-width-down/180?cb=20160729101151" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/6/60/Gy%C5%ABki_Restrained.png/revision/latest/scale-to-width-down/180?cb=20160729101151" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Gy%C5%ABki_Restrained.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Gyūki restrained by Kinshiki.</p> </figcaption> </figure>
+<p>Gyūki and B were captured by <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Momoshiki" title="Momoshiki">Momoshiki</a> and <a href="https://naruto.fandom.com/wiki/Kinshiki_%C5%8Ctsutsuki" title="Kinshiki Ōtsutsuki">Kinshiki Ōtsutsuki</a>. B fired a Tailed Beast Ball at Momoshiki, but he absorbed and redirected the attack with his <a href="https://naruto.fandom.com/wiki/Rinnegan" title="Rinnegan">Rinnegan</a>, knocking the jinchūriki out of his Tailed Beast Mode. After they finished extracting Gyūki's chakra and throwing an unconscious B into a river to let him drown, Momoshiki commented that he was unimpressed with the tailed beast's power, as he could only produce a few <a href="https://naruto.fandom.com/wiki/Chakra_Edible_Creation" title="Chakra Edible Creation">small red pills</a> with it. Despite the injuries, Gyūki and B survived and later made a full recovery.
+</p>
+<h3><span class="mw-headline" id="One-Tail_Escort_Arc">One-Tail Escort Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/One-Tail_Escort_Arc" title="One-Tail Escort Arc">One-Tail Escort Arc</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest?cb=20200604154217"><img alt="Biju Conference" class="thumbimage lazyload" data-image-key="Biju_Conference.png" data-image-name="Biju Conference.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest?cb=20200604154217"><img alt="Biju Conference" class="thumbimage" data-image-key="Biju_Conference.png" data-image-name="Biju Conference.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Biju_Conference.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Gyūki, with the other tailed beasts in a meeting with Naruto.</p> </figcaption> </figure>
+<p>In the anime, when <a href="https://naruto.fandom.com/wiki/Urashiki_%C5%8Ctsutsuki" title="Urashiki Ōtsutsuki">Urashiki Ōtsutsuki</a> began targeting <a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> for its chakra, it was deduced he was interested in all the tailed beasts' chakra. Naruto organised a telepathic meeting with the other tailed beasts, except for <a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a>, <a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a>, and <a href="https://naruto.fandom.com/wiki/Ch%C5%8Dmei" title="Chōmei">Chōmei</a>, who each refused to accept aid from humans in fear of being captured and used again by them, despite their trust in Naruto.
+</p>
+<h3><span class="mw-headline" id="Kawaki_Arc">Kawaki Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kawaki_Arc" title="Kawaki Arc">Kawaki Arc</a></span>
+In the anime, Gyūki was gathered with the other tailed beasts as they sensed Kurama's chakra vanishing after it <a href="https://naruto.fandom.com/wiki/Baryon_Mode" title="Baryon Mode">sacrificed</a> its life in the battle against <a href="https://naruto.fandom.com/wiki/Isshiki_%C5%8Ctsutsuki" title="Isshiki Ōtsutsuki">Isshiki Ōtsutsuki</a>.
+</p>
+<h2><span class="mw-headline" id="In_Other_Media">In Other Media</span></h2>
+<h3><span class="mw-headline" id="Movies">Movies</span></h3>
+<h4><span class="mw-headline" id="Naruto_the_Movie:_Blood_Prison">Naruto the Movie: Blood Prison</span></h4>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Naruto_the_Movie:_Blood_Prison" title="Naruto the Movie: Blood Prison">Naruto the Movie: Blood Prison</a></span>
+</p>
+<h3><span class="mw-headline" id="Video_Games">Video Games</span></h3>
+<p>Gyūki is playable as B's awakening in <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_2" title="Naruto Shippūden: Ultimate Ninja Storm 2">Naruto Shippūden: Ultimate Ninja Storm 2</a></i>, <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_Generations" title="Naruto Shippūden: Ultimate Ninja Storm Generations">Naruto Shippūden: Ultimate Ninja Storm Generations</a></i>, <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_3" title="Naruto Shippūden: Ultimate Ninja Storm 3">Naruto Shippūden: Ultimate Ninja Storm 3</a></i>, <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_Revolution" title="Naruto Shippūden: Ultimate Ninja Storm Revolution">Naruto Shippūden: Ultimate Ninja Storm Revolution</a></i>, and <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_4" title="Naruto Shippūden: Ultimate Ninja Storm 4">Naruto Shippūden: Ultimate Ninja Storm 4</a></i>.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<table class="youthwiki">
+<tbody><tr>
+<td><figure class="mw-halign-left" typeof="mw:File"><span title="Springtime of Youth"><img alt="Springtime of Youth" class="mw-file-element lazyload" data-image-key="Youth_symbol.png" data-image-name="Youth symbol.png" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/3/39/Youth_symbol.png/revision/latest/scale-to-width-down/40?cb=20130120020002" decoding="async" height="33" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="40"/></span><figcaption>Springtime of Youth</figcaption></figure>
+</td>
+<td><small>The <a class="extiw" href="https://springtimeofyouth.fandom.com/wiki/" title="w:c:springtimeofyouth"><i>Springtime of Youth</i> wiki</a> has an article about this topic:
+<div style="margin-left: 10px;"><b><a class="extiw" href="https://springtimeofyouth.fandom.com/wiki/Eight-Tails" title="w:c:springtimeofyouth:Eight-Tails">Eight-Tails</a></b></div></small>
+</td></tr></tbody></table>
+<ul><li>"Gyūki" (<span lang="ja">牛鬼</span>), which literally means "ox ogre", is an alternate pronunciation for the name of the <a class="extiw" href="https://en.wikipedia.org/wiki/ushi-oni" title="wikipedia:ushi-oni">ushi-oni</a>. In Japanese folklore, an ushi-oni is a massive, brutal <a class="extiw" href="https://en.wikipedia.org/wiki/y%C5%8Dkai" title="wikipedia:yōkai">yōkai</a> with the horned head of a bull and the body of an octopus, a crab, or a spider. One legend says that it lives off the coasts of Japan and attacks fishermen.</li>
+<li>Gyūki is the only tailed beast that apparently has been shown to have a permanently damaged body.</li>
+<li>Alongside Chōmei, they are the only tailed beasts that do not have any known elemental affinity. Both are also the only beasts whose tails differ from the conventional ones that their siblings have.</li></ul>
+<h2><span class="mw-headline" id="Quotes">Quotes</span></h2>
+<ul><li>(To <a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a>) "<i>Don't measure our strength or weakness by the number of our tails, hey!</i>" (<span lang="ja">「尾の数で強い弱いを決めんじゃねーよ!」</span>, <i>"O no kazu de tsuyoi yowai o kimen janē yo!"</i>)</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251007025725
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0.001 seconds
+CPU time usage: 0.706 seconds
+Real time usage: 1.083 seconds
+Preprocessor visited node count: 6871/1000000
+Post‐expand include size: 101194/2097152 bytes
+Template argument size: 18922/2097152 bytes
+Highest expansion depth: 26/100
+Expensive parser function count: 3/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 12825/5000000 bytes
+Lua time usage: 0.050/7.000 seconds
+Lua memory usage: 1861949/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  964.923      1 -total
+ 96.01%  926.394      5 Template:Content_only
+ 95.88%  925.172      1 Template:Infobox
+ 95.42%  920.759      1 Infobox:Gyūki
+ 95.23%  918.849      1 Template:Infobox/Naruto/Character
+ 60.28%  581.688      5 Template:IBox/Box
+ 28.17%  271.861     32 Template:IBox/Row
+ 16.11%  155.453     15 Template:SemanticInputParser
+ 15.86%  153.016      6 Template:SemanticInputParser/Array
+ 10.88%  105.004      1 Template:Infobox/Debut
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:6635-0!dateformat=default!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251007025725 and revision id 1441468. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Characters</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Gy%C5%ABki">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

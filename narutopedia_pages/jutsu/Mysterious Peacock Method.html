@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Mysterious Peacock Method — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Mysterious Peacock Method</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Mysterious%20Peacock%20Method" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Mysterious Peacock Method<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Mysterious+Peacock+Method&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Mysterious Peacock Method"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Mysterious_Peacock_Method" title="Special:FormEdit/Jutsu/Mysterious Peacock Method">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">孔雀妙法</rb></ruby>­ <dfn lang="ja-Latn">(Kujaku Myōhō)</dfn></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/3/32/Mysterious_Peacock_Method.png/revision/latest?cb=20150529092320" title="Mysterious Peacock Method">
+<img alt="Mysterious Peacock Method" class="pi-image-thumbnail" data-image-key="Mysterious_Peacock_Method.png" data-image-name="Mysterious Peacock Method.png" data-relevant="1" height="204" src="https://static.wikia.nocookie.net/naruto/images/3/32/Mysterious_Peacock_Method.png/revision/latest/scale-to-width-down/268?cb=20150529092320" srcset="https://static.wikia.nocookie.net/naruto/images/3/32/Mysterious_Peacock_Method.png/revision/latest/scale-to-width-down/268?cb=20150529092320 1x, https://static.wikia.nocookie.net/naruto/images/3/32/Mysterious_Peacock_Method.png/revision/latest/scale-to-width-down/536?cb=20150529092320 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="english tv">
+<h3 class="pi-data-label pi-secondary-font">English anime</h3>
+<div class="pi-data-value pi-font">Ninja Art: Kujaku</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Encounter!_The_Boy_with_a_Star%27s_Name" title="Encounter! The Boy with a Star's Name"><i>Naruto</i> Episode #178</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Hiden" title="Hiden">Hiden</a>, <a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Kinjutsu" title="Kinjutsu">Kinjutsu</a>, <a href="https://naruto.fandom.com/wiki/Fighting_Style" title="Fighting Style">Fighting Style</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Offensive, Supplementary</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="hand signs">
+<h3 class="pi-data-label pi-secondary-font">Hand seals</h3>
+<div class="pi-data-value pi-font">Technique specific hand sign</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Akahoshi" title="Akahoshi">Akahoshi</a></li><li><a href="https://naruto.fandom.com/wiki/Hokuto" title="Hokuto">Hokuto</a></li><li><a href="https://naruto.fandom.com/wiki/Hotarubi" title="Hotarubi">Hotarubi</a></li><li><a href="https://naruto.fandom.com/wiki/Natsuhi" title="Natsuhi">Natsuhi</a></li><li><a href="https://naruto.fandom.com/wiki/Shis%C5%8D" title="Shisō">Shisō</a></li><li><a href="https://naruto.fandom.com/wiki/Sumaru" title="Sumaru">Sumaru</a></li><li><a href="https://naruto.fandom.com/wiki/Yotaka" title="Yotaka">Yotaka</a></li></ul></div></div>
+</div>
+</section>
+</aside>
+
+The <b>Mysterious Peacock Method</b> is a trademark technique of <a href="https://naruto.fandom.com/wiki/Hoshigakure" title="Hoshigakure">Hoshigakure</a> and utilises <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a>-enriching radiation produced by a <a href="https://naruto.fandom.com/wiki/Meteorite" title="Meteorite">meteorite</a> that fell 200 years prior to the start of the series.
+<p></p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Usage"><span class="tocnumber">1</span> <span class="toctext">Usage</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Drawbacks"><span class="tocnumber">2</span> <span class="toctext">Drawbacks</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Variants"><span class="tocnumber">3</span> <span class="toctext">Variants</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="about:blank#Trivia"><span class="tocnumber">4</span> <span class="toctext">Trivia</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Usage">Usage</span></h2>
+<p>The technique itself manifests in the form of a feather-shaped array behind the Hoshigakure ninja and spreading out from behind them like a peacock's tail feathers, hence the name. This chakra is easily manipulated into various shapes to create techniques, making it one of the most versatile jutsu around. These techniques are honed through Star Training, which requires the ninja to spend large amounts of time focusing on their chakra and meditating in the presence of the meteorite. 
+</p>
+<h2><span class="mw-headline" id="Drawbacks">Drawbacks</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/3/3a/Meteorite_Effects.png/revision/latest?cb=20150529114738"><img alt="Meteorite Effects" class="thumbimage lazyload" data-image-key="Meteorite_Effects.png" data-image-name="Meteorite Effects.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/3a/Meteorite_Effects.png/revision/latest/scale-to-width-down/180?cb=20150529114738" decoding="async" height="135" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/3/3a/Meteorite_Effects.png/revision/latest?cb=20150529114738"><img alt="Meteorite Effects" class="thumbimage" data-image-key="Meteorite_Effects.png" data-image-name="Meteorite Effects.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/3a/Meteorite_Effects.png/revision/latest/scale-to-width-down/180?cb=20150529114738" decoding="async" height="135" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/3/3a/Meteorite_Effects.png/revision/latest/scale-to-width-down/180?cb=20150529114738" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Meteorite_Effects.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Mizura showing the side effects from the radiation poisoning.</p> </figcaption> </figure>
+<p>The meteorite's radiation greatly increases user's chakra strength and levels, but the same enhanced chakra is highly dangerous, potentially causing great damage to their physical body. Even for those who master the technique, there is still a high chance that their body will slowly weaken and eventually perish. At least three people (including <a href="https://naruto.fandom.com/wiki/Sumaru" title="Sumaru">Sumaru</a>'s father, <a href="https://naruto.fandom.com/wiki/Hotarubi" title="Hotarubi">Hotarubi</a>, who dies from extensive exposure), show severe physical trauma. <a href="https://naruto.fandom.com/wiki/Natsuhi" title="Natsuhi">Natsuhi</a> is the only known person who endured the training with no side effecs. This led the <a href="https://naruto.fandom.com/wiki/Third_Hoshikage" title="Third Hoshikage">Third Hoshikage</a> to <a href="https://naruto.fandom.com/wiki/Kinjutsu" title="Kinjutsu">ban</a> the training. With the meteor's destruction after <a href="https://naruto.fandom.com/wiki/Akahoshi" title="Akahoshi">Akahoshi</a>'s defeat, the training became lost forever.
+</p>
+<h2><span class="mw-headline" id="Variants">Variants</span></h2>
+<div class="wikia-gallery wikia-gallery-caption-below wikia-gallery-position-left wikia-gallery-spacing-medium wikia-gallery-border-small wikia-gallery-captions-left wikia-gallery-caption-size-medium" data-seq-no="1" hash="039658b6539a42dc18e9002f67fb98a3" id="gallery-1"><div class="wikia-gallery-caption"></div><div class="wikia-gallery-item" style="width:182px; "><div class="thumb" style="height:137px;"><div class="gallery-image-wrapper accent" id="MPM_Beast-png" style="position: relative; height:135px; width:180px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:MPM_Beast.png" style="height:135px; width:180px;" title="MPM Beast.png (1.44 MB)"><noscript><img alt="Beast (獣, Kemono): The chakra feathers change to the form of an animal, such as a dog. The chakra that the beast is made of is dense enough to repel shuriken thrown at it." class="thumbimage" data-caption='&lt;b&gt;Beast&lt;/b&gt; (&lt;span lang="ja"&gt;獣&lt;/span&gt;, &lt;i&gt;Kemono&lt;/i&gt;): The chakra feathers change to the form of an animal, such as a dog. The chakra that the beast is made of is dense enough to repel shuriken thrown at it.' data-image-key="MPM_Beast.png" data-image-name="MPM Beast.png" data-relevant="1" height="135" src="https://static.wikia.nocookie.net/naruto/images/5/57/MPM_Beast.png/revision/latest/scale-to-width-down/180?cb=20150529092748" style="" title="MPM Beast.png (1.44 MB)" width="180"/></noscript><img alt="Beast (獣, Kemono): The chakra feathers change to the form of an animal, such as a dog. The chakra that the beast is made of is dense enough to repel shuriken thrown at it." class="thumbimage lazyload" data-caption='&lt;b&gt;Beast&lt;/b&gt; (&lt;span lang="ja"&gt;獣&lt;/span&gt;, &lt;i&gt;Kemono&lt;/i&gt;): The chakra feathers change to the form of an animal, such as a dog. The chakra that the beast is made of is dense enough to repel shuriken thrown at it.' data-image-key="MPM_Beast.png" data-image-name="MPM Beast.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/57/MPM_Beast.png/revision/latest/scale-to-width-down/180?cb=20150529092748" height="135" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="MPM Beast.png (1.44 MB)" width="180"/></a></div></div><div class="lightbox-caption" style="width:180px;"><b>Beast</b> (<span lang="ja">獣</span>, <i>Kemono</i>): The chakra feathers change to the form of an animal, such as a dog. The chakra that the beast is made of is dense enough to repel shuriken thrown at it.</div></div><div class="wikia-gallery-item" style="width:182px; "><div class="thumb" style="height:137px;"><div class="gallery-image-wrapper accent" id="MPM_Join-png" style="position: relative; height:135px; width:180px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:MPM_Join.png" style="height:135px; width:180px;" title="MPM Join.png (1.34 MB)"><noscript><img alt="Join (合, Go, English TV: Synthesis): Combines two chakra beasts into one larger beast." class="thumbimage" data-caption='&lt;b&gt;Join&lt;/b&gt; (&lt;span lang="ja"&gt;合&lt;/span&gt;, &lt;i&gt;Go&lt;/i&gt;, &lt;i&gt;English TV:&lt;/i&gt; Synthesis): Combines two chakra beasts into one larger beast.' data-image-key="MPM_Join.png" data-image-name="MPM Join.png" data-relevant="1" height="135" src="https://static.wikia.nocookie.net/naruto/images/5/5e/MPM_Join.png/revision/latest/scale-to-width-down/180?cb=20150529092830" style="" title="MPM Join.png (1.34 MB)" width="180"/></noscript><img alt="Join (合, Go, English TV: Synthesis): Combines two chakra beasts into one larger beast." class="thumbimage lazyload" data-caption='&lt;b&gt;Join&lt;/b&gt; (&lt;span lang="ja"&gt;合&lt;/span&gt;, &lt;i&gt;Go&lt;/i&gt;, &lt;i&gt;English TV:&lt;/i&gt; Synthesis): Combines two chakra beasts into one larger beast.' data-image-key="MPM_Join.png" data-image-name="MPM Join.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/5e/MPM_Join.png/revision/latest/scale-to-width-down/180?cb=20150529092830" height="135" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="MPM Join.png (1.34 MB)" width="180"/></a></div></div><div class="lightbox-caption" style="width:180px;"><b>Join</b> (<span lang="ja">合</span>, <i>Go</i>, <i>English TV:</i> Synthesis): Combines two chakra beasts into one larger beast.</div></div><div class="wikia-gallery-item" style="width:182px; "><div class="thumb" style="height:137px;"><div class="gallery-image-wrapper accent" id="MPM_Destroy-png" style="position: relative; height:135px; width:180px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:MPM_Destroy.png" style="height:135px; width:180px;" title="MPM Destroy.png (1.12 MB)"><noscript><img alt="Destroy (斬, Zan, English TV: Cut): The chakra feathers are used to attack." class="thumbimage" data-caption='&lt;b&gt;Destroy&lt;/b&gt; (&lt;span lang="ja"&gt;斬&lt;/span&gt;, &lt;i&gt;Zan&lt;/i&gt;, &lt;i&gt;English TV:&lt;/i&gt; Cut): The chakra feathers are used to attack.' data-image-key="MPM_Destroy.png" data-image-name="MPM Destroy.png" data-relevant="1" height="135" src="https://static.wikia.nocookie.net/naruto/images/f/f8/MPM_Destroy.png/revision/latest/scale-to-width-down/180?cb=20150529092704" style="" title="MPM Destroy.png (1.12 MB)" width="180"/></noscript><img alt="Destroy (斬, Zan, English TV: Cut): The chakra feathers are used to attack." class="thumbimage lazyload" data-caption='&lt;b&gt;Destroy&lt;/b&gt; (&lt;span lang="ja"&gt;斬&lt;/span&gt;, &lt;i&gt;Zan&lt;/i&gt;, &lt;i&gt;English TV:&lt;/i&gt; Cut): The chakra feathers are used to attack.' data-image-key="MPM_Destroy.png" data-image-name="MPM Destroy.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/f/f8/MPM_Destroy.png/revision/latest/scale-to-width-down/180?cb=20150529092704" height="135" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="MPM Destroy.png (1.12 MB)" width="180"/></a></div></div><div class="lightbox-caption" style="width:180px;"><b>Destroy</b> (<span lang="ja">斬</span>, <i>Zan</i>, <i>English TV:</i> Cut): The chakra feathers are used to attack.</div></div><div class="wikia-gallery-item" style="width:182px; "><div class="thumb" style="height:137px;"><div class="gallery-image-wrapper accent" id="MPM_Wings-png" style="position: relative; height:135px; width:180px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:MPM_Wings.png" style="height:135px; width:180px;" title="MPM Wings.png (1.57 MB)"><noscript><img alt="Wings (翼, Yoku): The chakra feathers form wings strong enough to support a normal sized human in short flight." class="thumbimage" data-caption='&lt;b&gt;Wings&lt;/b&gt; (&lt;span lang="ja"&gt;翼&lt;/span&gt;, &lt;i&gt;Yoku&lt;/i&gt;): The chakra feathers form wings strong enough to support a normal sized human in short flight.' data-image-key="MPM_Wings.png" data-image-name="MPM Wings.png" data-relevant="1" height="135" src="https://static.wikia.nocookie.net/naruto/images/8/8a/MPM_Wings.png/revision/latest/scale-to-width-down/180?cb=20150529092526" style="" title="MPM Wings.png (1.57 MB)" width="180"/></noscript><img alt="Wings (翼, Yoku): The chakra feathers form wings strong enough to support a normal sized human in short flight." class="thumbimage lazyload" data-caption='&lt;b&gt;Wings&lt;/b&gt; (&lt;span lang="ja"&gt;翼&lt;/span&gt;, &lt;i&gt;Yoku&lt;/i&gt;): The chakra feathers form wings strong enough to support a normal sized human in short flight.' data-image-key="MPM_Wings.png" data-image-name="MPM Wings.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/8a/MPM_Wings.png/revision/latest/scale-to-width-down/180?cb=20150529092526" height="135" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="MPM Wings.png (1.57 MB)" width="180"/></a></div></div><div class="lightbox-caption" style="width:180px;"><b>Wings</b> (<span lang="ja">翼</span>, <i>Yoku</i>): The chakra feathers form wings strong enough to support a normal sized human in short flight.</div></div><div class="wikia-gallery-item" style="width:182px; "><div class="thumb" style="height:137px;"><div class="gallery-image-wrapper accent" id="MPM_Choke-png" style="position: relative; height:135px; width:180px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:MPM_Choke.png" style="height:135px; width:180px;" title="MPM Choke.png (1.29 MB)"><noscript><img alt="The chakra feathers turn into ropes to ensnare and strangle a target." class="thumbimage" data-caption="The chakra feathers turn into ropes to ensnare and strangle a target." data-image-key="MPM_Choke.png" data-image-name="MPM Choke.png" data-relevant="1" height="135" src="https://static.wikia.nocookie.net/naruto/images/a/a7/MPM_Choke.png/revision/latest/scale-to-width-down/180?cb=20150529094732" style="" title="MPM Choke.png (1.29 MB)" width="180"/></noscript><img alt="The chakra feathers turn into ropes to ensnare and strangle a target." class="thumbimage lazyload" data-caption="The chakra feathers turn into ropes to ensnare and strangle a target." data-image-key="MPM_Choke.png" data-image-name="MPM Choke.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/a7/MPM_Choke.png/revision/latest/scale-to-width-down/180?cb=20150529094732" height="135" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="MPM Choke.png (1.29 MB)" width="180"/></a></div></div><div class="lightbox-caption" style="width:180px;">The chakra feathers turn into ropes to ensnare and strangle a target.</div></div><div class="wikia-gallery-item" style="width:182px; "><div class="thumb" style="height:137px;"><div class="gallery-image-wrapper accent" id="MPM_Apparition-PNG" style="position: relative; height:135px; width:180px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:MPM_Apparition.PNG" style="height:135px; width:180px;" title="MPM Apparition.PNG (1.62 MB)"><noscript><img alt="If the user is close to death, they can use their remaining chakra to draw a symbol in the ground which allows them to temporarily resurrect themselves as a ghost-like apparition to even the score with whoever killed them. This apparition can seemingly deflect attacks, use any moves it could in life and be cloned through another's use of the Shadow Clone Technique." class="thumbimage" data-caption="If the user is close to death, they can use their remaining chakra to draw a symbol in the ground which allows them to temporarily resurrect themselves as a ghost-like apparition to even the score with whoever killed them. This apparition can seemingly deflect attacks, use any moves it could in life and be cloned through another's use of the ." data-image-key="MPM_Apparition.PNG" data-image-name="MPM Apparition.PNG" data-relevant="1" height="135" src="https://static.wikia.nocookie.net/naruto/images/2/2a/MPM_Apparition.PNG/revision/latest/scale-to-width-down/180?cb=20150529114512" style="" title="MPM Apparition.PNG (1.62 MB)" width="180"/></noscript><img alt="If the user is close to death, they can use their remaining chakra to draw a symbol in the ground which allows them to temporarily resurrect themselves as a ghost-like apparition to even the score with whoever killed them. This apparition can seemingly deflect attacks, use any moves it could in life and be cloned through another's use of the Shadow Clone Technique." class="thumbimage lazyload" data-caption="If the user is close to death, they can use their remaining chakra to draw a symbol in the ground which allows them to temporarily resurrect themselves as a ghost-like apparition to even the score with whoever killed them. This apparition can seemingly deflect attacks, use any moves it could in life and be cloned through another's use of the ." data-image-key="MPM_Apparition.PNG" data-image-name="MPM Apparition.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/2a/MPM_Apparition.PNG/revision/latest/scale-to-width-down/180?cb=20150529114512" height="135" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="MPM Apparition.PNG (1.62 MB)" width="180"/></a></div></div><div class="lightbox-caption" style="width:180px;">If the user is close to death, they can use their remaining chakra to draw a symbol in the ground which allows them to temporarily resurrect themselves as a ghost-like apparition to even the score with whoever killed them. This apparition can seemingly deflect attacks, use any moves it could in life and be cloned through another's use of the <a href="https://naruto.fandom.com/wiki/Shadow_Clone_Technique" title="Shadow Clone Technique">Shadow Clone Technique</a>.</div></div><div class="wikia-gallery-item" style="width:182px; "><div class="thumb" style="height:137px;"><div class="gallery-image-wrapper accent" id="MPM_Dragon-png" style="position: relative; height:135px; width:180px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:MPM_Dragon.png" style="height:135px; width:180px;" title="MPM Dragon.png (1.35 MB)"><noscript><img alt="Dragon (龍, Ryū): After implanting the star into himself, Akahoshi formed a dragon that could shoot blasts of star chakra at the opponent, and can also grow wings to increase its power." class="thumbimage" data-caption='&lt;b&gt;Dragon&lt;/b&gt; (&lt;span lang="ja"&gt;龍&lt;/span&gt;, &lt;i&gt;Ryū&lt;/i&gt;): After implanting the star into himself, Akahoshi formed a dragon that could shoot blasts of star chakra at the opponent, and can also grow wings to increase its power.' data-image-key="MPM_Dragon.png" data-image-name="MPM Dragon.png" data-relevant="1" height="135" src="https://static.wikia.nocookie.net/naruto/images/a/ab/MPM_Dragon.png/revision/latest/scale-to-width-down/180?cb=20150529114638" style="" title="MPM Dragon.png (1.35 MB)" width="180"/></noscript><img alt="Dragon (龍, Ryū): After implanting the star into himself, Akahoshi formed a dragon that could shoot blasts of star chakra at the opponent, and can also grow wings to increase its power." class="thumbimage lazyload" data-caption='&lt;b&gt;Dragon&lt;/b&gt; (&lt;span lang="ja"&gt;龍&lt;/span&gt;, &lt;i&gt;Ryū&lt;/i&gt;): After implanting the star into himself, Akahoshi formed a dragon that could shoot blasts of star chakra at the opponent, and can also grow wings to increase its power.' data-image-key="MPM_Dragon.png" data-image-name="MPM Dragon.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/ab/MPM_Dragon.png/revision/latest/scale-to-width-down/180?cb=20150529114638" height="135" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="MPM Dragon.png (1.35 MB)" width="180"/></a></div></div><div class="lightbox-caption" style="width:180px;"><b>Dragon</b> (<span lang="ja">龍</span>, <i>Ryū</i>): After implanting the star into himself, Akahoshi formed a dragon that could shoot blasts of star chakra at the opponent, and can also grow wings to increase its power.</div></div><div class="wikia-gallery-item" style="width:182px; "><div class="thumb" style="height:137px;"><div class="gallery-image-wrapper accent" id="MPM_Rope-png" style="position: relative; height:135px; width:180px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:MPM_Rope.png" style="height:135px; width:180px;" title="MPM Rope.png (1.06 MB)"><noscript><img alt="Chakra Rope (チャクラの縄, Chakura no Nawa): The user extends their chakra into a binding rope that cannot be cut." class="thumbimage" data-caption='&lt;b&gt;Chakra Rope&lt;/b&gt; (&lt;span lang="ja"&gt;チャクラの縄&lt;/span&gt;, &lt;i&gt;Chakura no Nawa&lt;/i&gt;): The user extends their chakra into a binding rope that cannot be cut.' data-image-key="MPM_Rope.png" data-image-name="MPM Rope.png" data-relevant="1" height="135" src="https://static.wikia.nocookie.net/naruto/images/f/f4/MPM_Rope.png/revision/latest/scale-to-width-down/180?cb=20150529095352" style="" title="MPM Rope.png (1.06 MB)" width="180"/></noscript><img alt="Chakra Rope (チャクラの縄, Chakura no Nawa): The user extends their chakra into a binding rope that cannot be cut." class="thumbimage lazyload" data-caption='&lt;b&gt;Chakra Rope&lt;/b&gt; (&lt;span lang="ja"&gt;チャクラの縄&lt;/span&gt;, &lt;i&gt;Chakura no Nawa&lt;/i&gt;): The user extends their chakra into a binding rope that cannot be cut.' data-image-key="MPM_Rope.png" data-image-name="MPM Rope.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/f/f4/MPM_Rope.png/revision/latest/scale-to-width-down/180?cb=20150529095352" height="135" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="MPM Rope.png (1.06 MB)" width="180"/></a></div></div><div class="lightbox-caption" style="width:180px;"><b>Chakra Rope</b> (<span lang="ja">チャクラの縄</span>, <i>Chakura no Nawa</i>): The user extends their chakra into a binding rope that cannot be cut.</div></div><div class="wikia-gallery-item" style="width:182px; "><div class="thumb" style="height:137px;"><div class="gallery-image-wrapper accent" id="MPM_Chakra_Predation-png" style="position: relative; height:135px; width:180px;"><a class="image lightbox" href="https://naruto.fandom.com/wiki/File:MPM_Chakra_Predation.png" style="height:135px; width:180px;" title="MPM Chakra Predation.png (1.16 MB)"><noscript><img alt="Chakra Predation (チャクラの捕食, Chakura no Hoshoku): The user steals star chakra from another comrade and devours it, making their own stronger." class="thumbimage" data-caption='&lt;b&gt;Chakra Predation&lt;/b&gt; (&lt;span lang="ja"&gt;チャクラの捕食&lt;/span&gt;, &lt;i&gt;Chakura no Hoshoku&lt;/i&gt;): The user steals star chakra from another comrade and devours it, making their own stronger.' data-image-key="MPM_Chakra_Predation.png" data-image-name="MPM Chakra Predation.png" data-relevant="1" height="135" src="https://static.wikia.nocookie.net/naruto/images/a/a3/MPM_Chakra_Predation.png/revision/latest/scale-to-width-down/180?cb=20150529111930" style="" title="MPM Chakra Predation.png (1.16 MB)" width="180"/></noscript><img alt="Chakra Predation (チャクラの捕食, Chakura no Hoshoku): The user steals star chakra from another comrade and devours it, making their own stronger." class="thumbimage lazyload" data-caption='&lt;b&gt;Chakra Predation&lt;/b&gt; (&lt;span lang="ja"&gt;チャクラの捕食&lt;/span&gt;, &lt;i&gt;Chakura no Hoshoku&lt;/i&gt;): The user steals star chakra from another comrade and devours it, making their own stronger.' data-image-key="MPM_Chakra_Predation.png" data-image-name="MPM Chakra Predation.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/a3/MPM_Chakra_Predation.png/revision/latest/scale-to-width-down/180?cb=20150529111930" height="135" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" style="" title="MPM Chakra Predation.png (1.16 MB)" width="180"/></a></div></div><div class="lightbox-caption" style="width:180px;"><b>Chakra Predation</b> (<span lang="ja">チャクラの捕食</span>, <i>Chakura no Hoshoku</i>): The user steals star chakra from another comrade and devours it, making their own stronger.</div></div></div>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>When Akahoshi implanted the meteorite into himself, a spectral dragon was formed. However, this may not be a true technique, as Akahoshi was under control of the meteorite and did not form the dragon himself.</li></ul>
+<!-- 
+NewPP limit report
+Cached time: 20251007210603
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.174 seconds
+Real time usage: 0.227 seconds
+Preprocessor visited node count: 311/1000000
+Post‐expand include size: 1890/2097152 bytes
+Template argument size: 68/2097152 bytes
+Highest expansion depth: 5/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 20098/5000000 bytes
+Lua time usage: 0.101/7.000 seconds
+Lua memory usage: 1901285/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  209.422      1 -total
+ 87.64%  183.543      1 Template:Infobox/Jutsu
+  7.86%   16.453      7 Template:Translation
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:6849-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251007210603 and revision id 1453889. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Mysterious%20Peacock%20Method">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

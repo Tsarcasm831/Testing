@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Shukaku — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Shukaku</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Shukaku" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="infobox box colored bordered innerbordered fill-td type-character list-noicon float-right-clear"><tbody><tr><th class="mainheader" colspan="2"><span class="plainlinks edit-infobox"><a class="text" href="https://naruto.fandom.com/wiki/Infobox:Shukaku?action=formedit" rel="noreferrer noopener" target="_blank">edit</a></span>Shukaku <a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bcharacters%5D=Shukaku&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Shukaku"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a> <span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Special:Browse/Shukaku" title="Special:Browse/Shukaku"><img class="mw-file-element" data-image-key="Browse_Information.svg" data-image-name="Browse Information.svg" data-relevant="0" decoding="async" height="19" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/ab/Browse_Information.svg/revision/latest?cb=20221026163711" width="19"/></a></span></th></tr>
+<tr>
+<td class="imagecell" colspan="2"><span typeof="mw:File"><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/9/99/Shukaku.png/revision/latest?cb=20140916210030"><img class="mw-file-element" data-image-key="Shukaku.png" data-image-name="Shukaku.png" data-relevant="1" decoding="async" height="169" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/9/99/Shukaku.png/revision/latest/scale-to-width-down/300?cb=20140916210030" width="300"/></a></span></td></tr>
+<tr><th class="mainheader lightheader" colspan="2"><span class="title" lang="ja">守鶴 Shukaku</span>
+<p><span class="title other">
+</span></p>
+<ul><li>One-Tail (<span lang="ja">一尾</span>, <i>Ichibi</i>)</li>
+<li>One-Tailed Shukaku (<span lang="ja">一尾の守鶴</span>, <i>Ichibi no Shukaku</i>)</li>
+<li>The Incarnation of Sand (<span lang="ja">砂の化身</span>, <i>Suna no Keshin</i>, <i>English TV:</i> The Manifestation of the Sand)</li>
+<li>Shukaku of the Sand (<span lang="ja">砂の守鶴</span>, <i>Suna no Shukaku</i>, <i>English TV:</i> Shukaku the Sand Spirit)</li>
+<li>Monster Tanuki (<span lang="ja">化け狸</span>, <i>Bakedanuki</i>)</li></ul>
+</th></tr><tr><th class="mainheader" colspan="2">Debut
+	</th></tr><tr><th>Manga
+      </th><td><a href="https://naruto.fandom.com/wiki/The_Naruto_Shinobi_Handbook!!" title="The Naruto Shinobi Handbook!!"><i>Naruto</i> Chapter #134</a>
+</td></tr><tr><th>Anime
+      </th><td><a href="https://naruto.fandom.com/wiki/Naruto%27s_Ninja_Handbook" title="Naruto's Ninja Handbook"><i>Naruto</i> Episode #78</a>
+</td></tr><tr><th>Novel
+      </th><td><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i>
+</td></tr><tr><th>Movie
+      </th><td><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i>
+</td></tr><tr><th>Game
+      </th><td><i><a href="https://naruto.fandom.com/wiki/Naruto:_Ultimate_Ninja" title="Naruto: Ultimate Ninja">Naruto: Ultimate Ninja</a></i>
+</td></tr><tr><th>OVA
+      </th><td><i><a href="https://naruto.fandom.com/wiki/Naruto_x_UT" title="Naruto x UT">Naruto x UT</a></i>
+</td></tr><tr><th>Appears in
+	</th><td>Anime, Manga, Novel, Game, Movie
+	</td></tr><tr><th class="mainheader" colspan="2">Voice Actors
+	</th></tr><tr><th>Japanese
+        </th><td>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Hiroshi_Iwasaki" title="wikipedia:Hiroshi Iwasaki">Hiroshi Iwasaki</a> <span title='Search the other 1 pages containing the property "Voice Actors" with the value "Hiroshi Iwasaki"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Hiroshi+Iwasaki" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span></li></ul>
+</td></tr><tr><th>English
+        </th><td>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Kirk_Thornton" title="wikipedia:Kirk Thornton">Kirk Thornton</a> <span title='Search the other 36 pages containing the property "Voice Actors" with the value "Kirk Thornton"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Kirk+Thornton" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span></li></ul>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Liam_O%27Brien" title="wikipedia:Liam O'Brien">Liam O'Brien</a> <span title="Search the other 14 pages containing the property &quot;Voice Actors&quot; with the value &quot;Liam O'Brien&quot;"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Liam+O%27Brien" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span>  (Video games)</li></ul>
+</td></tr><tr><th class="mainheader" colspan="2">Personal
+	</th></tr><tr><th>Species
+	</th><td><a href="https://naruto.fandom.com/wiki/Tanuki" title="Tanuki">Tanuki</a>
+</td></tr><tr><th>Kekkei Genkai
+	</th><td>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Magnet_Release" title="Magnet Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Magnet.svg" data-image-name="Nature Icon Magnet.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/7/7a/Nature_Icon_Magnet.svg/revision/latest/scale-to-width-down/18?cb=20100919225105" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Magnet_Release" title="Magnet Release">Magnet Release</a> </li></ul>
+</td></tr><tr><th>Classification
+        </th><td>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast" title="Tailed Beast">Tailed Beast</a></li></ul>
+</td></tr><tr><th>Jinchūriki
+	</th><td>
+<ul><li><a href="https://naruto.fandom.com/wiki/Bunpuku" title="Bunpuku">Bunpuku</a> </li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Gaara" title="Gaara">Gaara</a> </li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Obito_Uchiha" title="Obito Uchiha">Obito Uchiha</a> </li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> </li></ul>
+</td></tr><tr><th>Affiliation
+        </th><td>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Sunagakure" title="Sunagakure"><img class="mw-file-element lazyload" data-image-key="Sunagakure_Symbol.svg" data-image-name="Sunagakure Symbol.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/1/18/Sunagakure_Symbol.svg/revision/latest/scale-to-width-down/18?cb=20100714205222" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Sunagakure" title="Sunagakure">Sunagakure</a></li>
+<li class="mw-empty-elt"></li></ul>
+</td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Family
+	</th></tr><tr><td class="">
+<ul><li><a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a> (Creator)</li>
+<li><a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Isobu" title="Isobu">Isobu</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Son_Gok%C5%AB" title="Son Gokū">Son Gokū</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Saiken" title="Saiken">Saiken</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Ch%C5%8Dmei" title="Chōmei">Chōmei</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Gy%C5%ABki" title="Gyūki">Gyūki</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a> (Sibling)</li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Nature Type
+        </th></tr><tr><td class="">
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Magnet_Release" title="Magnet Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Magnet.svg" data-image-name="Nature Icon Magnet.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/7/7a/Nature_Icon_Magnet.svg/revision/latest/scale-to-width-down/18?cb=20100919225105" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Magnet_Release" title="Magnet Release">Magnet Release</a></li></ul>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Wind_Release" title="Wind Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Wind.svg" data-image-name="Nature Icon Wind.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/7/7a/Nature_Icon_Wind.svg/revision/latest/scale-to-width-down/18?cb=20091012163149" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Wind_Release" title="Wind Release">Wind Release</a></li></ul>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Earth_Release" title="Earth Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Earth.svg" data-image-name="Nature Icon Earth.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/5/52/Nature_Icon_Earth.svg/revision/latest/scale-to-width-down/18?cb=20091012162502" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Earth_Release" title="Earth Release">Earth Release</a></li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Unique Traits
+	</th></tr><tr><td class="">
+<ul><li>Manipulates <a href="https://naruto.fandom.com/wiki/Sand" title="Sand">sand</a></li>
+<li>Influences its sleeping <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki" title="Jinchūriki">jinchūriki</a></li>
+<li>Natural <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Cursed_seal" title="Cursed seal">cursed seal</a> markings</li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible mw-collapsed"><tbody><tr><th class="mainheader"><a class="text" href="https://naruto.fandom.com/index.php?title=Special%3AAsk&amp;offset=0&amp;limit=500&amp;q=%5B%5BConcept%3AJutsu%5D%5D%5B%5BUser+tech%3A%3AShukaku%5D%5D&amp;po=%3FAppears+in%3DMedia%0A%3FJutsu+classification%3DClassification%0A%3FChakra+Nature%0A%3FJutsu+class+type%3DClass%0A%3FJutsu+range%3DRange" rel="noreferrer noopener" target="_blank">Jutsu</a></th></tr><tr><td class="">
+<p class="mw-empty-elt">
+</p>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Chakra_Transfer_Technique" title="Chakra Transfer Technique">Chakra Transfer Technique</a></i></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Desert_Layered_Imperial_Funeral_Seal" title="Desert Layered Imperial Funeral Seal">Desert Layered Imperial Funeral Seal</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Great_Roar" title="Great Roar">Great Roar</a> <sup>(Anime only)</sup></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Full_Charge" title="Tailed Beast Full Charge">Tailed Beast Full Charge</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Telepathy" title="Tailed Beast Telepathy">Tailed Beast Telepathy</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Wind_Release:_Drilling_Air_Bullet" title="Wind Release: Drilling Air Bullet">Wind Release: Drilling Air Bullet</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Wind_Release:_Sand_Buckshot" title="Wind Release: Sand Buckshot">Wind Release: Sand Buckshot</a></li></ul></td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible mw-collapsed"><tbody><tr><th class="mainheader"><a class="text" href="https://naruto.fandom.com/index.php?title=Special%3AAsk&amp;offset=0&amp;limit=500&amp;q=%5B%5BConcept%3ATools%5D%5D%5B%5BUser+tech%3A%3AShukaku%5D%5D&amp;p=format%3Dbroadtable" rel="noreferrer noopener" target="_blank">Tools</a></th></tr><tr><td class="">
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Sand" title="Sand">Sand</a></li></ul></td></tr></tbody></table></td></tr></tbody></table>
+<p><b>Shukaku</b> (<span lang="ja">守鶴</span>), more commonly known as the <b>One-Tail</b> (<span lang="ja">一尾</span>, <i>Ichibi</i>), is one of the nine <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beasts" title="Tailed beasts">tailed beasts</a>. It was last sealed within <a href="https://naruto.fandom.com/wiki/Gaara" title="Gaara">Gaara</a> of <a href="https://naruto.fandom.com/wiki/Sunagakure" title="Sunagakure">Sunagakure</a>, after being sealed in two other <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki" title="Jinchūriki">jinchūriki</a> before him.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Background"><span class="tocnumber">1</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Personality"><span class="tocnumber">2</span> <span class="toctext">Personality</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Appearance"><span class="tocnumber">3</span> <span class="toctext">Appearance</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="about:blank#Abilities"><span class="tocnumber">4</span> <span class="toctext">Abilities</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="about:blank#Physical_and_Chakra_Prowess"><span class="tocnumber">4.1</span> <span class="toctext">Physical and Chakra Prowess</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="about:blank#Ninjutsu"><span class="tocnumber">4.2</span> <span class="toctext">Ninjutsu</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="about:blank#Sand_Manipulation"><span class="tocnumber">4.2.1</span> <span class="toctext">Sand Manipulation</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="about:blank#Nature_Transformation"><span class="tocnumber">4.2.2</span> <span class="toctext">Nature Transformation</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="about:blank#Part_I"><span class="tocnumber">5</span> <span class="toctext">Part I</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="about:blank#Konoha_Crush"><span class="tocnumber">5.1</span> <span class="toctext">Konoha Crush</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="about:blank#Sunagakure_Support_Mission"><span class="tocnumber">5.2</span> <span class="toctext">Sunagakure Support Mission</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="about:blank#Interlude"><span class="tocnumber">6</span> <span class="toctext">Interlude</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="about:blank#In_Naruto's_Footsteps:_The_Friends'_Paths"><span class="tocnumber">6.1</span> <span class="toctext">In Naruto's Footsteps: The Friends' Paths</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="about:blank#Part_II"><span class="tocnumber">7</span> <span class="toctext">Part II</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="about:blank#Kazekage_Rescue_Mission"><span class="tocnumber">7.1</span> <span class="toctext">Kazekage Rescue Mission</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="about:blank#Birth_of_the_Ten-Tails'_Jinch%C5%ABriki"><span class="tocnumber">7.2</span> <span class="toctext">Birth of the Ten-Tails' Jinchūriki</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="about:blank#Kaguya_%C5%8Ctsutsuki_Strikes"><span class="tocnumber">7.3</span> <span class="toctext">Kaguya Ōtsutsuki Strikes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="about:blank#New_Era"><span class="tocnumber">8</span> <span class="toctext">New Era</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="about:blank#Versus_Momoshiki_Arc"><span class="tocnumber">8.1</span> <span class="toctext">Versus Momoshiki Arc</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="about:blank#One-Tail_Escort_Arc"><span class="tocnumber">8.2</span> <span class="toctext">One-Tail Escort Arc</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="about:blank#Kawaki_Arc"><span class="tocnumber">8.3</span> <span class="toctext">Kawaki Arc</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-22"><a href="about:blank#In_Other_Media"><span class="tocnumber">9</span> <span class="toctext">In Other Media</span></a>
+<ul>
+<li class="toclevel-2 tocsection-23"><a href="about:blank#Video_Games"><span class="tocnumber">9.1</span> <span class="toctext">Video Games</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-24"><a href="about:blank#Trivia"><span class="tocnumber">10</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-25"><a href="about:blank#Quotes"><span class="tocnumber">11</span> <span class="toctext">Quotes</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="about:blank#References"><span class="tocnumber">12</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Background">Background</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest?cb=20150728221849"><img alt="Young Bijuu and Hagoromo" class="thumbimage lazyload" data-image-key="Young_Bijuu_and_Hagoromo.png" data-image-name="Young Bijuu and Hagoromo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest?cb=20150728221849"><img alt="Young Bijuu and Hagoromo" class="thumbimage" data-image-key="Young_Bijuu_and_Hagoromo.png" data-image-name="Young Bijuu and Hagoromo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Young_Bijuu_and_Hagoromo.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The young tailed beasts with Hagoromo.</p> </figcaption> </figure>
+<p>Shukaku and the tailed beasts first came into being in the waning days of <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>, who used his <a href="https://naruto.fandom.com/wiki/Creation_of_All_Things_Technique" title="Creation of All Things Technique">Creation of All Things Technique</a> to divide the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a>' chakra into nine separate bodies and giving each a name. Some time after being created, the Sage explained to the young tailed beasts that a link existed between them despite their separation. He also foretold of a day when they would be brought together again - though not as they were - and that at that time someone would emerge to show them what true power is. In the anime, before his death, Hagoromo sent Shukaku to live in a temple built for the purpose of protecting it in a desert region that would later become part of the <a href="https://naruto.fandom.com/wiki/Land_of_Wind" title="Land of Wind">Land of Wind</a>.
+</p><p>Long before the <a href="https://naruto.fandom.com/wiki/First_Shinobi_World_War" title="First Shinobi World War">First Shinobi World War</a>, Shukaku was captured by disciples of a temple and kept in Sunagakure, to which the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/First_Kazekage" title="First Kazekage">First Kazekage</a>, who was invited along with other first Kage by <a href="https://naruto.fandom.com/wiki/Hashirama_Senju" title="Hashirama Senju">Hashirama Senju</a> into the first <a href="https://naruto.fandom.com/wiki/Five_Kage_Summit" title="Five Kage Summit">Five Kage Summit</a>, attempted to use his possession of the tanuki as leverage to gain wealth for his nation, as opposed to gaining another tailed beast.
+</p>
+<table align="right"><tbody><tr><th></th><td><figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a href="https://naruto.fandom.com/wiki/File:Shukaku_and_Bunpuku.png" title="File:Shukaku and Bunpuku.png"><img alt="Shukaku and Bunpuku" class="thumbimage lazyload" data-image-key="Shukaku_and_Bunpuku.png" data-image-name="Shukaku and Bunpuku.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/8b/Shukaku_and_Bunpuku.png/revision/latest/scale-to-width-down/180?cb=20141218130049" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a href="https://naruto.fandom.com/wiki/File:Shukaku_and_Bunpuku.png" title="File:Shukaku and Bunpuku.png"><img alt="Shukaku and Bunpuku" class="thumbimage" data-image-key="Shukaku_and_Bunpuku.png" data-image-name="Shukaku and Bunpuku.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/8b/Shukaku_and_Bunpuku.png/revision/latest/scale-to-width-down/180?cb=20141218130049" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/8/8b/Shukaku_and_Bunpuku.png/revision/latest/scale-to-width-down/180?cb=20141218130049" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Shukaku_and_Bunpuku.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku sealed in Bunpuku.</p> </figcaption> </figure></td></tr></tbody></table>
+<p>Shukaku's first <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki" title="Jinchūriki">jinchūriki</a> was a Suna priest named <a href="https://naruto.fandom.com/wiki/Bunpuku" title="Bunpuku">Bunpuku</a>, who was locked away in a dungeon with the giant tea kettle, and was kept under constant guard. Over time, the citizens of Sunagakure came to believe that Shukaku itself was a <a class="extiw" href="https://en.wikipedia.org/wiki/Ikiry%C5%8D" title="wikipedia:Ikiryō">living ghost</a> (<span lang="ja">生霊</span>, <i>ikiryō</i>) of a corrupted priest sealed inside a tea kettle. Despite the animosity the village showed for Shukaku and its host, the elderly priest held no ill-will towards the tanuki nor the villagers, viewing it as an equal and was content as long as Shukaku hadn't forgotten his name. Shukaku eventually came to appreciate Bunpuku and would later remember the words he imparted to it: that someday someone would appear in the world to teach it about the heart and acceptance. Shukaku had another jinchūriki who inspired the <a href="https://naruto.fandom.com/wiki/Third_Kazekage" title="Third Kazekage">Third Kazekage</a> to create his <a href="https://naruto.fandom.com/wiki/Iron_Sand" title="Iron Sand">Iron Sand</a> <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fighting_style" title="Fighting style">fighting style</a>. Shukaku was eventually removed from their bodies, resulting in their respective deaths.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/0/08/Gaara_lost_control.png/revision/latest?cb=20211030011449"><img alt="Gaara lost control" class="thumbimage lazyload" data-image-key="Gaara_lost_control.png" data-image-name="Gaara lost control.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/0/08/Gaara_lost_control.png/revision/latest/scale-to-width-down/180?cb=20211030011449" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/0/08/Gaara_lost_control.png/revision/latest?cb=20211030011449"><img alt="Gaara lost control" class="thumbimage" data-image-key="Gaara_lost_control.png" data-image-name="Gaara lost control.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/0/08/Gaara_lost_control.png/revision/latest/scale-to-width-down/180?cb=20211030011449" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/0/08/Gaara_lost_control.png/revision/latest/scale-to-width-down/180?cb=20211030011449" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Gaara_lost_control.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku goes on a rampage after Gaara loses control.</p> </figcaption> </figure>
+<p>When <a href="https://naruto.fandom.com/wiki/Karura" title="Karura">Karura</a> became pregnant with Gaara, her husband, the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fourth_Kazekage" title="Fourth Kazekage">Fourth Kazekage</a>, had <a href="https://naruto.fandom.com/wiki/Chiyo" title="Chiyo">Chiyo</a> seal Shukaku into Gaara while he was still in the womb because, out of his <a href="https://naruto.fandom.com/wiki/Three_Sand_Siblings" title="Three Sand Siblings">three children</a>, Gaara was the only one compatible with the tailed beast. Before Karura died after giving birth, she passionately told her son that she would protect him, and, according to her husband, her love seeped into the sand and was noted to form his automatic defence. However, Gaara couldn't properly <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Control" title="Tailed Beast Control">control</a> Shukaku's powers, killing or injuring several of Suna's shinobi and citizens by accident. Shukaku would even cite its hatred toward humans, warning Gaara not to sleep too long if he didn't want to give Shukaku an opening. Deemed a failure, the Fourth Kazekage chose to test his son one last time, ordering <a href="https://naruto.fandom.com/wiki/Yashamaru" title="Yashamaru">Yashamaru</a> to assassinate him and also tell him that his mother never loved him, and that she was used as a human sacrifice for the sealing process. Gaara failed the test, fully releasing the rampaging Shukaku, to which the Fourth eventually used his <a href="https://naruto.fandom.com/wiki/Gold_Dust" title="Gold Dust">Gold Dust</a> to subdue the tanuki.
+</p>
+<h2><span class="mw-headline" id="Personality">Personality</span></h2>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/8/89/Shukaku_and_young_Gaara.png/revision/latest?cb=20141218124918"><img alt="Shukaku and young Gaara" class="thumbimage lazyload" data-image-key="Shukaku_and_young_Gaara.png" data-image-name="Shukaku and young Gaara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/89/Shukaku_and_young_Gaara.png/revision/latest/scale-to-width-down/180?cb=20141218124918" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/8/89/Shukaku_and_young_Gaara.png/revision/latest?cb=20141218124918"><img alt="Shukaku and young Gaara" class="thumbimage" data-image-key="Shukaku_and_young_Gaara.png" data-image-name="Shukaku and young Gaara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/89/Shukaku_and_young_Gaara.png/revision/latest/scale-to-width-down/180?cb=20141218124918" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/8/89/Shukaku_and_young_Gaara.png/revision/latest/scale-to-width-down/180?cb=20141218124918" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Shukaku_and_young_Gaara.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku threatening a young Gaara.</p> </figcaption> </figure>
+<p>Shukaku is characterised as a childish and short-tempered individual, and often speaks in a bombastic and incoherent manner, giving it the demeanour of a drunkard. It uses "ore-sama" (<span lang="ja">オレ様</span>, <i>literally meaning:</i> my esteemed self) when referring to itself, as it expresses great pride in its own abilities, especially its sealing techniques and defences. According to Gaara, prior to its introduction, Shukaku relishes the opportunity to kill anyone in sight, even more so during a full <a href="https://naruto.fandom.com/wiki/Moon" title="Moon">moon</a>. Shukaku has also shown to harbour a bitter grudge towards <a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a> due to the fox's beliefs that the tailed beasts' strength is measured by the number of tails, therefore viewing the tanuki as the weakest. Because of this, Shukaku strives to find any opportunity to surpass its arrogant rival.
+</p><p>Shukaku's hatred towards humans appears to stem from centuries of being viewed and treated as a monster that must either be destroyed or captured and weaponized. This led it to spark fear in whomever was its <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki" title="Jinchūriki">jinchūriki</a>, reminding them that if they go into a deep sleep, the tanuki would possess their body and murder all humans; this resulted in Gaara's developing insomnia. Rude as Shukaku can be, it could still be respectful to those who show genuine respect and kindness to the tanuki, as seen from its original harsh attitude toward <a href="https://naruto.fandom.com/wiki/Bunpuku" title="Bunpuku">Bunpuku</a>; when its jinchūriki treated the tanuki as an equal, an impressed Shukaku complimented him by comparing him to the Sage of Six Paths. Likewise, during the <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War" title="Fourth Shinobi World War">Fourth Shinobi World War</a>, as Gaara defiantly fought to protect Shukaku from being sealed and openly thanked Shukaku for helping him find his path in life, Shukaku came to see Gaara in a similar light to Bunpuku and fought to protect Gaara just as earnestly.
+</p><p>Years after the Fourth Great Shinobi War, Shukaku's relationship with Sunagakure was relatively peaceful as it mellowed down. As with the other tailed beasts, Shukaku also came to respect Naruto as well, commenting on his son <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Boruto" title="Boruto">Boruto</a> with interest when he displayed a similar drive. Shukaku is also not above developing affection as after Naruto's daughter <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Himawari" title="Himawari">Himawari</a> risked her own safety to save Shukaku, the tanuki began enjoying her company and when finally leaving, bid her a genuine and friendly goodbye.
+</p>
+<h2><span class="mw-headline" id="Appearance">Appearance</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/55/Young_Shukaku.png/revision/latest?cb=20151015140632"><img alt="Young Shukaku" class="thumbimage lazyload" data-image-key="Young_Shukaku.png" data-image-name="Young Shukaku.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/55/Young_Shukaku.png/revision/latest/scale-to-width-down/180?cb=20151015140632" decoding="async" height="174" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/55/Young_Shukaku.png/revision/latest?cb=20151015140632"><img alt="Young Shukaku" class="thumbimage" data-image-key="Young_Shukaku.png" data-image-name="Young Shukaku.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/55/Young_Shukaku.png/revision/latest/scale-to-width-down/180?cb=20151015140632" decoding="async" height="174" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/55/Young_Shukaku.png/revision/latest/scale-to-width-down/180?cb=20151015140632" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Young_Shukaku.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">A young Shukaku.</p> </figcaption> </figure>
+<p>Shukaku is a sandy-brown coloured <a class="extiw" href="https://en.wikipedia.org/wiki/tanuki" title="wikipedia:tanuki">tanuki</a>, with black (dark blue in the anime) <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Cursed_seal" title="Cursed seal">cursed seal</a> markings all over its face, body, and tail. It has a jagged, concave mouth with no tongue, and the sclerae of its eyes are black, with yellow irides and pupils that each takes the shape of a black four-pointed star with four black dots around it. During the last days of the Sage of Six Paths, Shukaku in its youth looked the basically same as it does presently, only much smaller with shorter ears and more spaced out markings.
+</p>
+<div style="clear: left;"></div>
+<h2><span class="mw-headline" id="Abilities">Abilities</span></h2>
+<p><span class="box headnote"><i>See also: <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki_Forms" title="Jinchūriki Forms">Jinchūriki Forms</a></i></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/6/60/Shukaku%27s_Tailed_Beast_Ball.png/revision/latest?cb=20150917123944"><img alt="Shukaku's Tailed Beast Ball" class="thumbimage lazyload" data-image-key="Shukaku%27s_Tailed_Beast_Ball.png" data-image-name="Shukaku's Tailed Beast Ball.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/60/Shukaku%27s_Tailed_Beast_Ball.png/revision/latest/scale-to-width-down/180?cb=20150917123944" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/6/60/Shukaku%27s_Tailed_Beast_Ball.png/revision/latest?cb=20150917123944"><img alt="Shukaku's Tailed Beast Ball" class="thumbimage" data-image-key="Shukaku%27s_Tailed_Beast_Ball.png" data-image-name="Shukaku's Tailed Beast Ball.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/60/Shukaku%27s_Tailed_Beast_Ball.png/revision/latest/scale-to-width-down/180?cb=20150917123944" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/6/60/Shukaku%27s_Tailed_Beast_Ball.png/revision/latest/scale-to-width-down/180?cb=20150917123944" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Shukaku%27s_Tailed_Beast_Ball.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku creating a Tailed Beast Ball.</p> </figcaption> </figure>
+<p>Shukaku is such a potential threat, As a precaution, if its jinchūriki lost control and fully transformed into Shukaku inside of Suna, the villagers were to either evacuate beforehand or seek shelter due to the risk of mass casualty from its rampage. Shukaku's power is quite impressive to the likes of the <a href="https://naruto.fandom.com/wiki/%C5%8Ctsutsuki_Clan" title="Ōtsutsuki Clan">Ōtsutsuki Clan</a>, with <a href="https://naruto.fandom.com/wiki/Urashiki_%C5%8Ctsutsuki" title="Urashiki Ōtsutsuki">Urashiki Ōtsutsuki</a> expressing glee in taking it.
+</p>
+<h3><span class="mw-headline" id="Physical_and_Chakra_Prowess">Physical and Chakra Prowess</span></h3>
+<p>Shukaku has great physical strength while using its tail, as seen when overlapping it with the other tailed beasts to shatter and even obliterate a <a href="https://naruto.fandom.com/wiki/Senjutsu" title="Senjutsu">senjutsu</a>-enhanced humanoid <a href="https://naruto.fandom.com/wiki/Susanoo" title="Susanoo">Susanoo</a>. As a tailed beast, Shukaku possesses a large quantity of <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a>. It also has powerful healing capacities, able to mend injuries in themselves and others in seconds. Likewise, Shukaku is effectively immortal, as when it dies, it will eventually revive, albeit in a younger form.  
+</p>
+<h3><span class="mw-headline" id="Ninjutsu">Ninjutsu</span></h3>
+<p>Shukaku has the ability to control its jinchūriki whenever they sleep, leading its host to develop <a class="extiw" href="https://en.wikipedia.org/wiki/insomnia" title="wikipedia:insomnia">insomnia</a>. Like the rest of its kind, Shukaku can also perform the <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a>. It is capable of performing <a href="https://naruto.fandom.com/wiki/F%C5%ABinjutsu" title="Fūinjutsu">fūinjutsu</a> by using its natural cursed seal markings across its own sand body, which gives off a magnetic field to bind its targets. One of its techniques, the <a href="https://naruto.fandom.com/wiki/Desert_Layered_Imperial_Funeral_Seal" title="Desert Layered Imperial Funeral Seal">Desert Layered Imperial Funeral Seal</a>, is strong enough to temporarily restrain and withstand powerful techniques, like the Susanoo.
+</p>
+<h4><span class="mw-headline" id="Sand_Manipulation">Sand Manipulation</span></h4>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/e/e0/Sabaku_Sotaisu_Fuin.png/revision/latest?cb=20141218123738"><img alt="Sabaku Sotaisu Fuin" class="thumbimage lazyload" data-image-key="Sabaku_Sotaisu_Fuin.png" data-image-name="Sabaku Sotaisu Fuin.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/e/e0/Sabaku_Sotaisu_Fuin.png/revision/latest/scale-to-width-down/180?cb=20141218123738" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/e/e0/Sabaku_Sotaisu_Fuin.png/revision/latest?cb=20141218123738"><img alt="Sabaku Sotaisu Fuin" class="thumbimage" data-image-key="Sabaku_Sotaisu_Fuin.png" data-image-name="Sabaku Sotaisu Fuin.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/e/e0/Sabaku_Sotaisu_Fuin.png/revision/latest/scale-to-width-down/180?cb=20141218123738" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/e/e0/Sabaku_Sotaisu_Fuin.png/revision/latest/scale-to-width-down/180?cb=20141218123738" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Sabaku_Sotaisu_Fuin.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku enforcing a fūinjutsu with its curse seal markings.</p> </figcaption> </figure>
+<p>Shukaku's most notable ability is its <a href="https://naruto.fandom.com/wiki/Sand" title="Sand">sand</a> manipulation, using it as an effective weapon and shield. Since its whole body is completely made of sand, the tanuki can ignore most damage that would otherwise be detrimental, as shown when it had one of its arms <a href="https://naruto.fandom.com/wiki/Toad_Sword_Beheading" title="Toad Sword Beheading">chopped off</a> by <a href="https://naruto.fandom.com/wiki/Gamabunta" title="Gamabunta">Gamabunta</a> and was still able to keep on fighting. Taking pride in its motto of absolute defence, Shukaku's sand is durable enough to block a senjutsu-enhanced Susanoo sword with ease. 
+</p>
+<h4><span class="mw-headline" id="Nature_Transformation">Nature Transformation</span></h4>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/4/41/Shukaku%27s_Wind_Release.png/revision/latest?cb=20190902100717"><img alt="Shukaku's Wind Release" class="thumbimage lazyload" data-image-key="Shukaku%27s_Wind_Release.png" data-image-name="Shukaku's Wind Release.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/41/Shukaku%27s_Wind_Release.png/revision/latest/scale-to-width-down/180?cb=20190902100717" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/4/41/Shukaku%27s_Wind_Release.png/revision/latest?cb=20190902100717"><img alt="Shukaku's Wind Release" class="thumbimage" data-image-key="Shukaku%27s_Wind_Release.png" data-image-name="Shukaku's Wind Release.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/41/Shukaku%27s_Wind_Release.png/revision/latest/scale-to-width-down/180?cb=20190902100717" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/4/41/Shukaku%27s_Wind_Release.png/revision/latest/scale-to-width-down/180?cb=20190902100717" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Shukaku%27s_Wind_Release.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku using Wind Release.</p> </figcaption> </figure>
+<p>Shukaku can use <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Wind" title="Wind">Wind</a> and <a href="https://naruto.fandom.com/wiki/Earth_Release" title="Earth Release">Earth Release</a> <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Nature_transformation" title="Nature transformation">nature transformations</a>. It can rapidly fire <a href="https://naruto.fandom.com/wiki/Wind_Release:_Drilling_Air_Bullet" title="Wind Release: Drilling Air Bullet">wind bullets</a> with enough force to level entire forests. Likewise, it can combine its wind abilities with Gaara's sand in order to produce a <a href="https://naruto.fandom.com/wiki/Wind_Release:_Sand_Buckshot" title="Wind Release: Sand Buckshot">mass of fast-moving sand bullets</a>. He could also charge these wind bullets to the point they could fire like a <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a>, and wipe out entire landscapes. Shukaku can combine wind and earth elements to use <a href="https://naruto.fandom.com/wiki/Magnet_Release" title="Magnet Release">Magnet Release</a>, and is the only tailed beast which can use <a href="https://naruto.fandom.com/wiki/Juinjutsu" title="Juinjutsu">cursed seals</a> from its markings and infuse them into the <a href="https://naruto.fandom.com/wiki/Rasengan" title="Rasengan">Rasengan</a> to create the <a href="https://naruto.fandom.com/wiki/Sage_Art:_Magnet_Release_Rasengan" title="Sage Art: Magnet Release Rasengan">Sage Art: Magnet Release Rasengan</a>, which was powerful enough to restrain <a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a>'s <a href="https://naruto.fandom.com/wiki/Limbo:_Border_Jail" title="Limbo: Border Jail">shadow</a> when he was the Ten-Tails' jinchūriki.
+</p>
+<h2><span class="mw-headline" id="Part_I">Part I</span></h2>
+<h3><span class="mw-headline" id="Konoha_Crush">Konoha Crush</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Konoha_Crush_(Arc)" title="Konoha Crush (Arc)">Konoha Crush</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/e/e9/Bunta_vs_Shukaku.png/revision/latest?cb=20150124090301"><img alt="Bunta vs Shukaku" class="thumbimage lazyload" data-image-key="Bunta_vs_Shukaku.png" data-image-name="Bunta vs Shukaku.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/e/e9/Bunta_vs_Shukaku.png/revision/latest/scale-to-width-down/180?cb=20150124090301" decoding="async" height="136" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/e/e9/Bunta_vs_Shukaku.png/revision/latest?cb=20150124090301"><img alt="Bunta vs Shukaku" class="thumbimage" data-image-key="Bunta_vs_Shukaku.png" data-image-name="Bunta vs Shukaku.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/e/e9/Bunta_vs_Shukaku.png/revision/latest/scale-to-width-down/180?cb=20150124090301" decoding="async" height="136" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/e/e9/Bunta_vs_Shukaku.png/revision/latest/scale-to-width-down/180?cb=20150124090301" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Bunta_vs_Shukaku.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku clashes with Gamabunta.</p> </figcaption> </figure>
+<p>During the <a href="https://naruto.fandom.com/wiki/Ch%C5%ABnin_Exams" title="Chūnin Exams">Chūnin Exams</a>, Gaara partially transformed into Shukaku during his fight with <a href="https://naruto.fandom.com/wiki/Sasuke_Uchiha" title="Sasuke Uchiha">Sasuke Uchiha</a>, lashing out with the tailed beast's arm after being injured for the first time and terrifying Sasuke with a glimpse of its eye. During the <a href="https://naruto.fandom.com/wiki/Konoha_Crush" title="Konoha Crush">Konoha Crush</a>, Gaara later transformed into his <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_Beast_Mode" title="Tailed Beast Mode">full Shukaku form</a> during his fight with <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a>, who summoned <a href="https://naruto.fandom.com/wiki/Gamabunta" title="Gamabunta">Gamabunta</a> to counteract it. 
+</p><p>When Gaara exposed himself on top of Shukaku's head and used the <a href="https://naruto.fandom.com/wiki/Feigning_Sleep_Technique" title="Feigning Sleep Technique">Feigning Sleep Technique</a>, Shukaku took full control of its body and battled them. Shukaku's power was too much for Gamabunta to handle, resulting in both him and Naruto using the <a href="https://naruto.fandom.com/wiki/Combination_Transformation" title="Combination Transformation">Combination Transformation</a> to take the form of a giant fox (the Nine-Tails in the anime). Gamabunta used the form's claws and teeth to grab and restrain Shukaku, in order for Naruto to wake Gaara up with a punch, which suppressed Shukaku's power.
+</p>
+<h3><span class="mw-headline" id="Sunagakure_Support_Mission">Sunagakure Support Mission</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Sunagakure_Support_Mission" title="Sunagakure Support Mission">Sunagakure Support Mission</a></span>
+In the anime, when Gaara's student <a href="https://naruto.fandom.com/wiki/Matsuri" title="Matsuri">Matsuri</a> got kidnapped by the <a href="https://naruto.fandom.com/wiki/Four_Celestial_Symbols_Men" title="Four Celestial Symbols Men">Four Celestial Symbols Men</a>, in a plot to take Shukaku's chakra, he rescued her and partially transformed into Shukaku to defeat the recently resurrected <a href="https://naruto.fandom.com/wiki/Seimei" title="Seimei">Seimei</a>.
+</p>
+<h2><span class="mw-headline" id="Interlude">Interlude</span></h2>
+<h3><span id="In_Naruto.27s_Footsteps:_The_Friends.27_Paths"></span><span class="mw-headline" id="In_Naruto's_Footsteps:_The_Friends'_Paths">In Naruto's Footsteps: The Friends' Paths</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/In_Naruto%27s_Footsteps:_The_Friends%27_Paths" title="In Naruto's Footsteps: The Friends' Paths">In Naruto's Footsteps: The Friends' Paths</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/a6/Shukaku_Struggling.png/revision/latest?cb=20150514121934"><img alt="Shukaku Struggling" class="thumbimage lazyload" data-image-key="Shukaku_Struggling.png" data-image-name="Shukaku Struggling.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/a6/Shukaku_Struggling.png/revision/latest/scale-to-width-down/180?cb=20150514121934" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/a6/Shukaku_Struggling.png/revision/latest?cb=20150514121934"><img alt="Shukaku Struggling" class="thumbimage" data-image-key="Shukaku_Struggling.png" data-image-name="Shukaku Struggling.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/a6/Shukaku_Struggling.png/revision/latest/scale-to-width-down/180?cb=20150514121934" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/a6/Shukaku_Struggling.png/revision/latest/scale-to-width-down/180?cb=20150514121934" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Shukaku_Struggling.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku resists being extracted from within Gaara.</p> </figcaption> </figure>
+<p>About two years after the Chūnin Exams in Konoha, another exam was held between Konoha and Suna. During this event, Gaara, was attacked by <a href="https://naruto.fandom.com/wiki/H%C5%8Dichi" title="Hōichi">Hōichi</a>, who used the <a href="https://naruto.fandom.com/wiki/Dharma_Power_Sealing_Technique:_Sen_no_Riky%C5%AB" title="Dharma Power Sealing Technique: Sen no Rikyū">fūinjutsu</a> of Bunpuku to subdue Gaara and begin transferring Shukaku's chakra into himself. 
+</p><p>Ultimately, the extraction was stopped by the intervention of <a href="https://naruto.fandom.com/wiki/Neji_Hy%C5%ABga" title="Neji Hyūga">Neji Hyūga</a>, who used his <a href="https://naruto.fandom.com/wiki/Gentle_Fist" title="Gentle Fist">Gentle Fist</a> to block the chakra points from which Shukaku was being extracted, thereby repelling the chains.
+</p>
+<h2><span class="mw-headline" id="Part_II">Part II</span></h2>
+<h3><span class="mw-headline" id="Kazekage_Rescue_Mission">Kazekage Rescue Mission</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kazekage_Rescue_Mission" title="Kazekage Rescue Mission">Kazekage Rescue Mission</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/3/39/Shukaku_Extracted_from_Gaara.png/revision/latest?cb=20150917211420"><img alt="Shukaku Extracted from Gaara" class="thumbimage lazyload" data-image-key="Shukaku_Extracted_from_Gaara.png" data-image-name="Shukaku Extracted from Gaara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/39/Shukaku_Extracted_from_Gaara.png/revision/latest/scale-to-width-down/180?cb=20150917211420" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/3/39/Shukaku_Extracted_from_Gaara.png/revision/latest?cb=20150917211420"><img alt="Shukaku Extracted from Gaara" class="thumbimage" data-image-key="Shukaku_Extracted_from_Gaara.png" data-image-name="Shukaku Extracted from Gaara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/39/Shukaku_Extracted_from_Gaara.png/revision/latest/scale-to-width-down/180?cb=20150917211420" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/3/39/Shukaku_Extracted_from_Gaara.png/revision/latest/scale-to-width-down/180?cb=20150917211420" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Shukaku_Extracted_from_Gaara.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku being extracted from Gaara.</p> </figcaption> </figure>
+<p>During Gaara's time as the Fifth Kazekage, <a href="https://naruto.fandom.com/wiki/Deidara" title="Deidara">Deidara</a> and <a href="https://naruto.fandom.com/wiki/Sasori" title="Sasori">Sasori</a> from the <a href="https://naruto.fandom.com/wiki/Akatsuki" title="Akatsuki">Akatsuki</a> were assigned to capture Shukaku. During the battle between Gaara and Deidara, Gaara manifested Shukaku's arms several times to attack the Akatsuki member. 
+</p><p>After Deidara defeated Gaara in combat and took him to Akatsuki's lair in the <a href="https://naruto.fandom.com/wiki/Land_of_Rivers" title="Land of Rivers">Land of Rivers</a>, Shukaku was forcefully <a href="https://naruto.fandom.com/wiki/Sealing_Technique:_Phantom_Dragons_Nine_Consuming_Seals" title="Sealing Technique: Phantom Dragons Nine Consuming Seals">extracted</a> from Gaara and placed within the <a href="https://naruto.fandom.com/wiki/Demonic_Statue_of_the_Outer_Path" title="Demonic Statue of the Outer Path">Demonic Statue of the Outer Path</a>. Though the extraction killed him, Gaara was resurrected through <a href="https://naruto.fandom.com/wiki/Chiyo" title="Chiyo">Chiyo</a>'s <a href="https://naruto.fandom.com/wiki/One%27s_Own_Life_Reincarnation" title="One's Own Life Reincarnation">One's Own Life Reincarnation</a> technique and has still retained the ability to control sand.
+</p>
+<h3><span id="Birth_of_the_Ten-Tails.27_Jinch.C5.ABriki"></span><span class="mw-headline" id="Birth_of_the_Ten-Tails'_Jinchūriki">Birth of the Ten-Tails' Jinchūriki</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Birth_of_the_Ten-Tails%27_Jinch%C5%ABriki" title="Birth of the Ten-Tails' Jinchūriki">Birth of the Ten-Tails' Jinchūriki</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest?cb=20250919211345"><img alt="Biju released" class="thumbimage lazyload" data-image-key="Biju_released.png" data-image-name="Biju released.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest?cb=20250919211345"><img alt="Biju released" class="thumbimage" data-image-key="Biju_released.png" data-image-name="Biju released.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Biju_released.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts being freed from Obito.</p> </figcaption> </figure>
+<p>Shukaku was the only tailed beast sealed within the Demonic Statue to have not been resealed into <a href="https://naruto.fandom.com/wiki/Obito_Uchiha" title="Obito Uchiha">Obito Uchiha</a>'s <a href="https://naruto.fandom.com/wiki/Six_Paths_of_Pain" title="Six Paths of Pain">Six Paths of Pain</a> and as such, did not meet Naruto during his encounter with the other tailed beasts. When Naruto proceeded in his plan to pull all the beasts from Obito's body in order to halt the tree form of the Ten-Tails' flower from blooming and completing the <a href="https://naruto.fandom.com/wiki/Eye_of_the_Moon_Plan" title="Eye of the Moon Plan">Eye of the Moon Plan</a>, its chakra rejected Naruto as he contained none of the tanuki's chakra. Gaara, having been bonded with Shukaku, instead took hold and began pulling the chakra himself. Through the efforts of the Kazekage, Shukaku was freed from its captivity alongside the other tailed beasts. Upon being freed, Shukaku started to recognise Naruto. Despite showing reluctance to Gaara's request for its help in sealing <a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a>, Shukaku decided to comply only for the opportunity to surpass Kurama.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest?cb=20250919131223"><img alt="Tailed Beasts vs Madara" class="thumbimage lazyload" data-image-key="Tailed_Beasts_vs_Madara.png" data-image-name="Tailed Beasts vs Madara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest?cb=20250919131223"><img alt="Tailed Beasts vs Madara" class="thumbimage" data-image-key="Tailed_Beasts_vs_Madara.png" data-image-name="Tailed Beasts vs Madara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beasts_vs_Madara.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts working together to attack Madara.</p> </figcaption> </figure>
+<p>When Madara ran towards them and the other tailed beasts, both Shukaku and Gaara conjured <a href="https://naruto.fandom.com/wiki/Wind_Release:_Sand_Buckshot" title="Wind Release: Sand Buckshot">numerous sand bullets</a> and were able to restrain the Uchiha's movements. Using the opportunity to attack, the tailed beasts each took a swing at their opponent, giving the sand-manipulating duo an opening to use their <a href="https://naruto.fandom.com/wiki/Desert_Layered_Imperial_Funeral_Seal" title="Desert Layered Imperial Funeral Seal">Desert Layered Imperial Funeral Seal</a>, but Madara managed to escape the sand pyramid with his Susanoo. As Naruto in <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_Beast_Mode" title="Tailed Beast Mode">Tailed Beast Mode</a> pinned Madara down with a tail, Shukaku and the other tailed beasts joined in and did the same to increase the damage, but the Uchiha survived their attacks and retreated to a safe distance. After he received his own right Rinnegan eye from a White Zetsu clone, Madara quickly summoned the Demonic Statue of the Outer Path from Obito's body, and used the Rinnegan to <a href="https://naruto.fandom.com/wiki/Limbo:_Border_Jail" title="Limbo: Border Jail">repel</a> the tailed beasts.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/1/10/Shukaku_defending_Gaara.png/revision/latest?cb=20150113025028"><img alt="Shukaku defending Gaara" class="thumbimage lazyload" data-image-key="Shukaku_defending_Gaara.png" data-image-name="Shukaku defending Gaara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/10/Shukaku_defending_Gaara.png/revision/latest/scale-to-width-down/180?cb=20150113025028" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/1/10/Shukaku_defending_Gaara.png/revision/latest?cb=20150113025028"><img alt="Shukaku defending Gaara" class="thumbimage" data-image-key="Shukaku_defending_Gaara.png" data-image-name="Shukaku defending Gaara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/10/Shukaku_defending_Gaara.png/revision/latest/scale-to-width-down/180?cb=20150113025028" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/1/10/Shukaku_defending_Gaara.png/revision/latest/scale-to-width-down/180?cb=20150113025028" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Shukaku_defending_Gaara.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku protecting Gaara from Madara's attack.</p> </figcaption> </figure>
+<p>With the tailed beasts stunned, Madara then proceeded to <a href="https://naruto.fandom.com/wiki/Demonic_Statue_Chains" title="Demonic Statue Chains">chain</a> them up and prepared to seal them back into the statue. As Madara began the process on Shukaku, Gaara <a href="https://naruto.fandom.com/wiki/Desert:_Hand" title="Desert: Hand">intervened</a>, declaring his refusal to let Madara get his former tailed beast. Shocked at how determined Gaara was to protect Shukaku despite their negative past, the tanuki remembered <a href="https://naruto.fandom.com/wiki/Bunpuku" title="Bunpuku">Bunpuku</a>'s words of wisdom. From that, it also recalled Gaara explaining that he'd been grateful to Shukaku as it was thanks to the tanuki that Gaara had met his first friend, Naruto. As Madara launched an attack on Gaara, Shukaku quickly blocked the attack for its former jinchūriki. Despite their new-found team-work, Madara still rebuffed their efforts and all the tailed beasts were resealed within the Demonic Statue.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest?cb=20150730121101"><img alt="Tailed Beast Reunion" class="thumbimage lazyload" data-image-key="Tailed_Beast_Reunion.png" data-image-name="Tailed Beast Reunion.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest?cb=20150730121101"><img alt="Tailed Beast Reunion" class="thumbimage" data-image-key="Tailed_Beast_Reunion.png" data-image-name="Tailed Beast Reunion.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_Reunion.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts reunite with Hagoromo and Naruto.</p> </figcaption> </figure>
+<p>Later, after Madara succeeded in becoming the Ten-Tails' jinchūriki, a reformed Obito managed to steal some of Shukaku's chakra along with some of Gyūki's. Then Obito sealed the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Yin" title="Yin">Yin</a> half of Kurama into a dying Naruto to save his life, Obito also sealed Shukaku and Gyūki chakra portion into Naruto. Inside Naruto's subconscious, Shukaku, Gyūki, and Yin-Kurama found the young jinchūriki talking with the spirit of <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>. As the other six tailed beasts manifested to join in the meeting, they all voiced their shared belief to the Sage that Naruto was the child of prophecy. As Naruto fought Madara, Shukaku aided him by lending its Magnet Release chakra, allowing Naruto to use a juinjutsu technique against Madara.
+</p>
+<h3><span id="Kaguya_.C5.8Ctsutsuki_Strikes"></span><span class="mw-headline" id="Kaguya_Ōtsutsuki_Strikes">Kaguya Ōtsutsuki Strikes</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki_Strikes" title="Kaguya Ōtsutsuki Strikes">Kaguya Ōtsutsuki Strikes</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest?cb=20160901155526"><img alt="Tailed Beast separate from Kaguya" class="thumbimage lazyload" data-image-key="Tailed_Beast_separate_from_Kaguya.png" data-image-name="Tailed Beast separate from Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest?cb=20160901155526"><img alt="Tailed Beast separate from Kaguya" class="thumbimage" data-image-key="Tailed_Beast_separate_from_Kaguya.png" data-image-name="Tailed Beast separate from Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_separate_from_Kaguya.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts being freed from the Ten-Tails.</p> </figcaption> </figure>
+<p>After Madara's ambitions were cut short by <a href="https://naruto.fandom.com/wiki/Black_Zetsu" title="Black Zetsu">Black Zetsu</a>, who revealed to be the silent manipulator of shinobi history since it was first created by <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki" title="Kaguya Ōtsutsuki">Kaguya Ōtsutsuki</a>, the black entity used Madara's body as a medium to resurrect its creator. During the battle against the tyrannical princess, Shukaku and the other tailed beasts continued to support Naruto by giving him <a href="https://naruto.fandom.com/wiki/Sage_Art:_Super_Tailed_Beast_Rasenshuriken" title="Sage Art: Super Tailed Beast Rasenshuriken">their combined power</a> to overwhelm her. Ultimately, Kaguya was defeated by Naruto and Sasuke, who used the <a href="https://naruto.fandom.com/wiki/Six_Paths_%E2%80%94_Chibaku_Tensei" title="Six Paths — Chibaku Tensei">Six Paths — Chibaku Tensei</a> to eject all the tailed beasts from her and seal her away inside a newly-created <a href="https://naruto.fandom.com/wiki/Moon" title="Moon">moon</a> within her own <a href="https://naruto.fandom.com/wiki/Kaguya%27s_Dimensions" title="Kaguya's Dimensions">dimension</a>.
+</p><p>After the spirits of Hagoromo and the past Kage summoned both the tailed beasts and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Team_Kakashi" title="Team Kakashi">Team 7</a> back to the real world, the tailed beasts began to discuss their plans for the future since they were finally free. Sasuke, however, made his own intentions known: removing as many people as possible who could get in the way of his plans of leading the world through a revolution to do away with current shinobi systems, including killing all the current Kage and tailed beasts. Just as Sasuke swiftly <a href="https://naruto.fandom.com/wiki/Genjutsu:_Sharingan" title="Genjutsu: Sharingan">subdued</a> the tailed beasts with his Rinnegan and sealed them within his <a href="https://naruto.fandom.com/wiki/Chibaku_Tensei" title="Chibaku Tensei">Chibaku Tensei</a>, Naruto reassured the tailed beasts that he would save them once again. After Naruto was able to defeat and reform Sasuke, the two dispelled the Infinite Tsukuyomi and Sasuke released Shukaku, along with the other tailed beasts, from their prisons.
+</p>
+<h2><span class="mw-headline" id="New_Era">New Era</span></h2>
+<h3><span class="mw-headline" id="Versus_Momoshiki_Arc">Versus Momoshiki Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Versus_Momoshiki_Arc" title="Versus Momoshiki Arc">Versus Momoshiki Arc</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/d/d1/Shukaku_Contacts_Gaara.png/revision/latest?cb=20180425113512"><img alt="Shukaku Contacts Gaara" class="thumbimage lazyload" data-image-key="Shukaku_Contacts_Gaara.png" data-image-name="Shukaku Contacts Gaara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/d/d1/Shukaku_Contacts_Gaara.png/revision/latest/scale-to-width-down/180?cb=20180425113512" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/d/d1/Shukaku_Contacts_Gaara.png/revision/latest?cb=20180425113512"><img alt="Shukaku Contacts Gaara" class="thumbimage" data-image-key="Shukaku_Contacts_Gaara.png" data-image-name="Shukaku Contacts Gaara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/d/d1/Shukaku_Contacts_Gaara.png/revision/latest/scale-to-width-down/180?cb=20180425113512" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Shukaku_Contacts_Gaara.png/revision/latest/scale-to-width-down/180?cb=20180425113512" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Shukaku_Contacts_Gaara.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku warning Gaara.</p> </figcaption> </figure>
+<p>After having never initiated contact with Gaara since the two parted ways, Shukaku <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Telepathy" title="Tailed Beast Telepathy">contacted</a> the Kazekage to inform him that it had lost contact with <a href="https://naruto.fandom.com/wiki/Gy%C5%ABki" title="Gyūki">Gyūki</a>. Telling him that its connection with Naruto was still intact, Shukaku said it had a bad feeling about the matter before leaving Gaara to deal with the matter as he saw fit.
+</p>
+<div style="clear: left;"></div>
+<h3><span class="mw-headline" id="One-Tail_Escort_Arc">One-Tail Escort Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/One-Tail_Escort_Arc" title="One-Tail Escort Arc">One-Tail Escort Arc</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/27/Shukaku_Vs_Urashiki.png/revision/latest?cb=20190902100919"><img alt="Shukaku Vs Urashiki" class="thumbimage lazyload" data-image-key="Shukaku_Vs_Urashiki.png" data-image-name="Shukaku Vs Urashiki.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/27/Shukaku_Vs_Urashiki.png/revision/latest/scale-to-width-down/180?cb=20190902100919" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/27/Shukaku_Vs_Urashiki.png/revision/latest?cb=20190902100919"><img alt="Shukaku Vs Urashiki" class="thumbimage" data-image-key="Shukaku_Vs_Urashiki.png" data-image-name="Shukaku Vs Urashiki.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/27/Shukaku_Vs_Urashiki.png/revision/latest/scale-to-width-down/180?cb=20190902100919" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/2/27/Shukaku_Vs_Urashiki.png/revision/latest/scale-to-width-down/180?cb=20190902100919" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Shukaku_Vs_Urashiki.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Shukaku facing Urashiki.</p> </figcaption> </figure>
+<p>In the anime, as Gaara was battling <a href="https://naruto.fandom.com/wiki/Urashiki_%C5%8Ctsutsuki" title="Urashiki Ōtsutsuki">Urashiki Ōtsutsuki</a>, Shukaku arrived to aid its former host. Together, the two were able to <a href="https://naruto.fandom.com/wiki/Desert_Layered_Imperial_Funeral_Seal" title="Desert Layered Imperial Funeral Seal">seal</a> away the foe. Knowing that the seal won't hold Urashiki for long, it was decided that <a href="https://naruto.fandom.com/wiki/Kankur%C5%8D" title="Kankurō">Kankurō</a>, <a href="https://naruto.fandom.com/wiki/Shinki" title="Shinki">Shinki</a>, and <a href="https://naruto.fandom.com/wiki/Boruto_Uzumaki" title="Boruto Uzumaki">Boruto Uzumaki</a> escort Shukaku to Konoha for its safety while Gaara would return to Suna to recover. Also during which, to make sure Urashiki would not sense its chakra, Shukaku willingly sealed itself inside a small tea kettle. However, the seal still allowed Shukaku to move about as a miniature version of itself, wearing the kettle like an armour. During their journey, they were intercepted by four of Urashiki's puppets. Kankurō decided to face the threat alone, while Boruto and Shinki went on ahead with Shukaku.
+</p><p>Along the way, Boruto was amazed at how cold Shinki was. Shukaku noted that Gaara was a lot like this back in the day, until Naruto's kindness swayed him to find a better path. Soon afterwards, they noticed a massive explosion from the battlefield. While Shinki insisted to move on, Boruto refused leave Kankurō when he needed them most, saying it would be a trashy thing to do. Boruto went back, while Shinki continued on with Shukaku. Before long, they were engaged by one of Urashiki's <a href="https://naruto.fandom.com/wiki/Autonomous_Puppet" title="Autonomous Puppet">puppets</a>. While Shukaku was concerned about this threat, Shinki was determined to avenge Kankurō.
+</p><p>Quickly, the puppet proved itself to be very versatile and dangerous as is easily breached Shinki's defenses and injected him with a paralysing poison. Shinki was forced to retreat with Shukaku, but was saved by the timely arrival of Boruto, Shikadai and Temari. While Shikadai and Temari held off the puppet, Boruto helped Shinki and Shukaku to safety. There, Boruto apologised to Shinki for calling him uncaring about his uncle, but still insisted that one should never willingly sacrifice an ally, proving his belief by returning to help Shikadai and Temari. Shukaku found the whole event very exciting, viewing Boruto to be similar yet smarter and more skilled than his father was at the time. It decided to watch the fight, but Shinki quickly picked up the tanuki and resumed his mission to Konoha.
+</p><p>After Boruto caught up with Shukaku and Shinki, they were soon intercepted by Urashiki. While the genin knew they were no match for him, they were able to pull off a strategy to again temporarily <a href="https://naruto.fandom.com/wiki/Black_Secret_Technique:_Black_Iron" title="Black Secret Technique: Black Iron">seal</a> him. Knowing Urashiki would soon escape and intercept them again at the border to the Land of Fire, they decided Boruto would distract Urashiki with a clone disguised as Shinki and carrying an empty tea kettle while Shukaku and Shinki went on ahead. During the plan, Shukaku noticed how hesitant he was with this plan that had a high chance with death for Boruto.
+</p><p>Once arriving at the border of the Land of Fire, Shukaku and Shinki were intercepted by <a href="https://naruto.fandom.com/wiki/Mirai_Sarutobi" title="Mirai Sarutobi">Mirai Sarutobi</a> who interrogated Shinki for unsanctioned entrance. While Shinki refused to answer questions to a shinobi not above chūnin, <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sai_Yamanaka" title="Sai Yamanaka">Sai Yamanaka</a> arrived, whose high-ranking prompted Shinki to explain the situation. Sai took over delivering Shukaku to Naruto. Once arriving at the Hokage's office, Shukaku explained the situation for Boruto. Before the Hokage left, Sasuke arrived to reveal that he already rescued Boruto and Urashaki had escaped. They decided to keep Shukaku at Naruto's home for protection.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/ad/Himawari_and_Shukaku.png/revision/latest?cb=20190929214716"><img alt="Himawari and Shukaku" class="thumbimage lazyload" data-image-key="Himawari_and_Shukaku.png" data-image-name="Himawari and Shukaku.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/ad/Himawari_and_Shukaku.png/revision/latest/scale-to-width-down/180?cb=20190929214716" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/ad/Himawari_and_Shukaku.png/revision/latest?cb=20190929214716"><img alt="Himawari and Shukaku" class="thumbimage" data-image-key="Himawari_and_Shukaku.png" data-image-name="Himawari and Shukaku.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/ad/Himawari_and_Shukaku.png/revision/latest/scale-to-width-down/180?cb=20190929214716" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/ad/Himawari_and_Shukaku.png/revision/latest/scale-to-width-down/180?cb=20190929214716" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Himawari_and_Shukaku.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Himawari playing with Shukaku.</p> </figcaption> </figure>
+<p>Upon arriving to meet Boruto's family, <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Himawari" title="Himawari">Himawari</a> immediately took a liking the miniaturised tailed beast, treating the tanuki as a talking Shukaku toy and kept it close to her. While Shukaku found the girl's attachment annoying, it was intrigued to learn that she once knocked out Kurama. Hoping to learn how she did as a chance to have some mocking rights on the fox, Shukaku decided to play nice with the young girl. Ultimately however, when learning that Himawari had no knowledge of the incident, Shukaku quickly turned cold again and told her to leave it alone, much to her sadness. While alone and taking a nap, its tea kettle form was mistaken for trash and taken to a scrapyard. As Shukaku was on the verge of being throwing into a trash compactor, Himawari, who was desperately looking for the tanuki, activated her <a href="https://naruto.fandom.com/wiki/Byakugan" title="Byakugan">Byakugan</a> again and quickly saved Shukaku. Amazed at how genuinely concerned Himawari was for it, Shukaku became kinder to her and openly admitted to Kurama that humans can be very entertaining. Later, when Naruto proceeded to move Shukaku to a new safehouse, the tanuki waved Boruto and Himawari goodbye with its tail.
+</p>
+<h3><span class="mw-headline" id="Kawaki_Arc">Kawaki Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kawaki_Arc" title="Kawaki Arc">Kawaki Arc</a></span>
+In the anime, Shukaku was gathered with the other tailed beasts as they sensed Kurama's chakra vanishing after it <a href="https://naruto.fandom.com/wiki/Baryon_Mode" title="Baryon Mode">sacrificed</a> its life in the battle against <a href="https://naruto.fandom.com/wiki/Isshiki_%C5%8Ctsutsuki" title="Isshiki Ōtsutsuki">Isshiki Ōtsutsuki</a>.
+</p>
+<h2><span class="mw-headline" id="In_Other_Media">In Other Media</span></h2>
+<h3><span class="mw-headline" id="Video_Games">Video Games</span></h3>
+<p>Shukaku appears as a boss in <i><a href="https://naruto.fandom.com/wiki/Naruto:_Ultimate_Ninja_Storm" title="Naruto: Ultimate Ninja Storm">Naruto: Ultimate Ninja Storm</a></i> and <i><a href="https://naruto.fandom.com/wiki/Naruto:_Rise_of_a_Ninja" title="Naruto: Rise of a Ninja">Naruto: Rise of a Ninja</a></i>, and a <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Replication" title="Tailed Beast Replication">false replication</a> of it is a boss in <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Kizuna_Drive" title="Naruto Shippūden: Kizuna Drive">Naruto Shippūden: Kizuna Drive</a></i>. Shukaku is playable in Gaara's awakening mode in both its miniature and full forms in the <a href="https://naruto.fandom.com/wiki/Naruto:_Ultimate_Ninja_(series)" title="Naruto: Ultimate Ninja (series)"><i>Ultimate Ninja</i> series</a>, and only its full form in <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_Revolution" title="Naruto Shippūden: Ultimate Ninja Storm Revolution">Ultimate Ninja Storm Revolution</a></i> and <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_4" title="Naruto Shippūden: Ultimate Ninja Storm 4">Ultimate Ninja Storm 4</a></i>, respectively.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>A <a class="extiw" href="https://en.wikipedia.org/wiki/Tanuki" title="wikipedia:Tanuki">tanuki</a> (<span lang="ja">狸</span>, <i>literally meaning:</i> raccoon dog) is a popular animal <a class="extiw" href="https://en.wikipedia.org/wiki/Y%C5%8Dkai" title="wikipedia:Yōkai">yōkai</a> in Japanese folklore and is famous for its mischievous nature and abilities to shape-shift. They are also said to be rivals to the <a class="extiw" href="https://en.wikipedia.org/wiki/kitsune" title="wikipedia:kitsune">kitsune</a>, which created an old Japanese proverb: "A fox and a tanuki matching their cleverness" (<span lang="ja">狐と狸の化かし合い</span>, <i>kitsune to tanuki no bakashi ai</i>), meaning two sly characters trying to outsmart one another. Shukaku being sealed inside a <a class="extiw" href="https://en.wikipedia.org/wiki/Kama_(Japanese_tea_ceremony)" title="wikipedia:Kama (Japanese tea ceremony)">tea kettle</a> is a reference to one Japanese tale called <i><a class="extiw" href="https://en.wikipedia.org/wiki/Bunbuku_Chagama" title="wikipedia:Bunbuku Chagama">Bunbuku Chagama</a></i>. In addition, Shukaku being claimed to be a corrupted Suna priest earlier in the series, has ties to a legend in <a class="extiw" href="https://en.wikipedia.org/wiki/Kench%C5%8D-ji" title="wikipedia:Kenchō-ji">Kenchō-ji</a> of a tanuki disguised as the shrine's priest.
+<ul><li>Furthermore, "Shukaku" (<span lang="ja">守鶴</span>), which literally means "protector crane", was also the name of the <a class="external text" href="https://yokai.com/shukaku/" rel="nofollow noreferrer noopener" target="_blank">tanuki</a> featured in <i>Bunpuku Chagama</i>.</li></ul></li>
+<li>Shukaku is the first tailed beast to have its name revealed in the series. In addition, Shukaku is the only tailed beast that hasn't been shown giving its jinchūriki the characteristic red chakra-shrouds (<a class="mw-redirect" href="https://naruto.fandom.com/wiki/Version_1" title="Version 1">Version 1</a> or <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Version_2" title="Version 2">Version 2</a> forms). This is presumably because Shukaku appeared early in the story as a sand spirit, since Kishimoto had not yet created the idea of multiple tailed beasts and Shukaku being one of them.</li>
+<li>When chapter 629 was first released, Shukaku's image was seen among the tailed beasts, despite not having the chance to give Naruto its chakra like the others, suggesting an error. In the tankōbon version, it was removed.</li></ul>
+<h2><span class="mw-headline" id="Quotes">Quotes</span></h2>
+<ul><li>(To <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Naruto" title="Naruto">Naruto</a> and <a href="https://naruto.fandom.com/wiki/Gamabunta" title="Gamabunta">Gamabunta</a>) "<i>I'm finally out!! And here's someone that I want to kill right now!!</i>"</li>
+<li>(To <a href="https://naruto.fandom.com/wiki/Gaara" title="Gaara">Gaara</a>) "<i>If a fox can transform seven times, a tanuki can do it eight times!</i>" (<span lang="ja">「狐七化け狸八化けってな」</span>, <i>"Kitsune nanabake tanuki yabake tte na!"</i>)</li>
+<li>"<i>My motto is absolute defence… That is what I, Shukaku, pride myself on!</i>"</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20250927205008
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0.001 seconds
+CPU time usage: 0.686 seconds
+Real time usage: 1.090 seconds
+Preprocessor visited node count: 7317/1000000
+Post‐expand include size: 117599/2097152 bytes
+Template argument size: 22276/2097152 bytes
+Highest expansion depth: 26/100
+Expensive parser function count: 3/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 12619/5000000 bytes
+Lua time usage: 0.051/7.000 seconds
+Lua memory usage: 1816640/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  911.263      1 -total
+ 96.13%  875.955      5 Template:Content_only
+ 95.86%  873.521      1 Template:Infobox
+ 95.24%  867.901      1 Infobox:Shukaku
+ 94.52%  861.295      1 Template:Infobox/Naruto/Character
+ 65.11%  593.367      5 Template:IBox/Box
+ 21.42%  195.235     32 Template:IBox/Row
+ 13.15%  119.790     18 Template:SemanticInputParser
+ 13.00%  118.473      8 Template:SemanticInputParser/Array
+  8.29%   75.525      1 Template:Infobox/Debut
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:2964-0!dateformat=default!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20250927205008 and revision id 1449007. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Characters</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Shukaku">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

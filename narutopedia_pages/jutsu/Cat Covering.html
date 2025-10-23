@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Cat Covering — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Cat Covering</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Cat%20Covering" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Cat Covering<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Cat+Covering&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Cat Covering"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Cat_Covering" title="Special:FormEdit/Jutsu/Cat Covering">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">猫かぶり</rb></ruby>­ <dfn lang="ja-Latn">(Nekokaburi)</dfn></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/f/f1/Cat_Covering.png/revision/latest?cb=20200424172613" title="Cat Covering">
+<img alt="Cat Covering" class="pi-image-thumbnail" data-image-key="Cat_Covering.png" data-image-name="Cat Covering.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/f/f1/Cat_Covering.png/revision/latest/scale-to-width-down/268?cb=20200424172613" srcset="https://static.wikia.nocookie.net/naruto/images/f/f1/Cat_Covering.png/revision/latest/scale-to-width-down/268?cb=20200424172613 1x, https://static.wikia.nocookie.net/naruto/images/f/f1/Cat_Covering.png/revision/latest/scale-to-width-down/535?cb=20200424172613 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="english tv">
+<h3 class="pi-data-label pi-secondary-font">English anime</h3>
+<div class="pi-data-value pi-font">Ninja Art: Cat Cloak</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game names">
+<h3 class="pi-data-label pi-secondary-font">English games</h3>
+<div class="pi-data-value pi-font">Cat Cover (<span lang="ja">猫カバー</span>, <i>Nekokabā</i>)</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="other names">
+<h3 class="pi-data-label pi-secondary-font">Alternative names</h3>
+<div class="pi-data-value pi-font">Cat Covering Technique (<span lang="ja">猫かぶりの術</span>, <i>Nekokaburi no Jutsu</i>)</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/A_Shinobi%27s_Resolve" title="A Shinobi's Resolve"><i>Boruto</i> Episode #37</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="novel debut">
+<h3 class="pi-data-label pi-secondary-font">Novel</h3>
+<div class="pi-data-value pi-font"><i><a class="mw-redirect" href="https://naruto.fandom.com/wiki/The_Last_Day_at_the_Ninja_Academy!" title="The Last Day at the Ninja Academy!">The Last Day at the Ninja Academy!</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Mobile" title="Naruto Mobile">Naruto Mobile</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Novel, Game</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Izuno_Clan" title="Izuno Clan"><img class="mw-file-element" data-image-key="Izuno_Symbol.svg" data-image-name="Izuno Symbol.svg" data-relevant="0" decoding="async" height="18" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/0/06/Izuno_Symbol.svg/revision/latest/scale-to-width-down/18?cb=20211115073307" width="18"/></a></span><a href="https://naruto.fandom.com/wiki/Hiden" title="Hiden">Hiden</a>, <a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/F%C5%ABinjutsu" title="Fūinjutsu">Fūinjutsu</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Supplementary</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Parent&amp;value=Cat_Covering" rel="noreferrer noopener" target="_blank">Derived jutsu</a></h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Cat_Surprise" title="Cat Surprise">Cat Surprise</a></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Wasabi_Izuno" title="Wasabi Izuno">Wasabi Izuno</a></li></ul></div></div>
+</div>
+</section>
+</aside>
+
+The <b>Cat Covering</b> is a <a href="https://naruto.fandom.com/wiki/Hiden" title="Hiden">Hiden</a> technique from the <a href="https://naruto.fandom.com/wiki/Izuno_Clan" title="Izuno Clan">Izuno Clan</a>, allowing the user to fight with cat-like reflexes and abilities while enveloped in <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a>.
+<p></p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Types_of_Cats"><span class="tocnumber">2</span> <span class="toctext">Types of Cats</span></a>
+<ul>
+<li class="toclevel-2 tocsection-3"><a href="about:blank#Stray_Cat"><span class="tocnumber">2.1</span> <span class="toctext">Stray Cat</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="about:blank#Siamese_Cat"><span class="tocnumber">2.2</span> <span class="toctext">Siamese Cat</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="about:blank#Scaled_Cat"><span class="tocnumber">2.3</span> <span class="toctext">Scaled Cat</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="about:blank#Spotted_Cat"><span class="tocnumber">2.4</span> <span class="toctext">Spotted Cat</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="about:blank#See_Also"><span class="tocnumber">3</span> <span class="toctext">See Also</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>The technique is usually kept in a <a href="https://naruto.fandom.com/wiki/F%C5%ABinjutsu" title="Fūinjutsu">sealing</a> <a href="https://naruto.fandom.com/wiki/Scroll" title="Scroll">scroll</a> that the user may access one of many different species of cats (i.e. <a class="extiw" href="https://en.wikipedia.org/wiki/Persian_cat" title="wikipedia:Persian cat">Persian</a>, <a class="extiw" href="https://en.wikipedia.org/wiki/Siamese_cat" title="wikipedia:Siamese cat">Siamese</a>, <a class="extiw" href="https://en.wikipedia.org/wiki/Tortoiseshell_cat" title="wikipedia:Tortoiseshell cat">Tortoiseshell</a>, <a class="external text" href="https://en.wikipedia.org/wiki/Rusty-spotted_cat" rel="nofollow noreferrer noopener" target="_blank">Rusty-spotted cat</a>). After weaving the required hand signs necessary to <a href="https://naruto.fandom.com/wiki/Unsealing_Technique" title="Unsealing Technique">unseal</a> the technique, the user becomes enveloped in a partial cloak of coloured chakra that gives the user the selected cat's colouring and attributes. Other features include a cat-like tail and ears as well as chakra-infused nails, and a heightened sense of smell and hearing; similar to the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Inuzuka_clan" title="Inuzuka clan">Inuzuka clan</a>'s <a href="https://naruto.fandom.com/wiki/Four_Legs_Technique" title="Four Legs Technique">Four Legs Technique</a>.
+</p>
+<h2><span class="mw-headline" id="Types_of_Cats">Types of Cats</span></h2>
+<h3><span class="mw-headline" id="Stray_Cat">Stray Cat</span></h3>
+<p>Wasabi transforms into a "stray" cat (野良, <i>nora</i> ), with green ears and tail, as well as yellow eyes. This transformation was responsible for making Wasabi recognized as one of the fastest students in her class at the Ninja Academy due to the greatly increased agility, which also gives her an increased jumping height.  Wasabi also gains other feline characteristics: her nails grow into claws and can be infused with chakra to raise a curtain of dust when striking the ground;  her roar is capable of scaring away predators such as wolves;  and her hearing becomes sharper, allowing her to hear distant sounds or whispers clearly.  Currently, Wasabi can access this transformation without the aid of her scroll, simply by placing her hood over her head. 
+</p>
+<h3><span class="mw-headline" id="Siamese_Cat">Siamese Cat</span></h3>
+<p>Wasabi transforms into a "Siamese" cat (暹羅, <i>shamuro</i> ), with blue ears, tail, and eyes. While transformed, Wasabi's sense of smell becomes even more acute, which is useful for locating and chasing a target based on its scent. Despite this, he does not appear to be very fast, as he was unable to catch up with a fleeing monkey. 
+</p>
+<h3><span class="mw-headline" id="Scaled_Cat">Scaled Cat</span></h3>
+<p>Wasabi transforms into a "scaled" cat (ミ毛, <i>mike</i> ), whose right ear is white, the left ear is black, the tail is orange, and its eyes are yellow. While transformed, Wasabi gains a great increase in speed, becoming even more agile than a wolf. Finding herself unable to catch up with a monkey in a chase with her Siamese cat, Wasabi considers using the scaled cat as a faster option. 
+</p>
+<h3><span class="mw-headline" id="Spotted_Cat">Spotted Cat</span></h3>
+<p>Wasabi transforms into a tabby cat (斑, <i>madara</i> ), with orange ears and tail, as well as claws on his hands and feet imbued with orange chakra. This cat grants him drastic improvements in his fighting power, increasing his speed, reflexes, acrobatic abilities, and enough strength to throw his target away with a single kick. His sharp claws can be used to strike his enemies and are durable enough to collide with metal weapons, both piercing and blunt. 
+</p>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Claw_Creation_Technique" title="Claw Creation Technique">Claw Creation Technique</a></i></li></ul>
+<!-- 
+NewPP limit report
+Cached time: 20251004195851
+Cache expiry: 2592000
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.165 seconds
+Real time usage: 0.251 seconds
+Preprocessor visited node count: 285/1000000
+Post‐expand include size: 1312/2097152 bytes
+Template argument size: 32/2097152 bytes
+Highest expansion depth: 5/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 583/5000000 bytes
+Lua time usage: 0.097/7.000 seconds
+Lua memory usage: 1880225/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  230.370      1 Template:Infobox/Jutsu
+100.00%  230.370      1 -total
+ 10.01%   23.066      2 Template:Translation
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:250022-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251004195851 and revision id 1455443. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Cat%20Covering">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

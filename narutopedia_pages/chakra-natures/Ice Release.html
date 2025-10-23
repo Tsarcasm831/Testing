@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Ice Release — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Ice Release</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Ice%20Release" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="infobox box colored bordered innerbordered fill-td type-basic list-noicon float-right-clear"><tbody><tr><th class="mainheader" colspan="2">Ice Release
+        </th></tr><tr><td class="imagecell" colspan="2"><span typeof="mw:File"><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c2/Ice_Release.png/revision/latest?cb=20170120070228"><img class="mw-file-element" data-image-key="Ice_Release.png" data-image-name="Ice Release.png" data-relevant="1" decoding="async" height="169" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/c/c2/Ice_Release.png/revision/latest/scale-to-width-down/300?cb=20170120070228" width="300"/></a></span></td></tr><tr><th class="mainheader" colspan="2">Name
+	</th></tr><tr><th>Kanji
+	</th><td lang="ja">氷遁
+	</td></tr><tr><th>Rōmaji
+	</th><td>Hyōton
+	</td></tr><tr><th>Literal English
+	</th><td>Ice Release
+	</td></tr><tr><th>English TV
+	</th><td>Ice Style
+	</td></tr><tr><th class="mainheader" colspan="2">Debut
+	</th></tr><tr><th>Manga
+      </th><td><a href="https://naruto.fandom.com/wiki/Speed!!" title="Speed!!"><i>Naruto</i> Chapter #24</a>
+</td></tr><tr><th>Anime
+      </th><td><a href="https://naruto.fandom.com/wiki/Haku%27s_Secret_Jutsu:_Demonic_Mirroring_Ice_Crystals" title="Haku's Secret Jutsu: Demonic Mirroring Ice Crystals"><i>Naruto</i> Episode #13</a>
+</td></tr><tr><th>Novel
+      </th><td><i><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Naruto:_Innocent_Heart,_Demonic_Blood" title="Naruto: Innocent Heart, Demonic Blood">Naruto: Innocent Heart, Demonic Blood</a></i>
+</td></tr><tr><th>Movie
+      </th><td><i><a href="https://naruto.fandom.com/wiki/Naruto_the_Movie:_Ninja_Clash_in_the_Land_of_Snow" title="Naruto the Movie: Ninja Clash in the Land of Snow">Naruto the Movie: Ninja Clash in the Land of Snow</a></i>
+</td></tr><tr><th>Game
+      </th><td><i><a href="https://naruto.fandom.com/wiki/Naruto:_Clash_of_Ninja" title="Naruto: Clash of Ninja">Naruto: Clash of Ninja</a></i>
+</td></tr><tr><th>OVA
+      </th><td><i><a href="https://naruto.fandom.com/wiki/Naruto:_The_Cross_Roads" title="Naruto: The Cross Roads">Naruto: The Cross Roads</a></i>
+</td></tr><tr><th>Appears in
+	</th><td>Anime, Manga, Novel, Game, Movie
+	</td></tr><tr><th class="mainheader" colspan="2">Data</th></tr><tr><th>Clan
+        </th><td>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Yuki_Clan" title="Yuki Clan"><img class="mw-file-element" data-image-key="Yuki_Symbol.svg" data-image-name="Yuki Symbol.svg" data-relevant="0" decoding="async" height="18" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/4/40/Yuki_Symbol.svg/revision/latest/scale-to-width-down/18?cb=20110114142340" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Yuki_Clan" title="Yuki Clan">Yuki Clan</a></li></ul>
+</td></tr><tr><th>Classification
+	</th><td> <a href="https://naruto.fandom.com/wiki/Kekkei_Genkai" title="Kekkei Genkai">Kekkei Genkai</a>,  <a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>
+</td></tr><tr><th>Basic Natures
+	</th><td>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Wind_Release" title="Wind Release"><img class="mw-file-element" data-image-key="Nature_Icon_Wind.svg" data-image-name="Nature Icon Wind.svg" data-relevant="0" decoding="async" height="18" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/7/7a/Nature_Icon_Wind.svg/revision/latest/scale-to-width-down/18?cb=20091012163149" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Wind_Release" title="Wind Release">Wind Release</a></li></ul>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Water_Release" title="Water Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Water.svg" data-image-name="Nature Icon Water.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/a/ab/Nature_Icon_Water.svg/revision/latest/scale-to-width-down/18?cb=20091012165923" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Water_Release" title="Water Release">Water Release</a></li></ul>
+</td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Known Wielders
+	  </th></tr><tr><td class="">
+<ul><li><a href="https://naruto.fandom.com/wiki/Haku" title="Haku">Haku</a></li>
+<li><i><a href="https://naruto.fandom.com/wiki/Haku%27s_Mother" title="Haku's Mother">Haku's Mother</a> </i></li>
+<li><a href="https://naruto.fandom.com/wiki/Hakuhy%C5%8D" title="Hakuhyō">Hakuhyō</a> <sup>(Novel only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Kahy%C5%8D" title="Kahyō">Kahyō</a> <sup>(Novel,Game only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Fubuki_Kakuyoku" title="Fubuki Kakuyoku">Fubuki Kakuyoku</a> <sup>(Movie only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Dot%C5%8D_Kazahana" title="Dotō Kazahana">Dotō Kazahana</a> <sup>(Movie only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Rahy%C5%8D" title="Rahyō">Rahyō</a> <sup>(Novel only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Nadare_R%C5%8Dga" title="Nadare Rōga">Nadare Rōga</a> <sup>(Movie only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ry%C5%8Dgi" title="Ryōgi">Ryōgi</a> <sup>(Anime only)</sup></li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Jutsu
+	  </th></tr><tr><td class="">
+<ul><li><a href="https://naruto.fandom.com/wiki/Certain-Kill_Ice_Spears" title="Certain-Kill Ice Spears">Certain-Kill Ice Spears</a> <sup>(Anime only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Demonic_Mirroring_Ice_Crystals" title="Demonic Mirroring Ice Crystals">Demonic Mirroring Ice Crystals</a></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Prison_Technique" title="Ice Prison Technique">Ice Prison Technique</a> <sup>(Movie only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_Black_Dragon_Blizzard" title="Ice Release: Black Dragon Blizzard">Ice Release: Black Dragon Blizzard</a> <sup>(Movie only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_Crystal_Wall" title="Ice Release: Crystal Wall">Ice Release: Crystal Wall</a> <sup>(Anime only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_Earthen_Consecutive_Chains_of_Ice" title="Ice Release: Earthen Consecutive Chains of Ice">Ice Release: Earthen Consecutive Chains of Ice</a> <sup>(Novel only)</sup></li>
+<li><i><a href="https://naruto.fandom.com/wiki/Ice_Release:_Frozen_Capturing_Field" title="Ice Release: Frozen Capturing Field">Ice Release: Frozen Capturing Field</a> </i> <sup>(Anime only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_Ice_Rock_Dome_of_Magnificent_Nothingness" title="Ice Release: Ice Rock Dome of Magnificent Nothingness">Ice Release: Ice Rock Dome of Magnificent Nothingness</a></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_Ice-Breaking_Sledgehammer" title="Ice Release: Ice-Breaking Sledgehammer">Ice Release: Ice-Breaking Sledgehammer</a> <sup>(Novel only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_One_Horned_White_Whale" title="Ice Release: One Horned White Whale">Ice Release: One Horned White Whale</a> <sup>(Movie only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_Swallow_Snow_Storm" title="Ice Release: Swallow Snow Storm">Ice Release: Swallow Snow Storm</a> <sup>(Movie only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_Tearing_Dragon_Fierce_Tiger" title="Ice Release: Tearing Dragon Fierce Tiger">Ice Release: Tearing Dragon Fierce Tiger</a> <sup>(Movie only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_Ten_Thousand_Ice_Petals" title="Ice Release: Ten Thousand Ice Petals">Ice Release: Ten Thousand Ice Petals</a> <sup>(Anime only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_Twin_Dragon_Blizzard" title="Ice Release: Twin Dragon Blizzard">Ice Release: Twin Dragon Blizzard</a> <sup>(Movie only)</sup></li>
+<li><i><a href="https://naruto.fandom.com/wiki/Ice_Release:_Whirlwind" title="Ice Release: Whirlwind">Ice Release: Whirlwind</a> </i> <sup>(Anime only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Release:_Wolf_Fang_Avalanche_Technique" title="Ice Release: Wolf Fang Avalanche Technique">Ice Release: Wolf Fang Avalanche Technique</a> <sup>(Movie only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice_Sword_Technique" title="Ice Sword Technique">Ice Sword Technique</a> <sup>(Novel only)</sup></li>
+<li><a href="https://naruto.fandom.com/wiki/Ice-Breaking_Fist" title="Ice-Breaking Fist">Ice-Breaking Fist</a> <sup>(Novel only)</sup></li></ul>
+</td></tr></tbody></table></td></tr></tbody></table>
+<p class="mw-empty-elt"></p><section></section><p><b>Ice Release</b> (<span lang="ja">氷遁</span>, <i>Hyōton</i>, <i>Viz:</i> Ice Style) is a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Nature_transformation" title="Nature transformation">nature transformation</a> <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Kekkei_genkai" title="Kekkei genkai">kekkei genkai</a>, a combination of <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Water" title="Water">water</a> and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Wind" title="Wind">wind</a>. The <a href="https://naruto.fandom.com/wiki/Land_of_Water" title="Land of Water">Land of Water</a>'s <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Yuki_clan" title="Yuki clan">Yuki clan</a> was feared for the power of their Ice Release, forcing its members to go into hiding to escape persecution.</p><section></section><p> In <i><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Kakashi_Hiden" title="Kakashi Hiden">Kakashi Hiden</a></i>, <a href="https://naruto.fandom.com/wiki/Kahy%C5%8D" title="Kahyō">Kahyō</a> and <a href="https://naruto.fandom.com/wiki/Rahy%C5%8D" title="Rahyō">Rahyō‎‎</a> are ‎‎ice users whose family was conquered by <a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a> decades earlier. Because Kiri did not value their lives, they both <a href="https://naruto.fandom.com/wiki/Missing-nin" title="Missing-nin">defected</a> and settled in the <a href="https://naruto.fandom.com/wiki/Land_of_Waves" title="Land of Waves">Land of Waves</a>. In the <i>Boruto</i> anime, <a href="https://naruto.fandom.com/wiki/Ry%C5%8Dgi" title="Ryōgi">Ryōgi</a> from the <a href="https://naruto.fandom.com/wiki/Land_of_Snow" title="Land of Snow">Land of Snow</a> can use Ice Release.
+</p><p class="mw-empty-elt"></p><p><a href="https://naruto.fandom.com/wiki/Haku" title="Haku">Haku</a>, a descendant of the Yuki clan, can make <a href="https://naruto.fandom.com/wiki/Demonic_Mirroring_Ice_Crystals" title="Demonic Mirroring Ice Crystals">mirrors of ice</a> that he is able to enter and instantly travel between. His ice is resistant to <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fire" title="Fire">fire</a>, experiencing little to no melting despite the heat. Kahyō can plant <a href="https://naruto.fandom.com/wiki/Ice_Release:_Earthen_Consecutive_Chains_of_Ice" title="Ice Release: Earthen Consecutive Chains of Ice">ice particles</a> on targets, causing them to freeze to death if they don't constantly use their chakra to keep themselves warm. Her Ice Release is dependent on moisture in the air, preventing her from forming ice in dry conditions. Rahyō <a href="https://naruto.fandom.com/wiki/Ice_Release:_Ice-Breaking_Sledgehammer" title="Ice Release: Ice-Breaking Sledgehammer">encases his hands with ice</a>, strengthening his <a href="https://naruto.fandom.com/wiki/Taijutsu" title="Taijutsu">taijutsu</a> strikes and making it easier for him to block opponents' taijutsu. Ryōgi can shoot <a href="https://naruto.fandom.com/wiki/Ice_Release:_Ten_Thousand_Ice_Petals" title="Ice Release: Ten Thousand Ice Petals">shards of ice</a> at targets.
+</p><p>An Ice Release user's presence can lower their surroundings' temperature, causing snow to fall in the immediate vicinity. Similarly, Ryōgi is shown lowering his own body temperature so that his movements will not activate thermal sensors.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>In <i><a href="https://naruto.fandom.com/wiki/Naruto_the_Movie:_Ninja_Clash_in_the_Land_of_Snow" title="Naruto the Movie: Ninja Clash in the Land of Snow">Naruto the Movie: Ninja Clash in the Land of Snow</a></i>, ninja from <a href="https://naruto.fandom.com/wiki/Yukigakure" title="Yukigakure">Yukigakure</a> use Ice Release by manipulating pre-existing ice and snow. Their Ice Release is not a kekkei genkai, as <a href="https://naruto.fandom.com/wiki/Kakashi_Hatake" title="Kakashi Hatake">Kakashi Hatake</a> is able to copy it with his <a href="https://naruto.fandom.com/wiki/Sharingan" title="Sharingan">Sharingan</a>. Most of these Ice Release techniques use the Dog <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Hand_seal" title="Hand seal">hand seal</a>.</li>
+<li>In the original <i>Naruto</i> anime, <a href="https://naruto.fandom.com/wiki/Renga" title="Renga">Renga</a> crystallises the water vapour around him into ice. This is never mentioned to be Ice Release.</li></ul>
+<table align="right"><tbody><tr><th></th><td><figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a href="https://naruto.fandom.com/wiki/File:Sasuke_ice.png" title="File:Sasuke ice.png"><img alt="Sasuke ice" class="thumbimage lazyload" data-image-key="Sasuke_ice.png" data-image-name="Sasuke ice.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/8b/Sasuke_ice.png/revision/latest/scale-to-width-down/180?cb=20221107010059" decoding="async" height="291" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a href="https://naruto.fandom.com/wiki/File:Sasuke_ice.png" title="File:Sasuke ice.png"><img alt="Sasuke ice" class="thumbimage" data-image-key="Sasuke_ice.png" data-image-name="Sasuke ice.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/8/8b/Sasuke_ice.png/revision/latest/scale-to-width-down/180?cb=20221107010059" decoding="async" height="291" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/8/8b/Sasuke_ice.png/revision/latest/scale-to-width-down/180?cb=20221107010059" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Sasuke_ice.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Sasuke making ice in the <i>Sasuke Retsuden</i> manga.</p> </figcaption> </figure></td></tr></tbody></table>
+<ul><li>In <i><a href="https://naruto.fandom.com/wiki/Sasuke_Shinden:_The_Teacher%27s_Star_Pupil" title="Sasuke Shinden: The Teacher's Star Pupil">Sasuke Shinden: The Teacher's Star Pupil</a></i>, after <a href="https://naruto.fandom.com/wiki/Sasuke_Uchiha" title="Sasuke Uchiha">Sasuke Uchiha</a> performs a Water Release, he <a href="https://naruto.fandom.com/wiki/Supercooled_Water_Technique" title="Supercooled Water Technique">rapidly cools</a> it with Wind Release, creating ice. <a href="https://naruto.fandom.com/wiki/Konohamaru_Sarutobi" title="Konohamaru Sarutobi">Konohamaru Sarutobi</a> compares this process to Ice Release, but Sasuke insists that it's inferior to true Ice Release.
+<ul><li>Sasuke later dispenses with Wind Release entirely, instead manipulating the molecules of his Water Release so that it changes from its liquid state (water) to its solid state (ice).</li></ul></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251009204517
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: []
+[SMW] In‐text annotation parser time: 0.002 seconds
+CPU time usage: 0.435 seconds
+Real time usage: 0.625 seconds
+Preprocessor visited node count: 3890/1000000
+Post‐expand include size: 39897/2097152 bytes
+Template argument size: 6427/2097152 bytes
+Highest expansion depth: 17/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3179/5000000 bytes
+Lua time usage: 0.052/7.000 seconds
+Lua memory usage: 1736374/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  552.272      1 -total
+ 96.69%  533.988      1 Template:Infobox/Naruto/Genetic
+ 70.06%  386.903      2 Template:IBox/Box
+ 44.21%  244.159     86 Template:MediaCleaner
+ 19.60%  108.227     18 Template:IBox/Row
+ 14.20%   78.417      1 Template:Infobox/Debut
+ 11.70%   64.643     27 Template:IsUnnamed
+  8.18%   45.161      7 Template:SemanticInputParser
+  6.45%   35.606      2 Template:MediaNav
+  4.49%   24.822      2 Template:SemanticInputParser/Array
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:3488-0!dateformat=default!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251009204517 and revision id 1451235. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Kekkei_Genkai</span><span class="footer-divider">•</span><span class="footer-category">•</span><span class="footer-divider">•</span><span class="footer-category">Chakra_Natures</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Ice%20Release">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

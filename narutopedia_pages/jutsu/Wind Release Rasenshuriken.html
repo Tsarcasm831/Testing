@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Wind Release: Rasenshuriken — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Wind Release: Rasenshuriken</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Wind%20Release%3A%20Rasenshuriken" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="box headnote">
+<tbody><tr>
+<td>This article is about the ninjutsu. For the episode, see <a href="https://naruto.fandom.com/wiki/Wind_Release:_Rasenshuriken!" title="Wind Release: Rasenshuriken!">Wind Release: Rasenshuriken!</a>.
+</td></tr></tbody></table>
+<p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Wind Release: Rasenshuriken<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Wind+Release%3A+Rasenshuriken&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Wind Release: Rasenshuriken"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Wind_Release:_Rasenshuriken" title="Special:FormEdit/Jutsu/Wind Release: Rasenshuriken">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">風遁・螺旋手裏剣</rb></ruby>­ <dfn lang="ja-Latn">(Fūton: Rasenshuriken)</dfn></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/5/52/F%C5%ABton_Rasenshuriken.png/revision/latest?cb=20220118210921" title="Fūton Rasenshuriken">
+<img alt="Fūton Rasenshuriken" class="pi-image-thumbnail" data-image-key="F%C5%ABton_Rasenshuriken.png" data-image-name="Fūton Rasenshuriken.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/5/52/F%C5%ABton_Rasenshuriken.png/revision/latest/scale-to-width-down/268?cb=20220118210921" srcset="https://static.wikia.nocookie.net/naruto/images/5/52/F%C5%ABton_Rasenshuriken.png/revision/latest/scale-to-width-down/268?cb=20220118210921 1x, https://static.wikia.nocookie.net/naruto/images/5/52/F%C5%ABton_Rasenshuriken.png/revision/latest/scale-to-width-down/536?cb=20220118210921 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="literal english">
+<h3 class="pi-data-label pi-secondary-font">Literal English</h3>
+<div class="pi-data-value pi-font">Wind Release: Spiralling Shuriken</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="english tv">
+<h3 class="pi-data-label pi-secondary-font">English anime</h3>
+<div class="pi-data-value pi-font">Wind Style: Rasen Shuriken</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut manga">
+<h3 class="pi-data-label pi-secondary-font">Manga</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Shikamaru%27s_Battle!!_(volume)" title="Shikamaru's Battle!! (volume)">Volume #37</a>, <a href="https://naruto.fandom.com/wiki/The_New_Technique%E2%80%A6!!" title="The New Technique…!!"><i>Naruto</i> Chapter #339</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/When_You_Curse_Someone,_You_Dig_Your_Own_Grave" title="When You Curse Someone, You Dig Your Own Grave"><i>Naruto Shippūden</i> Episode #87</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="novel debut">
+<h3 class="pi-data-label pi-secondary-font">Novel</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden_the_Movie:_The_Will_of_Fire" title="Naruto Shippūden the Movie: The Will of Fire">Naruto Shippūden the Movie: The Will of Fire</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="movie debut">
+<h3 class="pi-data-label pi-secondary-font">Movie</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden_the_Movie:_The_Will_of_Fire" title="Naruto Shippūden the Movie: The Will of Fire">Naruto Shippūden the Movie: The Will of Fire</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ninja_Destiny_3" title="Naruto Shippūden: Ninja Destiny 3">Naruto Shippūden: Ninja Destiny 3</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="ova debut">
+<h3 class="pi-data-label pi-secondary-font">OVA</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_x_UT" title="Naruto x UT">Naruto x UT</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Manga, Novel, Game, Movie</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Kinjutsu" title="Kinjutsu">Kinjutsu</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu type">
+<h3 class="pi-data-label pi-secondary-font">Nature</h3>
+<div class="pi-data-value pi-font"><div class="plainlist"><ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Wind_Release" title="Wind Release"><img class="mw-file-element" data-image-key="Nature_Icon_Wind.svg" data-image-name="Nature Icon Wind.svg" data-relevant="0" decoding="async" height="18" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/7/7a/Nature_Icon_Wind.svg/revision/latest/scale-to-width-down/18?cb=20091012163149" width="18"/></a></span><a href="https://naruto.fandom.com/wiki/Wind_Release" title="Wind Release">Wind Release</a></li></ul></div></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu rank">
+<h3 class="pi-data-label pi-secondary-font">Rank</h3>
+<div class="pi-data-value pi-font">S-rank</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Offensive</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu range">
+<h3 class="pi-data-label pi-secondary-font">Range</h3>
+<div class="pi-data-value pi-font">All ranges</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Other jutsu</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="parent jutsu">
+<h3 class="pi-data-label pi-secondary-font">Parent jutsu</h3>
+<div class="pi-data-value pi-font"><div class="plainlist"><ul><li><a href="https://naruto.fandom.com/wiki/Wind_Release:_Rasengan" title="Wind Release: Rasengan">Wind Release: Rasengan</a></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Parent&amp;value=Wind_Release%3A_Rasenshuriken" rel="noreferrer noopener" target="_blank">Derived jutsu</a></h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Big_Ball_Rasenshuriken" title="Big Ball Rasenshuriken">Big Ball Rasenshuriken</a></li><li><a href="https://naruto.fandom.com/wiki/Mini-Rasenshuriken" title="Mini-Rasenshuriken">Mini-Rasenshuriken</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Ink-Splatter_Rasenshuriken" title="Sage Art: Ink-Splatter Rasenshuriken">Sage Art: Ink-Splatter Rasenshuriken</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Super_Tailed_Beast_Rasenshuriken" title="Sage Art: Super Tailed Beast Rasenshuriken">Sage Art: Super Tailed Beast Rasenshuriken</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Lava_Release_Rasenshuriken" title="Sage Art: Lava Release Rasenshuriken">Sage Art: Lava Release Rasenshuriken</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Super_Tailed_Beast_Rasenshuriken" title="Sage Art: Super Tailed Beast Rasenshuriken">Sage Art: Super Tailed Beast Rasenshuriken</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Super_Tailed_Beast_Rasenshuriken" title="Sage Art: Super Tailed Beast Rasenshuriken">Sage Art: Super Tailed Beast Rasenshuriken</a></li><li><a href="https://naruto.fandom.com/wiki/Scorch_Release:_Halo_Hurricane_Jet_Black_Arrow_Style_Zero" title="Scorch Release: Halo Hurricane Jet Black Arrow Style Zero">Scorch Release: Halo Hurricane Jet Black Arrow Style Zero</a></li><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball_Rasenshuriken" title="Tailed Beast Ball Rasenshuriken">Tailed Beast Ball Rasenshuriken</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Six_Paths:_Ultra-Big_Ball_Rasenshuriken" title="Six Paths: Ultra-Big Ball Rasenshuriken">Six Paths: Ultra-Big Ball Rasenshuriken</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Wind_Release:_Repeated_Rasenshuriken" title="Wind Release: Repeated Rasenshuriken">Wind Release: Repeated Rasenshuriken</a></li><li><a href="https://naruto.fandom.com/wiki/Wind_Release:_Ultra-Big_Ball_Rasenshuriken" title="Wind Release: Ultra-Big Ball Rasenshuriken">Wind Release: Ultra-Big Ball Rasenshuriken</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Scorch_Release:_Halo_Hurricane_Jet_Black_Arrow_Style_Zero" title="Scorch Release: Halo Hurricane Jet Black Arrow Style Zero">Scorch Release: Halo Hurricane Jet Black Arrow Style Zero</a></li><li><a href="https://naruto.fandom.com/wiki/Six_Paths:_Ultra-Big_Ball_Rasenshuriken" title="Six Paths: Ultra-Big Ball Rasenshuriken">Six Paths: Ultra-Big Ball Rasenshuriken</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Yasaka_Magatama:_Tailed_Beast_Noka" title="Yasaka Magatama: Tailed Beast Noka">Yasaka Magatama: Tailed Beast Noka</a></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a></li></ul></div></div>
+</div>
+</section>
+</aside>
+
+The <b>Wind Release: Rasenshuriken</b> is a <a href="https://naruto.fandom.com/wiki/Shuriken" title="Shuriken">shuriken</a>-shaped variant of the <a href="https://naruto.fandom.com/wiki/Wind_Release:_Rasengan" title="Wind Release: Rasengan">Wind Release: Rasengan</a>.
+<p></p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Development"><span class="tocnumber">2</span> <span class="toctext">Development</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Trivia"><span class="tocnumber">3</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="about:blank#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>The Rasenshuriken was invented by <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> shortly after he figured out the principles of the <a href="https://naruto.fandom.com/wiki/Wind_Release:_Rasengan" title="Wind Release: Rasengan">Wind Release: Rasengan</a>. Like that technique, Naruto typically has the help of two <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Shadow_clone" title="Shadow clone">shadow clones</a> in the Rasenshuriken's formation: he provides the chakra, one clone helps keep the chakra contained, and the second clone adds his <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Wind" title="Wind">wind</a> <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Nature" title="Nature">nature</a>. It is the completed version of the Wind Release: Rasengan, with four large points around the central <a href="https://naruto.fandom.com/wiki/Rasengan" title="Rasengan">Rasengan</a> core, giving the appearance of a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/F%C5%ABma_shuriken" title="Fūma shuriken">fūma shuriken</a>. It also gives off a loud screeching noise. By the time of <i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i>, Naruto is able to create Rasenshuriken without aid and is able to remotely guide it.
+</p><p>The Rasenshuriken requires a great deal of chakra to perform. Naruto has been shown creating as many as three Rasenshuriken on his own before tiring out. While in <a href="https://naruto.fandom.com/wiki/Sage_Mode" title="Sage Mode">Sage Mode</a>, he can create two Rasenshuriken per transformation. After the second, he must re-enter Sage Mode in order to be able to create additional Rasenshuriken. However, after improving his Sage Mode he's able to use three at a single time (five in the anime), and while in his <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki_Forms" title="Jinchūriki Forms">Kurama Mode</a> or Nine-Tails Chakra Mode, he can use the Rasenshuriken an unlimited number of times. Its four points are very sharp, enough to cut through rock and disintegrate most of <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Pain" title="Pain">Pain</a>'s <a href="https://naruto.fandom.com/wiki/Human_Path" title="Human Path">Human Path</a>. The technique is extremely heavy, as <a href="https://naruto.fandom.com/wiki/Fukasaku" title="Fukasaku">Fukasaku</a> was surprised Naruto could throw the highly dense chakra, even in Sage Mode.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/b4/Blast.PNG/revision/latest?cb=20151004012112"><img alt="Blast" class="thumbimage lazyload" data-image-key="Blast.PNG" data-image-name="Blast.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/b4/Blast.PNG/revision/latest/scale-to-width-down/180?cb=20151004012112" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/b4/Blast.PNG/revision/latest?cb=20151004012112"><img alt="Blast" class="thumbimage" data-image-key="Blast.PNG" data-image-name="Blast.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/b4/Blast.PNG/revision/latest/scale-to-width-down/180?cb=20151004012112" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/b4/Blast.PNG/revision/latest/scale-to-width-down/180?cb=20151004012112" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Blast.PNG"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The Rasenshuriken's wind vortex.</p> </figcaption> </figure>
+<p>After travelling a certain distance or colliding with a target that it can't slice through, the central sphere of the Rasenshuriken detonates, producing a vortex of wind in the immediate area. Within this vortex, countless microscopic wind blades are created, so many that even the <a href="https://naruto.fandom.com/wiki/Sharingan" title="Sharingan">Sharingan</a> can't count them all. The wind blades pierce every cell in the body, disconnecting them from the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Chakra_circulatory_system" title="Chakra circulatory system">Chakra circulatory system</a> and so preventing them from providing their physical energy to the chakra-creation process. Because of this, the target loses their ability to create and mould chakra, damage which cannot be healed by <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Medical_ninjutsu" title="Medical ninjutsu">medical ninjutsu</a>. <a href="https://naruto.fandom.com/wiki/Tsunade" title="Tsunade">Tsunade</a> likens the damage to poison, and warns that if the damage is great enough, those affected by it won't be able to use <a href="https://naruto.fandom.com/wiki/Jutsu" title="Jutsu">jutsu</a> again.
+</p>
+<h2><span class="mw-headline" id="Development">Development</span></h2>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/aa/Severing_Chakra_Cells2.PNG/revision/latest?cb=20150217191006"><img alt="Severing Chakra Cells2" class="thumbimage lazyload" data-image-key="Severing_Chakra_Cells2.PNG" data-image-name="Severing Chakra Cells2.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/aa/Severing_Chakra_Cells2.PNG/revision/latest/scale-to-width-down/180?cb=20150217191006" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/aa/Severing_Chakra_Cells2.PNG/revision/latest?cb=20150217191006"><img alt="Severing Chakra Cells2" class="thumbimage" data-image-key="Severing_Chakra_Cells2.PNG" data-image-name="Severing Chakra Cells2.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/aa/Severing_Chakra_Cells2.PNG/revision/latest/scale-to-width-down/180?cb=20150217191006" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/aa/Severing_Chakra_Cells2.PNG/revision/latest/scale-to-width-down/180?cb=20150217191006" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Severing_Chakra_Cells2.PNG"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The side effect from using the technique at close range.</p> </figcaption> </figure>
+<p>When Naruto first starts using the Rasenshuriken there are two flaws to using it: It was prone to sporadically dissipate after being formed, forcing Naruto to use it as a melee weapon to keep it stable, thrusting the Rasenshuriken into targets in the same way that he does the standard Rasengan. The Rasenshuriken causes cellular damage not only to his targets, but to the arm Naruto holds the Rasenshuriken with, though the damage isn't quite as severe. It, however, poses enough risk for Tsunade to demand it never be used again.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/ac/Rasen_Expansion.PNG/revision/latest?cb=20150924045435"><img alt="Rasen Expansion" class="thumbimage lazyload" data-image-key="Rasen_Expansion.PNG" data-image-name="Rasen Expansion.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/ac/Rasen_Expansion.PNG/revision/latest/scale-to-width-down/180?cb=20150924045435" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/ac/Rasen_Expansion.PNG/revision/latest?cb=20150924045435"><img alt="Rasen Expansion" class="thumbimage" data-image-key="Rasen_Expansion.PNG" data-image-name="Rasen Expansion.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/ac/Rasen_Expansion.PNG/revision/latest/scale-to-width-down/180?cb=20150924045435" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/ac/Rasen_Expansion.PNG/revision/latest/scale-to-width-down/180?cb=20150924045435" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Rasen_Expansion.PNG"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The Rasenshuriken's expansion.</p> </figcaption> </figure>
+<p>Naruto is able to overcome these flaws by learning <a href="https://naruto.fandom.com/wiki/Senjutsu" title="Senjutsu">senjutsu</a>. By infusing the Rasenshuriken with senjutsu chakra, its shape is maintained after formation, meaning that he can use it as a projectile and, as a result, that he no longer needs to worry about damaging himself. When thrown, the Rasenshuriken travels very quickly, enough to cross the crater of <a href="https://naruto.fandom.com/wiki/Chibaku_Tensei" title="Chibaku Tensei">Chibaku Tensei</a> in under a second. Once thrown, Naruto can remotely expand the Rasenshuriken to either compensate for imprecise aim or to catch dodging targets, though its speed is great enough that this is rarely necessary. He enjoys similar benefits while using <a href="https://naruto.fandom.com/wiki/Nine-Tails_Chakra_Mode" title="Nine-Tails Chakra Mode">Nine-Tails Chakra Mode</a>, where he can use his <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Chakra_arm" title="Chakra arm">chakra arms</a> to guide the Rasenshuriken to its target while he remains at a safe distance. Moreover, he can use these chakra arms in place of the usual shadow clones.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/0/0a/Naruto_Vs_Kaguya.png/revision/latest?cb=20160825112853"><img alt="Naruto Vs Kaguya" class="thumbimage lazyload" data-image-key="Naruto_Vs_Kaguya.png" data-image-name="Naruto Vs Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/0/0a/Naruto_Vs_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160825112853" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/0/0a/Naruto_Vs_Kaguya.png/revision/latest?cb=20160825112853"><img alt="Naruto Vs Kaguya" class="thumbimage" data-image-key="Naruto_Vs_Kaguya.png" data-image-name="Naruto Vs Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/0/0a/Naruto_Vs_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160825112853" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/0/0a/Naruto_Vs_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160825112853" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Naruto_Vs_Kaguya.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Several Rasenshuriken influenced by Naruto's tailed beast chakra.</p> </figcaption> </figure>
+<p>Naruto eventually starts making the Rasenshuriken a template for other jutsu, just as he does with the regular Rasengan. Like the Rasengan, some of the simpler modifications he makes to the Rasenshuriken are by using <a href="https://naruto.fandom.com/wiki/Wind_Release:_Repeated_Rasenshuriken" title="Wind Release: Repeated Rasenshuriken">multiple simultaneously</a> or making them <a href="https://naruto.fandom.com/wiki/Big_Ball_Rasenshuriken" title="Big Ball Rasenshuriken">larger</a> (or even <a href="https://naruto.fandom.com/wiki/Mini-Rasenshuriken" title="Mini-Rasenshuriken">smaller</a>). In place of the Rasengan he uses for the centre of the Rasenshuriken, he can use <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Balls</a> or <a href="https://naruto.fandom.com/wiki/Truth-Seeking_Ball" title="Truth-Seeking Ball">Truth-Seeking Balls</a> that will create significantly larger explosions upon detonation. He can also apply other natures to the Rasenshuriken, as he does with the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Super_Tailed_Beast_Rasenshuriken" title="Super Tailed Beast Rasenshuriken">Super Tailed Beast Rasenshuriken</a>.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>Though the technique debuted in chapter 339, Naruto used it off-panel <a href="https://naruto.fandom.com/wiki/Affinities%E2%80%A6!!" title="Affinities…!!">six chapters earlier</a>.</li>
+<li>Like the Rasengan, the Rasenshuriken's colour is depicted inconsistently in the series because <a href="https://naruto.fandom.com/wiki/Masashi_Kishimoto" title="Masashi Kishimoto">Masashi Kishimoto</a> has yet to decide upon a colour for the technique. It is most often depicted as being a bluish-white, but different promotional and supplementary material have also shown it as red or orange with no obvious pattern.</li>
+<li>In <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden_the_Movie:_The_Will_of_Fire" title="Naruto Shippūden the Movie: The Will of Fire">Naruto Shippūden the Movie: The Will of Fire</a></i>, <a href="https://naruto.fandom.com/wiki/Hiruko_(missing-nin)" title="Hiruko (missing-nin)">Hiruko</a> tries to absorb this technique, but was unable to combine the peak-levels of shape and nature transformation, like Naruto did at first. The sphere begins forming in his hand, but it becomes unstable and disperses, backfiring on him.</li>
+<li>In certain games, when the senjutsu version of the Rasenshuriken is thrown, it will hit and carry its target into the air before exploding. This version is referred to as the <b>True: Wind Release: Rasenshuriken</b> (<span lang="ja">真・風遁・螺旋手裏剣</span>, <i>Shin Fūton: Rasenshuriken</i>).</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251001105440
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.307 seconds
+Real time usage: 0.506 seconds
+Preprocessor visited node count: 623/1000000
+Post‐expand include size: 3697/2097152 bytes
+Template argument size: 249/2097152 bytes
+Highest expansion depth: 7/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7110/5000000 bytes
+Lua time usage: 0.177/7.000 seconds
+Lua memory usage: 2023200/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  445.470      1 -total
+ 94.29%  420.046      1 Template:Infobox/Jutsu
+  1.64%    7.294      1 Template:Translation
+  0.43%    1.902      1 Template:Looking_for
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:3185-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251001105440 and revision id 1452956. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Wind%20Release%3A%20Rasenshuriken">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

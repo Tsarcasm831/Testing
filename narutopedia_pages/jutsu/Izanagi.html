@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Izanagi — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Izanagi</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Izanagi" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="box headnote">
+<tbody><tr>
+<td>This article is about the jutsu. For the chapter, see <a href="https://naruto.fandom.com/wiki/Izanagi_(chapter)" title="Izanagi (chapter)">Izanagi</a>.
+</td></tr></tbody></table>
+<p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Izanagi<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Izanagi&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Izanagi"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Izanagi" title="Special:FormEdit/Jutsu/Izanagi">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">イザナギ</rb></ruby>­ <dfn lang="ja-Latn">(Izanagi)</dfn></h2>
+<div class="pi-image-collection wds-tabber">
+<div class="wds-tabs__wrapper">
+<ul class="wds-tabs">
+<li class="wds-tabs__tab wds-is-current">
+<span class="wds-tabs__tab-label">
+							When Danzō is hit by Sasuke's Susanoo arrow…
+							
+						</span>
+</li>
+<li class="wds-tabs__tab">
+<span class="wds-tabs__tab-label">
+							…he casts Izanagi to nullify the damage…
+							
+						</span>
+</li>
+<li class="wds-tabs__tab">
+<span class="wds-tabs__tab-label">
+							…and continues as if nothing happened.
+							
+						</span>
+</li>
+</ul>
+</div>
+<div class="wds-tab__content wds-is-current">
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/9/93/Izanagi_1.png/revision/latest?cb=20151004045309" title="When Danzō is hit by Sasuke's Susanoo arrow…">
+<img alt="When Danzō is hit by Sasuke's Susanoo arrow…" class="pi-image-thumbnail" data-image-key="Izanagi 1.png" data-image-name="Izanagi 1.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/9/93/Izanagi_1.png/revision/latest/scale-to-width-down/268?cb=20151004045309" srcset="https://static.wikia.nocookie.net/naruto/images/9/93/Izanagi_1.png/revision/latest/scale-to-width-down/268?cb=20151004045309 1x, https://static.wikia.nocookie.net/naruto/images/9/93/Izanagi_1.png/revision/latest/scale-to-width-down/536?cb=20151004045309 2x" width="270"/>
+</a>
+</figure>
+</div>
+<div class="wds-tab__content">
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/0/0d/Izanagi_New2.png/revision/latest?cb=20151004045353" title="…he casts Izanagi to nullify the damage…">
+<img alt="…he casts Izanagi to nullify the damage…" class="pi-image-thumbnail" data-image-key="Izanagi New2.png" data-image-name="Izanagi New2.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/0/0d/Izanagi_New2.png/revision/latest/scale-to-width-down/268?cb=20151004045353" srcset="https://static.wikia.nocookie.net/naruto/images/0/0d/Izanagi_New2.png/revision/latest/scale-to-width-down/268?cb=20151004045353 1x, https://static.wikia.nocookie.net/naruto/images/0/0d/Izanagi_New2.png/revision/latest/scale-to-width-down/536?cb=20151004045353 2x" width="270"/>
+</a>
+</figure>
+</div>
+<div class="wds-tab__content">
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/b/b1/Izanagi_4.png/revision/latest?cb=20151004045432" title="…and continues as if nothing happened.">
+<img alt="…and continues as if nothing happened." class="pi-image-thumbnail" data-image-key="Izanagi 4.png" data-image-name="Izanagi 4.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/b/b1/Izanagi_4.png/revision/latest/scale-to-width-down/268?cb=20151004045432" srcset="https://static.wikia.nocookie.net/naruto/images/b/b1/Izanagi_4.png/revision/latest/scale-to-width-down/268?cb=20151004045432 1x, https://static.wikia.nocookie.net/naruto/images/b/b1/Izanagi_4.png/revision/latest/scale-to-width-down/536?cb=20151004045432 2x" width="270"/>
+</a>
+</figure>
+</div>
+</div>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut manga">
+<h3 class="pi-data-label pi-secondary-font">Manga</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Sasuke_vs._Danz%C5%8D%E2%80%A6!!_(volume)" title="Sasuke vs. Danzō…!! (volume)">Volume #51</a>, <a href="https://naruto.fandom.com/wiki/Sasuke_vs._Danz%C5%8D%E2%80%A6!!" title="Sasuke vs. Danzō…!!"><i>Naruto</i> Chapter #476</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Danz%C5%8D%27s_Right_Arm" title="Danzō's Right Arm"><i>Naruto Shippūden</i> Episode #209</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Impact" title="Naruto Shippūden: Ultimate Ninja Impact">Naruto Shippūden: Ultimate Ninja Impact</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Manga, Game</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Sharingan" title="Sharingan"><img class="mw-file-element lazyload" data-image-key="Sharingan_Triple.svg" data-image-name="Sharingan Triple.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/5/56/Sharingan_Triple.svg/revision/latest/scale-to-width-down/18?cb=20091022225716" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span><a href="https://naruto.fandom.com/wiki/Kekkei_Genkai" title="Kekkei Genkai">Kekkei Genkai</a>, <a href="https://naruto.fandom.com/wiki/Genjutsu" title="Genjutsu">Genjutsu</a>, <a href="https://naruto.fandom.com/wiki/Kinjutsu" title="Kinjutsu">Kinjutsu</a>, <a href="https://naruto.fandom.com/wiki/D%C5%8Djutsu" title="Dōjutsu">Dōjutsu</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu type">
+<h3 class="pi-data-label pi-secondary-font">Nature</h3>
+<div class="pi-data-value pi-font"><div class="plainlist"><ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Yin_Release" title="Yin Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Yin.svg" data-image-name="Nature Icon Yin.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/d/de/Nature_Icon_Yin.svg/revision/latest/scale-to-width-down/18?cb=20100916093714" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span><a href="https://naruto.fandom.com/wiki/Yin_Release" title="Yin Release">Yin Release</a></li><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Yang_Release" title="Yang Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Yang.svg" data-image-name="Nature Icon Yang.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/6/64/Nature_Icon_Yang.svg/revision/latest/scale-to-width-down/18?cb=20100916093715" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span><a href="https://naruto.fandom.com/wiki/Yang_Release" title="Yang Release">Yang Release</a></li></ul></div></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Defensive, Supplementary</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu range">
+<h3 class="pi-data-label pi-secondary-font">Range</h3>
+<div class="pi-data-value pi-font">Short range (0-5m)</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="hand signs">
+<h3 class="pi-data-label pi-secondary-font">Hand seals</h3>
+<div class="pi-data-value pi-font">Hare → Boar → Ram</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Other jutsu</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="parent jutsu">
+<h3 class="pi-data-label pi-secondary-font">Parent jutsu</h3>
+<div class="pi-data-value pi-font"><div class="plainlist"><ul><li><a href="https://naruto.fandom.com/wiki/Creation_of_All_Things_Technique" title="Creation of All Things Technique">Creation of All Things Technique</a></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Related jutsu</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="related jutsu">
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Izanami" title="Izanami">Izanami</a></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a></li><li><a href="https://naruto.fandom.com/wiki/Obito_Uchiha" title="Obito Uchiha">Obito Uchiha</a></li><li><a href="https://naruto.fandom.com/wiki/Danz%C5%8D_Shimura" title="Danzō Shimura">Danzō Shimura</a></li><li><a href="https://naruto.fandom.com/wiki/Baru_Uchiha" title="Baru Uchiha">Baru Uchiha</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Naka_Uchiha" title="Naka Uchiha">Naka Uchiha</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Rai_Uchiha" title="Rai Uchiha">Rai Uchiha</a><sup> (Anime only)</sup></li></ul></div></div>
+</div>
+</section>
+</aside>
+<b>Izanagi</b> is a <a href="https://naruto.fandom.com/wiki/Genjutsu" title="Genjutsu">genjutsu</a> performed with the <a href="https://naruto.fandom.com/wiki/Sharingan" title="Sharingan">Sharingan</a>.
+<p></p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Influence"><span class="tocnumber">2</span> <span class="toctext">Influence</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Trivia"><span class="tocnumber">3</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="about:blank#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>With a normal genjutsu, a user will apply an illusion to a target's senses, causing the target to experience things that are not real. With Izanagi, the user applies an illusion to reality itself, giving the user control over what is and is not real for as long as Izanagi is active. Users typically do this in order to protect themselves, negating any injuries they receive or even their deaths. When this happens, their injured self fades away as an illusion and their non-injured self immediately materialises in the previous self's place. In the anime, users are shown extending Izanagi's influence beyond their personal reality, affecting their surroundings and those within it.
+</p><p>Izanagi is based on the <a href="https://naruto.fandom.com/wiki/Creation_of_All_Things_Technique" title="Creation of All Things Technique">Creation of All Things Technique</a>, used by the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sage_of_Six_Paths" title="Sage of Six Paths">Sage of Six Paths</a> to turn imagination into reality. The process is explained to use <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Spiritual_energy" title="Spiritual energy">spiritual energy</a> – which forms the basis of <a href="https://naruto.fandom.com/wiki/Yin_Release" title="Yin Release">Yin Release</a> – to create shape from nothingness. Then, through the application of <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Physical_energy" title="Physical energy">physical energy</a> – which forms the basis of <a href="https://naruto.fandom.com/wiki/Yang_Release" title="Yang Release">Yang Release</a> – the shape has life breathed into it. Members of the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Uchiha_clan" title="Uchiha clan">Uchiha clan</a>, as descendants of the Sage, perform Izanagi with their <a href="https://naruto.fandom.com/wiki/Sharingan" title="Sharingan">Sharingan</a>. In exchange for the brief control over reality that Izanagi grants them, the Sharingan that they perform it with becomes blind; only awakening the <a href="https://naruto.fandom.com/wiki/Rinnegan" title="Rinnegan">Rinnegan</a> restores the eye's vision. Because the Uchiha prized their Sharingan, to lose it in this way prompted them to label it <a href="https://naruto.fandom.com/wiki/Kinjutsu" title="Kinjutsu">kinjutsu</a>.
+</p><p>Because Uchiha only possess half of the Sage's chakra, they can only keep Izanagi active for a few seconds; the exact amount of time depends on the user's power potential. To maximise Izanagi's duration, it is necessary to recreate the Sage's chakra by also having genetic material of the Sage's other descendants, the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Senju" title="Senju">Senju</a>. <a href="https://naruto.fandom.com/wiki/Danz%C5%8D_Shimura" title="Danzō Shimura">Danzō Shimura</a> receives both <a href="https://naruto.fandom.com/wiki/Shin_Uchiha" title="Shin Uchiha">Uchiha</a> and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Hashirama" title="Hashirama">Senju</a> implants, allowing him to use Izanagi for one minute. As this is still not very long, he has ten Sharingan implanted in his right arm, giving him up to ten minutes' worth of Izanagi with breaks in between as he chooses. Since he is not an Uchiha, each use of Izanagi causes Danzō's <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a> to drop significantly. <a href="https://naruto.fandom.com/wiki/Obito_Uchiha" title="Obito Uchiha">Obito Uchiha</a>, because he has control over the Senju cells he uses, is able to keep a single Izanagi active for significantly longer than Danzō.
+</p><p>As with other Sharingan-based techniques, Izanagi can be programmed to activate under certain conditions. <a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a> did so to undo his death after he'd been entombed, restoring him to life unbeknownst to anyone.
+</p>
+<h2><span class="mw-headline" id="Influence">Influence</span></h2>
+<p>Like the various techniques used with the Sharingan, this technique is named after a <a class="extiw" href="https://en.wikipedia.org/wiki/Shinto" title="wikipedia:Shinto">Shintō</a> <a class="extiw" href="https://en.wikipedia.org/wiki/Kami" title="wikipedia:Kami">god</a>. In this case, it is <a class="extiw" href="https://en.wikipedia.org/wiki/Izanagi" title="wikipedia:Izanagi">Izanagi</a>, who, together with his sister and wife <a class="extiw" href="https://en.wikipedia.org/wiki/Izanami" title="wikipedia:Izanami">Izanami</a>, created the islands and other deities of Japan.
+</p><p>One of the most famous stories about Izanagi tells the tale of how he goes into <a class="extiw" href="https://en.wikipedia.org/wiki/Yomi" title="wikipedia:Yomi">Yomi</a>, the Japanese underworld, to retrieve Izanami after she died giving birth to the Shintō fire god, <a class="extiw" href="https://en.wikipedia.org/wiki/Kagu-tsuchi" title="wikipedia:Kagu-tsuchi">Kagutsuchi</a>. In Yomi, he manages to get Izanami and they both try to leave, however, Izanagi was not supposed to look at her before they escape. Right before they reach the exit, Izanagi looks back and sees her in a decayed form. Frightened, Izanagi flees from Yomi and blocks the cave. Izanami curses Izanagi saying that she will kill 1000 people per day. In response, Izanagi says that 1500 people will be born each day. In another variation of the story, it is stated that Izanami told Izanagi to leave, however, he came back while she slept and lit a fire that revealed her decayed form, prompting him to escape out of fright, and barricade her inside with a giant boulder.
+</p><p>After his failed attempt to get Izanami, he washed himself in a stream. As he cleaned his left eye, <a class="extiw" href="https://en.wikipedia.org/wiki/Amaterasu" title="wikipedia:Amaterasu">Amaterasu</a> was born, as he cleaned his right eye, <a class="extiw" href="https://en.wikipedia.org/wiki/Tsukuyomi" title="wikipedia:Tsukuyomi">Tsukuyomi</a> was born, and as he cleaned his nose, <a class="extiw" href="https://en.wikipedia.org/wiki/Susanoo" title="wikipedia:Susanoo">Susanoo</a> was born.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>Because members of the Uchiha clan previously abused the use of Izanagi, <a href="https://naruto.fandom.com/wiki/Izanami" title="Izanami">Izanami</a> was created as a way to punish those who would misuse it. Like Izanagi, Izanami also blinds the Sharingan that it is performed with.</li>
+<li>During initial depictions of Izanagi, the blindness it causes is represented by the eye's lids closing. After the blindness caused by Izanami is depicted as turning the eye a blank white, Izanagi starts being depicted the same way.</li>
+<li>In the <i><a href="https://naruto.fandom.com/wiki/Naruto:_Ultimate_Ninja_(series)" title="Naruto: Ultimate Ninja (series)">Naruto Shippūden: Ultimate Ninja Storm</a></i> series, Danzō uses this as part of his ultimate technique, letting his Wood Release go out of control, creating a tree that crushes both himself and the opponent, and activating Izanagi at the last moment to escape unharmed.</li>
+<li>Despite Madara using a time-activated Izanagi in the manga, he is not listed as a user of Izanagi in <i><a href="https://naruto.fandom.com/wiki/Jin_no_Sho" title="Jin no Sho">Jin no Sho</a></i>.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251005175356
+Cache expiry: 2592000
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.192 seconds
+Real time usage: 0.256 seconds
+Preprocessor visited node count: 567/1000000
+Post‐expand include size: 2073/2097152 bytes
+Template argument size: 218/2097152 bytes
+Highest expansion depth: 7/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6793/5000000 bytes
+Lua time usage: 0.106/7.000 seconds
+Lua memory usage: 1892077/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  221.257      1 Template:Infobox/Jutsu
+100.00%  221.257      1 -total
+  0.63%    1.391      1 Template:Looking_for
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:34470-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251005175356 and revision id 1449691. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Izanagi">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Chakra Transfer Technique — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Chakra Transfer Technique</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Chakra%20Transfer%20Technique" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background"><i>Chakra Transfer Technique</i><a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Chakra+Transfer+Technique&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Chakra Transfer Technique"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Chakra_Transfer_Technique" title="Special:FormEdit/Jutsu/Chakra Transfer Technique">edit</a></span></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/4/43/Chakra_Transfer.png/revision/latest?cb=20150320110134" title="Chakra Transfer">
+<img alt="Chakra Transfer" class="pi-image-thumbnail" data-image-key="Chakra_Transfer.png" data-image-name="Chakra Transfer.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/4/43/Chakra_Transfer.png/revision/latest/scale-to-width-down/268?cb=20150320110134" srcset="https://static.wikia.nocookie.net/naruto/images/4/43/Chakra_Transfer.png/revision/latest/scale-to-width-down/268?cb=20150320110134 1x, https://static.wikia.nocookie.net/naruto/images/4/43/Chakra_Transfer.png/revision/latest/scale-to-width-down/536?cb=20150320110134 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut manga">
+<h3 class="pi-data-label pi-secondary-font">Manga</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Naruto_Returns!!_(volume)" title="Naruto Returns!! (volume)">Volume #46</a>, <a href="https://naruto.fandom.com/wiki/Decision!!" title="Decision!!"><i>Naruto</i> Chapter #424</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/The_Dark_Creeping_Clouds" title="The Dark Creeping Clouds"><i>Naruto</i> Episode #155</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="novel debut">
+<h3 class="pi-data-label pi-secondary-font">Novel</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="movie debut">
+<h3 class="pi-data-label pi-secondary-font">Movie</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_3" title="Naruto Shippūden: Ultimate Ninja Storm 3">Naruto Shippūden: Ultimate Ninja Storm 3</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Manga, Novel, Game, Movie</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Chakra_Flow" title="Chakra Flow">Chakra Flow</a>, <a href="https://naruto.fandom.com/wiki/Ninsh%C5%AB" title="Ninshū">Ninshū</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Supplementary</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu range">
+<h3 class="pi-data-label pi-secondary-font">Range</h3>
+<div class="pi-data-value pi-font">All ranges</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Parent&amp;value=Chakra_Transfer_Technique" rel="noreferrer noopener" target="_blank">Derived jutsu</a></h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<div class="pi-data-value pi-font"><div><ul><li><i><a href="https://naruto.fandom.com/wiki/Barrier_Shattering_Technique" title="Barrier Shattering Technique">Barrier Shattering Technique</a></i></li><li><i><a href="https://naruto.fandom.com/wiki/Heal_Bite" title="Heal Bite">Heal Bite</a></i></li><li><a href="https://naruto.fandom.com/wiki/Super_Compression_Rasengan" title="Super Compression Rasengan">Super Compression Rasengan</a></li><li><i><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Transfer_Technique" title="Tailed Beast Transfer Technique">Tailed Beast Transfer Technique</a></i></li><li><a href="https://naruto.fandom.com/wiki/Telegram_Flash" title="Telegram Flash">Telegram Flash</a></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Related jutsu</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="related jutsu">
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Sage_Art:_Amphibian_Technique" title="Sage Art: Amphibian Technique">Sage Art: Amphibian Technique</a></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Black_Zetsu" title="Black Zetsu">Black Zetsu</a></li><li><a href="https://naruto.fandom.com/wiki/Ch%C5%8Dmei" title="Chōmei">Chōmei</a></li><li><a href="https://naruto.fandom.com/wiki/Dan_Kat%C5%8D" title="Dan Katō">Dan Katō</a></li><li><a href="https://naruto.fandom.com/wiki/Gy%C5%ABki" title="Gyūki">Gyūki</a></li><li><a href="https://naruto.fandom.com/wiki/Hashirama_Senju" title="Hashirama Senju">Hashirama Senju</a></li><li><a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a></li><li><a href="https://naruto.fandom.com/wiki/Himawari_Uzumaki" title="Himawari Uzumaki">Himawari Uzumaki</a><sup> (Manga only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Isobu" title="Isobu">Isobu</a></li><li><a href="https://naruto.fandom.com/wiki/J%C5%ABgo" title="Jūgo">Jūgo</a></li><li><a href="https://naruto.fandom.com/wiki/Karin" title="Karin">Karin</a></li><li><a href="https://naruto.fandom.com/wiki/Katsuyu" title="Katsuyu">Katsuyu</a></li><li><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Kisame" title="Kisame">Kisame</a></li><li><a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a></li><li><a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a></li><li><a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a></li><li><a href="https://naruto.fandom.com/wiki/Minato_Namikaze" title="Minato Namikaze">Minato Namikaze</a></li><li><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a></li><li><a href="https://naruto.fandom.com/wiki/Obito_Uchiha" title="Obito Uchiha">Obito Uchiha</a></li><li><a href="https://naruto.fandom.com/wiki/Saiken" title="Saiken">Saiken</a></li><li><a href="https://naruto.fandom.com/wiki/Sakura_Haruno" title="Sakura Haruno">Sakura Haruno</a></li><li><a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a></li><li><a href="https://naruto.fandom.com/wiki/Son_Gok%C5%AB" title="Son Gokū">Son Gokū</a></li><li><a href="https://naruto.fandom.com/wiki/Tsunade" title="Tsunade">Tsunade</a></li><li><a href="https://naruto.fandom.com/wiki/White_Zetsu" title="White Zetsu">White Zetsu</a></li><li><a href="https://naruto.fandom.com/wiki/Akaboshi" title="Akaboshi">Akaboshi</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Asura_%C5%8Ctsutsuki" title="Asura Ōtsutsuki">Asura Ōtsutsuki</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Benten" title="Benten">Benten</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Ch%C5%ABshin" title="Chūshin">Chūshin</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/D%C5%8Dshu_Goetsu" title="Dōshu Goetsu">Dōshu Goetsu</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Edashi" title="Edashi">Edashi</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Futami" title="Futami">Futami</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Gasuka" title="Gasuka">Gasuka</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Hako_Kuroi" title="Hako Kuroi">Hako Kuroi</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Mitsuki" title="Mitsuki">Mitsuki</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Ino_Yamanaka" title="Ino Yamanaka">Ino Yamanaka</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Inojin_Yamanaka" title="Inojin Yamanaka">Inojin Yamanaka</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Iwabee_Yuino" title="Iwabee Yuino">Iwabee Yuino</a><sup> (Anime only)</sup></li><li><i><a href="https://naruto.fandom.com/wiki/Karin%27s_Mother" title="Karin's Mother">Karin's Mother</a></i><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Kanna" title="Kanna">Kanna</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Nang%C5%8D" title="Nangō">Nangō</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Ranmaru" title="Ranmaru">Ranmaru</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Sarada_Uchiha" title="Sarada Uchiha">Sarada Uchiha</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Taiz%C5%8D" title="Taizō">Taizō</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Urashiki_%C5%8Ctsutsuki" title="Urashiki Ōtsutsuki">Urashiki Ōtsutsuki</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Wasabi_Izuno" title="Wasabi Izuno">Wasabi Izuno</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Hamura_%C5%8Ctsutsuki" title="Hamura Ōtsutsuki">Hamura Ōtsutsuki</a><sup> (Movie only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Hinata_Hy%C5%ABga" title="Hinata Hyūga">Hinata Hyūga</a></li><li><a href="https://naruto.fandom.com/wiki/Hiruzen_Sarutobi" title="Hiruzen Sarutobi">Hiruzen Sarutobi</a><sup> (Game only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Kakashi_Hatake" title="Kakashi Hatake">Kakashi Hatake</a><sup> (Game only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Tobirama_Senju" title="Tobirama Senju">Tobirama Senju</a><sup> (Game only)</sup></li></ul></div></div>
+</div>
+</section>
+</aside>
+
+This technique allows the user to transfer their <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a> to a target. The amount of chakra transferred depends solely on the user.
+<p></p>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>This technique was originally created by <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a> in order to "connect" the spiritual energies of every living person. His intention was for it to be used to build and maintain peace through his religion of <a href="https://naruto.fandom.com/wiki/Ninsh%C5%AB" title="Ninshū">ninshū</a>, but this technique ended up becoming another tool for war when humanity weaponised chakra. This technique is used by many shinobi, each one of them has shown to use technique in different ways. 
+</p>
+<h2><span class="mw-headline" id="Variations">Variations</span></h2>
+<ul><li>Certain people, such as <a href="https://naruto.fandom.com/wiki/Minato_Namikaze" title="Minato Namikaze">Minato Namikaze</a> and <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> could also mould the transferred chakra in order to adapt it to another person's specific chakra type. In the latter's case, due to Kurama's chakra, it also enveloped the recipients in a chakra cloak similar to his "Version 1" form, albeit with no tails. Once the user transfers its chakra, he/she is able to manipulate that chakra remotely.</li>
+<li><a href="https://naruto.fandom.com/wiki/Katsuyu" title="Katsuyu">Katsuyu</a> and <a href="https://naruto.fandom.com/wiki/Tsunade" title="Tsunade">its</a> <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sakura" title="Sakura">summoners</a> have a unique bond between them through <a href="https://naruto.fandom.com/wiki/Strength_of_a_Hundred_Seal" title="Strength of a Hundred Seal">Strength of a Hundred Seal</a> and they can use <a href="https://naruto.fandom.com/wiki/Katsuyu:_Immense_Network_Healing" title="Katsuyu: Immense Network Healing">Katsuyu: Immense Network Healing</a>. Tsunade used this technique during <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Pain" title="Pain">Pain</a>'s invasion of Konoha, with Tsunade first transferring her healing chakra to Katsuyu, and then Katsuyu itself transferring it to the wounded villagers. <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sakura" title="Sakura">Sakura</a> used the same method of Tsunade with Katsuyu to heal wounded shinobi in Shinobi Alliance against Ten-Tails.</li>
+<li><a href="https://naruto.fandom.com/wiki/Tsunade" title="Tsunade">Tsunade</a> used again this technique during the five <a href="https://naruto.fandom.com/wiki/Kage" title="Kage">Kage</a>'s fight against <a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a> to give <a href="https://naruto.fandom.com/wiki/%C5%8Cnoki" title="Ōnoki">Ōnoki</a> some of her chakra so that he could use a massive <a href="https://naruto.fandom.com/wiki/Dust_Release:_Detachment_of_the_Primitive_World_Technique" title="Dust Release: Detachment of the Primitive World Technique">Dust Release: Detachment of the Primitive World Technique</a> to defeat Madara's <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Wood_clone" title="Wood clone">wood clones</a>. Sakura later used this technique to improve <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Obito" title="Obito">Obito</a>'s <a href="https://naruto.fandom.com/wiki/Kamui" title="Kamui">Kamui</a>.</li>
+<li><a href="https://naruto.fandom.com/wiki/Zetsu" title="Zetsu">Zetsu</a>'s <a href="https://naruto.fandom.com/wiki/Spore_Technique" title="Spore Technique">Spore Technique</a> creates clones, which feed on chakra to grow are also able to transfer chakra to people they come in contact with.</li>
+<li><a href="https://naruto.fandom.com/wiki/Dan_Kat%C5%8D" title="Dan Katō">Dan Katō</a> was able to use this technique as a <a href="https://naruto.fandom.com/wiki/Spirit_Transformation_Technique" title="Spirit Transformation Technique">spirit</a> in Tsunade's consciousness to restore her chakra and <a href="https://naruto.fandom.com/wiki/Strength_of_a_Hundred_Seal" title="Strength of a Hundred Seal">Strength of a Hundred Seal</a>. Obito did something similar to give his chakra and <a href="https://naruto.fandom.com/wiki/D%C5%8Djutsu" title="Dōjutsu">dōjutsu</a> <a href="https://naruto.fandom.com/wiki/Susanoo" title="Susanoo">powers</a> to <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Kakashi" title="Kakashi">Kakashi</a> after his body had been turned to ashes.</li>
+<li><a href="https://naruto.fandom.com/wiki/J%C5%ABgo" title="Jūgo">Jūgo</a> was able to transfer natural energy to someone thanks to his clan's <a href="https://naruto.fandom.com/wiki/J%C5%ABgo%27s_Clan%27s_Kekkei_Genkai" title="Jūgo's Clan's Kekkei Genkai">unique ability</a>.</li>
+<li><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beasts" title="Tailed beasts">Tailed beasts</a> are also able to freely share their chakra with whoever they choose, and as <a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a> has noted, it is a less complicated process for them than it is for humans.</li>
+<li><a href="https://naruto.fandom.com/wiki/Samehada" title="Samehada">Samehada</a> was able to absorb and transfer chakra to its wielder. It was also able to transfer chakra from Kisame back to Killer B.</li>
+<li><a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a> was the first user of this technique to <a href="https://naruto.fandom.com/wiki/Ninsh%C5%AB" title="Ninshū">connect all humans</a> living in the earth and gave the chakra to humanity besides his immediate family. Hagoromo also used this technique inside of Naruto and Sasuke who are the reincarnations of Asura and Indra. He gave the power to them to defeat Madara. While using this technique, a unique entity appears behind Hagoromo with a marking reminiscent of a third eye in its forehead.</li>
+<li>In the anime, if the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Aburame" title="Aburame">Aburame</a> member has proper control, the <a href="https://naruto.fandom.com/wiki/Kikaich%C5%AB" title="Kikaichū">kikaichū</a> are also shown able to transfer their accumulated chakra to others targets, replenishing them.</li>
+<li>In the anime, the <a href="https://naruto.fandom.com/wiki/Magaki_Group" title="Magaki Group">Magaki Group</a> uses this technique in a different way. First <a href="https://naruto.fandom.com/wiki/Nang%C5%8D" title="Nangō">Nangō</a> sends his chakra to <a href="https://naruto.fandom.com/wiki/Benten" title="Benten">Benten</a> and <a href="https://naruto.fandom.com/wiki/Ch%C5%ABshin" title="Chūshin">Chūshin</a>, and then both of them send it along with its own to <a href="https://naruto.fandom.com/wiki/Akaboshi" title="Akaboshi">Akaboshi</a>, greatly enhancing the power of his techniques. He is able to shatter a barrier easily with his increased chakra.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251010002231
+Cache expiry: 2592000
+Reduced expiry: false
+Complications: []
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.448 seconds
+Real time usage: 0.688 seconds
+Preprocessor visited node count: 491/1000000
+Post‐expand include size: 3669/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 5/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6130/5000000 bytes
+Lua time usage: 0.313/7.000 seconds
+Lua memory usage: 1887822/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  573.875      1 Template:Infobox/Jutsu
+100.00%  573.875      1 -total
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:14966-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251010002231 and revision id 1445797. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Chakra%20Transfer%20Technique">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Isobu — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Isobu</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Isobu" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="infobox box colored bordered innerbordered fill-td type-character list-noicon float-right-clear"><tbody><tr><th class="mainheader" colspan="2"><span class="plainlinks edit-infobox"><a class="text" href="https://naruto.fandom.com/wiki/Infobox:Isobu?action=formedit" rel="noreferrer noopener" target="_blank">edit</a></span>Isobu <a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bcharacters%5D=Isobu&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Isobu"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a> <span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Special:Browse/Isobu" title="Special:Browse/Isobu"><img class="mw-file-element" data-image-key="Browse_Information.svg" data-image-name="Browse Information.svg" data-relevant="0" decoding="async" height="19" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/ab/Browse_Information.svg/revision/latest?cb=20221026163711" width="19"/></a></span></th></tr>
+<tr>
+<td class="imagecell" colspan="2"><span typeof="mw:File"><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/d/df/Isobu.png/revision/latest?cb=20130913110358"><img class="mw-file-element" data-image-key="Isobu.png" data-image-name="Isobu.png" data-relevant="1" decoding="async" height="169" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/df/Isobu.png/revision/latest/scale-to-width-down/300?cb=20130913110358" width="300"/></a></span></td></tr>
+<tr><th class="mainheader lightheader" colspan="2"><span class="title" lang="ja">磯撫 Isobu</span>
+<p><span class="title other">
+</span></p>
+<ul><li>Three-Tails (<span lang="ja">三尾</span>, <i>Sanbi</i>)</li>
+<li>Giant Turtle (<span lang="ja">巨大亀</span>, <i>Kyodaigame</i>)</li></ul>
+</th></tr><tr><th class="mainheader" colspan="2">Debut
+	</th></tr><tr><th>Manga
+      </th><td><a href="https://naruto.fandom.com/wiki/The_Beginning_of_the_Nightmare!!" title="The Beginning of the Nightmare!!"><i>Naruto</i> Chapter #317</a>
+</td></tr><tr><th>Anime
+      </th><td><a href="https://naruto.fandom.com/wiki/Encounter" title="Encounter"><i>Naruto Shippūden</i> Episode #92</a>
+</td></tr><tr><th>Novel
+      </th><td><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i>
+</td></tr><tr><th>Movie
+      </th><td><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i>
+</td></tr><tr><th>Game
+      </th><td><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ninja_Destiny_3" title="Naruto Shippūden: Ninja Destiny 3">Naruto Shippūden: Ninja Destiny 3</a></i>
+</td></tr><tr><th>Appears in
+	</th><td>Anime, Manga, Novel, Game, Movie
+	</td></tr><tr><th class="mainheader" colspan="2">Voice Actors
+	</th></tr><tr><th>Japanese
+        </th><td>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Shigenori_S%C5%8Dya" title="wikipedia:Shigenori Sōya">Shigenori Sōya</a> <span title='Search the other 3 pages containing the property "Voice Actors" with the value "Shigenori Sōya"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Shigenori+S%C5%8Dya" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span></li></ul>
+</td></tr><tr><th>English
+        </th><td>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Chris_Edgerly" title="wikipedia:Chris Edgerly">Chris Edgerly</a> <span title='Search the other 2 pages containing the property "Voice Actors" with the value "Chris Edgerly"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Chris+Edgerly" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span></li></ul>
+</td></tr><tr><th class="mainheader" colspan="2">Personal
+	</th></tr><tr><th>Species
+	</th><td><a href="https://naruto.fandom.com/wiki/Turtle" title="Turtle">Turtle</a>
+</td></tr><tr><th>Classification
+        </th><td>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast" title="Tailed Beast">Tailed Beast</a></li></ul>
+</td></tr><tr><th>Jinchūriki
+	</th><td>
+<ul><li><a href="https://naruto.fandom.com/wiki/Rin_Nohara" title="Rin Nohara">Rin Nohara</a> </li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Yagura_Karatachi" title="Yagura Karatachi">Yagura Karatachi</a> </li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> </li></ul>
+</td></tr><tr><th>Affiliation
+        </th><td>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure"><img class="mw-file-element lazyload" data-image-key="Kirigakure_Symbol.svg" data-image-name="Kirigakure Symbol.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/e/e5/Kirigakure_Symbol.svg/revision/latest/scale-to-width-down/18?cb=20090830222755" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a></li>
+<li class="mw-empty-elt"></li></ul>
+</td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Family
+	</th></tr><tr><td class="">
+<ul><li><a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a> (Creator)</li>
+<li><a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Son_Gok%C5%AB" title="Son Gokū">Son Gokū</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Saiken" title="Saiken">Saiken</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Ch%C5%8Dmei" title="Chōmei">Chōmei</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Gy%C5%ABki" title="Gyūki">Gyūki</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a> (Sibling)</li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Nature Type
+        </th></tr><tr><td class="">
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Water_Release" title="Water Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Water.svg" data-image-name="Nature Icon Water.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/a/ab/Nature_Icon_Water.svg/revision/latest/scale-to-width-down/18?cb=20091012165923" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Water_Release" title="Water Release">Water Release</a></li></ul>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Yin_Release" title="Yin Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Yin.svg" data-image-name="Nature Icon Yin.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/d/de/Nature_Icon_Yin.svg/revision/latest/scale-to-width-down/18?cb=20100916093714" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Yin_Release" title="Yin Release">Yin Release</a> <sup>(Anime only)</sup></li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Unique Traits
+	</th></tr><tr><td class="">
+<ul><li><a href="https://naruto.fandom.com/wiki/Coral_Palm" title="Coral Palm">Produces Coral</a></li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible mw-collapsed"><tbody><tr><th class="mainheader"><a class="text" href="https://naruto.fandom.com/index.php?title=Special%3AAsk&amp;offset=0&amp;limit=500&amp;q=%5B%5BConcept%3AJutsu%5D%5D%5B%5BUser+tech%3A%3AIsobu%5D%5D&amp;po=%3FAppears+in%3DMedia%0A%3FJutsu+classification%3DClassification%0A%3FChakra+Nature%0A%3FJutsu+class+type%3DClass%0A%3FJutsu+range%3DRange" rel="noreferrer noopener" target="_blank">Jutsu</a></th></tr><tr><td class="">
+<p class="mw-empty-elt">
+</p>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Chakra_Transfer_Technique" title="Chakra Transfer Technique">Chakra Transfer Technique</a></i></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Cooperation_Tailed_Beast_Ball" title="Cooperation Tailed Beast Ball">Cooperation Tailed Beast Ball</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Coral_Palm" title="Coral Palm">Coral Palm</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Great_Roar" title="Great Roar">Great Roar</a> <sup>(Anime only)</sup></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Illusionary_Mist" title="Illusionary Mist">Illusionary Mist</a></i> <sup>(Anime only)</sup></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Leaping_Bullet_Shell_Tower" title="Leaping Bullet Shell Tower">Leaping Bullet Shell Tower</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Shadow_Stroke" title="Shadow Stroke">Shadow Stroke</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Full_Charge" title="Tailed Beast Full Charge">Tailed Beast Full Charge</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Telepathy" title="Tailed Beast Telepathy">Tailed Beast Telepathy</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Three-Tails_Mini_Clone" title="Three-Tails Mini Clone">Three-Tails Mini Clone</a></i> <sup>(Anime only)</sup></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Water_Release:_Great_Water_Mass_Bullet" title="Water Release: Great Water Mass Bullet">Water Release: Great Water Mass Bullet</a> <sup>(Anime only)</sup></li></ul></td></tr></tbody></table></td></tr></tbody></table>
+<p><b>Isobu</b> (<span lang="ja">磯撫</span>), more commonly known as the <b>Three-Tails</b> (<span lang="ja">三尾</span>, <i>Sanbi</i>), is one of the nine <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beasts" title="Tailed beasts">tailed beasts</a>. It was last sealed within <a href="https://naruto.fandom.com/wiki/Yagura_Karatachi" title="Yagura Karatachi">Yagura Karatachi</a> of <a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a>.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Background"><span class="tocnumber">1</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Personality"><span class="tocnumber">2</span> <span class="toctext">Personality</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Appearance"><span class="tocnumber">3</span> <span class="toctext">Appearance</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="about:blank#Abilities"><span class="tocnumber">4</span> <span class="toctext">Abilities</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="about:blank#Physical_and_Chakra_Prowess"><span class="tocnumber">4.1</span> <span class="toctext">Physical and Chakra Prowess</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="about:blank#Ninjutsu"><span class="tocnumber">4.2</span> <span class="toctext">Ninjutsu</span></a>
+<ul>
+<li class="toclevel-3 tocsection-7"><a href="about:blank#Nature_Transformation"><span class="tocnumber">4.2.1</span> <span class="toctext">Nature Transformation</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="about:blank#Part_II"><span class="tocnumber">5</span> <span class="toctext">Part II</span></a>
+<ul>
+<li class="toclevel-2 tocsection-9"><a href="about:blank#Akatsuki_Suppression_Mission"><span class="tocnumber">5.1</span> <span class="toctext">Akatsuki Suppression Mission</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="about:blank#Three-Tails'_Appearance"><span class="tocnumber">5.2</span> <span class="toctext">Three-Tails' Appearance</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="about:blank#Fourth_Shinobi_World_War:_Climax"><span class="tocnumber">5.3</span> <span class="toctext">Fourth Shinobi World War: Climax</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="about:blank#Birth_of_the_Ten-Tails'_Jinch%C5%ABriki"><span class="tocnumber">5.4</span> <span class="toctext">Birth of the Ten-Tails' Jinchūriki</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="about:blank#Kaguya_%C5%8Ctsutsuki_Strikes"><span class="tocnumber">5.5</span> <span class="toctext">Kaguya Ōtsutsuki Strikes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="about:blank#New_Era"><span class="tocnumber">6</span> <span class="toctext">New Era</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="about:blank#One-Tail_Escort_Arc"><span class="tocnumber">6.1</span> <span class="toctext">One-Tail Escort Arc</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="about:blank#Kawaki_Arc"><span class="tocnumber">6.2</span> <span class="toctext">Kawaki Arc</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="about:blank#In_Other_Media"><span class="tocnumber">7</span> <span class="toctext">In Other Media</span></a>
+<ul>
+<li class="toclevel-2 tocsection-18"><a href="about:blank#Video_Games"><span class="tocnumber">7.1</span> <span class="toctext">Video Games</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="about:blank#Trivia"><span class="tocnumber">8</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-20"><a href="about:blank#References"><span class="tocnumber">9</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Background">Background</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest?cb=20150728221849"><img alt="Young Bijuu and Hagoromo" class="thumbimage lazyload" data-image-key="Young_Bijuu_and_Hagoromo.png" data-image-name="Young Bijuu and Hagoromo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest?cb=20150728221849"><img alt="Young Bijuu and Hagoromo" class="thumbimage" data-image-key="Young_Bijuu_and_Hagoromo.png" data-image-name="Young Bijuu and Hagoromo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Young_Bijuu_and_Hagoromo.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The young tailed beasts with Hagoromo.</p> </figcaption> </figure>
+<p>Isobu and the tailed beasts first came into being in the waning days of <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>, who used his <a href="https://naruto.fandom.com/wiki/Creation_of_All_Things_Technique" title="Creation of All Things Technique">Creation of All Things Technique</a> to divide the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a>' chakra into nine separate bodies and giving each a name. Some time after being created, the Sage explained to the young tailed beasts that a link existed between them despite their separation. He also foretold of a day when they would be brought together again - though not as they were - and that at that time someone would emerge to show them what true power is. In the anime, before his death, Hagoromo sent Isobu to live in a temple built for the purpose of protecting it in a region surrounding a large misty lake that would later become part of the <a href="https://naruto.fandom.com/wiki/Land_of_Water" title="Land of Water">Land of Water</a>.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/3/31/Rin_and_Isobu.png/revision/latest?cb=20140807122036"><img alt="Rin and Isobu" class="thumbimage lazyload" data-image-key="Rin_and_Isobu.png" data-image-name="Rin and Isobu.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/31/Rin_and_Isobu.png/revision/latest/scale-to-width-down/180?cb=20140807122036" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/3/31/Rin_and_Isobu.png/revision/latest?cb=20140807122036"><img alt="Rin and Isobu" class="thumbimage" data-image-key="Rin_and_Isobu.png" data-image-name="Rin and Isobu.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/31/Rin_and_Isobu.png/revision/latest/scale-to-width-down/180?cb=20140807122036" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/3/31/Rin_and_Isobu.png/revision/latest/scale-to-width-down/180?cb=20140807122036" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Rin_and_Isobu.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Rin as Isobu's jinchūriki.</p> </figcaption> </figure>
+<p>During the <a href="https://naruto.fandom.com/wiki/First_Shinobi_World_War" title="First Shinobi World War">First Shinobi World War</a>, <a href="https://naruto.fandom.com/wiki/Hashirama_Senju" title="Hashirama Senju">Hashirama Senju</a> captured eight of the tailed beasts and sold Isobu and <a href="https://naruto.fandom.com/wiki/Saiken" title="Saiken">Saiken</a> to Kirigakure at the <a href="https://naruto.fandom.com/wiki/Five_Kage_Summit" title="Five Kage Summit">Five Kage Summit</a>, as a sign of friendship and to ensure a balance of power amongst their new villages. Decades later, Kirigakure — having been manipulated by <a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a> — sealed Isobu into the <a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a> shinobi, <a href="https://naruto.fandom.com/wiki/Rin_Nohara" title="Rin Nohara">Rin Nohara</a>. They plotted for Rin to be taken back to her village as a <a class="extiw" href="https://en.wikipedia.org/wiki/Trojan_Horse" title="wikipedia:Trojan Horse">Trojan horse</a>, releasing the tailed beast to wreak havoc in Konoha. This failed, however, as Rin was fully aware of their schemes and opted to <a href="https://naruto.fandom.com/wiki/Lightning_Cutter" title="Lightning Cutter">kill</a> herself at hands of her friend and fellow teammate, <a href="https://naruto.fandom.com/wiki/Kakashi_Hatake" title="Kakashi Hatake">Kakashi Hatake</a>, before their objectives could come to fruition. Eventually, Isobu was revived and recaptured by Kirigakure, who sealed Isobu within Yagura, the Fourth <a href="https://naruto.fandom.com/wiki/Mizukage" title="Mizukage">Mizukage</a>, who managed to gain <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Control" title="Tailed Beast Control">complete control</a> and harmony with it. However, Yagura was placed under the genjutsu of <a href="https://naruto.fandom.com/wiki/Obito_Uchiha" title="Obito Uchiha">Obito Uchiha</a>, who controlled the Mizukage, and Isobu by extension. The genjutsu was dispelled years later by <a href="https://naruto.fandom.com/wiki/Ao" title="Ao">Ao</a>, which led to Yagura's death shortly after. Some time after Yagura's death, Isobu was revived once more, although it was not recaptured and therefore was free to live in the wild.
+</p><p>In the anime, <a href="https://naruto.fandom.com/wiki/Tsunade" title="Tsunade">Tsunade</a> states that Isobu disappeared, its whereabouts unknown, after the <a href="https://naruto.fandom.com/wiki/Third_Shinobi_World_War" title="Third Shinobi World War">Third Shinobi World War</a>.
+</p>
+<h2><span class="mw-headline" id="Personality">Personality</span></h2>
+<p>Isobu speaks in a timid manner, referring to itself as "boku" (<span lang="ja">ボク</span>) which is usually used by young boys. Seeing as Yagura had full control of it and befriended it, it's assumed that Isobu isn't as rude or outspoken as some of the other tailed beasts and got along with its jinchūriki.
+</p>
+<h2><span class="mw-headline" id="Appearance">Appearance</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/f/f1/Young_Isobu.png/revision/latest?cb=20130913102943"><img alt="Young Isobu" class="thumbimage lazyload" data-image-key="Young_Isobu.png" data-image-name="Young Isobu.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/f/f1/Young_Isobu.png/revision/latest/scale-to-width-down/180?cb=20130913102943" decoding="async" height="181" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/f/f1/Young_Isobu.png/revision/latest?cb=20130913102943"><img alt="Young Isobu" class="thumbimage" data-image-key="Young_Isobu.png" data-image-name="Young Isobu.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/f/f1/Young_Isobu.png/revision/latest/scale-to-width-down/180?cb=20130913102943" decoding="async" height="181" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/f/f1/Young_Isobu.png/revision/latest/scale-to-width-down/180?cb=20130913102943" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Young_Isobu.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">A young Isobu.</p> </figcaption> </figure>
+<p>Isobu primarily resembles a large turtle, but with a crab-like shell, spikes all over its body, and three shrimp-like tails. Under its shell, it has red, muscle-like tissue. It has a pair of human-like arms and hands, but no hind-legs. His face is concealed between a large forehead and lower jaw — both of which have spikes. Its eyes are red and have crimson pupils. In the anime, the eyes are red with yellow pupils. 
+</p><p>Its right eye is constantly closed. In the anime, <a href="https://naruto.fandom.com/wiki/Guren" title="Guren">Guren</a> speculated this was because its eyes were the only soft parts of its body, being heavily-armoured, and thus kept one eye closed to cover more vulnerable spots. During the last remaining days of the Sage of Six Paths, Isobu was essentially much the same in appearance, albeit smaller in size with shorter spikes around its body, but was still many times larger than the Sage.
+</p>
+<h2><span class="mw-headline" id="Abilities">Abilities</span></h2>
+<p><span class="box headnote"><i>See also: <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki_Forms" title="Jinchūriki Forms">Jinchūriki Forms</a></i></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/3/3e/Isobu_destroying_Konoha.png/revision/latest?cb=20150221100419"><img alt="Isobu destroying Konoha" class="thumbimage lazyload" data-image-key="Isobu_destroying_Konoha.png" data-image-name="Isobu destroying Konoha.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/3e/Isobu_destroying_Konoha.png/revision/latest/scale-to-width-down/180?cb=20150221100419" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/3/3e/Isobu_destroying_Konoha.png/revision/latest?cb=20150221100419"><img alt="Isobu destroying Konoha" class="thumbimage" data-image-key="Isobu_destroying_Konoha.png" data-image-name="Isobu destroying Konoha.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/3e/Isobu_destroying_Konoha.png/revision/latest/scale-to-width-down/180?cb=20150221100419" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/3/3e/Isobu_destroying_Konoha.png/revision/latest/scale-to-width-down/180?cb=20150221100419" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Isobu_destroying_Konoha.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Isobu's destructive capability.</p> </figcaption> </figure>
+<p>As a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beast" title="Tailed beast">tailed beast</a>, Isobu is a powerful force to face. <a href="https://naruto.fandom.com/wiki/Kirigakure" title="Kirigakure">Kirigakure</a> was so confident of its destructive potential that they, under the influence of <a href="https://naruto.fandom.com/wiki/Madara_Uchiha" title="Madara Uchiha">Madara Uchiha</a>, intended to unleash Isobu in the midst of <a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a> to destroy the village. As with any tailed beast, Isobu is effectively immortal, as when it dies, it will eventually revive. In the anime, it could produce a <a href="https://naruto.fandom.com/wiki/Illusionary_Mist" title="Illusionary Mist">hallucinogenic mist</a> that exploited the victim's insecurities and forced the victim to face them.
+</p>
+<h3><span class="mw-headline" id="Physical_and_Chakra_Prowess">Physical and Chakra Prowess</span></h3>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/1/19/Shadow_Stroke.png/revision/latest?cb=20160110010949"><img alt="Shadow Stroke" class="thumbimage lazyload" data-image-key="Shadow_Stroke.png" data-image-name="Shadow Stroke.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/19/Shadow_Stroke.png/revision/latest/scale-to-width-down/180?cb=20160110010949" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/1/19/Shadow_Stroke.png/revision/latest?cb=20160110010949"><img alt="Shadow Stroke" class="thumbimage" data-image-key="Shadow_Stroke.png" data-image-name="Shadow Stroke.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/19/Shadow_Stroke.png/revision/latest/scale-to-width-down/180?cb=20160110010949" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/1/19/Shadow_Stroke.png/revision/latest/scale-to-width-down/180?cb=20160110010949" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Shadow_Stroke.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Isobu rolled into a ball.</p> </figcaption> </figure>
+<p>Isobu can <a href="https://naruto.fandom.com/wiki/Shadow_Stroke" title="Shadow Stroke">roll into a ball</a> to <a href="https://naruto.fandom.com/wiki/Leaping_Bullet_Shell_Tower" title="Leaping Bullet Shell Tower">move about quickly</a> and attack its opponents, making full use of the protrusions on its shell in a manner similar to the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Akimichi_clan" title="Akimichi clan">Akimichi clan</a>'s <a href="https://naruto.fandom.com/wiki/Spiked_Human_Bullet_Tank" title="Spiked Human Bullet Tank">Spiked Human Bullet Tank</a>. Isobu's tough skin and shell also grant it additional defence, allowing it to withstand nearly all forms of attack. It can also any of its three spiked tails to strike its opponents and break through most defences. It also has the ability to <a href="https://naruto.fandom.com/wiki/Coral_Palm" title="Coral Palm">create coral</a> and swim at very high speeds. In the anime, Isobu's only known physical weakness is its eye; as tough as its skin and shell are, it cannot harden its eyes and thus seems to keep one closed at all times.
+</p><p>As a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beast" title="Tailed beast">tailed beast</a>, Isobu possesses an enormous amount of <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a> that it can <a href="https://naruto.fandom.com/wiki/Chakra_Transfer_Technique" title="Chakra Transfer Technique">transfer</a>. It also has powerful healing capacities, able to mend injuries in themselves and others in seconds. Likewise, Isobu is effectively immortal, as when it dies, it will eventually revive, albeit in a younger form.  
+</p>
+<h3><span class="mw-headline" id="Ninjutsu">Ninjutsu</span></h3>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/58/Isobu%27s_Tailed_Beast_Ball.png/revision/latest?cb=20150917122825"><img alt="Isobu's Tailed Beast Ball" class="thumbimage lazyload" data-image-key="Isobu%27s_Tailed_Beast_Ball.png" data-image-name="Isobu's Tailed Beast Ball.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/58/Isobu%27s_Tailed_Beast_Ball.png/revision/latest/scale-to-width-down/180?cb=20150917122825" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/58/Isobu%27s_Tailed_Beast_Ball.png/revision/latest?cb=20150917122825"><img alt="Isobu's Tailed Beast Ball" class="thumbimage" data-image-key="Isobu%27s_Tailed_Beast_Ball.png" data-image-name="Isobu's Tailed Beast Ball.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/58/Isobu%27s_Tailed_Beast_Ball.png/revision/latest/scale-to-width-down/180?cb=20150917122825" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/58/Isobu%27s_Tailed_Beast_Ball.png/revision/latest/scale-to-width-down/180?cb=20150917122825" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Isobu%27s_Tailed_Beast_Ball.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Isobu creating a Tailed Beast Ball.</p> </figcaption> </figure>
+<p>In the anime, Isobu's abilities were greatly elaborated upon. It could create shockwaves to repel attacks and produce large tidal waves around it, enabling it to overwhelm <a href="https://naruto.fandom.com/wiki/Guren" title="Guren">Guren</a>'s <a href="https://naruto.fandom.com/wiki/Crystal_Release" title="Crystal Release">Crystal Release</a> several times over the course of their battle. When Isobu ate something, thousands of <a href="https://naruto.fandom.com/wiki/Three-Tails_Mini_Clone" title="Three-Tails Mini Clone">miniature versions of itself</a> would attack what was eaten within its stomach, presumably to speed up the digestion process. It was also shown capable of <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Space-Time_Ninjutsu" title="Space-Time Ninjutsu">Space-Time Ninjutsu</a>, materialising an entrance to a separate dimension in which it could hide its presence, until it was ready to return to wherever it chooses. Like the others Tailed Beasts, it can create the <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a>.
+</p>
+<h4><span class="mw-headline" id="Nature_Transformation">Nature Transformation</span></h4>
+<p>As a turtle, Isobu has an affinity for <a href="https://naruto.fandom.com/wiki/Water_Release" title="Water Release">Water Release</a>. In the anime, it has shown to fire powerful <a href="https://naruto.fandom.com/wiki/Water_Release:_Great_Water_Mass_Bullet" title="Water Release: Great Water Mass Bullet">water blasts</a> that are capable of destroying an entire cliff side.
+</p>
+<h2><span class="mw-headline" id="Part_II">Part II</span></h2>
+<h3><span class="mw-headline" id="Akatsuki_Suppression_Mission">Akatsuki Suppression Mission</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Akatsuki_Suppression_Mission" title="Akatsuki Suppression Mission">Akatsuki Suppression Mission</a></span>
+In the manga, Tobi and Deidara confronted the beast around the same time <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> had begun his <a href="https://naruto.fandom.com/wiki/Wind_Release" title="Wind Release">Wind Release</a> training, to which it responded by beginning to chase Tobi. With the Three-Tails distracted, Deidara moulded an explosive clay fish in an attempt to capture it. It was unclear if this marked the end of the battle, as the remainder of the battle went unseen. As the two towed the Three-Tails to the Akatsuki's lair after the battle, Tobi gloated at bringing the Three-Tails down with his special technique, but Deidara thought otherwise. It was later <a href="https://naruto.fandom.com/wiki/Sealing_Technique:_Phantom_Dragons_Nine_Consuming_Seals" title="Sealing Technique: Phantom Dragons Nine Consuming Seals">sealed</a> in the <a href="https://naruto.fandom.com/wiki/Demonic_Statue_of_the_Outer_Path" title="Demonic Statue of the Outer Path">sealing statue</a>.
+</p>
+<h3><span id="Three-Tails.27_Appearance"></span><span class="mw-headline" id="Three-Tails'_Appearance">Three-Tails' Appearance</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Three-Tails%27_Appearance" title="Three-Tails' Appearance">Three-Tails' Appearance</a></span>
+<span class="box headnote"><b><font color="green">NOTE</font>:</b> In the manga, the events of this arc occur during the <a href="about:blank#Akatsuki_Suppression_Mission">Akatsuki Suppression Mission</a>.</span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/f/f1/The_dimension%27s_entrance.PNG/revision/latest?cb=20151030201817"><img alt="The dimension's entrance" class="thumbimage lazyload" data-image-key="The_dimension%27s_entrance.PNG" data-image-name="The dimension's entrance.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/f/f1/The_dimension%27s_entrance.PNG/revision/latest/scale-to-width-down/180?cb=20151030201817" decoding="async" height="100" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/f/f1/The_dimension%27s_entrance.PNG/revision/latest?cb=20151030201817"><img alt="The dimension's entrance" class="thumbimage" data-image-key="The_dimension%27s_entrance.PNG" data-image-name="The dimension's entrance.PNG" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/f/f1/The_dimension%27s_entrance.PNG/revision/latest/scale-to-width-down/180?cb=20151030201817" decoding="async" height="100" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/f/f1/The_dimension%27s_entrance.PNG/revision/latest/scale-to-width-down/180?cb=20151030201817" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:The_dimension%27s_entrance.PNG"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The entrance to the dimension where the Three-Tails came from.</p> </figcaption> </figure>
+<p>In the anime, <a href="https://naruto.fandom.com/wiki/Orochimaru" title="Orochimaru">Orochimaru</a> instructed <a href="https://naruto.fandom.com/wiki/Kabuto_Yakushi" title="Kabuto Yakushi">Kabuto Yakushi</a> and <a href="https://naruto.fandom.com/wiki/Team_Guren" title="Team Guren">Team Guren</a> to take a young boy named <a href="https://naruto.fandom.com/wiki/Y%C5%ABkimaru" title="Yūkimaru">Yūkimaru</a> to a lake. After they arrived, Kabuto forced Yūkimaru to release all of his chakra, which caused the Three-Tails to begin to surface from the lake. With <a href="https://naruto.fandom.com/wiki/Guren" title="Guren">Guren</a>'s help, the beast was completely revealed, and they attempted to capture it. Their attempts proved insufficient, however, and the beast created a large tidal wave to wash its attackers away.
+</p><p>The tidal wave gained the attention of a nearby group of <a href="https://naruto.fandom.com/wiki/Konohagakure" title="Konohagakure">Konohagakure</a> ninja, who tried to use <a href="https://naruto.fandom.com/wiki/Four-Corner_Sealing_Barrier" title="Four-Corner Sealing Barrier">Four-Corner Sealing Barrier</a> to permanently trap the beast in its own dimension. Just as the sealing began to work, the Konoha ninja were interrupted by Guren, which prompted the beast to attack them all. Yūkimaru was able to calm the beast down temporarily, but, after he became tired, the Three-Tails turned its attention to him. Guren and <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> came to his defence, but were swallowed in the process. With the help of their allies on the outside, they were able to escape, and the Konoha ninja tried once more to seal the beast.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/1/12/Isobu_captured_by_Akatsuki.png/revision/latest?cb=20150209111508"><img alt="Isobu captured by Akatsuki" class="thumbimage lazyload" data-image-key="Isobu_captured_by_Akatsuki.png" data-image-name="Isobu captured by Akatsuki.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/12/Isobu_captured_by_Akatsuki.png/revision/latest/scale-to-width-down/180?cb=20150209111508" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/1/12/Isobu_captured_by_Akatsuki.png/revision/latest?cb=20150209111508"><img alt="Isobu captured by Akatsuki" class="thumbimage" data-image-key="Isobu_captured_by_Akatsuki.png" data-image-name="Isobu captured by Akatsuki.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/1/12/Isobu_captured_by_Akatsuki.png/revision/latest/scale-to-width-down/180?cb=20150209111508" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/1/12/Isobu_captured_by_Akatsuki.png/revision/latest/scale-to-width-down/180?cb=20150209111508" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Isobu_captured_by_Akatsuki.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Akatsuki prepares to seal the Three-Tails.</p> </figcaption> </figure>
+<p>Just when the sealing was almost complete, Yūkimaru, angered by the apparent death of Guren, empowered the beast to break free of its restraints. The Three-Tails went on a rampage, attacking everyone nearby and crushing <a href="https://naruto.fandom.com/wiki/Nurari" title="Nurari">Nurari</a>, <a href="https://naruto.fandom.com/wiki/Kigiri" title="Kigiri">Kigiri</a>, and <a href="https://naruto.fandom.com/wiki/Kih%C5%8D" title="Kihō">Kihō</a>. Its attempts to attack Yūkimaru, however, had no effect. It was only through the use of the <a href="https://naruto.fandom.com/wiki/Wind_Release:_Toad_Oil_Flame_Bullet" title="Wind Release: Toad Oil Flame Bullet">Wind Release: Toad Oil Flame Bullet</a> that the beast was driven away. The sealing attempt was left to <a href="https://naruto.fandom.com/wiki/Anbu" title="Anbu">Anbu</a> members, and the remaining Konoha ninja returned home. <a href="https://naruto.fandom.com/wiki/Deidara" title="Deidara">Deidara</a> and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tobi" title="Tobi">Tobi</a> of <a href="https://naruto.fandom.com/wiki/Akatsuki" title="Akatsuki">Akatsuki</a> soon found these Anbu members and disposed of them.
+</p>
+<h3><span class="mw-headline" id="Fourth_Shinobi_World_War:_Climax">Fourth Shinobi World War: Climax</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War:_Climax" title="Fourth Shinobi World War: Climax">Fourth Shinobi World War: Climax</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/59/Biju_full_transformation.png/revision/latest?cb=20130905164030"><img alt="Biju full transformation" class="thumbimage lazyload" data-image-key="Biju_full_transformation.png" data-image-name="Biju full transformation.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/59/Biju_full_transformation.png/revision/latest/scale-to-width-down/180?cb=20130905164030" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/59/Biju_full_transformation.png/revision/latest?cb=20130905164030"><img alt="Biju full transformation" class="thumbimage" data-image-key="Biju_full_transformation.png" data-image-name="Biju full transformation.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/59/Biju_full_transformation.png/revision/latest/scale-to-width-down/180?cb=20130905164030" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/59/Biju_full_transformation.png/revision/latest/scale-to-width-down/180?cb=20130905164030" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Biju_full_transformation.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The remaining jinchūriki transform into their tailed beasts.</p> </figcaption> </figure>
+<p>After <a href="https://naruto.fandom.com/wiki/Son_Gok%C5%AB" title="Son Gokū">Son Gokū</a> was resealed into the Demonic Statue of the Outer Path, Tobi, who was intent on going all-out from that point on, forced Yagura to fully transform into the Three-Tails. The opposing tailed beasts prepared to attack the shinobi, but they were <a href="https://naruto.fandom.com/wiki/Great_Roar" title="Great Roar">rebuffed</a> by a fully-transformed <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Naruto" title="Naruto">Naruto</a>. Wasting no time in their attacks, the Three-Tails evaded Naruto and <a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a>'s pile-drive attack by rolling out of the way to counter-attack after the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Six-Tails" title="Six-Tails">Six-Tails</a> had incapacitated them, but the turtle was stopped by the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Eight-Tails" title="Eight-Tails">Eight-Tails</a>. Freeing itself from the ox's grasp, the opposing beasts regrouped and prepared a collaborative Tailed Beast Ball, which was met by one from Naruto and Kurama.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/6/6b/Seishin_Sekai.png/revision/latest?cb=20130905162801"><img alt="Seishin Sekai" class="thumbimage lazyload" data-image-key="Seishin_Sekai.png" data-image-name="Seishin Sekai.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/6b/Seishin_Sekai.png/revision/latest/scale-to-width-down/180?cb=20130905162801" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/6/6b/Seishin_Sekai.png/revision/latest?cb=20130905162801"><img alt="Seishin Sekai" class="thumbimage" data-image-key="Seishin_Sekai.png" data-image-name="Seishin Sekai.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/6/6b/Seishin_Sekai.png/revision/latest/scale-to-width-down/180?cb=20130905162801" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/6/6b/Seishin_Sekai.png/revision/latest/scale-to-width-down/180?cb=20130905162801" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Seishin_Sekai.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Isobu, alongside the other jinchūriki and tailed beasts, encounters Naruto.</p> </figcaption> </figure>
+<p>As Naruto entered a deeper plane of the tailed beasts' consciousness, Isobu (who remembered <a href="https://naruto.fandom.com/wiki/Three-Tails%27_Appearance" title="Three-Tails' Appearance">meeting</a> him in the anime) introduced itself to the young shinobi. Later, as Isobu was freed from the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Chakra_receiver" title="Chakra receiver">chakra receiver</a>, it affirmed Kurama's belief that Naruto was the person the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sage_of_the_Six_Paths" title="Sage of the Six Paths">Sage of the Six Paths</a> had spoken about so long ago before being resealed into the <a href="https://naruto.fandom.com/wiki/Demonic_Statue_of_the_Outer_Path" title="Demonic Statue of the Outer Path">Demonic Statue of the Outer Path</a>.
+</p>
+<h3><span id="Birth_of_the_Ten-Tails.27_Jinch.C5.ABriki"></span><span class="mw-headline" id="Birth_of_the_Ten-Tails'_Jinchūriki">Birth of the Ten-Tails' Jinchūriki</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Birth_of_the_Ten-Tails%27_Jinch%C5%ABriki" title="Birth of the Ten-Tails' Jinchūriki">Birth of the Ten-Tails' Jinchūriki</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest?cb=20250919211345"><img alt="Biju released" class="thumbimage lazyload" data-image-key="Biju_released.png" data-image-name="Biju released.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest?cb=20250919211345"><img alt="Biju released" class="thumbimage" data-image-key="Biju_released.png" data-image-name="Biju released.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Biju_released.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts being freed from Obito.</p> </figcaption> </figure>
+<p>Isobu appeared alongside the other tailed beasts with the exception of Gyūki and <a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> when the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a> looked down at Naruto. The image of the tailed beasts, along with a silhouette of the Sage of Six Paths, drove the Ten-Tails to a fit as it evolved further. Due to the combined teamwork of the <a href="https://naruto.fandom.com/wiki/Allied_Shinobi_Forces" title="Allied Shinobi Forces">Allied Shinobi Forces</a>, Isobu, alongside the other imprisoned tailed beasts, was later pulled out of Obito and thus freed.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest?cb=20250919131223"><img alt="Tailed Beasts vs Madara" class="thumbimage lazyload" data-image-key="Tailed_Beasts_vs_Madara.png" data-image-name="Tailed Beasts vs Madara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest?cb=20250919131223"><img alt="Tailed Beasts vs Madara" class="thumbimage" data-image-key="Tailed_Beasts_vs_Madara.png" data-image-name="Tailed Beasts vs Madara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beasts_vs_Madara.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts working together to attack Madara.</p> </figcaption> </figure>
+<p>When Madara ran towards the tailed beasts, both Shukaku and <a href="https://naruto.fandom.com/wiki/Gaara" title="Gaara">Gaara</a> conjured <a href="https://naruto.fandom.com/wiki/Wind_Release:_Sand_Buckshot" title="Wind Release: Sand Buckshot">numerous sand bullets</a> and were able to restrain the Uchiha's movements. Using the opportunity to attack, the tailed beasts each took a swing at their opponent, giving sand-manipulating duo an opening to use their <a href="https://naruto.fandom.com/wiki/Desert_Layered_Imperial_Funeral_Seal" title="Desert Layered Imperial Funeral Seal">Desert Layered Imperial Funeral Seal</a>, but Madara managed to escape the sand pyramid with his Susanoo. As Naruto in <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_Beast_Mode" title="Tailed Beast Mode">Tailed Beast Mode</a> pinned Madara down with a tail, Isobu and the other tailed beasts joined in and did the same to increase the damage, but the Uchiha survived their attacks and retreated to a safe distance. After he received his own right Rinnegan eye from a White Zetsu clone, Madara quickly summoned the Demonic Statue of the Outer Path from Obito's body, and used the Rinnegan to <a href="https://naruto.fandom.com/wiki/Limbo:_Border_Jail" title="Limbo: Border Jail">repel</a> the tailed beasts. With the tailed beasts stunned, Madara then <a href="https://naruto.fandom.com/wiki/Demonic_Statue_Chains" title="Demonic Statue Chains">chained</a> them up and sealed them back into the Demonic Statue.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest?cb=20150730121101"><img alt="Tailed Beast Reunion" class="thumbimage lazyload" data-image-key="Tailed_Beast_Reunion.png" data-image-name="Tailed Beast Reunion.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest?cb=20150730121101"><img alt="Tailed Beast Reunion" class="thumbimage" data-image-key="Tailed_Beast_Reunion.png" data-image-name="Tailed Beast Reunion.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_Reunion.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts reunite with Hagoromo and Naruto.</p> </figcaption> </figure>
+<p>Later, the chakra Isobu transferred to Naruto earlier, manifested within Naruto's subconscious along with the other tailed beasts to speak with the young jinchūriki and the spirit of <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>. There, they all voiced their shared belief that Naruto was the child of prophecy.
+</p>
+<div style="clear: left;"></div>
+<h3><span id="Kaguya_.C5.8Ctsutsuki_Strikes"></span><span class="mw-headline" id="Kaguya_Ōtsutsuki_Strikes">Kaguya Ōtsutsuki Strikes</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki_Strikes" title="Kaguya Ōtsutsuki Strikes">Kaguya Ōtsutsuki Strikes</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest?cb=20160901155526"><img alt="Tailed Beast separate from Kaguya" class="thumbimage lazyload" data-image-key="Tailed_Beast_separate_from_Kaguya.png" data-image-name="Tailed Beast separate from Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest?cb=20160901155526"><img alt="Tailed Beast separate from Kaguya" class="thumbimage" data-image-key="Tailed_Beast_separate_from_Kaguya.png" data-image-name="Tailed Beast separate from Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_separate_from_Kaguya.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts being freed from the Ten-Tails.</p> </figcaption> </figure>
+<p>After Madara's ambitions were cut short by <a href="https://naruto.fandom.com/wiki/Black_Zetsu" title="Black Zetsu">Black Zetsu</a>, who revealed to be the silent manipulator of shinobi history since it was first created by <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki" title="Kaguya Ōtsutsuki">Kaguya Ōtsutsuki</a>, the black entity used Madara's body as a medium to resurrect its creator. During the battle against the tyrannical princess, Isobu and the other tailed beasts continued to support Naruto by giving him <a href="https://naruto.fandom.com/wiki/Sage_Art:_Super_Tailed_Beast_Rasenshuriken" title="Sage Art: Super Tailed Beast Rasenshuriken">their combined power</a> to overwhelm her. Ultimately, Kaguya was defeated by Naruto and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sasuke" title="Sasuke">Sasuke</a>, who used the <a href="https://naruto.fandom.com/wiki/Six_Paths_%E2%80%94_Chibaku_Tensei" title="Six Paths — Chibaku Tensei">Six Paths — Chibaku Tensei</a> to eject all the tailed beasts from her and seal her away inside a newly-created <a href="https://naruto.fandom.com/wiki/Moon" title="Moon">moon</a> within her own <a href="https://naruto.fandom.com/wiki/Kaguya%27s_Dimensions" title="Kaguya's Dimensions">dimension</a>.
+</p><p>After the spirits of Hagoromo and the past Kage summoned both the tailed beasts and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Team_Kakashi" title="Team Kakashi">Team 7</a> back to the real world, the tailed beasts began to discuss their plans for the future since they were finally free. Sasuke, however, made his own intentions known: removing as many people as possible who could get in the way of his plans of leading the world through a revolution to do away with current shinobi systems, including killing all the current Kage and tailed beasts. Just as Sasuke swiftly <a href="https://naruto.fandom.com/wiki/Genjutsu:_Sharingan" title="Genjutsu: Sharingan">subdued</a> the tailed beasts with his Rinnegan and sealed them within his <a href="https://naruto.fandom.com/wiki/Chibaku_Tensei" title="Chibaku Tensei">Chibaku Tensei</a>, Naruto reassured the tailed beasts that he would save them once again. After Naruto was able to defeat and reform Sasuke, the two dispelled the Infinite Tsukuyomi and Sasuke released Isobu, along with the other tailed beasts, from their prisons.
+</p>
+<h2><span class="mw-headline" id="New_Era">New Era</span></h2>
+<h3><span class="mw-headline" id="One-Tail_Escort_Arc">One-Tail Escort Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/One-Tail_Escort_Arc" title="One-Tail Escort Arc">One-Tail Escort Arc</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest?cb=20200604154217"><img alt="Biju Conference" class="thumbimage lazyload" data-image-key="Biju_Conference.png" data-image-name="Biju Conference.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest?cb=20200604154217"><img alt="Biju Conference" class="thumbimage" data-image-key="Biju_Conference.png" data-image-name="Biju Conference.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Biju_Conference.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Isobu, with the other tailed beasts in a meeting with Naruto.</p> </figcaption> </figure>
+<p>When <a href="https://naruto.fandom.com/wiki/Urashiki_%C5%8Ctsutsuki" title="Urashiki Ōtsutsuki">Urashiki Ōtsutsuki</a> began targeting <a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> for its chakra, it was deduced he was interested in all the tailed beasts' chakra. Naruto organised a telepathic meeting with the other tailed beasts, except for <a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a>, <a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a>, and <a href="https://naruto.fandom.com/wiki/Ch%C5%8Dmei" title="Chōmei">Chōmei</a>, who each refused to accept aid from humans in fear of being captured and used again by them, despite their trust in Naruto, and thus decided to skip the meeting.
+</p>
+<div style="clear: left;"></div>
+<h3><span class="mw-headline" id="Kawaki_Arc">Kawaki Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kawaki_Arc" title="Kawaki Arc">Kawaki Arc</a></span>
+In the anime, Isobu was gathered with the other tailed beasts as they sensed Kurama's chakra vanishing after it <a href="https://naruto.fandom.com/wiki/Baryon_Mode" title="Baryon Mode">sacrificed</a> its life in the battle against <a href="https://naruto.fandom.com/wiki/Isshiki_%C5%8Ctsutsuki" title="Isshiki Ōtsutsuki">Isshiki Ōtsutsuki</a>.
+</p>
+<h2><span class="mw-headline" id="In_Other_Media">In Other Media</span></h2>
+<h3><span class="mw-headline" id="Video_Games">Video Games</span></h3>
+<p>Isobu is playable as Yagura's awakening in <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_3" title="Naruto Shippūden: Ultimate Ninja Storm 3">Naruto Shippūden: Ultimate Ninja Storm 3</a></i>, <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_Revolution" title="Naruto Shippūden: Ultimate Ninja Storm Revolution">Naruto Shippūden: Ultimate Ninja Storm Revolution</a></i> and <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_4" title="Naruto Shippūden: Ultimate Ninja Storm 4">Naruto Shippūden: Ultimate Ninja Storm 4</a></i>, and Rin Nohara's in the latter. Isobu also appears as a boss in <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ninja_Destiny_3" title="Naruto Shippūden: Ninja Destiny 3">Naruto Shippūden: Ninja Destiny 3</a></i>.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>'Isobu' (<span lang="ja">磯撫</span>) literally means 'beach stroker', and is also an adaptation of the name of the sea <a class="extiw" href="https://en.wikipedia.org/wiki/Y%C5%8Dkai" title="wikipedia:Yōkai">yōkai</a> <a class="extiw" href="https://en.wikipedia.org/wiki/Isonade" title="wikipedia:Isonade">Isonade</a> (<span lang="ja">磯撫で</span>). The Isonade had a hooked tail, similar to Yagura's staff.</li>
+<li>Since Rin died without having Isobu extracted, Isobu is the first known tailed beast to have "died" and revived.</li>
+<li>In the <a href="https://naruto.fandom.com/wiki/Three-Tails%27_Appearance" title="Three-Tails' Appearance">Three-Tails' Appearance</a>, Isobu's capture took place much later than in the manga, but played out in much the same way.</li>
+<li>Isobu's turtle-based appearance may be a reference to <a class="extiw" href="https://en.wikipedia.org/wiki/Gamera" title="wikipedia:Gamera">Gamera</a>; the <i><a href="https://naruto.fandom.com/wiki/Rough_Sea_Splash" title="Rough Sea Splash">Rough Sea Splash</a></i> technique in <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_3" title="Naruto Shippūden: Ultimate Ninja Storm 3">Naruto Shippūden: Ultimate Ninja Storm 3</a></i> involves Isobu ramming into an opponent by emitting streams of water from his arms, strongly resembling Gamera's ability to fly with jets and ramming into opponents. Isobu also possesses a technique to <a href="https://naruto.fandom.com/wiki/Leaping_Bullet_Shell_Tower" title="Leaping Bullet Shell Tower">gain high mobility by spinning</a> while one of Gamera's signature abilities is also fly and rolling on the ground to ram into opponents by rapidly spinning.
+<ul><li>References to classic kaiju medias have been made by <a href="https://naruto.fandom.com/wiki/Masashi_Kishimoto" title="Masashi Kishimoto">Masashi Kishimoto</a> regarding Tailed Beasts on several occasions such as <i><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Full_Charge" title="Tailed Beast Full Charge">Tailed Beast Full Charge</a></i> and <i><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Mode!!" title="Tailed Beast Mode!!">Tailed Beast Mode!!</a></i>.</li></ul></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251010085111
+Cache expiry: 2592000
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0.001 seconds
+CPU time usage: 0.572 seconds
+Real time usage: 0.956 seconds
+Preprocessor visited node count: 6342/1000000
+Post‐expand include size: 98027/2097152 bytes
+Template argument size: 18394/2097152 bytes
+Highest expansion depth: 26/100
+Expensive parser function count: 3/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5147/5000000 bytes
+Lua time usage: 0.043/7.000 seconds
+Lua memory usage: 1836980/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  812.505      1 -total
+ 96.37%  783.038      5 Template:Content_only
+ 96.19%  781.547      1 Template:Infobox
+ 95.54%  776.258      1 Infobox:Isobu
+ 94.89%  770.968      1 Template:Infobox/Naruto/Character
+ 68.78%  558.830      5 Template:IBox/Box
+ 18.77%  152.546     32 Template:IBox/Row
+ 13.20%  107.279     12 Template:Infobox/Naruto/Character/JutsuList
+  9.52%   77.335     13 Template:SemanticInputParser
+  9.11%   74.048      7 Template:SemanticInputParser/Array
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:6539-0!dateformat=default!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251010085111 and revision id 1454566. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Characters</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Isobu">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

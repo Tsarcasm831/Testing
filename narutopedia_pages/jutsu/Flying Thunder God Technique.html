@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Flying Thunder God Technique — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Flying Thunder God Technique</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Flying%20Thunder%20God%20Technique" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="box headnote">
+<tbody><tr>
+<td>This article is about the jutsu invented by Tobirama. For the jutsu invented by Boruto, see <a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_Technique_(Boruto)" title="Flying Thunder God Technique (Boruto)">Flying Thunder God Technique (Boruto)</a>. For other uses, see <a class="mw-disambig" href="https://naruto.fandom.com/wiki/Hiraishin" title="Hiraishin">Hiraishin</a>.
+</td></tr></tbody></table>
+<p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Flying Thunder God Technique<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Flying+Thunder+God+Technique&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Flying Thunder God Technique"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Flying_Thunder_God_Technique" title="Special:FormEdit/Jutsu/Flying Thunder God Technique">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">飛雷神の術</rb></ruby>­ <dfn lang="ja-Latn">(Hiraishin no Jutsu)</dfn></h2>
+<div class="pi-image-collection wds-tabber">
+<div class="wds-tabs__wrapper">
+<ul class="wds-tabs">
+<li class="wds-tabs__tab wds-is-current">
+<span class="wds-tabs__tab-label">
+							Using this technique, the user can teleport in an instant…
+							
+						</span>
+</li>
+<li class="wds-tabs__tab">
+<span class="wds-tabs__tab-label">
+							…to any marked location.
+							
+						</span>
+</li>
+</ul>
+</div>
+<div class="wds-tab__content wds-is-current">
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/3/36/A_attacks_Minato.png/revision/latest?cb=20150212215443" title="Using this technique, the user can teleport in an instant…">
+<img alt="Using this technique, the user can teleport in an instant…" class="pi-image-thumbnail" data-image-key="A attacks Minato.png" data-image-name="A attacks Minato.png" data-relevant="1" height="153" src="https://static.wikia.nocookie.net/naruto/images/3/36/A_attacks_Minato.png/revision/latest/scale-to-width-down/268?cb=20150212215443" srcset="https://static.wikia.nocookie.net/naruto/images/3/36/A_attacks_Minato.png/revision/latest/scale-to-width-down/268?cb=20150212215443 1x, https://static.wikia.nocookie.net/naruto/images/3/36/A_attacks_Minato.png/revision/latest/scale-to-width-down/536?cb=20150212215443 2x" width="270"/>
+</a>
+</figure>
+</div>
+<div class="wds-tab__content">
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/c/c6/Minato_flies_to_a_kunai.png/revision/latest?cb=20150907082136" title="…to any marked location.">
+<img alt="…to any marked location." class="pi-image-thumbnail" data-image-key="Minato flies to a kunai.png" data-image-name="Minato flies to a kunai.png" data-relevant="1" height="153" src="https://static.wikia.nocookie.net/naruto/images/c/c6/Minato_flies_to_a_kunai.png/revision/latest/scale-to-width-down/268?cb=20150907082136" srcset="https://static.wikia.nocookie.net/naruto/images/c/c6/Minato_flies_to_a_kunai.png/revision/latest/scale-to-width-down/268?cb=20150907082136 1x, https://static.wikia.nocookie.net/naruto/images/c/c6/Minato_flies_to_a_kunai.png/revision/latest/scale-to-width-down/536?cb=20150907082136 2x" width="270"/>
+</a>
+</figure>
+</div>
+</div>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="viz manga">
+<h3 class="pi-data-label pi-secondary-font">Viz print media</h3>
+<div class="pi-data-value pi-font">Flying Thunder God Jutsu</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="english tv">
+<h3 class="pi-data-label pi-secondary-font">English anime</h3>
+<div class="pi-data-value pi-font">Flying Raijin Jutsu</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut manga">
+<h3 class="pi-data-label pi-secondary-font">Manga</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/The_Day_of_Departure!!_(volume)" title="The Day of Departure!! (volume)">Volume #27</a>, <a href="https://naruto.fandom.com/wiki/Side_Story_2:_Teamwork!!" title="Side Story 2: Teamwork!!"><i>Naruto</i> Chapter #240</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Kakashi_Chronicles_~_Boys%27_Life_on_the_Battlefield_~_Part_1" title="Kakashi Chronicles ~ Boys' Life on the Battlefield ~ Part 1"><i>Naruto Shippūden</i> Episode #119</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="movie debut">
+<h3 class="pi-data-label pi-secondary-font">Movie</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden_the_Movie:_The_Lost_Tower" title="Naruto Shippūden the Movie: The Lost Tower">Naruto Shippūden the Movie: The Lost Tower</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto:_Ultimate_Ninja_3" title="Naruto: Ultimate Ninja 3">Naruto: Ultimate Ninja 3</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="ova debut">
+<h3 class="pi-data-label pi-secondary-font">OVA</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_Generations#Anime_Cutscenes" title="Naruto Shippūden: Ultimate Ninja Storm Generations">Naruto Shippūden: UNSG anime cutscenes</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Manga, Game, Movie</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Space%E2%80%93Time_Ninjutsu" title="Space–Time Ninjutsu">Space–Time Ninjutsu</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu rank">
+<h3 class="pi-data-label pi-secondary-font">Rank</h3>
+<div class="pi-data-value pi-font">S-rank</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Supplementary</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu range">
+<h3 class="pi-data-label pi-secondary-font">Range</h3>
+<div class="pi-data-value pi-font">All ranges</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Parent&amp;value=Flying_Thunder_God_Technique" rel="noreferrer noopener" target="_blank">Derived jutsu</a></h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_Mutually_Instantaneous_Revolving_Technique" title="Flying Thunder God Mutually Instantaneous Revolving Technique">Flying Thunder God Mutually Instantaneous Revolving Technique</a></li><li><a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_Slash" title="Flying Thunder God Slash">Flying Thunder God Slash</a></li><li><a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_%E2%80%94_Second_Step" title="Flying Thunder God — Second Step">Flying Thunder God — Second Step</a></li><li><a href="https://naruto.fandom.com/wiki/Flying_Thunder_God:_Guiding_Thunder" title="Flying Thunder God: Guiding Thunder">Flying Thunder God: Guiding Thunder</a></li><li><a href="https://naruto.fandom.com/wiki/Spiralling_Flash_Super_Round_Dance_Howl_Style_Three" title="Spiralling Flash Super Round Dance Howl Style Three">Spiralling Flash Super Round Dance Howl Style Three</a></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Related jutsu</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="related jutsu">
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Flying_Thunder_Formation_Technique" title="Flying Thunder Formation Technique">Flying Thunder Formation Technique</a>, <a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_Technique_(Boruto)" title="Flying Thunder God Technique (Boruto)">Flying Thunder God Technique (Boruto)</a></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Minato_Namikaze" title="Minato Namikaze">Minato Namikaze</a></li><li><a href="https://naruto.fandom.com/wiki/Tobirama_Senju" title="Tobirama Senju">Tobirama Senju</a></li></ul></div></div>
+</div>
+</section>
+</aside>
+
+The <b>Flying Thunder God Technique</b> is a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Space%E2%80%93time_ninjutsu" title="Space–time ninjutsu">space–time ninjutsu</a> originally developed by <a href="https://naruto.fandom.com/wiki/Tobirama_Senju" title="Tobirama Senju">Tobirama Senju</a>. It was later <a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_Technique_(Boruto)" title="Flying Thunder God Technique (Boruto)">recreated</a> by <a href="https://naruto.fandom.com/wiki/Boruto_Uzumaki" title="Boruto Uzumaki">Boruto Uzumaki</a>.
+<p></p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Overview"><span class="tocnumber">1</span> <span class="toctext">Overview</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Trivia"><span class="tocnumber">2</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#See_Also"><span class="tocnumber">3</span> <span class="toctext">See Also</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="about:blank#References"><span class="tocnumber">4</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/5d/Flying_Thunder_God_Technique.png/revision/latest?cb=20150308034703"><img alt="Flying Thunder God Technique" class="thumbimage lazyload" data-image-key="Flying_Thunder_God_Technique.png" data-image-name="Flying Thunder God Technique.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/5d/Flying_Thunder_God_Technique.png/revision/latest/scale-to-width-down/180?cb=20150308034703" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/5d/Flying_Thunder_God_Technique.png/revision/latest?cb=20150308034703"><img alt="Flying Thunder God Technique" class="thumbimage" data-image-key="Flying_Thunder_God_Technique.png" data-image-name="Flying Thunder God Technique.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/5d/Flying_Thunder_God_Technique.png/revision/latest/scale-to-width-down/180?cb=20150308034703" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/5d/Flying_Thunder_God_Technique.png/revision/latest/scale-to-width-down/180?cb=20150308034703" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Flying_Thunder_God_Technique.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Minato's formula (left) and Tobirama's formula (right).</p> </figcaption> </figure>
+<p>Before the Flying Thunder God Technique can be performed, users must first mark a target with their "technique formula" (<span lang="ja">術式</span>, <i>jutsu-shiki</i>). The formula is applied after the merest touch and cannot be removed; it will remain in place even after the user has died. There is no limit to how many targets can be marked with technique formulas, as <a href="https://naruto.fandom.com/wiki/Minato_Namikaze" title="Minato Namikaze">Minato Namikaze</a> routinely uses dozens at a time. 
+</p><p>By entering a dimensional void, users can instantly teleport to a technique formula's location whenever they please, regardless of distance, or different dimension. To an onlooker, it may look like the <a href="https://naruto.fandom.com/wiki/Body_Flicker_Technique" title="Body Flicker Technique">Body Flicker Technique</a>, but the Flying Thunder God actually has more in common with the <a href="https://naruto.fandom.com/wiki/Summoning_Technique" title="Summoning Technique">Summoning Technique</a>. Anything that the user is holding, contacting, or that is linked with their <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a> will teleport with them, but this requires additional chakra to do; particularly large objects can require so much chakra as to place a limit on how far away the user is able to teleport. Users can choose to teleport to a different location than the objects, or they can teleport objects without teleporting themselves.
+</p><p>In combat situations, the Flying Thunder God can most effectively be used by marking an opponent's body with the technique formula, allowing the user to teleport to them at anytime: when the marked opponent tries to attack, the user can attack them first; when the marked opponent tries to escape, the user can instantly appear at their side. <i><a href="https://naruto.fandom.com/wiki/T%C5%8D_no_Sho" title="Tō no Sho">Tō no Sho</a></i> likens this to a <a href="https://naruto.fandom.com/wiki/Juinjutsu" title="Juinjutsu">juinjutsu</a>, in that anyone marked with the technique formula is essentially sentenced to death. While trying to find an opportunity to mark opponents, the Flying Thunder God also gives users a defensive option, as they can teleport away from an opponent's attacks. In order to take advantage of this, the technique formula is often applied to projectile weapons, such as Minato's <a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_Kunai" title="Flying Thunder God Kunai">special kunai</a>, which can quickly be scattered around a battlefield to create several teleportation destinations that can be escaped to and subsequently attacked from.
+</p><p>Both Tobirama and Minato were famed as the fastest shinobi during their lifetimes. While both were very fast on their own, the Flying Thunder God also contributed to their fame. During the <a href="https://naruto.fandom.com/wiki/Third_Shinobi_World_War" title="Third Shinobi World War">Third Shinobi World War</a>, Minato's extensive usage of the Flying Thunder God led to his moniker as "<a class="mw-redirect" href="https://naruto.fandom.com/wiki/Konoha" title="Konoha">Konoha</a>'s Yellow Flash": he would randomly appear behind enemy lines and, by seemingly being in many places at once, wipe out whole squadrons before they had time to react. By combining their naturally good reflexes with the instantaneousness of the Flying Thunder God, Tobirama could intercept and redirect a <a href="https://naruto.fandom.com/wiki/Truth-Seeking_Ball" title="Truth-Seeking Ball">Truth-Seeking Ball</a> mid-detonation and Minato could escape <a href="https://naruto.fandom.com/wiki/Kamui" title="Kamui">Kamui</a> mid-capture. Minato's ability to dodge <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fourth_Raikage" title="Fourth Raikage">A</a>'s <a href="https://naruto.fandom.com/wiki/Lightning_Release_Chakra_Mode" title="Lightning Release Chakra Mode">Lightning Release Chakra Mode</a> led A to dub Minato the fastest ninja who ever lived.
+</p><p>When both Tobirama and Minato are <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Impure_World_Reincarnation" title="Impure World Reincarnation">revived</a> during the <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War" title="Fourth Shinobi World War">Fourth Shinobi World War</a>, Tobirama was able to link himself with Minato's Flying Thunder God network, allowing him to teleport to the latter's technique formulas. Together, they develop the <a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_Mutually_Instantaneous_Revolving_Technique" title="Flying Thunder God Mutually Instantaneous Revolving Technique">Flying Thunder God Mutually Instantaneous Revolving Technique</a>, which allows them to switch places with each other in combat to set-up different manoeuvres. During their lives, both developed their own variants of the Flying Thunder God: Tobirama had the <a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_Slash" title="Flying Thunder God Slash">Flying Thunder God Slash</a>, which he used to stab opponents the instant he teleported to their side; Minato had <a href="https://naruto.fandom.com/wiki/Flying_Thunder_God:_Guiding_Thunder" title="Flying Thunder God: Guiding Thunder">Flying Thunder God: Guiding Thunder</a>, which created a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Barrier" title="Barrier">barrier</a> in front of him that teleported incoming attacks to a different location.
+</p><p>Approximately two decades later, <a href="https://naruto.fandom.com/wiki/Boruto_Uzumaki" title="Boruto Uzumaki">Boruto Uzumaki</a> would take inspiration from his grandfather and use his inherent <a href="https://naruto.fandom.com/wiki/%C5%8Ctsutsuki_Clan" title="Ōtsutsuki Clan">Ōtsutsuki</a> <a href="https://naruto.fandom.com/wiki/%C5%8Ctsutsuki_Teleportation" title="Ōtsutsuki Teleportation">teleportation</a> ability to devise <a href="https://naruto.fandom.com/wiki/Flying_Thunder_God_Technique_(Boruto)" title="Flying Thunder God Technique (Boruto)">an imitation of the ninjutsu</a>. Though it produces nearly identical results it is technically different enough to be considered an entirely separate technique, and has more limitations.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>The name <i>Hiraishin</i> is also the phonic of the Japanese word 避雷針, which means "<a class="extiw" href="https://en.wikipedia.org/wiki/Lightning_rod" title="wikipedia:Lightning rod">lightning rod</a>". This may suggest the reasoning as to why the technique is restricted towards a seal, because lightning is attracted to lightning rods.</li>
+<li>The Flying Thunder God Technique has sometimes been referred to as the <a href="https://naruto.fandom.com/wiki/Body_Flicker_Technique" title="Body Flicker Technique">Body Flicker Technique</a>, despite the fact that they are fundamentally different.</li>
+<li>Minato incorporated the Flying Thunder God's mark into his <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Kushina" title="Kushina">wife</a>'s <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Jinchuriki" title="Jinchuriki">seal</a>, allowing him to immediately come to her aid when needed.</li>
+<li>Although it's been said that the technique formula can't be removed, its marking has disappeared from individuals that have <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beast" title="Tailed beast">tailed beasts</a> sealed into them and extracted from them.</li>
+<li>In the anime, Minato's technique formula appears to say 忍愛之剣, made up of the kanji for "endurance" (<span lang="ja">忍</span>, <i>nin</i>), "love" (<span lang="ja">愛</span>, <i>ai</i>), "of" (<span lang="ja">之</span>), and "sword" (<span lang="ja">剣</span>, <i>ken</i>). Tobirama's is more reminiscent of the formula used for <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Seal" title="Seal">seals</a> – a random assortment of <a class="extiw" href="https://en.wikipedia.org/wiki/Kanji" title="wikipedia:Kanji">Kanji</a>, <a class="extiw" href="https://en.wikipedia.org/wiki/Hindi_script" title="wikipedia:Hindi script">Hindi script</a>, and other symbols.</li>
+<li>In video games, Minato's use of the Flying Thunder God Technique creates a yellow flash, in reference to his nickname.</li>
+<li>Originally, before Tobirama's second revival, the Flying Thunder God technique was said to be Minato's original technique, but it was then retconned to him learning it.</li></ul>
+<h2><span class="mw-headline" id="See_Also">See Also</span></h2>
+<ul><li><a href="https://naruto.fandom.com/wiki/Amenotejikara" title="Amenotejikara">Amenotejikara</a></li>
+<li><a href="https://naruto.fandom.com/wiki/Claw_Mark" title="Claw Mark">Claw Mark</a></li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251009022413
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.321 seconds
+Real time usage: 0.443 seconds
+Preprocessor visited node count: 800/1000000
+Post‐expand include size: 3187/2097152 bytes
+Template argument size: 445/2097152 bytes
+Highest expansion depth: 7/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 11092/5000000 bytes
+Lua time usage: 0.151/7.000 seconds
+Lua memory usage: 1891371/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  362.929      1 -total
+ 83.39%  302.653      1 Template:Infobox/Jutsu
+  3.42%   12.425      5 Template:Translation
+  0.54%    1.945      1 Template:Looking_for
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:2667-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251009022413 and revision id 1453412. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Flying%20Thunder%20God%20Technique">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

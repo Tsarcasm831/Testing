@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Six Paths Sage Mode — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Six Paths Sage Mode</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Six%20Paths%20Sage%20Mode" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Six Paths Sage Mode<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Six+Paths+Sage+Mode&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Six Paths Sage Mode"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Six_Paths_Sage_Mode" title="Special:FormEdit/Jutsu/Six Paths Sage Mode">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">六道仙人モード</rb></ruby>­ <dfn lang="ja-Latn">(Rikudō Sennin Mōdo)</dfn></h2>
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/2/22/Naruto%27s_SPSM.png/revision/latest?cb=20150730222303" title="Naruto's SPSM">
+<img alt="Naruto's SPSM" class="pi-image-thumbnail" data-image-key="Naruto%27s_SPSM.png" data-image-name="Naruto's SPSM.png" data-relevant="1" height="152" src="https://static.wikia.nocookie.net/naruto/images/2/22/Naruto%27s_SPSM.png/revision/latest/scale-to-width-down/268?cb=20150730222303" srcset="https://static.wikia.nocookie.net/naruto/images/2/22/Naruto%27s_SPSM.png/revision/latest/scale-to-width-down/268?cb=20150730222303 1x, https://static.wikia.nocookie.net/naruto/images/2/22/Naruto%27s_SPSM.png/revision/latest/scale-to-width-down/536?cb=20150730222303 2x" width="270"/>
+</a>
+</figure>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="viz manga">
+<h3 class="pi-data-label pi-secondary-font">Viz print media</h3>
+<div class="pi-data-value pi-font">Sage of Six Paths Mode</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut manga">
+<h3 class="pi-data-label pi-secondary-font">Manga</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Naruto_and_the_Sage_of_Six_Paths%E2%80%A6!!_(volume)" title="Naruto and the Sage of Six Paths…!! (volume)">Volume #70</a>, <a href="https://naruto.fandom.com/wiki/The_Incipient%E2%80%A6!!" title="The Incipient…!!"><i>Naruto</i> Chapter #670</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/The_Sage_of_Six_Paths" title="The Sage of Six Paths"><i>Naruto Shippūden</i> Episode #421</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="novel debut">
+<h3 class="pi-data-label pi-secondary-font">Novel</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Boruto:_Naruto_the_Movie" title="Boruto: Naruto the Movie">Boruto: Naruto the Movie</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="movie debut">
+<h3 class="pi-data-label pi-secondary-font">Movie</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Boruto:_Naruto_the_Movie" title="Boruto: Naruto the Movie">Boruto: Naruto the Movie</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_4" title="Naruto Shippūden: Ultimate Ninja Storm 4">Naruto Shippūden: Ultimate Ninja Storm 4</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Manga, Novel, Game, Movie</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/Senjutsu" title="Senjutsu">Senjutsu</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Offensive, Defensive, Supplementary</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Parent&amp;value=Six_Paths_Sage_Mode" rel="noreferrer noopener" target="_blank">Derived jutsu</a></h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Instant_Lightning:_Combination_Tag" title="Instant Lightning: Combination Tag">Instant Lightning: Combination Tag</a></li><li><a href="https://naruto.fandom.com/wiki/Naruto_Region_Combo" title="Naruto Region Combo">Naruto Region Combo</a></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Ink-Splatter_Rasenshuriken" title="Sage Art: Ink-Splatter Rasenshuriken">Sage Art: Ink-Splatter Rasenshuriken</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Super_Tailed_Beast_Rasenshuriken" title="Sage Art: Super Tailed Beast Rasenshuriken">Sage Art: Super Tailed Beast Rasenshuriken</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Lava_Release_Rasenshuriken" title="Sage Art: Lava Release Rasenshuriken">Sage Art: Lava Release Rasenshuriken</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Super_Tailed_Beast_Rasenshuriken" title="Sage Art: Super Tailed Beast Rasenshuriken">Sage Art: Super Tailed Beast Rasenshuriken</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Sage_Art:_Magnet_Release_Rasengan" title="Sage Art: Magnet Release Rasengan">Sage Art: Magnet Release Rasengan</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Magnet_Release:_Spiral_Jet_Black" title="Magnet Release: Spiral Jet Black">Magnet Release: Spiral Jet Black</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Six_Paths:_Ultra-Big_Ball_Rasenshuriken" title="Six Paths: Ultra-Big Ball Rasenshuriken">Six Paths: Ultra-Big Ball Rasenshuriken</a></li><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball_Rasenshuriken" title="Tailed Beast Ball Rasenshuriken">Tailed Beast Ball Rasenshuriken</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Six_Paths:_Ultra-Big_Ball_Rasenshuriken" title="Six Paths: Ultra-Big Ball Rasenshuriken">Six Paths: Ultra-Big Ball Rasenshuriken</a></li></ul></div></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Related jutsu</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="related jutsu">
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Sage_Mode" title="Sage Mode">Sage Mode</a>, <a href="https://naruto.fandom.com/wiki/Truth-Seeking_Ball" title="Truth-Seeking Ball">Truth-Seeking Ball</a>, <a href="https://naruto.fandom.com/wiki/Six_Paths_Ten-Tails_Coffin_Seal" title="Six Paths Ten-Tails Coffin Seal">Six Paths Ten-Tails Coffin Seal</a>, <a href="https://naruto.fandom.com/wiki/Six_Paths_Senjutsu" title="Six Paths Senjutsu">Six Paths Senjutsu</a></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a></li></ul></div></div>
+</div>
+</section>
+</aside>
+<p></p><section></section><p><b>Six Paths Sage Mode</b> (<span lang="ja">六道仙人モード</span>, <i>Rikudō Sennin Mōdo</i>) is a divine transformation gifted by <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a> to those who have an iron faith and the will to never give up. It significantly enhances the user's powers and allows them to use a number of new techniques.</p><section></section>
+<p class="mw-empty-elt"></p>
+<h2><span class="mw-headline" id="Attributes">Attributes</span></h2>
+<div class="wikia-slideshow wikia-gallery floatleft" data-crop="" data-hash="6933583d4fa3c732470c8d5788e5a5a9" data-seq-no="1" id="slideshow-1"><div class="wikia-slideshow-wrapper" style="width: 250px"><div class="wikia-slideshow-images-wrapper"><div class="wikia-slideshow-prev-next"><a class="wikia-slideshow-prev" title="Previous photo"><svg class="wds-icon wds-icon-tiny"><use xlink:href="#wds-icons-arrow-tiny"></use></svg></a><a class="wikia-slideshow-next" title="Next photo"><svg class="wds-icon wds-icon-tiny"><use xlink:href="#wds-icons-arrow-tiny"></use></svg></a></div><ul class="wikia-slideshow-images neutral" style="height: 188px; width: 250px"><li class="wikia-slideshow-first-image"><a class="image lightbox" id="slideshow-1-0" style="width: 170px" title="Expand slideshow"><img alt="Naruto's initial Nine-Tails Chakra Mode with Six Paths Sage Mode." class="thumbimage" data-caption="Naruto's initial Nine-Tails Chakra Mode with Six Paths Sage Mode." data-image-key="NTCM_and_SPSM.png" data-image-name="NTCM and SPSM.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/3a/NTCM_and_SPSM.png/revision/latest/scale-to-width-down/188?cb=20160915181947" height="188" style="border: 0px;" width="188"/></a><div class="wikia-slideshow-overlay"><div class="wikia-slideshow-image-caption">Naruto's initial Nine-Tails Chakra Mode with Six Paths Sage Mode.</div></div></li><li><a class="image lightbox" id="slideshow-1-1" style="width: 170px" title="Expand slideshow"><img alt="Naruto's initial chakra mode with Six Paths Sage Mode in the Boruto anime." class="thumbimage" data-caption="Naruto's initial chakra mode with Six Paths Sage Mode in the ." data-image-key="Gaiden_NTCM_and_SPSM.png" data-image-name="Gaiden NTCM and SPSM.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/2b/Gaiden_NTCM_and_SPSM.png/revision/latest/scale-to-width-down/188?cb=20171220103632" height="188" style="border: 0px;" width="188"/></a><div class="wikia-slideshow-overlay"><div class="wikia-slideshow-image-caption">Naruto's initial chakra mode with Six Paths Sage Mode in the <a href="https://naruto.fandom.com/wiki/Boruto:_Naruto_Next_Generations#Anime" title="Boruto: Naruto Next Generations"><i>Boruto</i> anime</a>.</div></div></li><li><a class="image lightbox" id="slideshow-1-2" style="width: 170px" title="Expand slideshow"><img alt="Naruto's initial chakra mode with Six Paths Sage Mode in the Boruto movie." class="thumbimage" data-caption="Naruto's initial chakra mode with Six Paths Sage Mode in the ." data-image-key="Naruto%27s_1st_NTCM_and_SPSM_-_Boruto_Movie.png" data-image-name="Naruto's 1st NTCM and SPSM - Boruto Movie.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/5c/Naruto%27s_1st_NTCM_and_SPSM_-_Boruto_Movie.png/revision/latest/scale-to-width-down/188?cb=20160914212436" height="188" style="border: 0px;" width="188"/></a><div class="wikia-slideshow-overlay"><div class="wikia-slideshow-image-caption">Naruto's initial chakra mode with Six Paths Sage Mode in the <a href="https://naruto.fandom.com/wiki/Boruto:_Naruto_the_Movie" title="Boruto: Naruto the Movie"><i>Boruto</i> movie</a>.</div></div></li><li><a class="image lightbox" id="slideshow-1-3" style="width: 170px" title="Expand slideshow"><img alt="Naruto's second chakra mode with Six Paths Sage Mode in the Boruto movie and Boruto anime." class="thumbimage" data-caption="Naruto's second chakra mode with Six Paths Sage Mode in the &lt;i&gt;Boruto&lt;/i&gt; movie and &lt;i&gt;Boruto&lt;/i&gt; anime." data-image-key="Naruto%27s_2nd_NTCM_and_SPSM_-_Boruto_Movie.png" data-image-name="Naruto's 2nd NTCM and SPSM - Boruto Movie.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/ca/Naruto%27s_2nd_NTCM_and_SPSM_-_Boruto_Movie.png/revision/latest/scale-to-width-down/188?cb=20160914212450" height="188" style="border: 0px;" width="188"/></a><div class="wikia-slideshow-overlay"><div class="wikia-slideshow-image-caption">Naruto's second chakra mode with Six Paths Sage Mode in the <i>Boruto</i> movie and <i>Boruto</i> anime.</div></div></li><li><a class="image lightbox" id="slideshow-1-4" style="width: 170px" title="Expand slideshow"><img alt="Naruto's initial chakra mode with Six Paths Sage Mode in the Boruto manga." class="thumbimage" data-caption="Naruto's initial chakra mode with Six Paths Sage Mode in the ." data-image-key="Naruto%27s_1st_NTCM_and_SPSM_-_Boruto_Manga.png" data-image-name="Naruto's 1st NTCM and SPSM - Boruto Manga.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/3e/Naruto%27s_1st_NTCM_and_SPSM_-_Boruto_Manga.png/revision/latest/scale-to-width-down/188?cb=20160914212514" height="188" style="border: 0px;" width="188"/></a><div class="wikia-slideshow-overlay"><div class="wikia-slideshow-image-caption">Naruto's initial chakra mode with Six Paths Sage Mode in the <a href="https://naruto.fandom.com/wiki/Boruto:_Naruto_Next_Generations#Manga" title="Boruto: Naruto Next Generations"><i>Boruto</i> manga</a>.</div></div></li><li><a class="image lightbox" id="slideshow-1-5" style="width: 170px" title="Expand slideshow"><img alt="Naruto's second chakra mode with Six Paths Sage Mode in the Boruto manga." class="thumbimage" data-caption="Naruto's second chakra mode with Six Paths Sage Mode in the &lt;i&gt;Boruto&lt;/i&gt; manga." data-image-key="Naruto%27s_2nd_NTCM_and_SPSM_-_Boruto_Manga.png" data-image-name="Naruto's 2nd NTCM and SPSM - Boruto Manga.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/50/Naruto%27s_2nd_NTCM_and_SPSM_-_Boruto_Manga.png/revision/latest/scale-to-width-down/130?cb=20180823081753" height="188" style="border: 0px;" width="130"/></a><div class="wikia-slideshow-overlay"><div class="wikia-slideshow-image-caption">Naruto's second chakra mode with Six Paths Sage Mode in the <i>Boruto</i> manga.</div></div></li></ul></div><div class="wikia-slideshow-toolbar"><div><span class="wikia-slideshow-toolbar-counter" data-counter="$1/6">1/6</span></div></div></div></div>
+<p>This state is indicated with Naruto's pupils consisting of a cross of vertical <a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">fox</a>-slits with horizontal <a href="https://naruto.fandom.com/wiki/Toad" title="Toad">toad</a>-slits, and there is no pigmentation around his eyes that would otherwise signify the standard <a href="https://naruto.fandom.com/wiki/Sage_Mode" title="Sage Mode">Sage Mode</a>. Since Naruto first awakened this power, he has always used it simultaneously with the <a href="https://naruto.fandom.com/wiki/Nine-Tails_Chakra_Mode" title="Nine-Tails Chakra Mode">Nine-Tails Chakra Mode</a>. Directly after obtaining <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>'s power, Naruto's eyes are yellow and later orange with the various chakra modes he uses after <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War" title="Fourth Shinobi World War">the war</a>, just like his previous ones before meeting Hagoromo. This mode increases the user's physical parameters well above that of Sage Mode and the Nine-Tails Chakra Mode, as Naruto was able to kick away <a href="https://naruto.fandom.com/wiki/Truth-Seeking_Ball" title="Truth-Seeking Ball">Truth-Seeking Balls</a> before entering the Nine-Tails Chakra Mode with this power. As a heightened state of Sage Mode, Naruto's <a href="https://naruto.fandom.com/wiki/Jutsu" title="Jutsu">jutsu</a> are augmented with larger amounts of <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Natural_energy" title="Natural energy">natural energy</a> to make them stronger. With the power he received from Hagoromo, Naruto gains a masterful grasp of chakra, control over all things in nature, and the ability to comprehend all universal things. His <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Sensing" title="Sensing">sensing</a> ability also rises to the point where he can sense and thus react to the invisible shadows in the world of <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Limbo" title="Limbo">Limbo</a>.
+</p><p>When Naruto uses his Nine-Tails Chakra Mode in conjunction with his Six Paths Sage Mode, he can push his abilities even further, such as being able to levitate, becoming fast enough to catch <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki" title="Kaguya Ōtsutsuki">Kaguya Ōtsutsuki</a> off guard and slice off her right arm, even being durable enough to take a <a href="https://naruto.fandom.com/wiki/Chidori" title="Chidori">Chidori</a> unharmed.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<table align="right"><tbody><tr><th></th><td><figure class="thumb show-info-icon" style="width: 134px" typeof="mw:File/Thumb"> <a href="https://naruto.fandom.com/wiki/File:Naruto_NTCM_and_SPSM_Digital.png" title="File:Naruto NTCM and SPSM Digital.png"><img alt="Naruto NTCM and SPSM Digital" class="thumbimage" data-image-key="Naruto_NTCM_and_SPSM_Digital.png" data-image-name="Naruto NTCM and SPSM Digital.png" data-relevant="1" decoding="async" height="241" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/c/cb/Naruto_NTCM_and_SPSM_Digital.png/revision/latest?cb=20140922202640" width="134"/></a> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Naruto_NTCM_and_SPSM_Digital.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Naruto's eyes in the original colourised chapters.</p> </figcaption> </figure></td></tr></tbody></table>
+<ul><li>It's unclear what this form's name signifies, and consequentially what the best translation is. "Six Paths Sage Mode" suggests it is a version of <a href="https://naruto.fandom.com/wiki/Sage_Mode" title="Sage Mode">Sage Mode</a> augmented with the <a href="https://naruto.fandom.com/wiki/Six_Paths" title="Six Paths">Six Paths</a>. "Sage of Six Paths Mode" would suggest it is named after <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>, better known as the Sage of Six Paths. The original Japanese supports both translations, and in fact could intend for both meanings to be true.</li>
+<li>In <i><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Shikamaru_Hiden" title="Shikamaru Hiden">Shikamaru Hiden</a></i>, it is suggested that having the chakra of all nine <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beast" title="Tailed beast">tailed beasts</a> is also a requirement to obtain this mode.</li>
+<li>In the colourised versions of chapters <a href="https://naruto.fandom.com/wiki/The_Infinite_Dream" title="The Infinite Dream">676</a> and <a href="https://naruto.fandom.com/wiki/My_Will_Is" title="My Will Is">678</a> included in digital editions of <i>Weekly Shōnen Jump</i>, Naruto's eyes in this mode were depicted with orange irides, much like his previous transformations. Later illustrations coloured by <a href="https://naruto.fandom.com/wiki/Masashi_Kishimoto" title="Masashi Kishimoto">Masashi Kishimoto</a> instead depict Naruto with yellow irides. The colouration was corrected in subsequent chapters and the <i><a href="https://naruto.fandom.com/wiki/Naruto:_Colour_Edition" title="Naruto: Colour Edition">Naruto: Colour Edition</a></i> release of <a href="https://naruto.fandom.com/wiki/Naruto_and_the_Sage_of_Six_Paths%E2%80%A6!!_(volume)" title="Naruto and the Sage of Six Paths…!! (volume)">volume 71</a>.</li>
+<li>In VIZ Shonen Jump, Naruto's Six Paths Sage Mode was attributed to the <a href="https://naruto.fandom.com/wiki/Six_Paths_Yang_Power" title="Six Paths Yang Power">Six Paths Yang Power</a>. However, this is not mentioned in the manga or the databooks.</li>
+<li>In <i>Boruto: Naruto Next Generations</i> chapter 52, Naruto asked about the difference between "Baryon Mode" and "Kurama Mode and Sage of Six Paths Mode" to Kurama. It is suggested that he was using the latter forms when he fought <a href="https://naruto.fandom.com/wiki/Isshiki_%C5%8Ctsutsuki" title="Isshiki Ōtsutsuki">Isshiki Ōtsutsuki</a>.</li></ul>
+<div style="clear: both;"></div>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251001105612
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: []
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.243 seconds
+Real time usage: 0.352 seconds
+Preprocessor visited node count: 476/1000000
+Post‐expand include size: 2685/2097152 bytes
+Template argument size: 175/2097152 bytes
+Highest expansion depth: 5/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 10273/5000000 bytes
+Lua time usage: 0.133/7.000 seconds
+Lua memory usage: 1890846/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  301.297      1 -total
+ 90.80%  273.578      1 Template:Infobox/Jutsu
+  2.04%    6.137      1 Template:Translation
+  0.40%    1.201      1 Template:ImgRight
+  0.37%    1.105      1 Template:-
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:153874-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251001105612 and revision id 1453129. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Six%20Paths%20Sage%20Mode">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

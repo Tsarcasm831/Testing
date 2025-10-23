@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Transformation Technique — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Transformation Technique</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Transformation%20Technique" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><p>
+</p><aside class="portable-infobox pi-background pi-border-color pi-theme-jutsu pi-layout-default" role="region">
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background">Transformation Technique<a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bjutsu%5D=Transformation+Technique&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Transformation Technique"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a><span style="float:right;font-size:x-small"><a href="https://naruto.fandom.com/wiki/Special:FormEdit/Jutsu/Transformation_Technique" title="Special:FormEdit/Jutsu/Transformation Technique">edit</a></span></h2>
+<h2 class="pi-item pi-item-spacing pi-title pi-secondary-background" data-source="kanji"><ruby lang="ja"><rb lang="ja-Hani">変化の術</rb></ruby>­ <dfn lang="ja-Latn">(Henge no Jutsu)</dfn></h2>
+<div class="pi-image-collection wds-tabber">
+<div class="wds-tabs__wrapper">
+<ul class="wds-tabs">
+<li class="wds-tabs__tab wds-is-current">
+<span class="wds-tabs__tab-label">
+							The user gathers chakra…
+							
+						</span>
+</li>
+<li class="wds-tabs__tab">
+<span class="wds-tabs__tab-label">
+							…to transform into something else.
+							
+						</span>
+</li>
+</ul>
+</div>
+<div class="wds-tab__content wds-is-current">
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/d/db/Transformation_Technique_part_1.png/revision/latest?cb=20150504124845" title="The user gathers chakra… ">
+<img alt="The user gathers chakra… " class="pi-image-thumbnail" data-image-key="Transformation Technique part 1.png" data-image-name="Transformation Technique part 1.png" data-relevant="1" height="203" src="https://static.wikia.nocookie.net/naruto/images/d/db/Transformation_Technique_part_1.png/revision/latest/scale-to-width-down/268?cb=20150504124845" srcset="https://static.wikia.nocookie.net/naruto/images/d/db/Transformation_Technique_part_1.png/revision/latest/scale-to-width-down/268?cb=20150504124845 1x, https://static.wikia.nocookie.net/naruto/images/d/db/Transformation_Technique_part_1.png/revision/latest/scale-to-width-down/536?cb=20150504124845 2x" width="270"/>
+</a>
+</figure>
+</div>
+<div class="wds-tab__content">
+<figure class="pi-item pi-image">
+<a class="image image-thumbnail" href="https://static.wikia.nocookie.net/naruto/images/9/94/Transformation_Technique_part_2.png/revision/latest?cb=20150504124900" title="…to transform into something else.">
+<img alt="…to transform into something else." class="pi-image-thumbnail" data-image-key="Transformation Technique part 2.png" data-image-name="Transformation Technique part 2.png" data-relevant="1" height="203" src="https://static.wikia.nocookie.net/naruto/images/9/94/Transformation_Technique_part_2.png/revision/latest/scale-to-width-down/268?cb=20150504124900" srcset="https://static.wikia.nocookie.net/naruto/images/9/94/Transformation_Technique_part_2.png/revision/latest/scale-to-width-down/268?cb=20150504124900 1x, https://static.wikia.nocookie.net/naruto/images/9/94/Transformation_Technique_part_2.png/revision/latest/scale-to-width-down/536?cb=20150504124900 2x" width="270"/>
+</a>
+</figure>
+</div>
+</div>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Name</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="english tv">
+<h3 class="pi-data-label pi-secondary-font">English anime</h3>
+<div class="pi-data-value pi-font">Transformation Jutsu</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Debut</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut manga">
+<h3 class="pi-data-label pi-secondary-font">Manga</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki_(volume)" title="Naruto Uzumaki (volume)">Volume #1</a>, <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki!!_(chapter_1)" title="Naruto Uzumaki!! (chapter 1)"><i>Naruto</i> Chapter #1</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="debut anime">
+<h3 class="pi-data-label pi-secondary-font">Anime</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Enter:_Naruto_Uzumaki!" title="Enter: Naruto Uzumaki!"><i>Naruto</i> Episode #1</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="novel debut">
+<h3 class="pi-data-label pi-secondary-font">Novel</h3>
+<div class="pi-data-value pi-font"><i><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Naruto:_Innocent_Heart,_Demonic_Blood" title="Naruto: Innocent Heart, Demonic Blood">Naruto: Innocent Heart, Demonic Blood</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="movie debut">
+<h3 class="pi-data-label pi-secondary-font">Movie</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto_the_Movie:_Blood_Prison" title="Naruto the Movie: Blood Prison">Naruto the Movie: Blood Prison</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="game debut">
+<h3 class="pi-data-label pi-secondary-font">Game</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/Naruto:_Konoha_Ninp%C5%8Dch%C5%8D" title="Naruto: Konoha Ninpōchō">Naruto: Konoha Ninpōchō</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="ova debut">
+<h3 class="pi-data-label pi-secondary-font">OVA</h3>
+<div class="pi-data-value pi-font"><i><a href="https://naruto.fandom.com/wiki/The_Day_Naruto_Became_Hokage_(OVA)" title="The Day Naruto Became Hokage (OVA)">The Day Naruto Became Hokage (OVA)</a></i></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<h3 class="pi-data-label pi-secondary-font">Appears in</h3>
+<div class="pi-data-value pi-font">Anime, Manga, Novel, Game, Movie</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Data</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu classification">
+<h3 class="pi-data-label pi-secondary-font">Classification</h3>
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Ninjutsu" title="Ninjutsu">Ninjutsu</a>, <a href="https://naruto.fandom.com/wiki/General_skill" title="General skill">General skill</a></div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu rank">
+<h3 class="pi-data-label pi-secondary-font">Rank</h3>
+<div class="pi-data-value pi-font">E-rank</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu class type">
+<h3 class="pi-data-label pi-secondary-font">Class</h3>
+<div class="pi-data-value pi-font">Supplementary</div>
+</div>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="hand signs">
+<h3 class="pi-data-label pi-secondary-font">Hand seals</h3>
+<div class="pi-data-value pi-font">Dog → Boar → Ram</div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background"><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Parent&amp;value=Transformation_Technique" rel="noreferrer noopener" target="_blank">Derived jutsu</a></h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="jutsu media">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Beast_Human_Clone" title="Beast Human Clone">Beast Human Clone</a></li><li><a href="https://naruto.fandom.com/wiki/Combination_Transformation" title="Combination Transformation">Combination Transformation</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Human_Beast_Combination_Transformation:_Double-Headed_Wolf" title="Human Beast Combination Transformation: Double-Headed Wolf">Human Beast Combination Transformation: Double-Headed Wolf</a></li><li><a href="https://naruto.fandom.com/wiki/Human_Beast_Mixture_Transformation_%E2%80%94_Three-Headed_Wolf" title="Human Beast Mixture Transformation — Three-Headed Wolf">Human Beast Mixture Transformation — Three-Headed Wolf</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Face_Copying_Technique" title="Face Copying Technique">Face Copying Technique</a></li><li><i><a href="https://naruto.fandom.com/wiki/New_Sexy_Technique" title="New Sexy Technique">New Sexy Technique</a></i></li><li><a href="https://naruto.fandom.com/wiki/Sexy_Technique" title="Sexy Technique">Sexy Technique</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Bouncy_Bouncy_Technique" title="Bouncy Bouncy Technique">Bouncy Bouncy Technique</a></li><li><a href="https://naruto.fandom.com/wiki/Harem_Technique" title="Harem Technique">Harem Technique</a></li><li><a href="https://naruto.fandom.com/wiki/Sexy_Technique:_Pole_Dance_and_Nice_Body" title="Sexy Technique: Pole Dance and Nice Body">Sexy Technique: Pole Dance and Nice Body</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Transformation:_Adamantine_Staff" title="Transformation: Adamantine Staff">Transformation: Adamantine Staff</a><div><ul><li><a href="https://naruto.fandom.com/wiki/Adamantine_Prison_Wall" title="Adamantine Prison Wall">Adamantine Prison Wall</a></li></ul></div></li><li><a href="https://naruto.fandom.com/wiki/Wood_Release:_Transformation" title="Wood Release: Transformation">Wood Release: Transformation</a></li></ul></div></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Related jutsu</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="related jutsu">
+<div class="pi-data-value pi-font"><a href="https://naruto.fandom.com/wiki/Substitute_Technique" title="Substitute Technique">Substitute Technique</a></div>
+</div>
+</section>
+<section class="pi-item pi-group pi-border-color pi-collapse pi-collapse-open">
+<h2 class="pi-item pi-header pi-secondary-font pi-item-spacing pi-secondary-background">Users</h2>
+<div class="pi-item pi-data pi-item-spacing pi-border-color" data-source="users">
+<div class="pi-data-value pi-font"><div><ul><li><a href="https://naruto.fandom.com/wiki/Tsunade" title="Tsunade">Tsunade</a></li><li><a href="https://naruto.fandom.com/wiki/Hy%C5%8Di_Yorishiro" title="Hyōi Yorishiro">Hyōi Yorishiro</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Kager%C5%8D" title="Kagerō">Kagerō</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Nanafushi" title="Nanafushi">Nanafushi</a><sup> (Anime only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Kazan" title="Kazan">Kazan</a><sup> (Movie only)</sup></li><li><a href="https://naruto.fandom.com/wiki/Men%C5%8D_(ninja)" title="Menō (ninja)">Menō </a><sup> (Game only)</sup></li></ul></div></div>
+</div>
+</section>
+</aside>
+
+The <b>Transformation Technique</b> allows the user to take the appearance of whatever they choose. 
+<p></p>
+<h2><span class="mw-headline" id="Overview">Overview</span></h2>
+<p>This technique is most often used to disguise the user as another person, but they can also turn into an animal, plant, or inanimate object; according to <i><a class="mw-disambig" href="https://naruto.fandom.com/wiki/Sasuke_Retsuden" title="Sasuke Retsuden">Sasuke Retsuden</a></i>, inanimate objects are the most difficult to transform into, and users are shown familiarising themselves with an object's weight and feel before assuming its form. Users will gain the attributes and physical features of whatever they transform into, such as a weapon's sharpness or an animal's fangs. To be able to assume so many different forms makes this technique invaluable for not just combat, but intelligence gathering and diversionary tactics as well. In <i><a href="https://naruto.fandom.com/wiki/Sasuke_Shinden:_The_Teacher%27s_Star_Pupil" title="Sasuke Shinden: The Teacher's Star Pupil">Sasuke Shinden</a></i>, some transformations are shown to take some getting used to, such as if the assumed form has a different height than the user or if the assumed form wears clothes that the user isn't accustomed to.
+</p><p>Being able to use the Transformation Technique does not necessarily mean one can use it well. Ideally, the user's transformation should be indistinguishable from the original, so that if they were placed together they could not be told apart. Inexperienced users, particularly <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Academy_student" title="Academy student">Academy students</a>, will often have obvious discrepancies in their transformations, making them useless for deception. Even practised users, though their transformations may lack any serious flaws, can overlook small details of whoever they're impersonating (such as minor scrapes or blemishes), thus enabling careful observers to expose them as impostors. Even if a transformation is a perfect likeness, users can still inadvertently reveal themselves if they don't act the same way as their subject. Users can also be identified as fakes if their scent is wrong.
+</p><p>When a transformed user has been found out and attacked, they ordinarily allow the transformation to dispel. Some users may maintain the transformation in a final attempt to keep their cover, only dispelling the transformation once this effort fails. Still other users may, when they seem to be dispelling the transformation, actually take another transformation altogether, confusing opponents as to their true identity. Seemingly the only way to reliably find out if somebody is using the Transformation Technique is to knock them unconscious, which will cause the transformation to dissolve.
+</p><p><a href="https://naruto.fandom.com/wiki/Tsunade" title="Tsunade">Tsunade</a> uses the Transformation Technique to constantly appear several decades younger, keeping it active regardless of where she is or what she's doing. She only reverts to her original form when she no longer has the <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a> to maintain her transformation. In the anime, <a href="https://naruto.fandom.com/wiki/Kager%C5%8D" title="Kagerō">Kagerō</a> also keeps her Transformation Technique active for long periods of time, taking the form of a buck-toothed, hunchbacked man. In <i><a class="mw-redirect" href="https://naruto.fandom.com/wiki/Akatsuki_Hiden" title="Akatsuki Hiden">Akatsuki Hiden</a></i>, the citizens of <a href="https://naruto.fandom.com/wiki/Shangri-la" title="Shangri-la">Shangri-la</a> use the Transformation Technique at all times in a concerted effort to make new lives for themselves; their transformations only dispel when they die.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Hens%C5%8Djutsu" title="wikipedia:Hensōjutsu">Hensōjutsu</a> was a real-life ninja skill, where the ninja would assume a false identity in order to blend in with a population and spy.</li>
+<li>When <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> transforms into a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/F%C5%ABma_shuriken" title="Fūma shuriken">fūma shuriken</a>, <a href="https://naruto.fandom.com/wiki/Sasuke_Uchiha" title="Sasuke Uchiha">Sasuke Uchiha</a> is able to tell that it's Naruto as soon as he grabs the shuriken.</li>
+<li>In <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden_the_Movie" title="Naruto Shippūden the Movie">Naruto Shippūden the Movie</a></i>, the <a href="https://naruto.fandom.com/wiki/Shadow_Mirror_Body_Changing_Method" title="Shadow Mirror Body Changing Method">Shadow Mirror Body Changing Method</a> permanently changes the user's appearance, with no way to change back.</li>
+<li>In <i><a href="https://naruto.fandom.com/wiki/Naruto_the_Movie:_Blood_Prison" title="Naruto the Movie: Blood Prison">Naruto the Movie: Blood Prison</a></i>, <a href="https://naruto.fandom.com/wiki/Kazan" title="Kazan">Kazan</a> earned the moniker "Hundred Transformations" due to his extensive usage of the Transformation Technique.</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap"></div>
+<!-- 
+NewPP limit report
+Cached time: 20250929054906
+Cache expiry: 1209600
+Reduced expiry: false
+Complications: []
+[SMW] In‐text annotation parser time: 0 seconds
+CPU time usage: 0.200 seconds
+Real time usage: 0.292 seconds
+Preprocessor visited node count: 461/1000000
+Post‐expand include size: 2580/2097152 bytes
+Template argument size: 54/2097152 bytes
+Highest expansion depth: 6/100
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4350/5000000 bytes
+Lua time usage: 0.121/7.000 seconds
+Lua memory usage: 1891389/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  267.164      1 Template:Infobox/Jutsu
+100.00%  267.164      1 -total
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:2174-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20250929054906 and revision id 1433676. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Jutsu</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Transformation%20Technique">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>

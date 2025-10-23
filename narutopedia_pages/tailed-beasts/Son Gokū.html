@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Son Gokū — Narutopedia (CC BY-SA)</title>
+<meta content="" name="description"/>
+<style>
+  :root {
+    color-scheme: dark;
+    --chakra-orange: #f97316;
+    --chakra-amber: #fbbf24;
+    --midnight: #0b1120;
+    --midnight-soft: rgba(15, 23, 42, 0.82);
+    --storm: rgba(148, 163, 184, 0.22);
+    --storm-strong: rgba(148, 163, 184, 0.35);
+    --surface: rgba(15, 23, 42, 0.94);
+    --text-primary: #e2e8f0;
+    --text-muted: #cbd5f5;
+    --text-soft: #94a3b8;
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, 0.55);
+    --shadow-sm: 0 6px 24px rgba(15, 23, 42, 0.45);
+    --radius-lg: 28px;
+    --radius-md: 22px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body.naruto-body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Source Sans 3", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.7;
+    background: radial-gradient(circle at 20% 20%, rgba(249, 115, 22, 0.18), transparent 45%),
+                radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.12), transparent 40%),
+                var(--midnight);
+    color: var(--text-primary);
+    padding-bottom: 64px;
+  }
+
+  a {
+    color: var(--chakra-amber);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: #fde68a;
+    opacity: 0.9;
+  }
+
+  .page-wrapper {
+    width: min(1180px, 92vw);
+    margin: 0 auto;
+    padding: 56px 0 24px;
+  }
+
+  .hero-banner {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: 40px clamp(24px, 4vw, 48px);
+    background: linear-gradient(130deg, rgba(249, 115, 22, 0.42), rgba(249, 115, 22, 0.16))
+                ,linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.72));
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+  }
+
+  .hero-banner::after {
+    content: "";
+    position: absolute;
+    inset: -30% 35% auto -18%;
+    height: clamp(280px, 40vw, 420px);
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.32), transparent 65%);
+    transform: rotate(-12deg);
+    opacity: 0.75;
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: "";
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: rgba(248, 250, 252, 0.45);
+  }
+
+  .hero-title {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 4vw, 3.6rem);
+    margin: 18px 0 8px;
+    color: #f8fafc;
+  }
+
+  .hero-tagline {
+    max-width: 620px;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+
+  .hero-meta {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    background: rgba(248, 250, 252, 0.12);
+    border: 1px solid rgba(248, 250, 252, 0.18);
+    color: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .source-link span {
+    font-size: 1.1rem;
+  }
+
+  .license-badge {
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: var(--text-muted);
+  }
+
+  .content-section {
+    margin-top: 42px;
+  }
+
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+    gap: clamp(20px, 3vw, 36px);
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: clamp(22px, 2.5vw, 30px);
+    border: 1px solid var(--storm);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px);
+  }
+
+  .infobox-panel {
+    position: sticky;
+    top: 96px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .infobox-panel::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .infobox-panel::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.35);
+    border-radius: 999px;
+  }
+
+  .article-panel {
+    background: rgba(15, 23, 42, 0.82);
+  }
+
+  .naruto-article {
+    color: var(--text-primary);
+  }
+
+  .naruto-article h2,
+  .naruto-article h3,
+  .naruto-article h4 {
+    font-family: "Kanit", "Source Sans 3", sans-serif;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-top: 2.4rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .naruto-article h2 {
+    font-size: 1.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.24);
+    padding-bottom: 0.35rem;
+  }
+
+  .naruto-article p {
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article ul,
+  .naruto-article ol {
+    padding-left: 1.35rem;
+    margin: 1rem 0;
+    color: var(--text-primary);
+  }
+
+  .naruto-article blockquote {
+    margin: 1.6rem 0;
+    padding: 1.2rem 1.4rem;
+    border-left: 4px solid rgba(249, 115, 22, 0.55);
+    background: rgba(15, 23, 42, 0.68);
+    border-radius: 18px;
+    color: var(--text-muted);
+  }
+
+  .naruto-article table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1.4rem 0;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.18);
+    background: rgba(15, 23, 42, 0.6);
+  }
+
+  .naruto-article table th,
+  .naruto-article table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    vertical-align: top;
+  }
+
+  .naruto-article table tr:last-child th,
+  .naruto-article table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .naruto-article img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.45);
+    margin: 1.4rem 0;
+  }
+
+  .page-footer {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-soft);
+  }
+
+  .page-footer strong,
+  .footer-label {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.78rem;
+  }
+
+  .footer-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .footer-line span:not(.footer-label) {
+    color: var(--text-primary);
+  }
+
+  .footer-category {
+    font-weight: 600;
+  }
+
+  .footer-divider {
+    color: var(--text-soft);
+  }
+
+  @media (max-width: 1080px) {
+    .infobox-panel {
+      position: relative;
+      top: auto;
+      max-height: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .page-wrapper {
+      width: min(680px, 94vw);
+      padding-top: 40px;
+    }
+
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .hero-banner {
+      padding: 32px 22px;
+    }
+
+    .hero-eyebrow {
+      letter-spacing: 0.2em;
+      font-size: 0.72rem;
+    }
+
+    .hero-banner::after {
+      inset: 30% -20% -40% -5%;
+      transform: rotate(0deg);
+    }
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;600;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/><meta content="#0b1120" name="theme-color"/></head>
+<body class="naruto-body"><div class="page-wrapper"><header class="hero-banner panel"><span class="hero-eyebrow">Konoha Academy Archives</span><h1 class="hero-title">Son Gokū</h1><p class="hero-tagline">Curated Narutopedia knowledge, beautifully preserved for every shinobi-in-training.</p><div class="hero-meta"><a class="source source-link" href="https://naruto.fandom.com/wiki/Son%20Gok%C5%AB" rel="noopener noreferrer" target="_blank"><span>↗</span>View on Narutopedia</a><span class="license-badge">CC BY-SA 3.0</span></div></header><section class="content-section"><div class="content-layout">
+<aside class="card infobox panel infobox-panel" id="infobox"></aside>
+<main class="card panel article-panel">
+<article class="naruto-article">
+
+<div class="mw-content-ltr mw-parser-output" dir="ltr" lang="en"><table class="infobox box colored bordered innerbordered fill-td type-character list-noicon float-right-clear"><tbody><tr><th class="mainheader" colspan="2"><span class="plainlinks edit-infobox"><a class="text" href="https://naruto.fandom.com/wiki/Infobox:Son_Gok%C5%AB?action=formedit" rel="noreferrer noopener" target="_blank">edit</a></span>Son Gokū <a class="popupformlink" href="https://naruto.fandom.com/wiki/Special:RunQuery/Image_query?Image_query%5Bcharacters%5D=Son+Gok%C5%AB&amp;_run=&amp;wpRunQuery=true" target="_self" title="Images of Son Gokū"><span typeof="mw:File"><span><img class="mw-file-element" data-image-key="Camera_font_awesome.svg" data-image-name="Camera font awesome.svg" data-relevant="0" decoding="async" height="15" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/d/d1/Camera_font_awesome.svg/revision/latest/scale-to-width-down/15?cb=20170622151508" width="15"/></span></span></a> <span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Special:Browse/Son_Gok%C5%AB" title="Special:Browse/Son Gokū"><img class="mw-file-element" data-image-key="Browse_Information.svg" data-image-name="Browse Information.svg" data-relevant="0" decoding="async" height="19" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/ab/Browse_Information.svg/revision/latest?cb=20221026163711" width="19"/></a></span></th></tr>
+<tr>
+<td class="imagecell" colspan="2"><span typeof="mw:File"><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/5e/Son_Goku.png/revision/latest?cb=20140817220446"><img class="mw-file-element" data-image-key="Son_Goku.png" data-image-name="Son Goku.png" data-relevant="1" decoding="async" height="198" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/5e/Son_Goku.png/revision/latest/scale-to-width-down/300?cb=20140817220446" width="300"/></a></span></td></tr>
+<tr><th class="mainheader lightheader" colspan="2"><span class="title" lang="ja">孫悟空 Son Gokū</span>
+<p><span class="title other">
+</span></p>
+<ul><li>Four-Tails (<span lang="ja">四尾</span>, <i>Yonbi</i>)</li>
+<li>King of the Sage Monkeys (<span lang="ja">仙猿の王</span>, <i>Sen'en no Ō</i>)</li>
+<li>Handsome Monkey King (<span lang="ja">美猿王</span>, <i>Bien'ō</i>)</li>
+<li>Great Sage Equalling Heaven (<span lang="ja">斉天大聖</span>, <i>Seiten Taisei</i>)</li></ul>
+</th></tr><tr><th class="mainheader" colspan="2">Debut
+	</th></tr><tr><th>Manga
+      </th><td><a href="https://naruto.fandom.com/wiki/Declaration_of_War" title="Declaration of War"><i>Naruto</i> Chapter #467</a>
+</td></tr><tr><th>Anime
+      </th><td><a href="https://naruto.fandom.com/wiki/Nine-Tails,_Captured!" title="Nine-Tails, Captured!"><i>Naruto Shippūden</i> Episode #165</a>
+</td></tr><tr><th>Novel
+      </th><td><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i>
+</td></tr><tr><th>Movie
+      </th><td><i><a href="https://naruto.fandom.com/wiki/The_Last:_Naruto_the_Movie" title="The Last: Naruto the Movie">The Last: Naruto the Movie</a></i>
+</td></tr><tr><th>Game
+      </th><td><i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_3" title="Naruto Shippūden: Ultimate Ninja Storm 3">Naruto Shippūden: Ultimate Ninja Storm 3</a></i>
+</td></tr><tr><th>Appears in
+	</th><td>Anime, Manga, Novel, Game, Movie
+	</td></tr><tr><th class="mainheader" colspan="2">Voice Actors
+	</th></tr><tr><th>Japanese
+        </th><td>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/Hiroki_Yasumoto" title="wikipedia:Hiroki Yasumoto">Hiroki Yasumoto</a> <span title='Search the other 2 pages containing the property "Voice Actors" with the value "Hiroki Yasumoto"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=Hiroki+Yasumoto" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span></li></ul>
+</td></tr><tr><th>English
+        </th><td>
+<ul><li><a class="extiw" href="https://en.wikipedia.org/wiki/John_Eric_Bentley" title="wikipedia:John Eric Bentley">John Eric Bentley</a> <span title='Search the other 3 pages containing the property "Voice Actors" with the value "John Eric Bentley"'><a class="text" href="https://naruto.fandom.com/wiki/Special:SearchByProperty?property=Voice_Actors&amp;value=John+Eric+Bentley" rel="noreferrer noopener" target="_blank"><img alt="Search_Icon.svg" src="https://static.wikia.nocookie.net/naruto/images/0/0b/Search_Icon.svg"/></a></span></li></ul>
+</td></tr><tr><th class="mainheader" colspan="2">Personal
+	</th></tr><tr><th>Species
+	</th><td><a href="https://naruto.fandom.com/wiki/Monkey" title="Monkey">Monkey</a>
+</td></tr><tr><th>Kekkei Genkai
+	</th><td>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Lava_Release" title="Lava Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Lava.svg" data-image-name="Nature Icon Lava.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/4/48/Nature_Icon_Lava.svg/revision/latest/scale-to-width-down/18?cb=20091012121231" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Lava_Release" title="Lava Release">Lava Release</a> </li></ul>
+</td></tr><tr><th>Classification
+        </th><td>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast" title="Tailed Beast">Tailed Beast</a></li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Sage" title="Sage">Sage</a></li></ul>
+</td></tr><tr><th>Jinchūriki
+	</th><td>
+<ul><li><a href="https://naruto.fandom.com/wiki/R%C5%8Dshi" title="Rōshi">Rōshi</a> </li></ul>
+<ul><li><a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a> </li></ul>
+</td></tr><tr><th>Affiliation
+        </th><td>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Iwagakure" title="Iwagakure"><img class="mw-file-element lazyload" data-image-key="Iwagakure_Symbol.svg" data-image-name="Iwagakure Symbol.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/a/a5/Iwagakure_Symbol.svg/revision/latest/scale-to-width-down/18?cb=20090830222812" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Iwagakure" title="Iwagakure">Iwagakure</a></li>
+<li class="mw-empty-elt"></li></ul>
+</td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Family
+	</th></tr><tr><td class="">
+<ul><li><a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a> (Creator)</li>
+<li><a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Isobu" title="Isobu">Isobu</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Saiken" title="Saiken">Saiken</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Ch%C5%8Dmei" title="Chōmei">Chōmei</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Gy%C5%ABki" title="Gyūki">Gyūki</a> (Sibling)</li>
+<li><a href="https://naruto.fandom.com/wiki/Kurama" title="Kurama">Kurama</a> (Sibling)</li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible"><tbody><tr><th class="mainheader">Nature Type
+        </th></tr><tr><td class="">
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Lava_Release" title="Lava Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Lava.svg" data-image-name="Nature Icon Lava.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/4/48/Nature_Icon_Lava.svg/revision/latest/scale-to-width-down/18?cb=20091012121231" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Lava_Release" title="Lava Release">Lava Release</a></li></ul>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Fire_Release" title="Fire Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Fire.svg" data-image-name="Nature Icon Fire.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/b/bf/Nature_Icon_Fire.svg/revision/latest/scale-to-width-down/18?cb=20091012120333" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Fire_Release" title="Fire Release">Fire Release</a></li></ul>
+<ul><li><span typeof="mw:File"><a href="https://naruto.fandom.com/wiki/Earth_Release" title="Earth Release"><img class="mw-file-element lazyload" data-image-key="Nature_Icon_Earth.svg" data-image-name="Nature Icon Earth.svg" data-relevant="0" data-src="https://static.wikia.nocookie.net/naruto/images/5/52/Nature_Icon_Earth.svg/revision/latest/scale-to-width-down/18?cb=20091012162502" decoding="async" height="18" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="18"/></a></span> <a href="https://naruto.fandom.com/wiki/Earth_Release" title="Earth Release">Earth Release</a></li></ul>
+</td></tr></tbody></table></td></tr><tr><td class="clearcell" colspan="2"><table class="box cellbox mw-collapsible mw-collapsed"><tbody><tr><th class="mainheader"><a class="text" href="https://naruto.fandom.com/index.php?title=Special%3AAsk&amp;offset=0&amp;limit=500&amp;q=%5B%5BConcept%3AJutsu%5D%5D%5B%5BUser+tech%3A%3ASon+Gok%C5%AB%5D%5D&amp;po=%3FAppears+in%3DMedia%0A%3FJutsu+classification%3DClassification%0A%3FChakra+Nature%0A%3FJutsu+class+type%3DClass%0A%3FJutsu+range%3DRange" rel="noreferrer noopener" target="_blank">Jutsu</a></th></tr><tr><td class="">
+<p class="mw-empty-elt">
+</p>
+<ul><li><i><a href="https://naruto.fandom.com/wiki/Chakra_Transfer_Technique" title="Chakra Transfer Technique">Chakra Transfer Technique</a></i></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Flower%E2%80%93Fruit_Mountain" title="Flower–Fruit Mountain">Flower–Fruit Mountain</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Monkey_Flame_Arson" title="Monkey Flame Arson">Monkey Flame Arson</a> <sup>(Anime only)</sup></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Full_Charge" title="Tailed Beast Full Charge">Tailed Beast Full Charge</a></li></ul>
+<p class="mw-empty-elt">
+</p>
+<ul><li><a href="https://naruto.fandom.com/wiki/Tailed_Beast_Telepathy" title="Tailed Beast Telepathy">Tailed Beast Telepathy</a></li></ul></td></tr></tbody></table></td></tr></tbody></table>
+<p><b>Seiten Taisei Son Gokū</b> (<span lang="ja">斉天大聖孫悟空</span>, <i>literally meaning:</i> Great Sage Equalling Heaven Son Gokū), more commonly known as <b>Son Gokū</b> (<span lang="ja">孫悟空</span>) or simply the <b>Four-Tails</b> (<span lang="ja">四尾</span>, <i>Yonbi</i>), is one of the nine <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beasts" title="Tailed beasts">tailed beasts</a>. It was last sealed within <a href="https://naruto.fandom.com/wiki/R%C5%8Dshi" title="Rōshi">Rōshi</a> of <a href="https://naruto.fandom.com/wiki/Iwagakure" title="Iwagakure">Iwagakure</a>.
+</p>
+<div aria-labelledby="mw-toc-heading" class="toc" id="toc" role="navigation"><input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox"/><div class="toctitle" dir="ltr" lang="en"><h2 id="mw-toc-heading">Contents</h2><span class="toctogglespan"><label class="toctogglelabel" for="toctogglecheckbox"></label></span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="about:blank#Background"><span class="tocnumber">1</span> <span class="toctext">Background</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="about:blank#Personality"><span class="tocnumber">2</span> <span class="toctext">Personality</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="about:blank#Appearance"><span class="tocnumber">3</span> <span class="toctext">Appearance</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="about:blank#Abilities"><span class="tocnumber">4</span> <span class="toctext">Abilities</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="about:blank#Chakra_and_Physical_Prowess"><span class="tocnumber">4.1</span> <span class="toctext">Chakra and Physical Prowess</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="about:blank#Ninjutsu"><span class="tocnumber">4.2</span> <span class="toctext">Ninjutsu</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-7"><a href="about:blank#Part_II"><span class="tocnumber">5</span> <span class="toctext">Part II</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="about:blank#Itachi_Pursuit_Mission"><span class="tocnumber">5.1</span> <span class="toctext">Itachi Pursuit Mission</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="about:blank#Fourth_Shinobi_World_War:_Climax"><span class="tocnumber">5.2</span> <span class="toctext">Fourth Shinobi World War: Climax</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="about:blank#Birth_of_the_Ten-Tails'_Jinch%C5%ABriki"><span class="tocnumber">5.3</span> <span class="toctext">Birth of the Ten-Tails' Jinchūriki</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="about:blank#Kaguya_%C5%8Ctsutsuki_Strikes"><span class="tocnumber">5.4</span> <span class="toctext">Kaguya Ōtsutsuki Strikes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="about:blank#New_Era"><span class="tocnumber">6</span> <span class="toctext">New Era</span></a>
+<ul>
+<li class="toclevel-2 tocsection-13"><a href="about:blank#One-Tail_Escort_Arc"><span class="tocnumber">6.1</span> <span class="toctext">One-Tail Escort Arc</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="about:blank#Kawaki_Arc"><span class="tocnumber">6.2</span> <span class="toctext">Kawaki Arc</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-15"><a href="about:blank#In_Other_Media"><span class="tocnumber">7</span> <span class="toctext">In Other Media</span></a>
+<ul>
+<li class="toclevel-2 tocsection-16"><a href="about:blank#Video_Games"><span class="tocnumber">7.1</span> <span class="toctext">Video Games</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-17"><a href="about:blank#Trivia"><span class="tocnumber">8</span> <span class="toctext">Trivia</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="about:blank#Quotes"><span class="tocnumber">9</span> <span class="toctext">Quotes</span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="about:blank#References"><span class="tocnumber">10</span> <span class="toctext">References</span></a></li>
+</ul>
+</div>
+<h2><span class="mw-headline" id="Background">Background</span></h2>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest?cb=20150728221849"><img alt="Young Bijuu and Hagoromo" class="thumbimage lazyload" data-image-key="Young_Bijuu_and_Hagoromo.png" data-image-name="Young Bijuu and Hagoromo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest?cb=20150728221849"><img alt="Young Bijuu and Hagoromo" class="thumbimage" data-image-key="Young_Bijuu_and_Hagoromo.png" data-image-name="Young Bijuu and Hagoromo.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bb/Young_Bijuu_and_Hagoromo.png/revision/latest/scale-to-width-down/180?cb=20150728221849" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Young_Bijuu_and_Hagoromo.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The young tailed beasts with Hagoromo.</p> </figcaption> </figure>
+<p>Son Gokū and the tailed beasts first came into being in the waning days of <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>, who used his <a href="https://naruto.fandom.com/wiki/Creation_of_All_Things_Technique" title="Creation of All Things Technique">Creation of All Things Technique</a> to divide the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a>' chakra into nine separate bodies and giving each a name. Some time after being created, the Sage explained to the young tailed beasts that a link existed between them despite their separation. He also foretold of a day when they would be brought together again - though not as they were - and that at that time someone would emerge to show them what true power is. In the anime, before his death, Hagoromo sent Son to live in a temple built for the purpose of protecting it in a desolate rocky region that would later become part of the <a href="https://naruto.fandom.com/wiki/Land_of_Earth" title="Land of Earth">Land of Earth</a>. Eventually, Son moved on to live in a new location known as the Water Screen Cave, reigning over the monkeys that resided there.
+</p><p>During the <a href="https://naruto.fandom.com/wiki/First_Shinobi_World_War" title="First Shinobi World War">First Shinobi World War</a>, <a href="https://naruto.fandom.com/wiki/Hashirama_Senju" title="Hashirama Senju">Hashirama Senju</a> captured eight of the tailed beasts and sold Son and <a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a> to Iwagakure at the <a href="https://naruto.fandom.com/wiki/Five_Kage_Summit" title="Five Kage Summit">Five Kage Summit</a>, as a sign of friendship and to ensure a balance of power amongst their new villages. The tailed beast would end up being sealed within Rōshi decades later who left his village in a journey to gain a better understanding and control of the tailed beast.
+</p>
+<h2><span class="mw-headline" id="Personality">Personality</span></h2>
+<p>Son Gokū is a very prideful tailed beast, as it detests being called by the name "Four-Tails" and boasts about its lineage. It uses "ore" (<span lang="ja">オレ</span>) when referring to itself.
+</p><p>It also hated humans, due to the fact that humans had enslaved it, and believes that apes are more intelligent than humans. However, when talking about the Sage of Six Paths, it showed him great respect, being that also had, apparently, a very deep relationship with him, never forgetting his final words. It also seems to have taken a liking to <a href="https://naruto.fandom.com/wiki/Naruto_Uzumaki" title="Naruto Uzumaki">Naruto Uzumaki</a>, as it was moved by his actions for truly trying to save it from being controlled by Tobi and even gave him some of its chakra before being sealed away. He also treats his fellow tailed beasts with much respect, as he addresses them by their name, as seen with Kurama. Son also has a high amount of respect for those who respect the tailed beasts.
+</p>
+<h2><span class="mw-headline" id="Appearance">Appearance</span></h2>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c3/Young_Son.png/revision/latest?cb=20170802064809"><img alt="Young Son" class="thumbimage lazyload" data-image-key="Young_Son.png" data-image-name="Young Son.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c3/Young_Son.png/revision/latest/scale-to-width-down/180?cb=20170802064809" decoding="async" height="154" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c3/Young_Son.png/revision/latest?cb=20170802064809"><img alt="Young Son" class="thumbimage" data-image-key="Young_Son.png" data-image-name="Young Son.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c3/Young_Son.png/revision/latest/scale-to-width-down/180?cb=20170802064809" decoding="async" height="154" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/c/c3/Young_Son.png/revision/latest/scale-to-width-down/180?cb=20170802064809" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Young_Son.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">A young Son Gokū.</p> </figcaption> </figure>
+<p>Son Gokū is a red-furred and green-skinned monkey, with a body-build of a gorilla. It has eyes with yellow irides and white pupils, spike-like protrusions along the length of its tails, elongated blunt fangs, and two long horns curving upwards on its forehead like a crown (both its fangs and horns are dark-tipped). In its mouth, Son doesn't have a tongue, but has an opening that is shaped like a dome volcano. During the last remaining days of the Sage of Six Paths, Son was much smaller and leaner with smaller fangs.
+</p>
+<h2><span class="mw-headline" id="Abilities">Abilities</span></h2>
+<p><span class="box headnote"><i>See also: <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki_Forms" title="Jinchūriki Forms">Jinchūriki Forms</a></i></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/23/Son%27s_Tailed_Beast_Ball.png/revision/latest?cb=20150917123306"><img alt="Son's Tailed Beast Ball" class="thumbimage lazyload" data-image-key="Son%27s_Tailed_Beast_Ball.png" data-image-name="Son's Tailed Beast Ball.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/23/Son%27s_Tailed_Beast_Ball.png/revision/latest/scale-to-width-down/180?cb=20150917123306" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/23/Son%27s_Tailed_Beast_Ball.png/revision/latest?cb=20150917123306"><img alt="Son's Tailed Beast Ball" class="thumbimage" data-image-key="Son%27s_Tailed_Beast_Ball.png" data-image-name="Son's Tailed Beast Ball.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/23/Son%27s_Tailed_Beast_Ball.png/revision/latest/scale-to-width-down/180?cb=20150917123306" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/2/23/Son%27s_Tailed_Beast_Ball.png/revision/latest/scale-to-width-down/180?cb=20150917123306" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Son%27s_Tailed_Beast_Ball.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Son creating a Tailed Beast Ball.</p> </figcaption> </figure>
+<h3><span class="mw-headline" id="Chakra_and_Physical_Prowess">Chakra and Physical Prowess</span></h3>
+<p>Son also seems knowledgeable in <a href="https://naruto.fandom.com/wiki/Taijutsu" title="Taijutsu">taijutsu</a>, likewise showing deceptive nimbleness of its size, utilising powerful and well-timed kicks against its opponents. Son has a great deal of physical strength, being able to lift and toss <a href="https://naruto.fandom.com/wiki/Gy%C5%ABki" title="Gyūki">Gyūki</a> with ease.  
+</p><p>As a <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_beast" title="Tailed beast">tailed beast</a>, Son Gokū possesses an enormous supply of <a href="https://naruto.fandom.com/wiki/Chakra" title="Chakra">chakra</a>. It also has powerful healing capacities, able to mend injuries in themselves and others in seconds. Likewise, Son is effectively immortal, as when it dies, it will eventually revive, albeit in a younger form.  
+</p>
+<div style="clear: left;"></div>
+<h3><span class="mw-headline" id="Ninjutsu">Ninjutsu</span></h3>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/4/40/Monkey_Flame_Arson.png/revision/latest?cb=20150223072612"><img alt="Monkey Flame Arson" class="thumbimage lazyload" data-image-key="Monkey_Flame_Arson.png" data-image-name="Monkey Flame Arson.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/40/Monkey_Flame_Arson.png/revision/latest/scale-to-width-down/180?cb=20150223072612" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/4/40/Monkey_Flame_Arson.png/revision/latest?cb=20150223072612"><img alt="Monkey Flame Arson" class="thumbimage" data-image-key="Monkey_Flame_Arson.png" data-image-name="Monkey Flame Arson.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/4/40/Monkey_Flame_Arson.png/revision/latest/scale-to-width-down/180?cb=20150223072612" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/4/40/Monkey_Flame_Arson.png/revision/latest/scale-to-width-down/180?cb=20150223072612" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Monkey_Flame_Arson.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Son Gokū breathing green flames.</p> </figcaption> </figure>
+<p>Like the other tailed beasts, Son can create a <a href="https://naruto.fandom.com/wiki/Tailed_Beast_Ball" title="Tailed Beast Ball">Tailed Beast Ball</a>. Son can also use <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Fire" title="Fire">Fire</a> and <a href="https://naruto.fandom.com/wiki/Earth_Release" title="Earth Release">Earth Release</a> simultaneously, allowing it to use <a href="https://naruto.fandom.com/wiki/Lava_Release" title="Lava Release">Lava Release</a>. With it, it can create <a href="https://naruto.fandom.com/wiki/Flower%E2%80%93Fruit_Mountain" title="Flower–Fruit Mountain">volcanoes</a>, and <a href="https://naruto.fandom.com/wiki/Monkey_Flame_Arson" title="Monkey Flame Arson">breathe a stream of green coloured fire</a>.
+</p>
+<h2><span class="mw-headline" id="Part_II">Part II</span></h2>
+<h3><span class="mw-headline" id="Itachi_Pursuit_Mission">Itachi Pursuit Mission</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Itachi_Pursuit_Mission" title="Itachi Pursuit Mission">Itachi Pursuit Mission</a></span>
+After an unseen and difficult battle with <a href="https://naruto.fandom.com/wiki/Kisame_Hoshigaki" title="Kisame Hoshigaki">Kisame Hoshigaki</a>, <a href="https://naruto.fandom.com/wiki/R%C5%8Dshi" title="Rōshi">Rōshi</a> was defeated and captured by the Akatsuki member. The Four-Tails was later <a href="https://naruto.fandom.com/wiki/Sealing_Technique:_Phantom_Dragons_Nine_Consuming_Seals" title="Sealing Technique: Phantom Dragons Nine Consuming Seals">extracted</a> and sealed, leading to Rōshi's death.
+</p>
+<h3><span class="mw-headline" id="Fourth_Shinobi_World_War:_Climax">Fourth Shinobi World War: Climax</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War:_Climax" title="Fourth Shinobi World War: Climax">Fourth Shinobi World War: Climax</a></span>
+During the <a href="https://naruto.fandom.com/wiki/Fourth_Shinobi_World_War" title="Fourth Shinobi World War">Fourth Shinobi World War</a>, Tobi forced Rōshi to fully transform into the Four-Tails and attack Killer B and <a href="https://naruto.fandom.com/wiki/Gy%C5%ABki" title="Gyūki">Gyūki</a>, managing to flip the latter over by its tentacles. Later, Son attempted to swallow Naruto. Naruto tried to free himself from between the beasts jaws, but failed.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Son_trapped.png/revision/latest?cb=20130822121112"><img alt="Son trapped" class="thumbimage lazyload" data-image-key="Son_trapped.png" data-image-name="Son trapped.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Son_trapped.png/revision/latest/scale-to-width-down/180?cb=20130822121112" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Son_trapped.png/revision/latest?cb=20130822121112"><img alt="Son trapped" class="thumbimage" data-image-key="Son_trapped.png" data-image-name="Son trapped.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Son_trapped.png/revision/latest/scale-to-width-down/180?cb=20130822121112" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/2/21/Son_trapped.png/revision/latest/scale-to-width-down/180?cb=20130822121112" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Son_trapped.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Son Gokū's encounter with Naruto.</p> </figcaption> </figure>
+<p>The <a href="https://naruto.fandom.com/wiki/Demonic_Statue_Chains" title="Demonic Statue Chains">chained-up</a> Four-Tails asked Naruto, now inside the tailed beast, if he had come to steal its power. It lashed out when Naruto referred to it as the "Four-Tails", demanded that Naruto address it by its proper title; Son Gokū. As their conversation continued, Son was shocked to discover Naruto to be an open, honest young man. After Son cursed humans for sealing the tailed beasts away and denying their existence, Naruto shared that he was once treated in a similar manner and that he hated to see someone like Tobi controlling the tailed beasts. After initially laughing at the prospect of Naruto, a <a href="https://naruto.fandom.com/wiki/Jinch%C5%ABriki" title="Jinchūriki">jinchūriki</a>, wanting to befriend his tailed beast, Son realised that Naruto's ambition was genuine and told him that there might be a way to stop its rampage if the chains that bound it were undone.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/3/33/Naruto_and_Son_fist_bump.png/revision/latest?cb=20130905155434"><img alt="Naruto and Son fist bump" class="thumbimage lazyload" data-image-key="Naruto_and_Son_fist_bump.png" data-image-name="Naruto and Son fist bump.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/33/Naruto_and_Son_fist_bump.png/revision/latest/scale-to-width-down/180?cb=20130905155434" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/3/33/Naruto_and_Son_fist_bump.png/revision/latest?cb=20130905155434"><img alt="Naruto and Son fist bump" class="thumbimage" data-image-key="Naruto_and_Son_fist_bump.png" data-image-name="Naruto and Son fist bump.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/3/33/Naruto_and_Son_fist_bump.png/revision/latest/scale-to-width-down/180?cb=20130905155434" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/3/33/Naruto_and_Son_fist_bump.png/revision/latest/scale-to-width-down/180?cb=20130905155434" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Naruto_and_Son_fist_bump.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Son leaves Naruto with a parting gift.</p> </figcaption> </figure>
+<p>As Son explained to Naruto about the location of the <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Chakra_receiver" title="Chakra receiver">chakra receiver</a> embedded in its body, the beast warned him not to expect it to become his ally, due to its distrust against jinchūriki. Naruto used shadow clones to force Son to vomit him up. A Naruto clone who stayed inside the tailed beast's mouth went into <a href="https://naruto.fandom.com/wiki/Sage_Mode" title="Sage Mode">Sage Mode</a> and push the receiver from the inside while he himself pulled it from the outside. Although Naruto succeeded, he quickly realised that Son was still bound. Son explained that the Demonic Statue of the Outer Path still held its chakra and that Naruto had only freed it from Tobi's control. As Naruto argued with the beast over wanting to save it completely and not just free it from Tobi's control, Son in disbelief of the young jinchūriki's character, offered its chakra to Naruto, pleased that he genuinely tried to rescue it. Son was then resealed into the <a href="https://naruto.fandom.com/wiki/Demonic_Statue_of_the_Outer_Path" title="Demonic Statue of the Outer Path">Demonic Statue of the Outer Path</a>, leaving Rōshi's body behind.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/9/97/Son_and_Roshi%27s_final_moments.png/revision/latest?cb=20130905183222"><img alt="Son and Roshi's final moments" class="thumbimage lazyload" data-image-key="Son_and_Roshi%27s_final_moments.png" data-image-name="Son and Roshi's final moments.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/9/97/Son_and_Roshi%27s_final_moments.png/revision/latest/scale-to-width-down/180?cb=20130905183222" decoding="async" height="102" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/9/97/Son_and_Roshi%27s_final_moments.png/revision/latest?cb=20130905183222"><img alt="Son and Roshi's final moments" class="thumbimage" data-image-key="Son_and_Roshi%27s_final_moments.png" data-image-name="Son and Roshi's final moments.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/9/97/Son_and_Roshi%27s_final_moments.png/revision/latest/scale-to-width-down/180?cb=20130905183222" decoding="async" height="102" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/9/97/Son_and_Roshi%27s_final_moments.png/revision/latest/scale-to-width-down/180?cb=20130905183222" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Son_and_Roshi%27s_final_moments.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Rōshi and Son part ways on good terms.</p> </figcaption> </figure>
+<p>In <a href="https://naruto.fandom.com/wiki/F%C5%AB" title="Fū">Fū</a>'s flashback of the time before Son was sealed, it was revealed that Rōshi attempted to make amends with Son, wondering whether or not they could have traversed a path more similar to Naruto and Kurama's. Son told Rōshi that if he wasn't so stubborn and hadn't forgotten its name all those years ago, it might have been possible. As the beast was resealed into the Demonic Statue of the Outer Path, it parted on good terms with Rōshi, who told it that he had never forgotten its name, but rather was too proud to address it properly. He then wondered if calling the beast "Son" would be appropriate.
+</p>
+<h3><span id="Birth_of_the_Ten-Tails.27_Jinch.C5.ABriki"></span><span class="mw-headline" id="Birth_of_the_Ten-Tails'_Jinchūriki">Birth of the Ten-Tails' Jinchūriki</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Birth_of_the_Ten-Tails%27_Jinch%C5%ABriki" title="Birth of the Ten-Tails' Jinchūriki">Birth of the Ten-Tails' Jinchūriki</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest?cb=20250919211345"><img alt="Biju released" class="thumbimage lazyload" data-image-key="Biju_released.png" data-image-name="Biju released.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest?cb=20250919211345"><img alt="Biju released" class="thumbimage" data-image-key="Biju_released.png" data-image-name="Biju released.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/2/21/Biju_released.png/revision/latest/scale-to-width-down/180?cb=20250919211345" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Biju_released.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts being freed from Obito.</p> </figcaption> </figure>
+<p>Son Gokū appeared alongside the other tailed beasts with the exception of Gyūki and <a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> when the <a href="https://naruto.fandom.com/wiki/Ten-Tails" title="Ten-Tails">Ten-Tails</a> looked down at Naruto. The image of the tailed beasts, along with a silhouette of the Sage of Six Paths, drove the Ten-Tails to a fit as it evolved further. Later, Son Gokū was extracted from Obito along with the other tailed beasts by the combined efforts of the <a href="https://naruto.fandom.com/wiki/Allied_Shinobi_Forces" title="Allied Shinobi Forces">Allied Shinobi Forces</a>. Upon being freed, Son Gokū noted that Naruto had truly kept his promise and saved them. Upon learning that <a href="https://naruto.fandom.com/wiki/Gaara" title="Gaara">Gaara</a> — who noted that he considered Naruto his first friend — intended to seal Madara with Shukaku's assistance, Son declared that it too along with the other freed tailed beasts would also assist to repay Naruto.
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest?cb=20250919131223"><img alt="Tailed Beasts vs Madara" class="thumbimage lazyload" data-image-key="Tailed_Beasts_vs_Madara.png" data-image-name="Tailed Beasts vs Madara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest?cb=20250919131223"><img alt="Tailed Beasts vs Madara" class="thumbimage" data-image-key="Tailed_Beasts_vs_Madara.png" data-image-name="Tailed Beasts vs Madara.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/5/53/Tailed_Beasts_vs_Madara.png/revision/latest/scale-to-width-down/180?cb=20250919131223" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beasts_vs_Madara.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts working together to attack Madara.</p> </figcaption> </figure>
+<p>When Madara ran towards the tailed beasts, both Shukaku and Gaara conjured <a href="https://naruto.fandom.com/wiki/Wind_Release:_Sand_Buckshot" title="Wind Release: Sand Buckshot">numerous sand bullets</a> and were able to restrain the Uchiha's movements. Using the opportunity to attack, the tailed beasts each took a swing at their opponent, giving sand-manipulating duo an opening to use their <a href="https://naruto.fandom.com/wiki/Desert_Layered_Imperial_Funeral_Seal" title="Desert Layered Imperial Funeral Seal">Desert Layered Imperial Funeral Seal</a>, but Madara managed to escape the sand pyramid with his Susanoo. As Naruto in <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Tailed_Beast_Mode" title="Tailed Beast Mode">Tailed Beast Mode</a> pinned Madara down with a tail, Son and the other tailed beasts joined in and did the same to increase the damage, but the Uchiha survived their attacks and retreated to a safe distance. After he received his own right Rinnegan eye from a White Zetsu clone, Madara quickly summoned the Demonic Statue of the Outer Path from Obito's body, and used the Rinnegan to <a href="https://naruto.fandom.com/wiki/Limbo:_Border_Jail" title="Limbo: Border Jail">repel</a> the tailed beasts. With the tailed beasts stunned, Madara then <a href="https://naruto.fandom.com/wiki/Demonic_Statue_Chains" title="Demonic Statue Chains">chained</a> them up and sealed them back into the Demonic Statue.
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest?cb=20150730121101"><img alt="Tailed Beast Reunion" class="thumbimage lazyload" data-image-key="Tailed_Beast_Reunion.png" data-image-name="Tailed Beast Reunion.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest?cb=20150730121101"><img alt="Tailed Beast Reunion" class="thumbimage" data-image-key="Tailed_Beast_Reunion.png" data-image-name="Tailed Beast Reunion.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/b/bd/Tailed_Beast_Reunion.png/revision/latest/scale-to-width-down/180?cb=20150730121101" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_Reunion.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts reunite with Hagoromo and Naruto.</p> </figcaption> </figure>
+<p>Later, the chakra Son transferred to Naruto, earlier manifested within Naruto's subconscious along with the other tailed beasts to speak with the young jinchūriki and the spirit of <a href="https://naruto.fandom.com/wiki/Hagoromo_%C5%8Ctsutsuki" title="Hagoromo Ōtsutsuki">Hagoromo Ōtsutsuki</a>. There, they all voiced their shared belief to the Sage that Naruto was the child of prophecy. As Naruto fought Madara, Son aided Naruto by lending him its Lava Release chakra to empower his Rasenshuriken, which completely overwhelmed Madara and cut down the tree form of the Ten-Tails.
+</p>
+<h3><span id="Kaguya_.C5.8Ctsutsuki_Strikes"></span><span class="mw-headline" id="Kaguya_Ōtsutsuki_Strikes">Kaguya Ōtsutsuki Strikes</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki_Strikes" title="Kaguya Ōtsutsuki Strikes">Kaguya Ōtsutsuki Strikes</a></span>
+</p>
+<figure class="thumb mw-halign-left show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest?cb=20160901155526"><img alt="Tailed Beast separate from Kaguya" class="thumbimage lazyload" data-image-key="Tailed_Beast_separate_from_Kaguya.png" data-image-name="Tailed Beast separate from Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest?cb=20160901155526"><img alt="Tailed Beast separate from Kaguya" class="thumbimage" data-image-key="Tailed_Beast_separate_from_Kaguya.png" data-image-name="Tailed Beast separate from Kaguya.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/a/af/Tailed_Beast_separate_from_Kaguya.png/revision/latest/scale-to-width-down/180?cb=20160901155526" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Tailed_Beast_separate_from_Kaguya.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">The tailed beasts being freed from the Ten-Tails.</p> </figcaption> </figure>
+<p>After Madara's ambitions were cut short by <a href="https://naruto.fandom.com/wiki/Black_Zetsu" title="Black Zetsu">Black Zetsu</a>, who revealed to be the silent manipulator of shinobi history since it was first created by <a href="https://naruto.fandom.com/wiki/Kaguya_%C5%8Ctsutsuki" title="Kaguya Ōtsutsuki">Kaguya Ōtsutsuki</a>, the black entity used Madara's body as a medium to resurrect its creator. During the battle against the tyrannical princess, Son and the other tailed beasts continued to support Naruto by giving him <a href="https://naruto.fandom.com/wiki/Sage_Art:_Super_Tailed_Beast_Rasenshuriken" title="Sage Art: Super Tailed Beast Rasenshuriken">their combined power</a> to overwhelm her. Ultimately, Kaguya was defeated by Naruto and Sasuke, who used the <a href="https://naruto.fandom.com/wiki/Six_Paths_%E2%80%94_Chibaku_Tensei" title="Six Paths — Chibaku Tensei">Six Paths — Chibaku Tensei</a> to eject all the tailed beasts from her and seal her away inside a newly-created <a href="https://naruto.fandom.com/wiki/Moon" title="Moon">moon</a> within her own <a href="https://naruto.fandom.com/wiki/Kaguya%27s_Dimensions" title="Kaguya's Dimensions">dimension</a>. Son complimented Kurama for having such a good jinchūriki even though it admitted the boy was a bit naive at times.
+</p><p>After the spirits of Hagoromo and the past Kage summoned both the tailed beasts and <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Team_Kakashi" title="Team Kakashi">Team 7</a> back to the real world, the tailed beasts began to discuss their plans for the future since they were finally free, with Son expressing its desire to return to its cave. Sasuke, however, made his own intentions known: removing as many people as possible who could get in the way of his plans of leading the world through a revolution to do away with current shinobi systems, including killing all the current Kage and tailed beasts. Just as Sasuke swiftly <a href="https://naruto.fandom.com/wiki/Genjutsu:_Sharingan" title="Genjutsu: Sharingan">subdued</a> the tailed beasts with his Rinnegan and sealed them within his <a href="https://naruto.fandom.com/wiki/Chibaku_Tensei" title="Chibaku Tensei">Chibaku Tensei</a>, Naruto reassured the tailed beasts that he would save them once again. After Naruto was able to defeat and reform Sasuke, the two dispelled the Infinite Tsukuyomi and Sasuke released Son, along with the other tailed beasts, from their prisons.
+</p>
+<h2><span class="mw-headline" id="New_Era">New Era</span></h2>
+<h3><span class="mw-headline" id="One-Tail_Escort_Arc">One-Tail Escort Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/One-Tail_Escort_Arc" title="One-Tail Escort Arc">One-Tail Escort Arc</a></span>
+</p>
+<figure class="thumb show-info-icon" style="width: 180px" typeof="mw:File/Thumb"> <a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest?cb=20200604154217"><img alt="Biju Conference" class="thumbimage lazyload" data-image-key="Biju_Conference.png" data-image-name="Biju Conference.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" decoding="async" height="101" loading="lazy" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="180"/></a> <noscript><a class="mw-file-description image" href="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest?cb=20200604154217"><img alt="Biju Conference" class="thumbimage" data-image-key="Biju_Conference.png" data-image-name="Biju Conference.png" data-relevant="1" data-src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" decoding="async" height="101" loading="lazy" src="https://static.wikia.nocookie.net/naruto/images/c/c5/Biju_Conference.png/revision/latest/scale-to-width-down/180?cb=20200604154217" width="180"/></a></noscript> <figcaption class="thumbcaption"> <a class="info-icon" href="https://naruto.fandom.com/wiki/File:Biju_Conference.png"><svg><use xlink:href="#wds-icons-info-small"></use></svg></a> <p class="caption">Son, with the other tailed beasts in a meeting with Naruto.</p> </figcaption> </figure>
+<p>When <a href="https://naruto.fandom.com/wiki/Urashiki_%C5%8Ctsutsuki" title="Urashiki Ōtsutsuki">Urashiki Ōtsutsuki</a> began targeting <a href="https://naruto.fandom.com/wiki/Shukaku" title="Shukaku">Shukaku</a> for its chakra, it was deduced he was interested in all the tailed beasts' chakra. Naruto organised a telepathic meeting with the other tailed beasts, except for <a href="https://naruto.fandom.com/wiki/Matatabi" title="Matatabi">Matatabi</a>, <a href="https://naruto.fandom.com/wiki/Koku%C5%8D" title="Kokuō">Kokuō</a>, and <a href="https://naruto.fandom.com/wiki/Ch%C5%8Dmei" title="Chōmei">Chōmei</a>, who each refused to accept aid from humans in fear of being captured and used again by them, despite their trust in Naruto, and thus decided to skip the meeting.
+</p>
+<h3><span class="mw-headline" id="Kawaki_Arc">Kawaki Arc</span></h3>
+<p><span class="box headnote">Main article: <a href="https://naruto.fandom.com/wiki/Kawaki_Arc" title="Kawaki Arc">Kawaki Arc</a></span>
+In the anime, Son Gokū was gathered with the other tailed beasts as they sensed Kurama's chakra vanishing after it <a href="https://naruto.fandom.com/wiki/Baryon_Mode" title="Baryon Mode">sacrificed</a> its life in the battle against <a href="https://naruto.fandom.com/wiki/Isshiki_%C5%8Ctsutsuki" title="Isshiki Ōtsutsuki">Isshiki Ōtsutsuki</a>.
+</p>
+<h2><span class="mw-headline" id="In_Other_Media">In Other Media</span></h2>
+<h3><span class="mw-headline" id="Video_Games">Video Games</span></h3>
+<p>Son Gokū is playable as Rōshi's awakening in <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_3" title="Naruto Shippūden: Ultimate Ninja Storm 3">Naruto Shippūden: Ultimate Ninja Storm 3</a></i>, <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_Revolution" title="Naruto Shippūden: Ultimate Ninja Storm Revolution">Naruto Shippūden: Ultimate Ninja Storm Revolution</a></i>, <i><a href="https://naruto.fandom.com/wiki/Naruto_Shipp%C5%ABden:_Ultimate_Ninja_Storm_4" title="Naruto Shippūden: Ultimate Ninja Storm 4">Naruto Shippūden: Ultimate Ninja Storm 4</a>, and <a href="https://naruto.fandom.com/wiki/Naruto_x_Boruto:_Ultimate_Ninja_Storm_Connections" title="Naruto x Boruto: Ultimate Ninja Storm Connections">Naruto x Boruto: Ultimate Ninja Storm Connections</a></i>.
+</p>
+<h2><span class="mw-headline" id="Trivia">Trivia</span></h2>
+<ul><li>Son Gokū (<span lang="ja">孫悟空</span>) is the Japanese on'yomi rendering for <a class="extiw" href="https://en.wikipedia.org/wiki/Sun_Wukong" title="wikipedia:Sun Wukong">Sun Wukong</a>, the iconic legendary character from the classic Chinese novel <i><a class="extiw" href="https://en.wikipedia.org/wiki/Journey_to_the_West" title="wikipedia:Journey to the West">Journey to the West</a></i> known as the Monkey King and is also used for the <a class="extiw" href="https://dragonball.fandom.com/wiki/Goku" title="w:c:Dragonball:Goku">character with the same name</a> from the <i><a class="extiw" href="https://en.wikipedia.org/wiki/Dragon_Ball" title="wikipedia:Dragon Ball">Dragon Ball</a></i> series. <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Kishimoto" title="Kishimoto">Kishimoto</a> was mainly inspired to create Son based on the aforementioned version of Sun Wukong/Son Gokū, which is referenced in its design resembling the <a class="extiw" href="https://dragonball.fandom.com/wiki/Great_Ape" title="w:c:Dragonball:Great Ape">Ōzaru</a> form, the inherited <a class="extiw" href="https://dragonball.fandom.com/wiki/Dragon_Ball_(object)" title="w:c:Dragonball:Dragon Ball (object)">Dragon Ball</a> that has four stars in it, and having a master named Rōshi. Besides the name, Son is also based on several other references to the original version of Sun Wukong/Son Gokū, which includes:
+<ul><li>The horns on its forehead are modelled after Wukong's diadem.</li>
+<li>"Handsome Monkey King" (<span lang="ja">美猿王</span>, <i>Bien'ō</i>) and "Great Sage Equalling Heaven" (<span lang="ja">斉天大聖</span>, <i>Seiten Taisei</i>) are both titles that Wukong bears, though the former is written with a different character for "monkey" than from the Chinese version of the title (originally written as "美猴王") instead.</li>
+<li>The Water Screen Cave (<span lang="ja">水簾洞</span>, <i>Suirendō</i>) is the cave where Wukong was born on the Mountain of Flowers and Fruit (<span lang="ja">花果山</span>, <i>Kakazan</i>).</li>
+<li>When Naruto met Son within Rōshi, it was sealed to a giant stone, which reflects the mountain under which the original Wukong was sealed.</li>
+<li>His voice actor in Latin Spanish, Mario Castañeda, is the voice of the protagonist of the Dragon Ball saga, Son Goku.</li></ul></li>
+<li>A Dharma name (<span lang="ja">法号</span>, <i>hōgō</i>) can be one of two things. It can be the name given to a newly ordained Buddhist monk or nun, or it can be the posthumous name given to deceased people according to the Buddhist faith.</li>
+<li>The fur on its chin and on the top of its back resemble Rōshi's beard and hairstyle.</li></ul>
+<h2><span class="mw-headline" id="Quotes">Quotes</span></h2>
+<ul><li>(Introducing itself to <a class="mw-redirect" href="https://naruto.fandom.com/wiki/Naruto" title="Naruto">Naruto</a>) <i>"I am the Handsome Monkey King of the Water Screen Cave; the King of the Sage Monkeys, bestowed with the Dharma name of Son by the Sage of Six Paths. I am Son Gokū, the Great Sage Equalling Heaven hoohoohooooo!!"</i> (<span lang="ja"> 「オレは水簾洞の美猿王　六道仙人より孫の法号を与えられし仙猿の王。孫悟空斉天大聖だウキキィーーー!!」</span>, <i>"Ore wa Suirendō no Bien'ō, Rikudō Sennin yori Son no hōgō o ataerareshi Sen'en no Ō. Son Gokū Seiten Taisei da ukikī~~~!!"</i>)</li></ul>
+<h2><span class="mw-headline" id="References">References</span></h2>
+<div class="mw-references-wrap mw-references-columns"></div>
+<!-- 
+NewPP limit report
+Cached time: 20251003220604
+Cache expiry: 2592000
+Reduced expiry: false
+Complications: [show‐toc]
+[SMW] In‐text annotation parser time: 0.001 seconds
+CPU time usage: 0.637 seconds
+Real time usage: 0.951 seconds
+Preprocessor visited node count: 6026/1000000
+Post‐expand include size: 92348/2097152 bytes
+Template argument size: 17477/2097152 bytes
+Highest expansion depth: 26/100
+Expensive parser function count: 3/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5742/5000000 bytes
+Lua time usage: 0.054/7.000 seconds
+Lua memory usage: 1863321/104857600 bytes
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  821.187      1 -total
+ 95.17%  781.498      5 Template:Content_only
+ 94.98%  779.971      1 Template:Infobox
+ 94.30%  774.418      1 Infobox:Son_Gokū
+ 94.07%  772.469      1 Template:Infobox/Naruto/Character
+ 61.63%  506.113      5 Template:IBox/Box
+ 22.88%  187.880     32 Template:IBox/Row
+ 12.18%  100.011      1 Template:Infobox/Debut
+ 11.31%   92.900     15 Template:SemanticInputParser
+ 10.90%   89.529      8 Template:SemanticInputParser/Array
+-->
+<!-- Saved in parser cache with key 1.43.1_prod_naruto:pcache:idhash:6540-0!dateformat=default!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20251003220604 and revision id 1451839. Rendering was triggered because: page-view
+ -->
+</div>
+</article>
+</main>
+</div></section><footer class="page-footer panel">
+<div class="footer-line"><span class="footer-label">Filed under</span><span class="footer-category">Characters</span></div>
+<div class="footer-line">
+      Text is from <a href="https://naruto.fandom.com/wiki/Son%20Gok%C5%AB">Narutopedia</a> under
+      <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>. Changes were made.
+    </div>
+<div class="footer-line">Maintained by the Konoha Academy Archives initiative.</div></footer></div><script>
+  const box = document.querySelector('.portable-infobox');
+  if (box) document.getElementById('infobox').appendChild(box);
+</script></body></html>
