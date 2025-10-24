@@ -1,0 +1,175 @@
+:root {
+  color-scheme: light dark;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header,
+footer {
+  padding: 1.5rem clamp(1rem, 3vw, 3rem);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+header h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+header p {
+  margin: 0;
+  max-width: 60ch;
+  line-height: 1.5;
+}
+
+main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 3vw, 3rem);
+  background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.15), transparent 55%);
+}
+
+#diagram {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.65);
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.35);
+  min-height: 520px;
+}
+
+#details {
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.75);
+  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.3);
+  overflow-y: auto;
+}
+
+#details h2 {
+  margin-top: 0;
+}
+
+#details .detail-type {
+  margin: 0.2rem 0 0.8rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+#details ul {
+  padding-left: 1.2rem;
+}
+
+#details .detail-list {
+  list-style: none;
+  padding: 0;
+}
+
+#details .detail-list li {
+  margin: 0.35rem 0;
+}
+
+#details .detail-source {
+  font-size: 0.85rem;
+  color: rgba(148, 163, 184, 0.95);
+}
+
+#details code {
+  background: rgba(30, 41, 59, 0.8);
+  padding: 0.1rem 0.25rem;
+  border-radius: 6px;
+}
+
+.node circle {
+  fill: rgba(59, 130, 246, 0.9);
+  stroke: rgba(191, 219, 254, 0.9);
+  stroke-width: 2px;
+  transition: fill 0.2s ease, stroke 0.2s ease, r 0.2s ease;
+}
+
+.node--leaf circle {
+  fill: rgba(34, 197, 94, 0.9);
+  stroke: rgba(187, 247, 208, 0.9);
+}
+
+.node--selected circle {
+  fill: rgba(236, 72, 153, 0.95);
+  stroke: rgba(248, 187, 208, 0.95);
+  stroke-width: 3px;
+}
+
+.node text {
+  font-size: 0.9rem;
+  fill: #e2e8f0;
+  paint-order: stroke;
+  stroke: rgba(15, 23, 42, 0.65);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.link {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.5);
+  stroke-width: 1.5px;
+}
+
+.controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.4);
+}
+
+.controls button {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #bfdbfe;
+  font-weight: 600;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.controls button:hover,
+.controls button:focus {
+  background: rgba(59, 130, 246, 0.35);
+  transform: translateY(-1px);
+}
+
+.controls button:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 900px) {
+  main {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 60vh) minmax(0, 1fr);
+  }
+
+  #diagram {
+    min-height: 400px;
+  }
+}
