@@ -1,0 +1,43 @@
+# proxy
+- 10643:Position Proxy | G=709 | O=1/4 | S=10643 | F=P | Out=11150
+- 13201:Position Proxy | G=190 | O=2/9 | S=13201 | F=P | Out=2311;9408
+- 18361:Position Proxy | G=139 | O=1/2 | S=18361 | F=P | Out=16218
+- 18756:Position Proxy | G=572 | O=3/9 | S=18756 | F=P | In=13170 | Out=21984;64583
+- 22046:Position Proxy | G=10 | O=1/2 | S=22046 | F=P | Out=14993
+- 24452:Position Proxy | G=606 | O=2/12 | S=24452 | F=P | In=59585 | Out=13170
+- 25134:Position Proxy | G=564 | O=3/15 | S=25134 | F=P | In=46393 | Out=22994;46882
+- 25441:Position Proxy | G=14 | O=2/1 | S=25441 | F=P | Out=49080;24970
+- 26661:Position Proxy | G=152 | O=2/7 | S=26661 | F=P | Out=16218;48679
+- 27475:Position Proxy | G=130 | O=1/0 | S=27475 | F=P | Out=51198
+- 27819:Position Proxy | G=633 | O=1/4 | S=27819 | F=P | Out=59585
+- 28018:Position Proxy | G=9 | O=2/4 | S=28018 | F=P | Out=17219;36931
+- 28650:Position Proxy | G=154 | O=3/1 | S=28650 | F=P | In=10532;46519 | Out=2491
+- 30275:Position Proxy | G=25 | O=3/4 | S=30275 | F=P | Out=49080;44169;55190
+- 33833:Position Proxy | G=708 | O=2/12 | S=33833 | F=P | In=11150 | Out=49684
+- 34013:Position Proxy | G=586 | O=2/9 | S=34013 | F=P | In=41876 | Out=61288
+- 35070:Position Proxy | G=99 | O=1/1 | S=35070 | F=P | Out=61666
+- 35313:Position Proxy | G=626 | O=1/4 | S=35313 | F=P | In=61305
+- 35853:Position Proxy | G=545 | O=2/1 | S=35853 | F=P | In=46393 | Out=3109
+- 35926:Position Proxy | G=704 | O=2/9 | S=35926 | F=P | In=6910;18436
+- 36414:Position Proxy | G=706 | O=1/3 | S=36414 | F=P | Out=18436
+- 37147:Position Proxy | G=527 | O=1/0 | S=37147 | F=P | Out=3109
+- 37898:Position Proxy | G=170 | O=2/15 | S=37898 | F=P | In=10532 | Out=23984
+- 3854:Position Proxy | G=11 | O=1/0 | S=3854 | F=P | Out=24970
+- 40114:Position Proxy | G=110 | O=1/1 | S=40114 | F=P | Out=12613
+- 43989:Position Proxy | G=169 | O=3/7 | S=43989 | F=P | In=29712;9408 | Out=7960
+- 44470:Position Proxy | G=593 | O=1/5 | S=44470 | F=P | In=12161
+- 48128:Position Proxy | G=196 | O=1/5 | S=48128 | F=P | In=23984
+- 48132:Position Proxy | G=703 | O=3/12 | S=48132 | F=P | In=6910 | Out=32763;33753
+- 49951:Position Proxy | G=8 | O=1/1 | S=49951 | F=P | Out=36931
+- 50179:Position Proxy | G=705 | O=2/15 | S=50179 | F=P | In=22748 | Out=33753
+- 51233:Position Proxy | G=599 | O=2/12 | S=51233 | F=P | In=22994 | Out=61305
+- 53203:Position Proxy | G=13 | O=2/7 | S=53203 | F=P | Out=44169;14993
+- 54600:Position Proxy | G=600 | O=1/3 | S=54600 | F=P | Out=41876
+- 55706:Position Proxy | G=131 | O=2/4 | S=55706 | F=P | Out=12613;29712
+- 56439:Position Proxy | G=707 | O=1/5 | S=56439 | F=P | Out=22748
+- 57194:Position Proxy | G=580 | O=2/15 | S=57194 | F=P | Out=40400;12161
+- 58194:Position Proxy | G=552 | O=2/7 | S=58194 | F=P | In=9797;64583
+- 58355:Position Proxy | G=119 | O=2/4 | S=58355 | F=P | In=61666 | Out=46519
+- 63754:Position Proxy | G=528 | O=1/2 | S=63754 | F=P | Out=9797
+- 64166:Position Proxy | G=144 | O=2/1 | S=64166 | F=P | In=51198 | Out=23756
+- 7956:Position Proxy | G=204 | O=1/3 | S=7956 | F=P | In=2311

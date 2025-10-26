@@ -1,0 +1,58 @@
+# jewel_sockets
+- 10532:Medium Jewel Socket | G=154 | O=3/7 | S=10532 | F=J | In=23756 | Out=28650;37898
+- 11150:Small Jewel Socket | G=708 | O=2/4 | S=11150 | F=J | In=10643 | Out=33833
+- 12161:Small Jewel Socket | G=580 | O=2/7 | S=12161 | F=J | In=57194 | Out=44470
+- 12613:Small Jewel Socket | G=131 | O=2/12 | S=12613 | F=J | In=40114;55706
+- 13170:Medium Jewel Socket | G=572 | O=3/4 | S=13170 | F=J | In=61288;24452 | Out=18756
+- 14993:Small Jewel Socket | G=13 | O=2/15 | S=14993 | F=J | In=22046;53203
+- 16218:Small Jewel Socket | G=152 | O=2/15 | S=16218 | F=J | In=18361;26661
+- 17219:Medium Jewel Socket | G=25 | O=3/12 | S=17219 | F=J | In=28018;44169 | Out=49080
+- 18436:Small Jewel Socket | G=704 | O=2/1 | S=18436 | F=J | In=36414 | Out=35926
+- 21984:Large Jewel Socket | G=551 | O=1/2 | S=21984 | F=J | In=21033;18756
+- 22748:Small Jewel Socket | G=705 | O=2/7 | S=22748 | F=J | In=56439 | Out=50179
+- 22994:Medium Jewel Socket | G=564 | O=3/4 | S=22994 | F=J | In=40400;25134 | Out=51233
+- 2311:Small Jewel Socket | G=190 | O=2/1 | S=2311 | F=J | In=13201 | Out=7956
+- 23756:Medium Jewel Socket | G=154 | O=3/9 | S=23756 | F=J | In=64166 | Out=10532;46519
+- 23984:Small Jewel Socket | G=170 | O=2/7 | S=23984 | F=J | In=37898 | Out=48128
+- 2491:Large Jewel Socket | G=171 | O=1/5 | S=2491 | F=J | In=28650 | Out=18901
+- 24970:Small Jewel Socket | G=14 | O=2/9 | S=24970 | F=J | In=3854;25441
+- 26196:Basic Jewel Socket | G=81 | O=0/0 | S=26196 | F=J | Out=37999;34171
+- 26725:Basic Jewel Socket | G=80 | O=2/8 | S=26725 | F=J | In=62363 | Out=62429
+- 28475:Basic Jewel Socket | G=285 | O=2/12 | S=28475 | F=J | In=49178
+- 29712:Medium Jewel Socket | G=169 | O=3/12 | S=29712 | F=J | In=55706;48679 | Out=43989
+- 3109:Small Jewel Socket | G=545 | O=2/9 | S=3109 | F=J | In=37147;35853
+- 31683:Basic Jewel Socket | G=370 | O=0/0 | S=31683 | F=J | In=36881 | Out=43162
+- 32763:Large Jewel Socket | G=693 | O=1/3 | S=32763 | F=J | In=48132 | Out=23334
+- 33631:Basic Jewel Socket | G=216 | O=2/15 | S=33631 | F=J | In=15405
+- 33753:Medium Jewel Socket | G=703 | O=3/7 | S=33753 | F=J | In=48132;50179 | Out=49684
+- 33989:Basic Jewel Socket | G=503 | O=2/7 | S=33989 | F=J | In=39861
+- 34483:Basic Jewel Socket | G=436 | O=2/9 | S=34483 | F=J | In=11497
+- 36634:Basic Jewel Socket | G=288 | O=2/1 | S=36634 | F=J | In=7388
+- 36931:Small Jewel Socket | G=9 | O=2/12 | S=36931 | F=J | In=49951;28018
+- 40400:Medium Jewel Socket | G=564 | O=3/7 | S=40400 | F=J | In=46393;57194 | Out=22994
+- 41263:Basic Jewel Socket | G=444 | O=2/4 | S=41263 | F=J | In=48778
+- 41876:Small Jewel Socket | G=586 | O=2/1 | S=41876 | F=J | In=54600 | Out=34013
+- 44169:Medium Jewel Socket | G=25 | O=3/15 | S=44169 | F=J | In=53203;30275 | Out=17219
+- 46393:Medium Jewel Socket | G=564 | O=3/9 | S=46393 | F=J | Out=35853;40400;25134
+- 46519:Medium Jewel Socket | G=154 | O=3/12 | S=46519 | F=J | In=58355;23756 | Out=28650
+- 46882:Large Jewel Socket | G=548 | O=1/4 | S=46882 | F=J | In=40132;25134
+- 48679:Medium Jewel Socket | G=169 | O=3/15 | S=48679 | F=J | In=26661;9408 | Out=29712
+- 48768:Basic Jewel Socket | G=396 | O=0/0 | S=48768 | F=J | In=11688 | Out=28221
+- 49080:Medium Jewel Socket | G=25 | O=3/9 | S=49080 | F=J | In=25441;17219;30275
+- 49684:Medium Jewel Socket | G=703 | O=3/4 | S=49684 | F=J | In=33753;33833 | Out=6910
+- 51198:Small Jewel Socket | G=144 | O=2/9 | S=51198 | F=J | In=27475 | Out=64166
+- 54127:Basic Jewel Socket | G=374 | O=0/0 | S=54127 | F=J | In=18103 | Out=11859
+- 55190:Large Jewel Socket | G=49 | O=1/0 | S=55190 | F=J | In=30275;26712
+- 59585:Small Jewel Socket | G=606 | O=2/4 | S=59585 | F=J | In=27819 | Out=24452
+- 60735:Basic Jewel Socket | G=652 | O=2/0 | S=60735 | F=J | In=14292;38348
+- 61288:Medium Jewel Socket | G=572 | O=3/1 | S=61288 | F=J | In=64583;34013 | Out=13170
+- 61305:Small Jewel Socket | G=599 | O=2/4 | S=61305 | F=J | In=51233 | Out=35313
+- 61419:Basic Jewel Socket | G=353 | O=2/4 | S=61419 | F=J | In=15117 | Out=53279
+- 61666:Small Jewel Socket | G=119 | O=2/12 | S=61666 | F=J | In=35070 | Out=58355
+- 61834:Basic Jewel Socket | G=660 | O=0/0 | S=61834 | F=J | In=53213 | Out=27656
+- 6230:Basic Jewel Socket | G=330 | O=0/0 | S=6230 | F=J | In=55906 | Out=48423
+- 64583:Medium Jewel Socket | G=572 | O=3/15 | S=64583 | F=J | In=18756 | Out=61288;58194
+- 6910:Medium Jewel Socket | G=703 | O=3/1 | S=6910 | F=J | In=49684 | Out=35926;48132
+- 7960:Large Jewel Socket | G=185 | O=1/1 | S=7960 | F=J | In=43989;52502
+- 9408:Medium Jewel Socket | G=169 | O=3/1 | S=9408 | F=J | In=13201 | Out=48679;43989
+- 9797:Small Jewel Socket | G=552 | O=2/15 | S=9797 | F=J | In=63754 | Out=58194
