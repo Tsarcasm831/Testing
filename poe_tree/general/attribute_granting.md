@@ -1,0 +1,212 @@
+# attribute_granting
+- 10221:Strength | G=125 | O=0/0 | S=10221 | Attr=Str10 | Stats=+10 to Strength | In=44941;50422;54396 | Out=6446;24155;25168
+- 1031:Intelligence | G=322 | O=0/0 | S=1031 | Attr=Int10 | Stats=+10 to Intelligence | In=7938;33755;12852;60388 | Out=19635
+- 10490:Intelligence | G=305 | O=4/7 | S=10490 | Attr=Int10 | Stats=+10 to Intelligence | In=33479;45680;22473 | Out=47251;45175;18359
+- 10575:Intelligence | G=129 | O=4/30 | S=10575 | Attr=Int10 | Stats=+10 to Intelligence | In=58402;21262 | Out=40508;29199
+- 10829:Dexterity | G=385 | O=4/7 | S=10829 | Attr=Dex10 | Stats=+10 to Dexterity | In=16167;56116;238 | Out=32091;18402;41967
+- 11334:Intelligence | G=517 | O=6/54 | S=11334 | Attr=Int10 | Stats=+10 to Intelligence | In=38129 | Out=15549
+- 11497:Dexterity | G=436 | O=2/5 | S=11497 | Attr=Dex10 | Stats=+10 to Dexterity | In=238;5408 | Out=34483
+- 11551:Intelligence | G=403 | O=4/0 | S=11551 | Attr=Int10 | Stats=+10 to Intelligence | In=19635;22315;50472;38176 | Out=43000
+- 11651:Intelligence | G=427 | O=0/0 | S=11651 | Attr=Int10 | Stats=+10 to Intelligence | Out=5408;6580;58214
+- 11859:Strength | G=374 | O=3/0 | S=11859 | Attr=Str10 | Stats=+10 to Strength | In=54127;4833 | Out=56001;49971
+- 12412:Dexterity | G=686 | O=0/0 | S=12412 | Attr=Dex10 | Stats=+10 to Dexterity | In=32555;36221;64769;20807;63618 | Out=54354
+- 13009:Dexterity | G=233 | O=0/0 | S=13009 | Attr=Dex10 | Stats=+10 to Dexterity | In=17735;651 | Out=60398
+- 13885:Dexterity | G=617 | O=4/10 | S=13885 | Attr=Dex10 | Stats=+10 to Dexterity | In=47362;7112;8012 | Out=28012;40362
+- 14021:Intelligence | G=268 | O=6/0 | S=14021 | Attr=Int10 | Stats=+10 to Intelligence | In=55332;12379 | Out=7938;367;64401
+- 14056:Strength | G=237 | O=0/0 | S=14056 | Attr=Str10 | Stats=+10 to Strength | In=34400;18025;22703;6741 | Out=487;34601;11700;36945;47785
+- 14151:Intelligence | G=228 | O=4/10 | S=14151 | Attr=Int10 | Stats=+10 to Intelligence | In=63965 | Out=27564
+- 14292:Dexterity | G=652 | O=2/3 | S=14292 | Attr=Dex10 | Stats=+10 to Dexterity | Out=20807;60735
+- 1461:Dexterity | G=666 | O=4/10 | S=1461 | Attr=Dex10 | Stats=+10 to Dexterity | In=59606;17790;30826;36287;23407 | Out=49900;6797
+- 14930:Strength | G=136 | O=0/0 | S=14930 | Attr=Str10 | Stats=+10 to Strength | In=3644;53987;43822;25781;48287;34400 | Out=23090;40818;44916
+- 15064:Strength | G=121 | O=4/30 | S=15064 | Attr=Str10 | Stats=+10 to Strength | In=10031;29199;31931;12536
+- 15117:Intelligence | G=353 | O=2/1 | S=15117 | Attr=Int10 | Stats=+10 to Intelligence | Out=4367;61419
+- 15144:Attack Speed and Dexterity | G=369 | O=3/4 | S=15144 | Attr=Dex5 | Stats=4% increased Attack Speed;+5 to Dexterity | In=35179;918 | Out=58833;3992
+- 15405:Strength | G=216 | O=2/11 | S=15405 | Attr=Str10 | Stats=+10 to Strength | In=50862;33740 | Out=33631
+- 15549:Intelligence | G=517 | O=6/0 | S=15549 | Attr=Int10 | Stats=+10 to Intelligence | In=11334 | Out=20546
+- 15631:Strength | G=122 | O=0/0 | S=15631 | Attr=Str10 | Stats=+10 to Strength | In=39713;31931 | Out=64426;44967;41599;63306
+- 16167:Dexterity | G=385 | O=4/0 | S=16167 | Attr=Dex10 | Stats=+10 to Dexterity | In=19144 | Out=10829;14090;24472
+- 16544:Dexterity | G=366 | O=0/0 | S=16544 | Attr=Dex10 | Stats=+10 to Dexterity | In=18103 | Out=8544;24083;65485;57449
+- 16775:Strength | G=289 | O=4/13 | S=16775 | Attr=Str10 | Stats=+10 to Strength | In=46910;63976;25959 | Out=34207
+- 17201:Dexterity | G=387 | O=0/0 | S=17201 | Attr=Dex10 | Stats=+10 to Dexterity | In=56001;22423;36222;29185;19711 | Out=17383
+- 17735:Intelligence | G=172 | O=0/0 | S=17735 | Attr=Int10 | Stats=+10 to Intelligence | In=49254;34880;27564 | Out=13009;58402
+- 18033:Intelligence | G=420 | O=4/27 | S=18033 | Attr=Int10 | Stats=+10 to Intelligence | In=57565;33545;57736 | Out=46092
+- 18103:Dexterity | G=374 | O=3/8 | S=18103 | Attr=Dex10 | Stats=+10 to Dexterity | In=23066 | Out=16544;54127;37584
+- 18182:Intelligence | G=680 | O=0/0 | S=18182 | Attr=Int10 | Stats=+10 to Intelligence | In=60259;63228;53456;35255;56295 | Out=28753;55414;17749
+- 19501:Intelligence | G=401 | O=0/0 | S=19501 | Attr=Int10 | Stats=+10 to Intelligence | In=4367;36107;5972;35730;43988;15167;5296
+- 19635:Intelligence | G=356 | O=4/0 | S=19635 | Attr=Int10 | Stats=+10 to Intelligence | In=1031;53279;38805;27611;44723 | Out=11551;8302;40075;50826
+- 19711:Dexterity | G=418 | O=0/0 | S=19711 | Attr=Dex10 | Stats=+10 to Dexterity | In=6580;50041 | Out=20010;17201;60529;8410
+- 19884:Strength | G=117 | O=2/8 | S=19884 | Attr=Str15 | Stats=+15 to Strength | In=49772 | Out=25531
+- 20010:Dexterity | G=452 | O=0/0 | S=20010 | Attr=Dex10 | Stats=+10 to Dexterity | In=19711;36704;55392 | Out=23471;10808
+- 20546:Intelligence | G=553 | O=4/37 | S=20546 | Attr=Int10 | Stats=+10 to Intelligence | In=21301;15549;35894;14157 | Out=3656;31371
+- 20807:Dexterity | G=685 | O=0/0 | S=20807 | Attr=Dex10 | Stats=+10 to Dexterity | In=14292;16079;59220;57080;36287;38149 | Out=12412;61573;10840
+- 21301:Strength | G=495 | O=0/0 | S=21301 | Attr=Str10 | Stats=+10 to Strength | In=37671;57746 | Out=20546
+- 2151:Mana Regeneration and Intelligence | G=369 | O=3/15 | S=2151 | Attr=Int5 | Stats=20% increased Mana Regeneration Rate;+5 to Intelligence | In=22497 | Out=58833;37690;5560
+- 21678:Intelligence | G=376 | O=6/30 | S=21678 | Attr=Int10 | Stats=+10 to Intelligence | In=57226 | Out=32210
+- 22266:Dexterity | G=620 | O=0/0 | S=22266 | Attr=Dex10 | Stats=+10 to Dexterity | In=30679;16882 | Out=32555;9786;14804;50038
+- 22285:Strength | G=104 | O=0/0 | S=22285 | Attr=Str10 | Stats=+10 to Strength | Out=55649;53793;38508;62363
+- 22703:Strength | G=257 | O=0/0 | S=22703 | Attr=Str10 | Stats=+10 to Strength | In=43374 | Out=14056;16380;15451
+- 23027:Strength | G=57 | O=0/0 | S=23027 | Attr=Str10 | Stats=+10 to Strength | In=60472;44202;6712 | Out=54667;47427;10555
+- 23471:Dexterity | G=487 | O=6/36 | S=23471 | Attr=Dex10 | Stats=+10 to Dexterity | In=20010;53002;36874;15027;3469 | Out=56589;5237;40287;23237
+- 238:Dexterity | G=436 | O=2/0 | S=238 | Attr=Dex10 | Stats=+10 to Dexterity | Out=10829;11497
+- 23881:Strength | G=219 | O=4/0 | S=23881 | Attr=Str10 | Stats=+10 to Strength | In=9511 | Out=26523
+- 24083:Strength | G=326 | O=0/0 | S=24083 | Attr=Str10 | Stats=+10 to Strength | In=61262;50679;31471;17566;10073;16544 | Out=49343
+- 24496:Dexterity | G=503 | O=2/13 | S=24496 | Attr=Dex10 | Stats=+10 to Dexterity | In=39861 | Out=51786
+- 24865:Strength | G=304 | O=0/0 | S=24865 | Attr=Str10 | Stats=+10 to Strength | In=476 | Out=6741;34031;50515;56920;8904
+- 24914:Strength | G=258 | O=0/0 | S=24914 | Attr=Str10 | Stats=+10 to Strength | In=34400 | Out=61262;8533;38664;16860;23852
+- 25531:Strength | G=117 | O=2/13 | S=25531 | Attr=Str15 | Stats=+15 to Strength | In=19884 | Out=3644
+- 26270:Intelligence | G=55 | O=0/0 | S=26270 | Attr=Int10 | Stats=+10 to Intelligence | In=19732;60472;46897;64210 | Out=41190;25332;22472;57283
+- 26523:Strength | G=184 | O=0/0 | S=26523 | Attr=Str10 | Stats=+10 to Strength | In=58449;44606;23881 | Out=6446
+- 27283:Dexterity | G=619 | O=4/11 | S=27283 | Attr=Dex10 | Stats=+10 to Dexterity | In=5616;31508 | Out=63843;37619
+- 27415:Intelligence | G=475 | O=0/0 | S=27415 | Attr=Int10 | Stats=+10 to Intelligence | In=37671;6109;37175 | Out=32710;14209;57457
+- 27564:Intelligence | G=228 | O=4/0 | S=27564 | Attr=Int10 | Stats=+10 to Intelligence | In=14151 | Out=17735
+- 27592:Intelligence | G=461 | O=2/9 | S=27592 | Attr=Int15 | Stats=+15 to Intelligence | In=5296 | Out=44924
+- 27656:Intelligence | G=660 | O=3/4 | S=27656 | Attr=Int10 | Stats=+10 to Intelligence | In=3314;61834;25411 | Out=56295
+- 27659:Dexterity | G=428 | O=0/0 | S=27659 | Attr=Dex10 | Stats=+10 to Dexterity | In=8948;51517;127 | Out=37671
+- 28012:Dexterity | G=617 | O=4/20 | S=28012 | Attr=Dex10 | Stats=+10 to Dexterity | In=13885;46408 | Out=59252;4011
+- 28330:Strength | G=342 | O=4/0 | S=28330 | Attr=Str10 | Stats=+10 to Strength | In=46578 | Out=19144;25732
+- 28574:Dexterity | G=437 | O=4/27 | S=28574 | Attr=Dex10 | Stats=+10 to Dexterity | In=33545;51786 | Out=61875;40100
+- 2913:Dexterity | G=177 | O=0/0 | S=2913 | Attr=Dex10 | Stats=+10 to Dexterity | In=44908 | Out=50862;54267;55913
+- 29199:Intelligence | G=107 | O=0/0 | S=29199 | Attr=Int10 | Stats=+10 to Intelligence | In=37999;10575 | Out=15064
+- 29353:Strength | G=59 | O=0/0 | S=29353 | Attr=Str10 | Stats=+10 to Strength | In=44202;63282 | Out=35288;50570;11431
+- 29937:Dexterity | G=433 | O=0/0 | S=29937 | Attr=Dex10 | Stats=+10 to Dexterity | In=8544 | Out=6363;56807;35406
+- 30679:Dexterity | G=581 | O=0/0 | S=30679 | Attr=Dex10 | Stats=+10 to Dexterity | In=58271;5237;30626 | Out=22266;11678;43608;4656;5632
+- 30691:Intelligence | G=295 | O=0/0 | S=30691 | Attr=Int10 | Stats=+10 to Intelligence | In=43374 | Out=476;28498;42086
+- 30733:Strength | G=285 | O=2/3 | S=30733 | Attr=Str10 | Stats=+10 to Strength | In=46578 | Out=49178
+- 31080:Dexterity | G=252 | O=4/23 | S=31080 | Attr=Dex10 | Stats=+10 to Dexterity | In=49412;50340 | Out=43374
+- 31472:Intelligence | S=31472 | Attr=Int10 | Stats=+10 to Intelligence
+- 31875:Strength | G=298 | O=0/0 | S=31875 | Attr=Str10 | Stats=+10 to Strength | Out=4397;60398;22062
+- 31931:Strength | G=121 | O=4/20 | S=31931 | Attr=Str10 | Stats=+10 to Strength | In=62303;44908 | Out=15064;15631
+- 32210:Intelligence | G=376 | O=6/22 | S=32210 | Attr=Int10 | Stats=+10 to Intelligence | In=21678 | Out=8948
+- 32555:Dexterity | G=648 | O=0/0 | S=32555 | Attr=Dex10 | Stats=+10 to Dexterity | In=60942;22266;64878 | Out=12412;51420;54922;53574
+- 32710:Intelligence | G=460 | O=6/16 | S=32710 | Attr=Int10 | Stats=+10 to Intelligence | In=41635;27415;49605 | Out=10153;32345;4502;51801;48275
+- 33310:Intelligence | G=474 | O=6/6 | S=33310 | Attr=Int10 | Stats=+10 to Intelligence | In=5296;39521;49605 | Out=56075;51219;12831;53290
+- 33479:Intelligence | G=305 | O=4/13 | S=33479 | Attr=Int10 | Stats=+10 to Intelligence | In=47312;63976 | Out=10490;7614
+- 33740:Strength | G=216 | O=2/5 | S=33740 | Attr=Str10 | Stats=+10 to Strength | Out=46910;15405
+- 33783:Intelligence | G=585 | O=4/10 | S=33783 | Attr=Int10 | Stats=+10 to Intelligence | In=3656;62791;46896 | Out=4502;42744
+- 34031:Strength | G=338 | O=0/0 | S=34031 | Attr=Str10 | Stats=+10 to Strength | In=24865;29933;43303;25324;56001 | Out=49109
+- 34171:Strength | G=81 | O=3/12 | S=34171 | Attr=Str10 | Stats=+10 to Strength | In=26196;27575 | Out=11730;60472
+- 34400:Strength | G=192 | O=0/0 | S=34400 | Attr=Str10 | Stats=+10 to Strength | In=32376;62319 | Out=24914;14930;14056;35053;29797;34513;21210
+- 3469:Dexterity | G=525 | O=0/0 | S=3469 | Attr=Dex10 | Stats=+10 to Dexterity | In=16851;64709 | Out=23471;34678;53324;6383;63620
+- 35556:Strength | G=221 | O=4/20 | S=35556 | Attr=Str10 | Stats=+10 to Strength | In=39916 | Out=44908
+- 36287:Dexterity | G=684 | O=0/0 | S=36287 | Attr=Dex10 | Stats=+10 to Dexterity | In=64235;54307 | Out=1461;20807;10843;62744;45202
+- 3644:Strength | G=95 | O=0/0 | S=3644 | Attr=Str10 | Stats=+10 to Strength | In=5233;57279;25531 | Out=14930;39678;34750;20913;9402
+- 36542:Intelligence | G=345 | O=6/50 | S=36542 | Attr=Int10 | Stats=+10 to Intelligence | In=4397;37569
+- 36543:Strength | G=229 | O=4/20 | S=36543 | Attr=Str10 | Stats=+10 to Strength | In=6981 | Out=49412
+- 3656:Intelligence | G=614 | O=4/0 | S=3656 | Attr=Int10 | Stats=+10 to Intelligence | In=20546;265;24050 | Out=58244;27962;33783
+- 36678:Intelligence | G=195 | O=0/0 | S=36678 | Attr=Int10 | Stats=+10 to Intelligence | In=39841 | Out=42760;7444;20987;12246;57404
+- 36858:Intelligence | G=649 | O=0/0 | S=36858 | Attr=Int10 | Stats=+10 to Intelligence | In=60405 | Out=60440;61653;53456;23616;39814
+- 37569:Intelligence | G=345 | O=6/42 | S=37569 | Attr=Int10 | Stats=+10 to Intelligence | Out=36542;57264
+- 37671:Intelligence | G=454 | O=0/0 | S=37671 | Attr=Int10 | Stats=+10 to Intelligence | In=27659;48778;12189 | Out=61320;21301;31703;27415
+- 37999:Intelligence | G=81 | O=3/4 | S=37999 | Attr=Int10 | Stats=+10 to Intelligence | In=40766;26196 | Out=34173;29199
+- 38176:Intelligence | G=460 | O=6/60 | S=38176 | Attr=Int10 | Stats=+10 to Intelligence | In=8948;18663;29171 | Out=11551;49651
+- 38348:Dexterity | G=652 | O=2/13 | S=38348 | Attr=Dex10 | Stats=+10 to Dexterity | Out=60735;63843
+- 38662:Dexterity | G=539 | O=0/0 | S=38662 | Attr=Dex10 | Stats=+10 to Dexterity | In=63795;50338;6538;5616
+- 39718:Dexterity | G=618 | O=0/0 | S=39718 | Attr=Dex10 | Stats=+10 to Dexterity | In=31315;11239;59606;5616;56646
+- 39841:Intelligence | G=245 | O=6/66 | S=39841 | Attr=Int10 | Stats=+10 to Intelligence | In=32075;52412 | Out=63447;36678;5462
+- 39861:Dexterity | G=503 | O=2/3 | S=39861 | Attr=Dex10 | Stats=+10 to Dexterity | In=49978 | Out=24496;33989
+- 39916:Strength | G=221 | O=4/17 | S=39916 | Attr=Str10 | Stats=+10 to Strength | Out=35556;20228
+- 4011:Dexterity | G=544 | O=0/0 | S=4011 | Attr=Dex10 | Stats=+10 to Dexterity | In=45838;5823;28012 | Out=9355
+- 40366:Intelligence | G=165 | O=4/37 | S=40366 | Attr=Int10 | Stats=+10 to Intelligence | In=6764 | Out=42760;885;58763
+- 40653:Strength | G=127 | O=4/20 | S=40653 | Attr=Str10 | Stats=+10 to Strength | In=62108;53793;33098;49412 | Out=42800;9052
+- 40867:Strength | G=340 | O=4/33 | S=40867 | Attr=Str10 | Stats=+10 to Strength | In=42911 | Out=476
+- 41635:Intelligence | G=460 | O=6/9 | S=41635 | Attr=Int10 | Stats=+10 to Intelligence | In=49651;64239 | Out=32710;4036
+- 41866:Dexterity | G=608 | O=5/18 | S=41866 | Attr=Dex10 | Stats=+10 to Dexterity | In=37504;9206 | Out=63843;60942
+- 42760:Intelligence | G=268 | O=6/56 | S=42760 | Attr=Int10 | Stats=+10 to Intelligence | In=40366;36678;56029;12250;46340 | Out=5456;55332;24229
+- 42800:Strength | G=197 | O=4/30 | S=42800 | Attr=Str10 | Stats=+10 to Strength | In=40653;30251;46756 | Out=487;1252
+- 42911:Strength | G=340 | O=4/0 | S=42911 | Attr=Str10 | Stats=+10 to Strength | In=47389 | Out=40867
+- 43374:Strength | G=274 | O=0/0 | S=43374 | Attr=Str10 | Stats=+10 to Strength | In=31080;40907;64816;49178;2355 | Out=22703;30691
+- 43608:Dexterity | G=569 | O=2/5 | S=43608 | Attr=Dex15 | Stats=+15 to Dexterity | In=30679 | Out=63439
+- 4367:Intelligence | G=355 | O=0/0 | S=4367 | Attr=Int10 | Stats=+10 to Intelligence | In=32431;15117;60989 | Out=19501;44184;56158;55804
+- 4397:Intelligence | G=311 | O=0/0 | S=4397 | Attr=Int10 | Stats=+10 to Intelligence | In=31875 | Out=36542;11420;7938
+- 44184:Intelligence | G=320 | O=0/0 | S=44184 | Attr=Int10 | Stats=+10 to Intelligence | In=63447;14936;61804;4367 | Out=29781;12888;58210
+- 44202:Strength | G=58 | O=0/0 | S=44202 | Attr=Str10 | Stats=+10 to Strength | In=58556;21929 | Out=29353;23027
+- 444:Dexterity | G=494 | O=5/36 | S=444 | Attr=Dex10 | Stats=+10 to Dexterity | In=52904 | Out=61306
+- 44606:Intelligence | G=183 | O=0/0 | S=44606 | Attr=Int10 | Stats=+10 to Intelligence | In=19261;50862 | Out=26523
+- 44908:Strength | G=176 | O=0/0 | S=44908 | Attr=Str10 | Stats=+10 to Strength | In=26866;35556 | Out=2913;31931
+- 44924:Intelligence | G=461 | O=2/15 | S=44924 | Attr=Int15 | Stats=+15 to Intelligence | In=27592 | Out=55114
+- 44967:Strength | G=124 | O=0/0 | S=44967 | Attr=Str10 | Stats=+10 to Strength | In=7374;15631 | Out=50422
+- 4502:Intelligence | G=585 | O=4/3 | S=4502 | Attr=Int10 | Stats=+10 to Intelligence | In=32710;20852;33783;1822 | Out=49515
+- 45838:Dexterity | G=500 | O=4/20 | S=45838 | Attr=Dex10 | Stats=+10 to Dexterity | In=8640 | Out=4011
+- 46092:Intelligence | G=420 | O=4/33 | S=46092 | Attr=Int10 | Stats=+10 to Intelligence | In=60090;34907;18033 | Out=51923;17849;60247
+- 46277:Dexterity | G=682 | O=0/0 | S=46277 | Attr=Dex10 | Stats=+10 to Dexterity | In=38995;25260;49900 | Out=56295;5629;60592;4269
+- 46340:Intelligence | G=251 | O=0/0 | S=46340 | Attr=Int10 | Stats=+10 to Intelligence | In=60398;34478 | Out=42760;51954;54954
+- 46578:Strength | G=342 | O=4/33 | S=46578 | Attr=Str10 | Stats=+10 to Strength | In=29292;57061 | Out=28330;13714;30733;12926
+- 46910:Strength | G=289 | O=4/20 | S=46910 | Attr=Str10 | Stats=+10 to Strength | In=33740 | Out=16775;65034;34906;50288;8139
+- 47062:Spell Damage and Intelligence | G=369 | O=3/1 | S=47062 | Attr=Int5 | Stats=10% increased Spell Damage;+5 to Intelligence | Out=58833;56153;63845
+- 47251:Intelligence | G=288 | O=2/8 | S=47251 | Attr=Int10 | Stats=+10 to Intelligence | In=10490 | Out=7388
+- 476:Strength | G=319 | O=0/0 | S=476 | Attr=Str10 | Stats=+10 to Strength | In=30691;34009;40867 | Out=24865
+- 487:Strength | G=193 | O=0/0 | S=487 | Attr=Str10 | Stats=+10 to Strength | In=5197;42800;14056 | Out=7162;24720;5103;1354
+- 48778:Intelligence | G=444 | O=2/0 | S=48778 | Attr=Int10 | Stats=+10 to Intelligence | In=51923 | Out=37671;41263
+- 48828:Physical Damage and Strength | G=369 | O=3/9 | S=48828 | Attr=Str5 | Stats=+5 to Strength;10% increased Physical Damage | Out=58833;62662;45887;33508
+- 49178:Strength | G=285 | O=2/8 | S=49178 | Attr=Str10 | Stats=+10 to Strength | In=30733 | Out=43374;28475
+- 49412:Strength | G=182 | O=0/0 | S=49412 | Attr=Str10 | Stats=+10 to Strength | In=24383;15438;36543 | Out=31080;40653
+- 49605:Intelligence | G=531 | O=0/0 | S=49605 | Attr=Int10 | Stats=+10 to Intelligence | In=52407 | Out=32710;60440;22618;33310;42006
+- 49651:Intelligence | G=460 | O=6/0 | S=49651 | Attr=Int10 | Stats=+10 to Intelligence | In=38176;27709 | Out=41635;23950;7641;5296
+- 49806:Dexterity | G=381 | O=4/7 | S=49806 | Attr=Dex10 | Stats=+10 to Dexterity | In=63649 | Out=6580
+- 49900:Dexterity | G=683 | O=0/0 | S=49900 | Attr=Dex10 | Stats=+10 to Dexterity | In=1461;5802;1648 | Out=46277
+- 49978:Dexterity | G=543 | O=0/0 | S=49978 | Attr=Dex10 | Stats=+10 to Dexterity | In=39524;49639;9355;41819;8938 | Out=6538;39861;6042
+- 50422:Strength | G=123 | O=4/20 | S=50422 | Attr=Str10 | Stats=+10 to Strength | In=50570;27195;44967;32245 | Out=50197;10221;50862
+- 50570:Strength | G=86 | O=0/0 | S=50570 | Attr=Str10 | Stats=+10 to Strength | In=29353;38906;55854;7399 | Out=50422
+- 50862:Strength | G=178 | O=0/0 | S=50862 | Attr=Str10 | Stats=+10 to Strength | In=50422;2913 | Out=44606;15405;3167;21650
+- 51786:Dexterity | G=437 | O=4/20 | S=51786 | Attr=Dex10 | Stats=+10 to Dexterity | In=23540;35737;24496 | Out=28574;20812;36877
+- 51923:Intelligence | G=444 | O=2/11 | S=51923 | Attr=Int10 | Stats=+10 to Intelligence | In=46092 | Out=48778
+- 5233:Strength | G=63 | O=0/0 | S=5233 | Attr=Str10 | Stats=+10 to Strength | In=7082;63723;61388;55676;46585;7285 | Out=3644;10851;44268
+- 5237:Dexterity | G=536 | O=0/0 | S=5237 | Attr=Dex10 | Stats=+10 to Dexterity | In=23471;40135 | Out=6363;42178;58854;30679;51404;27325
+- 52904:Dexterity | G=494 | O=5/60 | S=52904 | Attr=Dex10 | Stats=+10 to Dexterity | In=39821 | Out=444
+- 52919:Dexterity | S=52919 | Attr=Dex10 | Stats=+10 to Dexterity
+- 5296:Intelligence | G=474 | O=6/66 | S=5296 | Attr=Int10 | Stats=+10 to Intelligence | In=49651 | Out=33310;19501;62697;27592;9370
+- 53213:Dexterity | G=660 | O=3/12 | S=53213 | Attr=Dex10 | Stats=+10 to Dexterity | In=42443;3537 | Out=61834;7112
+- 53279:Intelligence | G=353 | O=2/7 | S=53279 | Attr=Int10 | Stats=+10 to Intelligence | In=61419 | Out=19635
+- 53456:Intelligence | G=667 | O=0/0 | S=53456 | Attr=Int10 | Stats=+10 to Intelligence | In=36858;25789;24426 | Out=18182;2260;11162;5022
+- 53793:Strength | G=127 | O=4/30 | S=53793 | Attr=Str10 | Stats=+10 to Strength | In=62017;12247;22285;37884 | Out=40653;63027
+- 5408:Dexterity | G=446 | O=0/0 | S=5408 | Attr=Dex10 | Stats=+10 to Dexterity | In=11651;29359;930;39085 | Out=63139;56589;11497
+- 55332:Intelligence | G=268 | O=6/63 | S=55332 | Attr=Int10 | Stats=+10 to Intelligence | In=22088;42760 | Out=14021;48118
+- 55373:Life and Strength | G=369 | O=3/12 | S=55373 | Attr=Str5 | Stats=+12 to maximum Life;+5 to Strength | Out=58833;38048;17674
+- 55649:Strength | G=126 | O=4/30 | S=55649 | Attr=Str10 | Stats=+10 to Strength | In=44429;45163;22285;6446;34130
+- 56001:Strength | G=365 | O=0/0 | S=56001 | Attr=Str10 | Stats=+10 to Strength | In=11859 | Out=17201;34031
+- 5616:Dexterity | G=619 | O=4/0 | S=5616 | Attr=Dex10 | Stats=+10 to Dexterity | Out=38662;39718;27283;56814
+- 56295:Intelligence | G=681 | O=0/0 | S=56295 | Attr=Int10 | Stats=+10 to Intelligence | In=27656;46277 | Out=18182
+- 56589:Dexterity | G=466 | O=0/0 | S=56589 | Attr=Dex10 | Stats=+10 to Dexterity | In=5408;23471 | Out=43787;26365;13019
+- 58244:Intelligence | G=614 | O=4/10 | S=58244 | Attr=Int10 | Stats=+10 to Intelligence | In=3656;1767;11018;49308 | Out=7112
+- 58402:Intelligence | G=129 | O=4/0 | S=58402 | Attr=Int10 | Stats=+10 to Intelligence | In=17735 | Out=10575;6764;59728;40776;42343
+- 59252:Dexterity | G=615 | O=0/0 | S=59252 | Attr=Dex10 | Stats=+10 to Dexterity | In=49408;2121;28012;19210 | Out=59606
+- 59370:Dexterity | G=509 | O=4/33 | S=59370 | Attr=Dex10 | Stats=+10 to Dexterity | In=45035 | Out=63795
+- 59606:Dexterity | G=616 | O=0/0 | S=59606 | Attr=Dex10 | Stats=+10 to Dexterity | In=59252;54868 | Out=8938;39718;60180;52714;1461;1427
+- 59928:Strength | G=61 | O=0/0 | S=59928 | Attr=Str10 | Stats=+10 to Strength | In=20966;63282;44624;2219;30380 | Out=63723
+- 60398:Intelligence | G=272 | O=0/0 | S=60398 | Attr=Int10 | Stats=+10 to Intelligence | In=13009;34098;60648;7388;31875 | Out=39648;46340
+- 60440:Intelligence | G=597 | O=0/0 | S=60440 | Attr=Int10 | Stats=+10 to Intelligence | In=49605;50382;55571;30767;5018;36858 | Out=11455
+- 60472:Strength | G=56 | O=0/0 | S=60472 | Attr=Str10 | Stats=+10 to Strength | In=34171 | Out=23027;26270;29061
+- 60942:Dexterity | G=608 | O=5/36 | S=60942 | Attr=Dex10 | Stats=+10 to Dexterity | In=61306;64709;41866 | Out=33196;19228;32555
+- 61262:Strength | G=309 | O=4/30 | S=61262 | Attr=Str10 | Stats=+10 to Strength | In=24914;45503 | Out=24083;37800;55420;17429;58541
+- 61306:Dexterity | G=540 | O=0/0 | S=61306 | Attr=Dex10 | Stats=+10 to Dexterity | In=444;17421;16602 | Out=60942;63139;54142
+- 62103:Projectile Damage and Dexterity | G=369 | O=3/7 | S=62103 | Attr=Dex5 | Stats=10% increased Projectile Damage;+5 to Dexterity | Out=58833;39773;60532
+- 62363:Strength | G=80 | O=2/5 | S=62363 | Attr=Str10 | Stats=+10 to Strength | In=22285 | Out=26725
+- 62429:Strength | G=80 | O=2/11 | S=62429 | Attr=Str10 | Stats=+10 to Strength | In=26725 | Out=63723
+- 63139:Strength | G=485 | O=0/0 | S=63139 | Attr=Str10 | Stats=+10 to Strength | In=5408;53882;15837;61306
+- 63282:Strength | G=60 | O=4/20 | S=63282 | Attr=Str10 | Stats=+10 to Strength | In=31961;37501 | Out=29353;59928;34590;65125
+- 63439:Dexterity | G=569 | O=2/0 | S=63439 | Attr=Dex15 | Stats=+15 to Dexterity | In=43608 | Out=63921
+- 63447:Intelligence | G=245 | O=6/9 | S=63447 | Attr=Int10 | Stats=+10 to Intelligence | In=39841;33864;47949;52655 | Out=44184;56066
+- 6363:Dexterity | G=468 | O=0/0 | S=6363 | Attr=Dex10 | Stats=+10 to Dexterity | In=29937;30030;5237 | Out=55021;46291;56659
+- 63649:Dexterity | G=381 | O=4/0 | S=63649 | Attr=Dex10 | Stats=+10 to Dexterity | In=39725 | Out=49806
+- 63723:Strength | G=62 | O=0/0 | S=63723 | Attr=Str10 | Stats=+10 to Strength | In=25682;59928;48109;62429 | Out=5233
+- 63795:Dexterity | G=509 | O=4/0 | S=63795 | Attr=Dex10 | Stats=+10 to Dexterity | In=59370 | Out=38662
+- 63843:Dexterity | G=641 | O=0/0 | S=63843 | Attr=Dex10 | Stats=+10 to Dexterity | In=41866;27283;38348;21758
+- 64210:Intelligence | G=88 | O=0/0 | S=64210 | Attr=Int10 | Stats=+10 to Intelligence | In=27134;5743;7444 | Out=26270;5935;41970;4300
+- 6446:Strength | G=126 | O=4/0 | S=6446 | Attr=Str10 | Stats=+10 to Strength | In=27166;10221;26523 | Out=55649
+- 64709:Dexterity | G=571 | O=0/0 | S=64709 | Attr=Dex10 | Stats=+10 to Dexterity | In=29104 | Out=60942;3469;32802;23438;34660;50734
+- 6538:Intelligence | G=538 | O=0/0 | S=6538 | Attr=Int10 | Stats=+10 to Intelligence | In=64265;49978;17788 | Out=38662
+- 65506:Strength | S=65506 | Attr=Str10 | Stats=+10 to Strength
+- 6580:Dexterity | G=407 | O=0/0 | S=6580 | Attr=Dex10 | Stats=+10 to Dexterity | In=49806;48807;11651 | Out=19711
+- 6741:Strength | G=270 | O=0/0 | S=6741 | Attr=Str10 | Stats=+10 to Strength | In=57257;23199;24865 | Out=14056;17818;40841
+- 6764:Intelligence | G=165 | O=4/31 | S=6764 | Attr=Int10 | Stats=+10 to Intelligence | In=14057;19919;58402;24824 | Out=40366;44465
+- 6981:Strength | G=229 | O=4/10 | S=6981 | Attr=Str10 | Stats=+10 to Strength | In=50904 | Out=36543
+- 7112:Dexterity | G=642 | O=0/0 | S=7112 | Attr=Dex10 | Stats=+10 to Dexterity | In=58244;53213 | Out=13885
+- 7388:Intelligence | G=288 | O=2/13 | S=7388 | Attr=Int10 | Stats=+10 to Intelligence | In=47251 | Out=60398;36634
+- 7444:Intelligence | G=106 | O=0/0 | S=7444 | Attr=Int10 | Stats=+10 to Intelligence | In=4713;63398;48713;36678 | Out=64210;45486;46672;63425
+- 7938:Intelligence | G=268 | O=6/12 | S=7938 | Attr=Int10 | Stats=+10 to Intelligence | In=14021;4397 | Out=1031;33779;34157
+- 8544:Dexterity | G=397 | O=0/0 | S=8544 | Attr=Dex10 | Stats=+10 to Dexterity | In=16544;11364;58545;10661 | Out=29937;38772;49547
+- 8640:Dexterity | G=500 | O=4/24 | S=8640 | Attr=Dex10 | Stats=+10 to Dexterity | Out=45838;45272
+- 8938:Dexterity | G=578 | O=0/0 | S=8938 | Attr=Dex10 | Stats=+10 to Dexterity | In=12801;59606 | Out=49978;56090;22845
+- 8948:Intelligence | G=413 | O=0/0 | S=8948 | Attr=Int10 | Stats=+10 to Intelligence | In=27929;32210 | Out=27659;38176
+- 9355:Strength | G=542 | O=0/0 | S=9355 | Attr=Str10 | Stats=+10 to Strength | In=58968;4011;64509 | Out=49978
+- 9511:Strength | G=219 | O=4/3 | S=9511 | Attr=Str10 | Stats=+10 to Strength | In=31628 | Out=23881

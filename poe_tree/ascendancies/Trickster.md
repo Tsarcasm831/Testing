@@ -1,0 +1,18 @@
+# Trickster
+- 13219:Evasion and Energy Shield, Damage | A=Trickster | G=712 | O=3/12 | S=13219 | Stats=10% increased Damage;14% increased Evasion Rating;5% increased maximum Energy Shield | In=55236 | Out=55867
+- 19587:Evasion and Energy Shield, Movement Speed | A=Trickster | G=712 | O=2/7 | S=19587 | Stats=14% increased Evasion Rating;5% increased maximum Energy Shield;4% increased Movement Speed | In=55236 | Out=29825
+- 23225:One Step Ahead | A=Trickster | G=712 | O=4/23 | S=23225 | F=N | Stats=Your Action Speed is at least 108% of base value;Nearby Enemy Monsters' Action Speed is at most 92% of base value | In=35598
+- 2336:Evasion and Energy Shield, Energy Shield Leech | A=Trickster | G=712 | O=4/18 | S=2336 | Stats=14% increased Evasion Rating;5% increased maximum Energy Shield;40% increased total Recovery per second from Energy Shield Leech | In=29825 | Out=48999
+- 28884:Heartstopper | A=Trickster | G=712 | O=2/15 | S=28884 | F=N | Stats=Every 10 seconds:
+Take 40% less Damage from Hits for 5 seconds
+Take 40% less Damage over Time for 5 seconds | Rem=(These are consecutive) | In=63908
+- 29825:Escape Artist | A=Trickster | G=712 | O=3/7 | S=29825 | F=N | Stats=+5 to Evasion Rating per 1 Maximum Energy Shield on Equipped Helmet;+1 to maximum Energy Shield per 6 Evasion Rating on Equipped Body Armour | In=19587 | Out=58454;2336
+- 32947:Swift Killer | A=Trickster | G=712 | O=4/27 | S=32947 | F=N | Stats=200% increased Charge Duration;+2 to Maximum Frenzy Charges | Out=37191
+- 35598:Evasion and Energy Shield, Attack and Cast Speed | A=Trickster | G=712 | O=3/9 | S=35598 | Stats=14% increased Evasion Rating;5% increased maximum Energy Shield;4% increased Attack and Cast Speed | In=55236 | Out=23225
+- 37191:Evasion and Energy Shield, Frenzy Charge Duration | A=Trickster | G=712 | O=3/11 | S=37191 | Stats=14% increased Evasion Rating;5% increased maximum Energy Shield;15% increased Frenzy Charge Duration | In=32947;55236
+- 41891:Spellbreaker | A=Trickster | G=712 | O=4/13 | S=41891 | F=N | Stats=+20% chance to Suppress Spell Damage;Prevent +10% of Suppressed Spell Damage while on Full Energy Shield;50% chance for Energy Shield Recharge to start when you Suppress Spell Damage | Rem=(50% of Damage from Suppressed Hits and Ailments they inflict is prevented) | In=58454
+- 48999:Soul Drinker | A=Trickster | G=712 | O=4/20 | S=48999 | F=N | Stats=2% of Damage Leeched as Energy Shield;20% increased Attack and Cast Speed while Leeching Energy Shield;Energy Shield Leech effects are not removed when Energy Shield is Filled | Rem=(Leeched Energy Shield is recovered over time. Multiple Leeches can occur simultaneously, up to a maximum rate) | In=2336
+- 55236:Trickster | A=Trickster | G=712 | O=0/0 | S=55236 | F=AS | In=44683 | Out=35598;63908;37191;13219;19587
+- 55867:Polymath | A=Trickster | G=712 | O=4/30 | S=55867 | F=N | Stats=3% more Damage for each different type of Mastery you have Allocated;Recover 1% of Life on Kill for each different type of Mastery you have Allocated;Recover 1% of Energy Shield on Kill for each different type of Mastery you have Allocated;Recover 1% of Mana on Kill for each different type of Mastery you have Allocated | In=13219
+- 58454:Evasion and Energy Shield, Energy Shield Recharge | A=Trickster | G=712 | O=4/16 | S=58454 | Stats=14% increased Evasion Rating;5% increased maximum Energy Shield;10% increased Energy Shield Recharge Rate | In=29825 | Out=41891
+- 63908:Evasion and Energy Shield, Movement Speed | A=Trickster | G=712 | O=2/1 | S=63908 | Stats=14% increased Evasion Rating;5% increased maximum Energy Shield;4% increased Movement Speed | In=55236 | Out=28884
