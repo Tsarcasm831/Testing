@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Isometric / Topdown Grid (7x9)</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <!-- Import map placeholder (we're not using external libs yet, kept for future) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "\(none\)": "\(none\)"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <aside id="unit-info" aria-hidden="true" class="unit-info">
+      <!-- content filled by JS -->
+    </aside>
+
+    <div id="main-area">
+      <header>
+        <h1>7 × 9 Grid</h1>
+        <div class="controls">
+          <label>
+            Mode:
+            <select id="mode">
+              <option value="topdown">Topdown</option>
+              <option value="isometric">Isometric</option>
+            </select>
+          </label>
+          <button id="clear">Clear selection</button>
+        </div>
+      </header>
+
+      <main>
+        <div id="grid-container" aria-label="Game grid"></div>
+      </main>
+
+      <footer>
+        <small>Click a tile to toggle selection. Use the Mode selector to switch projection.</small>
+      </footer>
+    </div>
+    
+    <aside id="enemy-info" aria-hidden="true" class="enemy-info">
+      <!-- content filled by JS -->
+    </aside>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
