@@ -134,8 +134,25 @@ html,body,#app{height:100%;margin:0;background:var(--bg)}
 
 header{display:flex;gap:18px;align-items:center;width:100%;max-width:980px}
 h1{margin:0;font-size:18px;color:#0f172a}
-.controls{margin-left:auto;display:flex;gap:10px;align-items:center}
+.controls{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.controls label{display:flex;align-items:center;gap:6px;font-weight:600;color:#0f172a}
 .controls select, .controls button{padding:6px 10px;border-radius:8px;border:1px solid #e6e7e8;background:var(--panel);cursor:pointer}
+.phase-badge{
+  background:rgba(43,122,120,0.12);
+  color:var(--accent);
+  font-weight:700;
+  padding:4px 12px;
+  border-radius:999px;
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:28px;
+}
+.controls button[disabled]{
+  opacity:0.6;
+  cursor:not-allowed;
+}
 main{width:100%;max-width:980px;display:flex;justify-content:center;align-items:center}
 #grid-container{background:transparent;padding:12px;border-radius:12px;box-shadow:var(--shadow);background:linear-gradient(180deg, #fff, #fbfbfb)}
 .grid{display:inline-grid;gap:6px;padding:12px;border-radius:8px;background:transparent}
