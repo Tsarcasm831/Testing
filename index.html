@@ -24,6 +24,7 @@
       <header>
         <h1>7 × 9 Grid</h1>
         <div class="controls">
+          <div id="phase" class="phase-badge" aria-live="polite">Phase: Placement</div>
           <label>
             Mode:
             <select id="mode">
@@ -31,7 +32,9 @@
               <option value="isometric">Isometric</option>
             </select>
           </label>
-          <button id="clear">Clear selection</button>
+          <button id="start-battle" type="button">Start Battle</button>
+          <button id="action-rest" type="button" disabled>Rest (+25)</button>
+          <button id="action-skip" type="button" disabled>Skip</button>
         </div>
       </header>
 

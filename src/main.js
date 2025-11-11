@@ -23,11 +23,14 @@ const PASSIVE_CHAKRA_REGEN = 5;
 
 const container = document.getElementById("grid-container");
 const modeSelect = document.getElementById("mode");
-const actionBtn = document.getElementById("clear");
+const actionBtn = document.getElementById("start-battle");
 const unitInfo = document.getElementById("unit-info");
 const enemyInfo = document.getElementById("enemy-info");
-const controls = document.querySelector(".controls");
 const footerNote = document.querySelector("footer small");
+const phaseBadge = document.getElementById("phase");
+
+const restBtn = document.getElementById("action-rest");
+const skipBtn = document.getElementById("action-skip");
 
 let currentMode = modeSelect.value || "topdown";
 let labelsVisible = false;
@@ -42,20 +45,6 @@ const state = {
   round: 1,
   waveIndex: 0,
 };
-
-const restBtn = document.createElement("button");
-restBtn.id = "rest";
-restBtn.textContent = "Rest";
-restBtn.disabled = true;
-controls.appendChild(restBtn);
-
-const skipBtn = document.createElement("button");
-skipBtn.id = "skip";
-skipBtn.textContent = "Skip";
-skipBtn.disabled = true;
-controls.appendChild(skipBtn);
-
-actionBtn.textContent = "Start Battle";
 
 function deepClone(value) {
   if (typeof structuredClone === "function") {
@@ -293,16 +282,33 @@ function updateFooter() {
 }
 
 function updateControls() {
+  const phaseLabel =
+    state.phase === "placement" ? "Placement" : "Battle";
+  if (phaseBadge) {
+    phaseBadge.textContent = `Phase: ${phaseLabel}`;
+  }
   if (state.phase === "placement") {
-    actionBtn.textContent = "Start Battle";
-    restBtn.disabled = true;
-    skipBtn.disabled = true;
+    if (actionBtn) {
+      actionBtn.textContent = "Start Battle";
+    }
+    if (restBtn) {
+      restBtn.disabled = true;
+    }
+    if (skipBtn) {
+      skipBtn.disabled = true;
+    }
   } else {
-    actionBtn.textContent = "Reset";
+    if (actionBtn) {
+      actionBtn.textContent = "Reset";
+    }
     const active = getActiveUnit();
     const canUseButtons = !!active && isHero(active) && canAct(active);
-    restBtn.disabled = !canUseButtons;
-    skipBtn.disabled = !canUseButtons;
+    if (restBtn) {
+      restBtn.disabled = !canUseButtons;
+    }
+    if (skipBtn) {
+      skipBtn.disabled = !canUseButtons;
+    }
   }
 }
 
@@ -550,7 +556,7 @@ function handleRest() {
   if (!active || !isHero(active) || !canAct(active)) {
     return;
   }
-  restAction(state, active, PASSIVE_CHAKRA_REGEN * 2);
+  restAction(state, active, 25);
   finishTurn(active);
   processAutoTurns();
 }
@@ -569,16 +575,22 @@ modeSelect.addEventListener("change", (event) => {
   renderGrid();
 });
 
-actionBtn.addEventListener("click", () => {
-  if (state.phase === "placement") {
-    startBattle();
-  } else {
-    resetBattle();
-  }
-});
+if (actionBtn) {
+  actionBtn.addEventListener("click", () => {
+    if (state.phase === "placement") {
+      startBattle();
+    } else {
+      resetBattle();
+    }
+  });
+}
 
-restBtn.addEventListener("click", handleRest);
-skipBtn.addEventListener("click", handleSkip);
+if (restBtn) {
+  restBtn.addEventListener("click", handleRest);
+}
+if (skipBtn) {
+  skipBtn.addEventListener("click", handleSkip);
+}
 
 window.addEventListener("keydown", (event) => {
   if (event.key === "g" || event.key === "G") {
