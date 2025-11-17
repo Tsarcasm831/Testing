@@ -1,4 +1,4 @@
-import { svg, $, W, H } from './constants.js';
+import { svg, $, W, H, backgroundImage, oceanRect, oceanMaskRect } from './constants.js';
 import { MODEL, state } from './model.js';
 import { download, autosave } from './utils.js';
 import { drawAll } from './render.js';
@@ -262,6 +262,27 @@ function updateBrushPanel(){
   });
 }
 
+function syncOceanDimensions(){
+  const width = backgroundImage?.naturalWidth || Number(backgroundImage?.getAttribute('width')) || W;
+  const height = backgroundImage?.naturalHeight || Number(backgroundImage?.getAttribute('height')) || H;
+  if(oceanRect){
+    oceanRect.setAttribute('width', width);
+    oceanRect.setAttribute('height', height);
+  }
+  if(oceanMaskRect){
+    oceanMaskRect.setAttribute('width', width);
+    oceanMaskRect.setAttribute('height', height);
+  }
+}
+
+function setupOceanSizing(){
+  syncOceanDimensions();
+  if(backgroundImage && !backgroundImage.complete){
+    backgroundImage.addEventListener('load', syncOceanDimensions, { once:true });
+  }
+  window.addEventListener('resize', syncOceanDimensions);
+}
+
 // Zoom helpers - throttled for performance
 let zoomThrottle = null;
 function throttledWheelZoom(e) {
@@ -314,6 +335,7 @@ function updatePieceView(){
 
 export function initUI(){
   wireUI();
+  setupOceanSizing();
   document.body.dataset.mode=state.mode;
   // Ensure starting at max zoom-out
   setViewBox({ x:0, y:0, w:W, h:H });
