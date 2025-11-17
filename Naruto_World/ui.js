@@ -44,7 +44,7 @@ function wireUI(){
     lmName.value = d.name || '';
     lmDesc.value = d.desc || '';
     lmColor.value = d.color || '#22d3ee';
-    document.getElementById('lmViewPage').href = `land.html?id=${d.id || key}`;
+    document.getElementById('lmViewPage').href = `land-pages/land.html?id=${d.id || key}`;
     lModal.hidden = false;
   }
   window.__openLandModal = openLandModal;
