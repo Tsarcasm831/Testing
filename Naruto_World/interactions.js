@@ -1,25 +1,59 @@
-import { svg } from './constants.js';
 import { MODEL, state } from './model.js';
-import { clamp, screenToPct, autosave } from './utils.js';
+import { clamp, screenToPct, autosave, parseViewBox, setViewBox } from './utils.js';
 import { dumpJSON } from './export-utils.js';
 import { drawAll } from './render.js';
 import { W, H, hLayer } from './constants.js';
 
-export function select(kind,key){ 
-  state.selected={kind,key}; 
+let zoomAnimation=null;
+
+function stopZoomAnimation(){
+  if(zoomAnimation?.rafId) cancelAnimationFrame(zoomAnimation.rafId);
+  zoomAnimation=null;
+}
+
+function animateViewBox(start,target){
+  const ratio=Math.max(target.w,start.w)/Math.min(target.w,start.w);
+  const duration=1500 + Math.min(Math.abs(ratio-1),1)*1500;
+  const anim={start,target,duration,startTime:performance.now(),rafId:null};
+  const step=(now)=>{
+    if(zoomAnimation!==anim) return;
+    const t=Math.min((now-anim.startTime)/anim.duration,1);
+    const eased=t*t*(3-2*t);
+    const vb={
+      x:anim.start.x + (anim.target.x-anim.start.x)*eased,
+      y:anim.start.y + (anim.target.y-anim.start.y)*eased,
+      w:anim.start.w + (anim.target.w-anim.start.w)*eased,
+      h:anim.start.h + (anim.target.h-anim.start.h)*eased
+    };
+    setViewBox(vb);
+    if(t<1){
+      anim.rafId=requestAnimationFrame(step);
+    }else{
+      zoomAnimation=null;
+    }
+  };
+  zoomAnimation=anim;
+  anim.rafId=requestAnimationFrame(step);
+}
+
+export function select(kind,key){
+  stopZoomAnimation();
+  state.selected={kind,key};
   if(kind === 'land') {
     zoomToLand(key);
   } else if (!kind) {
     // Reset zoom when nothing is selected
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    setViewBox({ x:0, y:0, w:W, h:H });
   }
-  drawAll(); 
+  drawAll();
 }
 
 function zoomToLand(key) {
   const land = MODEL.lands[key];
   if (!land || !land.points || land.points.length === 0) return;
-  
+
+  const currentView = parseViewBox();
+
   // Calculate bounding box
   let minX = 100, maxX = 0, minY = 100, maxY = 0;
   for (const [x, y] of land.points) {
@@ -45,8 +79,16 @@ function zoomToLand(key) {
   const vbY = (minY / 100) * H;
   const vbW = ((maxX - minX) / 100) * W;
   const vbH = ((maxY - minY) / 100) * H;
-  
-  svg.setAttribute('viewBox', `${vbX} ${vbY} ${vbW} ${vbH}`);
+
+  const target={ x:vbX, y:vbY, w:vbW, h:vbH };
+  const unchanged = ['x','y','w','h'].every(k=>Math.abs(target[k]-currentView[k])<0.5);
+  if(unchanged){
+    setViewBox(target);
+    return;
+  }
+
+  stopZoomAnimation();
+  animateViewBox(currentView,target);
 }
 
 // Optimized drag vertex - throttled updates

@@ -1,6 +1,6 @@
 import { svg, $, W, H, backgroundImage, oceanRect, oceanMaskRect } from './constants.js';
 import { MODEL, state } from './model.js';
-import { download, autosave } from './utils.js';
+import { download, autosave, parseViewBox, setViewBox } from './utils.js';
 import { drawAll } from './render.js';
 import { dumpJSON, buildExportSVG, buildDefaultModelJS } from './export-utils.js';
 import { canvasDown, finishDrawing, cancelDrawing, select } from './interactions.js';
@@ -292,11 +292,6 @@ function throttledWheelZoom(e) {
   onWheelZoom(e);
 }
 
-function parseViewBox() {
-  const vb = (svg.getAttribute('viewBox') || '').trim().split(/\s+/).map(Number);
-  return (vb.length===4 && vb.every(n=>!Number.isNaN(n))) ? { x:vb[0], y:vb[1], w:vb[2], h:vb[3] } : { x:0, y:0, w:W, h:H };
-}
-function setViewBox(vb){ svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`); }
 function onWheelZoom(e){
   const vb = parseViewBox();
   const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
