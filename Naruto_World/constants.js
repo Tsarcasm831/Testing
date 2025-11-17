@@ -1,6 +1,9 @@
 export const W = 1018, H = 968; // viewBox
 
 export const svg = document.getElementById('map');
+export const backgroundImage = document.getElementById('backgroundImage');
+export const oceanRect = document.querySelector('#oceanLayer rect');
+export const oceanMaskRect = document.querySelector('#oceanMask rect');
 export const dLayer = document.getElementById('districtLayer');
 export const rLayer = document.getElementById('roadLayer');
 export const riverLayer = document.getElementById('riverLayer');
