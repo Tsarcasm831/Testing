@@ -8,6 +8,7 @@
   --park: #22c55e;         /* park color */
   --roadA: #f8fafc;        /* avenue color */
   --roadS: #cbd5e1;        /* street color */
+  --ocean: #0ea5e9;        /* ocean base */
 }
 
 html, body { height: 100%; margin: 0; background: var(--bg); color: var(--ink);
@@ -24,6 +25,7 @@ svg { width: 100%; height: 100%; display: block; touch-action: none }
 .land:hover { stroke: #fff }
 .district { fill: var(--dist-fill); stroke: var(--dist-stroke); stroke-width: 2; vector-effect: non-scaling-stroke }
 .district:hover { stroke: #fff }
+.ocean { fill: var(--ocean); opacity: .28; stroke: none }
 .road { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke }
 .road.avenue { stroke: var(--roadA) }
 .road.street { stroke: var(--roadS) }
