@@ -11,6 +11,9 @@
   <div id="mapPane">
     <svg id="map" viewBox="0 0 1018 968" aria-label="Konohagakure interactive map">
       <image href="Map of Naruto2.jpg" x="0" y="0" width="1018" height="968" preserveAspectRatio="xMidYMid meet" id="backgroundImage"></image>
+      <g id="oceanLayer" aria-hidden="true">
+        <rect x="0" y="0" width="1018" height="968" class="ocean" pointer-events="none"></rect>
+      </g>
       <!-- New paint layers (bottom-most overlay to top-most paint): -->
       <g id="grassLayer"></g>
       <g id="forestLayer"></g>
