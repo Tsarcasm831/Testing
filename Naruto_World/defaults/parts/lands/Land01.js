@@ -151,6 +151,20 @@ export const Land01 = {
     [36.44515301717522, 20.662210007344395],
     [35.854697836405634, 19.903264952100013]
   ],
-  "color": "#e32400"
+  "color": "#e32400",
+  "rangers": [
+    { "code": "K", "name": "Konoha Watch", "detail": "Leaf shinobi rotating on forest treelines." },
+    { "code": "L", "name": "Lantern Scouts", "detail": "Signal fires and messenger hawks along village roads." }
+  ],
+  "ninjaRisks": [
+    { "name": "Root Remnants", "detail": "Operating discreetly near old ANBU hideouts." },
+    { "name": "Sound Operatives", "detail": "Testing barriers on the borders of Fire Country." }
+  ],
+  "facts": [
+    { "title": "Heart of the Leaf", "detail": "The Land of Fire hosts Konoha and remains the political core for many alliances." },
+    { "title": "Dense Canopies", "detail": "Thick forests provide natural cover; visibility drops quickly off the main roads." },
+    { "title": "Rapid Response", "detail": "Fire Daimyo maintains messenger stations within a few hours of each district." }
+  ],
+  "symbol": "Leaf insignia flies over major checkpoints."
 };
 

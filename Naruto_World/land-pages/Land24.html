@@ -292,29 +292,7 @@ a { color: inherit; }
   <div class="layout">
     <section class="card">
       <h2>Surveillance Rangers</h2>
-      <ul class="stacked-list">
-        <li class="stacked-item">
-          <span class="pill">A</span>
-          <div class="item-body">
-            <strong>Azura Squad</strong>
-            <span>Patrolling borderlines and relay towers.</span>
-          </div>
-        </li>
-        <li class="stacked-item">
-          <span class="pill">B</span>
-          <div class="item-body">
-            <strong>Beacon Team</strong>
-            <span>Signals intel and long-range scans.</span>
-          </div>
-        </li>
-        <li class="stacked-item">
-          <span class="pill">C</span>
-          <div class="item-body">
-            <strong>Crimson Watch</strong>
-            <span>Shadows operating near waterways.</span>
-          </div>
-        </li>
-      </ul>
+      <ul class="stacked-list" id="rangerList"></ul>
     </section>
 
     <section class="card map-card">
@@ -323,7 +301,7 @@ a { color: inherit; }
           <span class="eyebrow">Land Svg</span>
           <h2 style="margin: 6px 0 0 0;">Territory Outline</h2>
         </div>
-        <div class="symbol-placeholder">Land symbol (if available)</div>
+        <div class="symbol-placeholder" id="symbolNote">Land symbol (if available)</div>
       </div>
       <div class="map-frame">
         <svg id="landSvg" viewBox="0 0 1018 968"></svg>
@@ -332,43 +310,7 @@ a { color: inherit; }
 
     <section class="card">
       <h2>Top 5 Dangerous Ninjas</h2>
-      <ul class="check-list">
-        <li class="check-item">
-          <span class="check-icon"></span>
-          <div class="item-body">
-            <strong>Raikiri</strong>
-            <span>Seen near canyon ridge checkpoints.</span>
-          </div>
-        </li>
-        <li class="check-item">
-          <span class="check-icon"></span>
-          <div class="item-body">
-            <strong>Silent Gale</strong>
-            <span>Expert in soundless infiltration.</span>
-          </div>
-        </li>
-        <li class="check-item">
-          <span class="check-icon"></span>
-          <div class="item-body">
-            <strong>Obsidian Kunoichi</strong>
-            <span>Poison specialist with stealth tactics.</span>
-          </div>
-        </li>
-        <li class="check-item">
-          <span class="check-icon"></span>
-          <div class="item-body">
-            <strong>Red Fang</strong>
-            <span>Reported around supply convoys.</span>
-          </div>
-        </li>
-        <li class="check-item">
-          <span class="check-icon"></span>
-          <div class="item-body">
-            <strong>Ghost Runner</strong>
-            <span>Vanishing after dusk; likely local.</span>
-          </div>
-        </li>
-      </ul>
+      <ul class="check-list" id="ninjaList"></ul>
     </section>
   </div>
 
@@ -377,20 +319,7 @@ a { color: inherit; }
       <h2 style="margin: 0;">Known Details</h2>
       <span class="eyebrow" style="background: rgba(115, 255, 206, 0.12); color: var(--accent-strong);">Updated</span>
     </div>
-    <div class="details-grid">
-      <article class="detail-card">
-        <h3>Terrain Pulse</h3>
-        <p>Rolling landscapes spotted with hideouts. Keep scouts mobile and rotate vantage points every 3 hours.</p>
-      </article>
-      <article class="detail-card">
-        <h3>Allied Signals</h3>
-        <p>Nearest friendly post is two valleys away. Use blue flares to request backup or evacuation.</p>
-      </article>
-      <article class="detail-card">
-        <h3>Supply Notes</h3>
-        <p>Rations cached along the northern ridge. Approaching storms may affect access routes.</p>
-      </article>
-    </div>
+    <div class="details-grid" id="factsGrid"></div>
   </section>
 </div>
 

@@ -3,9 +3,211 @@ import { DEFAULT_MODEL } from '../user-defaults.js';
 const W = 1018;
 const H = 968;
 
+const fallbackRangers = [
+  { code: 'A', name: 'Azura Squad', detail: 'Patrolling borderlines and relay towers.' },
+  { code: 'B', name: 'Beacon Team', detail: 'Signals intel and long-range scans.' },
+  { code: 'C', name: 'Crimson Watch', detail: 'Shadows operating near waterways.' }
+];
+
+const fallbackNinjas = [
+  { name: 'Raikiri', detail: 'Seen near canyon ridge checkpoints.' },
+  { name: 'Silent Gale', detail: 'Expert in soundless infiltration.' },
+  { name: 'Obsidian Kunoichi', detail: 'Poison specialist with stealth tactics.' },
+  { name: 'Red Fang', detail: 'Reported around supply convoys.' },
+  { name: 'Ghost Runner', detail: 'Vanishing after dusk; likely local.' }
+];
+
+const fallbackFacts = [
+  { title: 'Terrain Pulse', detail: 'Rolling landscapes spotted with hideouts. Keep scouts mobile and rotate vantage points every 3 hours.' },
+  { title: 'Allied Signals', detail: 'Nearest friendly post is two valleys away. Use blue flares to request backup or evacuation.' },
+  { title: 'Supply Notes', detail: 'Rations cached along the northern ridge. Approaching storms may affect access routes.' }
+];
+
 function getLandId() {
   const params = new URLSearchParams(window.location.search);
   return params.get('id') || document.body.dataset.landId || null;
+}
+
+function normalizeRangers(landName, rangers = []) {
+  if (Array.isArray(rangers) && rangers.length > 0) {
+    return rangers.map((item, index) => ({
+      code: item.code || String.fromCharCode(65 + index),
+      name: item.name || `Sentinel ${String.fromCharCode(65 + index)}`,
+      detail: item.detail || `Scouting routes near ${landName}.`
+    }));
+  }
+
+  return fallbackRangers.map((item, index) => ({
+    ...item,
+    detail: `${item.detail} (${landName})`
+  }));
+}
+
+function normalizeNinjas(landName, ninjas = []) {
+  if (Array.isArray(ninjas) && ninjas.length > 0) {
+    return ninjas.map((item) => ({
+      name: item.name || 'Unidentified ninja',
+      detail: item.detail || `Activity tracked around ${landName}.`
+    }));
+  }
+
+  return fallbackNinjas.map((item) => ({
+    ...item,
+    detail: `${item.detail} (${landName})`
+  }));
+}
+
+function normalizeFacts(landName, facts = [], landDesc = '') {
+  if (Array.isArray(facts) && facts.length > 0) {
+    return facts.map((item, index) => ({
+      title: item.title || `Key fact ${index + 1}`,
+      detail: item.detail || `Field intel recorded for ${landName}.`
+    }));
+  }
+
+  if (landDesc) {
+    return [
+      { title: 'Report Summary', detail: landDesc },
+      ...fallbackFacts.slice(1)
+    ];
+  }
+
+  return fallbackFacts;
+}
+
+function renderList(containerId, items, renderer, emptyMessage, placeholderClass = 'stacked-item') {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+
+  if (!items || items.length === 0) {
+    const placeholder = document.createElement('li');
+    placeholder.className = placeholderClass;
+    placeholder.textContent = emptyMessage || 'No data available.';
+    container.appendChild(placeholder);
+    return;
+  }
+
+  for (const item of items) {
+    container.appendChild(renderer(item));
+  }
+}
+
+function renderRangers(rangers) {
+  renderList(
+    'rangerList',
+    rangers,
+    (item) => {
+      const li = document.createElement('li');
+      li.className = 'stacked-item';
+
+      const pill = document.createElement('span');
+      pill.className = 'pill';
+      pill.textContent = item.code || '•';
+
+      const body = document.createElement('div');
+      body.className = 'item-body';
+
+      const strong = document.createElement('strong');
+      strong.textContent = item.name;
+
+      const span = document.createElement('span');
+      span.textContent = item.detail;
+
+      body.appendChild(strong);
+      body.appendChild(span);
+      li.appendChild(pill);
+      li.appendChild(body);
+
+      return li;
+    },
+    'No ranger teams reported.'
+  );
+}
+
+function renderNinjaRisks(ninjas) {
+  renderList(
+    'ninjaList',
+    ninjas,
+    (item) => {
+      const li = document.createElement('li');
+      li.className = 'check-item';
+
+      const icon = document.createElement('span');
+      icon.className = 'check-icon';
+
+      const body = document.createElement('div');
+      body.className = 'item-body';
+
+      const strong = document.createElement('strong');
+      strong.textContent = item.name;
+
+      const span = document.createElement('span');
+      span.textContent = item.detail;
+
+      body.appendChild(strong);
+      body.appendChild(span);
+      li.appendChild(icon);
+      li.appendChild(body);
+
+      return li;
+    },
+    'No high-risk ninja activity reported.',
+    'check-item'
+  );
+}
+
+function renderFacts(facts) {
+  const container = document.getElementById('factsGrid');
+  container.innerHTML = '';
+
+  if (!facts || facts.length === 0) {
+    const placeholder = document.createElement('article');
+    placeholder.className = 'detail-card';
+
+    const h3 = document.createElement('h3');
+    h3.textContent = 'No intel available';
+
+    const p = document.createElement('p');
+    p.textContent = 'Details are missing for this territory.';
+
+    placeholder.appendChild(h3);
+    placeholder.appendChild(p);
+    container.appendChild(placeholder);
+    return;
+  }
+
+  for (const fact of facts) {
+    const card = document.createElement('article');
+    card.className = 'detail-card';
+
+    const h3 = document.createElement('h3');
+    h3.textContent = fact.title;
+
+    const p = document.createElement('p');
+    p.textContent = fact.detail;
+
+    card.appendChild(h3);
+    card.appendChild(p);
+    container.appendChild(card);
+  }
+}
+
+function renderSymbol(symbolText) {
+  const symbolEl = document.getElementById('symbolNote');
+  symbolEl.textContent = symbolText || 'Land symbol (if available)';
+}
+
+function renderNotFound() {
+  document.getElementById('landName').textContent = 'Land not found';
+  document.getElementById('landDesc').textContent = 'We could not locate intel for this territory.';
+  renderRangers([]);
+  renderNinjaRisks([]);
+  renderFacts([]);
+  renderSymbol('No symbol available');
+
+  const svg = document.getElementById('landSvg');
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 }
 
 function renderLand() {
@@ -13,14 +215,25 @@ function renderLand() {
   const land = landId ? DEFAULT_MODEL.lands[landId] : null;
 
   if (!land) {
-    document.getElementById('landName').textContent = 'Land not found';
-    document.getElementById('landDesc').textContent = '';
+    renderNotFound();
     return;
   }
 
-  document.getElementById('landName').textContent = land.name || land.id;
-  document.getElementById('landDesc').textContent = land.desc || '';
+  const landName = land.name || land.id;
+  const landDesc = land.desc || '';
+
+  document.getElementById('landName').textContent = landName;
+  document.getElementById('landDesc').textContent = landDesc || 'No description available.';
   document.title = land.name || land.id;
+
+  const rangers = normalizeRangers(landName, land.rangers);
+  const ninjas = normalizeNinjas(landName, land.ninjaRisks);
+  const facts = normalizeFacts(landName, land.facts, landDesc);
+
+  renderRangers(rangers);
+  renderNinjaRisks(ninjas);
+  renderFacts(facts);
+  renderSymbol(land.symbol);
 
   const svg = document.getElementById('landSvg');
   svg.innerHTML = '';
