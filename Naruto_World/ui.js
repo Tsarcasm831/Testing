@@ -61,7 +61,8 @@ function wireUI(){
   });
 
   svg.addEventListener('dblclick',finishDrawing);
-  svg.addEventListener('mousemove',canvasDown);
+  // Use mousedown to avoid resetting state on every mouse movement while hovering the map
+  svg.addEventListener('mousedown',canvasDown);
   svg.addEventListener('wheel', throttledWheelZoom, { passive:false });
   window.addEventListener('keydown',e=>{
     const t=e.target, tag=(t?.tagName||'').toUpperCase();
