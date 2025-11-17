@@ -1,4 +1,4 @@
-import { W, H, svg, dLayer, rLayer, pLayer, hLayer, wLayer, tip } from './constants.js';
+import { W, H, svg, dLayer, rLayer, pLayer, hLayer, wLayer, tip, oceanMaskShapes } from './constants.js';
 import { MODEL, state } from './model.js';
 import { pct, mk, clear, autosave } from './utils.js';
 import { select, startDragVertex, startDragWhole, startDragPOI } from './interactions.js';
@@ -56,71 +56,80 @@ const LAND_ICONS = {
 
 function drawLands(){
   clear(dLayer);
-  if(!getToggle('toggleLands')) return;
+  clear(oceanMaskShapes);
+  const shouldDrawLands = getToggle('toggleLands');
   const locked = !!state.locks?.landsLocked;
   const fragment = document.createDocumentFragment();
+  const maskFragment = document.createDocumentFragment();
   const selectedKey = state.selected?.kind === 'land' ? state.selected.key : null;
-  
+
   for(const k in MODEL.lands){
     const d=MODEL.lands[k];
     const pts=d.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
-    const col = d.color || '#22d3ee';
-    const isSelected = k === selectedKey;
-    const opacity = selectedKey && !isSelected ? '0.25' : '1';
-    const poly=mk('polygon',{
-      class:'land '+(isSelected?'selected':''),
-      'data-id':k,
-      points:pts, 
-      style:`--dist-stroke:${col};--dist-fill:${col}55;opacity:${opacity}`
-    });
-    poly.addEventListener('mouseenter',e=>showTip(e,{name:d.name,desc:d.desc}));
-    poly.addEventListener('mousemove',moveTip);
-    poly.addEventListener('mouseleave',hideTip);
-    poly.addEventListener('mousedown',e=>{
-      if(state.addingPOI) return;
-      e.stopPropagation();
-      if(locked) return;
-      if(state.mode==='select'){
-        select('land',k);
-        if(e.altKey){ 
-          startDragWhole(e,'land',k); 
-        } else {
-          // Open land modal on click
-          if(window.__openLandModal){ 
-            window.__openLandModal(k); 
+    maskFragment.appendChild(mk('polygon',{ points:pts, fill:'black' }));
+
+    if(shouldDrawLands){
+      const col = d.color || '#22d3ee';
+      const isSelected = k === selectedKey;
+      const opacity = selectedKey && !isSelected ? '0.25' : '1';
+      const poly=mk('polygon',{
+        class:'land '+(isSelected?'selected':''),
+        'data-id':k,
+        points:pts,
+        style:`--dist-stroke:${col};--dist-fill:${col}55;opacity:${opacity}`
+      });
+      poly.addEventListener('mouseenter',e=>showTip(e,{name:d.name,desc:d.desc}));
+      poly.addEventListener('mousemove',moveTip);
+      poly.addEventListener('mouseleave',hideTip);
+      poly.addEventListener('mousedown',e=>{
+        if(state.addingPOI) return;
+        e.stopPropagation();
+        if(locked) return;
+        if(state.mode==='select'){
+          select('land',k);
+          if(e.altKey){
+            startDragWhole(e,'land',k);
+          } else {
+            // Open land modal on click
+            if(window.__openLandModal){
+              window.__openLandModal(k);
+            }
           }
         }
-      }
-    });
-    fragment.appendChild(poly);
-    
-    // Add icon if this land is selected and has a special icon
-    if(isSelected && LAND_ICONS[k]){
-      // Calculate center of land's bounding box
-      let minX = 100, maxX = 0, minY = 100, maxY = 0;
-      for(const [x,y] of d.points){
-        minX = Math.min(minX, x);
-        maxX = Math.max(maxX, x);
-        minY = Math.min(minY, y);
-        maxY = Math.max(maxY, y);
-      }
-      const centerX = (minX + maxX) / 2;
-      const centerY = (minY + maxY) / 2;
-      const size = Math.min((maxX - minX), (maxY - minY)) * 0.3; // Icon is 30% of land size
-      
-      const icon = mk('image', {
-        href: LAND_ICONS[k],
-        x: (centerX - size/2) * W/100,
-        y: (centerY - size/2) * H/100,
-        width: size * W/100,
-        height: size * H/100,
-        opacity: '0.8',
-        style: 'pointer-events: none;'
       });
-      fragment.appendChild(icon);
+      fragment.appendChild(poly);
+
+      // Add icon if this land is selected and has a special icon
+      if(isSelected && LAND_ICONS[k]){
+        // Calculate center of land's bounding box
+        let minX = 100, maxX = 0, minY = 100, maxY = 0;
+        for(const [x,y] of d.points){
+          minX = Math.min(minX, x);
+          maxX = Math.max(maxX, x);
+          minY = Math.min(minY, y);
+          maxY = Math.max(maxY, y);
+        }
+        const centerX = (minX + maxX) / 2;
+        const centerY = (minY + maxY) / 2;
+        const size = Math.min((maxX - minX), (maxY - minY)) * 0.3; // Icon is 30% of land size
+
+        const icon = mk('image', {
+          href: LAND_ICONS[k],
+          x: (centerX - size/2) * W/100,
+          y: (centerY - size/2) * H/100,
+          width: size * W/100,
+          height: size * H/100,
+          opacity: '0.8',
+          style: 'pointer-events: none;'
+        });
+        fragment.appendChild(icon);
+      }
     }
   }
-  dLayer.appendChild(fragment);
+  oceanMaskShapes.appendChild(maskFragment);
+  if(shouldDrawLands){
+    dLayer.appendChild(fragment);
+  }
 }
 
 function drawRoads(){

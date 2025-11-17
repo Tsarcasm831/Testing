@@ -10,9 +10,15 @@
 <div id="wrap">
   <div id="mapPane">
     <svg id="map" viewBox="0 0 1018 968" aria-label="Konohagakure interactive map">
+      <defs>
+        <mask id="oceanMask">
+          <rect x="0" y="0" width="1018" height="968" fill="white"></rect>
+          <g id="oceanMaskShapes" fill="black"></g>
+        </mask>
+      </defs>
       <image href="Map of Naruto2.jpg" x="0" y="0" width="1018" height="968" preserveAspectRatio="xMidYMid meet" id="backgroundImage"></image>
       <g id="oceanLayer" aria-hidden="true">
-        <rect x="0" y="0" width="1018" height="968" class="ocean" pointer-events="none"></rect>
+        <rect x="0" y="0" width="1018" height="968" class="ocean" pointer-events="none" mask="url(#oceanMask)"></rect>
       </g>
       <!-- New paint layers (bottom-most overlay to top-most paint): -->
       <g id="grassLayer"></g>

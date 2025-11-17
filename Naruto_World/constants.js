@@ -7,6 +7,7 @@ export const riverLayer = document.getElementById('riverLayer');
 export const pLayer = document.getElementById('poiLayer');
 export const hLayer = document.getElementById('handleLayer');
 export const wLayer = document.getElementById('wallLayer');
+export const oceanMaskShapes = document.getElementById('oceanMaskShapes');
 export const tip = document.getElementById('tip');
 export const out = document.getElementById('json');
 
