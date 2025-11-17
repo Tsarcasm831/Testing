@@ -35,3 +35,12 @@ export function autosave(MODEL){
 export function clear(el){
   while(el && el.firstChild) el.removeChild(el.firstChild);
 }
+
+export function parseViewBox(){
+  const vb=(svg.getAttribute('viewBox')||'').trim().split(/\s+/).map(Number);
+  return (vb.length===4 && vb.every(n=>!Number.isNaN(n))) ? { x:vb[0], y:vb[1], w:vb[2], h:vb[3] } : { x:0, y:0, w:W, h:H };
+}
+
+export function setViewBox(vb){
+  svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+}
