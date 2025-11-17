@@ -10,3 +10,7 @@ This project provides a browser-based SVG overlay editor for creating and editin
 4. Preview the production build: `npm run preview`
 
 Vite serves `index.html` from the project root so existing relative asset paths continue to work without modification.
+
+## Land detail pages
+
+Prebuilt land and island detail views now live under `land-pages/`. Use `node generate-land-pages.js` to regenerate them from the current defaults; the same folder contains the reusable template (`land.html`) and module (`land.js`).

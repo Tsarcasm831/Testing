@@ -2,9 +2,11 @@
 // Run with: node generate-land-pages.js
 
 import { DEFAULT_LANDS } from './defaults/parts/lands-custom.js';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 
-const baseTemplate = readFileSync('./land.html', 'utf8');
+const OUTPUT_DIR = './land-pages';
+mkdirSync(OUTPUT_DIR, { recursive: true });
+const baseTemplate = readFileSync(`${OUTPUT_DIR}/land.html`, 'utf8');
 
 function generateLandPage(land) {
   return baseTemplate
@@ -14,8 +16,9 @@ function generateLandPage(land) {
 
 for (const [id, land] of Object.entries(DEFAULT_LANDS)) {
   const html = generateLandPage(land);
-  writeFileSync(`${id}.html`, html);
-  console.log(`Generated ${id}.html`);
+  const outPath = `${OUTPUT_DIR}/${id}.html`;
+  writeFileSync(outPath, html);
+  console.log(`Generated ${outPath}`);
 }
 
 console.log('✓ All land pages generated');
