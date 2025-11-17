@@ -263,15 +263,13 @@ function updateBrushPanel(){
 }
 
 function syncOceanDimensions(){
-  const width = backgroundImage?.naturalWidth || Number(backgroundImage?.getAttribute('width')) || W;
-  const height = backgroundImage?.naturalHeight || Number(backgroundImage?.getAttribute('height')) || H;
   if(oceanRect){
-    oceanRect.setAttribute('width', width);
-    oceanRect.setAttribute('height', height);
+    oceanRect.setAttribute('width', W);
+    oceanRect.setAttribute('height', H);
   }
   if(oceanMaskRect){
-    oceanMaskRect.setAttribute('width', width);
-    oceanMaskRect.setAttribute('height', height);
+    oceanMaskRect.setAttribute('width', W);
+    oceanMaskRect.setAttribute('height', H);
   }
 }
 
