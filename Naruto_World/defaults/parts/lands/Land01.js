@@ -157,8 +157,36 @@ export const Land01 = {
     { "code": "L", "name": "Lantern Scouts", "detail": "Signal fires and messenger hawks along village roads." }
   ],
   "ninjaRisks": [
-    { "name": "Root Remnants", "detail": "Operating discreetly near old ANBU hideouts." },
-    { "name": "Sound Operatives", "detail": "Testing barriers on the borders of Fire Country." }
+    {
+      "name": "Itachi Uchiha",
+      "village": "Konohagakure",
+      "detail": "Former ANBU prodigy; intelligence suggests periodic returns for silent surveillance.",
+      "image": "../assets/characters/itachi-uchiha.png"
+    },
+    {
+      "name": "Sasuke Uchiha",
+      "village": "Konohagakure",
+      "detail": "Rogue shinobi tracking Ōtsutsuki traces; crosses Fire borders without warning.",
+      "image": "../assets/characters/sasuke-uchiha.png"
+    },
+    {
+      "name": "Kiyomu Fukuda",
+      "village": "Konohagakure",
+      "detail": "Barrier specialist noted for experimental sealing arrays near Konoha outposts.",
+      "image": "../assets/characters/kiyomu-fukuda.png"
+    },
+    {
+      "name": "Kakashi Hatake",
+      "village": "Konohagakure",
+      "detail": "Copy Ninja observed auditing strategic chokepoints; treats any approach as hostile.",
+      "image": "../assets/characters/kakashi-hatake.png"
+    },
+    {
+      "name": "Asuma Sarutobi",
+      "village": "Konohagakure",
+      "detail": "Guardian of the Twelve tracking rogue merchants; carries wind-style trenches through forests.",
+      "image": "../assets/characters/asuma-sarutobi.png"
+    }
   ],
   "facts": [
     { "title": "Heart of the Leaf", "detail": "The Land of Fire hosts Konoha and remains the political core for many alliances." },
