@@ -10,11 +10,11 @@ const fallbackRangers = [
 ];
 
 const fallbackNinjas = [
-  { name: 'Raikiri', detail: 'Seen near canyon ridge checkpoints.' },
-  { name: 'Silent Gale', detail: 'Expert in soundless infiltration.' },
-  { name: 'Obsidian Kunoichi', detail: 'Poison specialist with stealth tactics.' },
-  { name: 'Red Fang', detail: 'Reported around supply convoys.' },
-  { name: 'Ghost Runner', detail: 'Vanishing after dusk; likely local.' }
+  { name: 'Raikiri', detail: 'Seen near canyon ridge checkpoints.', village: 'Unknown origin' },
+  { name: 'Silent Gale', detail: 'Expert in soundless infiltration.', village: 'Unknown origin' },
+  { name: 'Obsidian Kunoichi', detail: 'Poison specialist with stealth tactics.', village: 'Unknown origin' },
+  { name: 'Red Fang', detail: 'Reported around supply convoys.', village: 'Unknown origin' },
+  { name: 'Ghost Runner', detail: 'Vanishing after dusk; likely local.', village: 'Unknown origin' }
 ];
 
 const fallbackFacts = [
@@ -47,7 +47,9 @@ function normalizeNinjas(landName, ninjas = []) {
   if (Array.isArray(ninjas) && ninjas.length > 0) {
     return ninjas.map((item) => ({
       name: item.name || 'Unidentified ninja',
-      detail: item.detail || `Activity tracked around ${landName}.`
+      detail: item.detail || `Activity tracked around ${landName}.`,
+      village: item.village || 'Unknown origin',
+      image: item.image || null
     }));
   }
 
@@ -124,13 +126,76 @@ function renderRangers(rangers) {
   );
 }
 
-function renderNinjaRisks(ninjas) {
+function getBingoModalElements() {
+  return {
+    root: document.getElementById('bingoModal'),
+    backdrop: document.getElementById('bingoModalBackdrop'),
+    closeBtn: document.getElementById('bingoModalClose'),
+    name: document.getElementById('bingoName'),
+    village: document.getElementById('bingoVillage'),
+    detail: document.getElementById('bingoDetail'),
+    image: document.getElementById('bingoImage')
+  };
+}
+
+function slugifyName(name = '') {
+  const slug = name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+  return slug || 'unknown-ninja';
+}
+
+function getNinjaImage(item) {
+  if (item.image) return item.image;
+  return `../assets/characters/${slugifyName(item.name)}.png`;
+}
+
+function showBingoModal(item) {
+  const modal = getBingoModalElements();
+  if (!modal.root) return;
+
+  modal.name.textContent = item.name;
+  modal.village.textContent = item.village || 'Unknown origin';
+  modal.detail.textContent = item.detail;
+  modal.image.src = getNinjaImage(item);
+  modal.image.alt = `${item.name} portrait`;
+
+  modal.root.classList.remove('hidden');
+  modal.root.setAttribute('aria-hidden', 'false');
+}
+
+function hideBingoModal() {
+  const modal = getBingoModalElements();
+  if (!modal.root) return;
+
+  modal.root.classList.add('hidden');
+  modal.root.setAttribute('aria-hidden', 'true');
+}
+
+function wireModalEvents() {
+  const modal = getBingoModalElements();
+  if (!modal.root) return;
+
+  modal.backdrop?.addEventListener('click', hideBingoModal);
+  modal.closeBtn?.addEventListener('click', hideBingoModal);
+  document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape' && !modal.root.classList.contains('hidden')) {
+      hideBingoModal();
+    }
+  });
+}
+
+function renderBingoBook(ninjas) {
   renderList(
     'ninjaList',
     ninjas,
     (item) => {
       const li = document.createElement('li');
-      li.className = 'check-item';
+      li.className = 'check-item bingo-card';
+      li.setAttribute('role', 'button');
+      li.tabIndex = 0;
 
       const icon = document.createElement('span');
       icon.className = 'check-icon';
@@ -141,17 +206,31 @@ function renderNinjaRisks(ninjas) {
       const strong = document.createElement('strong');
       strong.textContent = item.name;
 
+      const meta = document.createElement('span');
+      meta.className = 'item-meta';
+      meta.textContent = item.village || 'Unknown origin';
+
       const span = document.createElement('span');
       span.textContent = item.detail;
 
       body.appendChild(strong);
+      body.appendChild(meta);
       body.appendChild(span);
       li.appendChild(icon);
       li.appendChild(body);
 
+      const openModal = () => showBingoModal(item);
+      li.addEventListener('click', openModal);
+      li.addEventListener('keydown', (evt) => {
+        if (evt.key === 'Enter' || evt.key === ' ') {
+          evt.preventDefault();
+          openModal();
+        }
+      });
+
       return li;
     },
-    'No high-risk ninja activity reported.',
+    'No bingo book records found.',
     'check-item'
   );
 }
@@ -201,7 +280,7 @@ function renderNotFound() {
   document.getElementById('landName').textContent = 'Land not found';
   document.getElementById('landDesc').textContent = 'We could not locate intel for this territory.';
   renderRangers([]);
-  renderNinjaRisks([]);
+  renderBingoBook([]);
   renderFacts([]);
   renderSymbol('No symbol available');
 
@@ -231,7 +310,7 @@ function renderLand() {
   const facts = normalizeFacts(landName, land.facts, landDesc);
 
   renderRangers(rangers);
-  renderNinjaRisks(ninjas);
+  renderBingoBook(ninjas);
   renderFacts(facts);
   renderSymbol(land.symbol);
 
@@ -281,4 +360,5 @@ function renderLand() {
   svg.appendChild(polygon);
 }
 
+wireModalEvents();
 renderLand();
