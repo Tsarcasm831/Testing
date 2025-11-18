@@ -23,12 +23,18 @@ import { Land22 } from './lands/Land22.js';
 import { Land23 } from './lands/Land23.js';
 import { Land24 } from './lands/Land24.js';
 import { Land25 } from './lands/Land25.js';
+import { Land26 } from './lands/Land26.js';
 import { Island01 } from './lands/Island01.js';
 import { Island02 } from './lands/Island02.js';
 import { Island03 } from './lands/Island03.js';
 import { Island04 } from './lands/Island04.js';
 import { Island05 } from './lands/Island05.js';
 import { Island06 } from './lands/Island06.js';
+import { Island07 } from './lands/Island07.js';
+import { Island08 } from './lands/Island08.js';
+import { Island09 } from './lands/Island09.js';
+import { Island10 } from './lands/Island10.js';
+import { Island11 } from './lands/Island11.js';
 
 export const DEFAULT_LANDS = {
   Land01,
@@ -56,11 +62,17 @@ export const DEFAULT_LANDS = {
   Land23,
   Land24,
   Land25,
+  Land26,
   Island01,
   Island02,
   Island03,
   Island04,
   Island05,
-  Island06
+  Island06,
+  Island07,
+  Island08,
+  Island09,
+  Island10,
+  Island11
 };
 
