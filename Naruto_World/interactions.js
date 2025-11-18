@@ -39,6 +39,7 @@ function animateViewBox(start,target){
 export function select(kind,key){
   stopZoomAnimation();
   state.selected={kind,key};
+  window.dispatchEvent(new CustomEvent('selection:changed', { detail: state.selected }));
   if(kind === 'land') {
     zoomToLand(key);
   } else if (!kind) {

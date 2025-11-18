@@ -314,6 +314,14 @@ function updatePieceView(){
   const ta = document.getElementById('piece');
   if(!sel || !ta) return;
   const key = sel.value;
+  if(key === 'selectedLand'){
+    if(state.selected?.kind === 'land' && MODEL.lands[state.selected.key]){
+      ta.value = JSON.stringify({ [state.selected.key]: MODEL.lands[state.selected.key] }, null, 2);
+    }else{
+      ta.value = '// Select a land to view its data';
+    }
+    return;
+  }
   const src = key==='lands' ? MODEL.lands
             : key==='roads' ? MODEL.roads
             : key==='poi' ? MODEL.poi
@@ -345,5 +353,6 @@ export function initUI(){
     }
   });}
   window.addEventListener('json:updated', updatePieceView);
+  window.addEventListener('selection:changed', updatePieceView);
   updatePieceView();
 }
