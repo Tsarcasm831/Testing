@@ -56,5 +56,13 @@ export const Land11 = {
     [18.17214306304872, 24.627244176943442],
     [18.14016405866282, 24.635926554025698]
   ],
-  "color": "#78716c"
+  "color": "#78716c",
+  "ninjaRisks": [
+    { "name": "Onoki", "village": "Hidden Stone Village", "detail": "Third Tsuchikage, Particle Style" },
+    { "name": "Deidara", "village": "Hidden Stone Village", "detail": "Akatsuki, Explosion Style" },
+    { "name": "Kurotsuchi", "village": "Hidden Stone Village", "detail": "Fourth Tsuchikage, Lava Style" },
+    { "name": "Akatsuchi", "village": "Hidden Stone Village", "detail": "Golem User, Bodyguard" },
+    { "name": "Han", "village": "Hidden Stone Village", "detail": "Five-Tails Jinchuriki, Steam Ninja" },
+    { "name": "Hiruko", "village": "Hidden Stone Village", "detail": "Chimera Technique, Mt. Shumisen", "image": "../assets/characters/Land11/Hiruko.png" }
+  ]
 };

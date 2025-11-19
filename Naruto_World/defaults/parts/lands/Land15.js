@@ -137,6 +137,14 @@ export const Land15 = {
     [8.405537033830504, 61.53687406177363],
     [8.050473406179012, 61.46218796406896]
   ],
-  "color": "#ffd700"
+  "color": "#ffd700",
+  "ninjaRisks": [
+    { "name": "Pakura", "village": "Hidden Sand Village", "detail": "Hero of the Sand, Scorch Style", "image": "../assets/characters/Land15/Pakura.png" },
+    { "name": "Gaara", "village": "Hidden Sand Village", "detail": "Fifth Kazekage, Sand Manipulation" },
+    { "name": "Sasori", "village": "Hidden Sand Village", "detail": "Akatsuki, Puppet Master" },
+    { "name": "Temari", "village": "Hidden Sand Village", "detail": "Wind Scythe User" },
+    { "name": "Kankuro", "village": "Hidden Sand Village", "detail": "Puppet Master" },
+    { "name": "Chiyo", "village": "Hidden Sand Village", "detail": "Elder, Puppet Master/Healer" }
+  ]
 };
 

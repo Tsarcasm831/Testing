@@ -17,5 +17,12 @@ export const Land14 = {
     [9.101283854726255, 22.397837362998775],
     [8.07314275055831, 22.83033733525552]
   ],
-  "color": "#f472b6"
+  "color": "#f472b6",
+  "ninjaRisks": [
+    { "name": "Kikunojo", "village": "Hana no Kuni", "detail": "Daimyo’s Bodyguard, Flower Ninja" },
+    { "name": "Yurinojo", "village": "Hana no Kuni", "detail": "Daimyo’s Bodyguard, Flower Ninja" },
+    { "name": "Ninjutsu Flowers", "village": "Hana no Kuni", "detail": "Petal Shuriken User" },
+    { "name": "Genjutsu Flowers", "village": "Hana no Kuni", "detail": "Pollen Illusionist" },
+    { "name": "Tank Flowers", "village": "Hana no Kuni", "detail": "Root Shield User" }
+  ]
 };

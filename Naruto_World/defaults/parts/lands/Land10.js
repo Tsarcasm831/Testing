@@ -49,5 +49,12 @@ export const Land10 = {
     [9.50864181068885, 21.20638760653409],
     [9.1330799934672, 22.427174276556848]
   ],
-  "color": "#6b7280"
+  "color": "#6b7280",
+  "ninjaRisks": [
+    { "name": "Gengo", "village": "Shijima no Kuni", "detail": "Leader, Genjutsu/Voice Manipulation" },
+    { "name": "Ro", "village": "Shijima no Kuni", "detail": "Anbu/Enlightened One" },
+    { "name": "Soku", "village": "Shijima no Kuni", "detail": "Anbu/Enlightened One, Chakra Needle User" },
+    { "name": "Mino", "village": "Shijima no Kuni", "detail": "Anbu Guard" },
+    { "name": "Tank Silence", "village": "Shijima no Kuni", "detail": "Heavy Gatekeeper" }
+  ]
 };

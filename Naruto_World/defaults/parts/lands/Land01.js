@@ -158,34 +158,34 @@ export const Land01 = {
   ],
   "ninjaRisks": [
     {
-      "name": "Itachi Uchiha",
-      "village": "Konohagakure",
-      "detail": "Former ANBU prodigy; intelligence suggests periodic returns for silent surveillance.",
-      "image": "../assets/characters/itachi-uchiha.png"
-    },
-    {
-      "name": "Sasuke Uchiha",
-      "village": "Konohagakure",
-      "detail": "Rogue shinobi tracking Ōtsutsuki traces; crosses Fire borders without warning.",
-      "image": "../assets/characters/sasuke-uchiha.png"
-    },
-    {
-      "name": "Kiyomu Fukuda",
-      "village": "Konohagakure",
-      "detail": "Barrier specialist noted for experimental sealing arrays near Konoha outposts.",
-      "image": "../assets/characters/kiyomu-fukuda.png"
-    },
-    {
       "name": "Kakashi Hatake",
-      "village": "Konohagakure",
-      "detail": "Copy Ninja observed auditing strategic chokepoints; treats any approach as hostile.",
-      "image": "../assets/characters/kakashi-hatake.png"
+      "village": "Hidden Leaf Village",
+      "detail": "Copy Ninja, Sixth Hokage",
+      "image": "../assets/characters/Land01/Kakashi Hatake.png"
     },
     {
-      "name": "Asuma Sarutobi",
-      "village": "Konohagakure",
-      "detail": "Guardian of the Twelve tracking rogue merchants; carries wind-style trenches through forests.",
-      "image": "../assets/characters/asuma-sarutobi.png"
+      "name": "Might Guy",
+      "village": "Hidden Leaf Village",
+      "detail": "Taijutsu Master, Noble Blue Beast",
+      "image": "../assets/characters/Land01/Might Guy.png"
+    },
+    {
+      "name": "Itachi Uchiha",
+      "village": "Hidden Leaf Village",
+      "detail": "Akatsuki, S-Rank Rouge",
+      "image": "../assets/characters/Land01/Itachi Uchiha.png"
+    },
+    {
+      "name": "Tsunade Senju",
+      "village": "Hidden Leaf Village",
+      "detail": "Legendary Sannin, Fifth Hokage",
+      "image": "../assets/characters/Land01/Tsunade Senju.png"
+    },
+    {
+      "name": "Minato Namikaze",
+      "village": "Hidden Leaf Village",
+      "detail": "Yellow Flash, Fourth Hokage",
+      "image": "../assets/characters/Land01/Minato Namikaze.png"
     }
   ],
   "facts": [

@@ -48,6 +48,13 @@ export const Land03 = {
     [49.189734318401584, 14.085282570074412],
     [49.08586363427062, 14.725108186075511]
   ],
-  "color": "#94e3fe"
+  "color": "#94e3fe",
+  "ninjaRisks": [
+    { "name": "Fubuki Kakuyoku", "village": "Hidden Frost Village", "detail": "Ice Style user, often associated with Snow", "image": "../assets/characters/Land26/Fubuki Kakuyoku.png" },
+    { "name": "Naderi", "village": "Hidden Frost Village", "detail": "Anbu of the Frost", "image": "../assets/characters/Land03/Naderi.png" },
+    { "name": "Frost Daimyo's Guard", "village": "Hidden Frost Village", "detail": "Substitute for Chukichi", "image": "../assets/characters/Land03/Frost Daimyo's Guard.png" },
+    { "name": "Genjutsu Frost", "village": "Hidden Frost Village", "detail": "Illusion Specialist", "image": "../assets/characters/Land03/Genjutsu Frost.png" },
+    { "name": "Tank Frost", "village": "Hidden Frost Village", "detail": "Heavy Shield Unit", "image": "../assets/characters/Land03/Tank Frost.png" }
+  ]
 };
 

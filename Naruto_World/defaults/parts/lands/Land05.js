@@ -30,5 +30,15 @@ export const Land05 = {
     [59.65059351593197, 38.0429449160237],
     [58.77966140717093, 37.33692326821571]
   ],
-  "color": "#22c55e"
+  "color": "#22c55e",
+  "ninjaRisks": [
+    { "name": "Prajñā Leader", "village": "Prajñā Group", "detail": "Hannya Mask Anbu Commander, Wood Style User", "image": "../assets/characters/Land25/Prajna Leader.png" },
+    { "name": "Gantetsu", "village": "Land of Woods", "detail": "Legendary Criminal 'Gantetsu of the Ridge'", "image": "../assets/characters/Land05/Gantetsu.png" },
+    { "name": "Monju", "village": "Shinobazu", "detail": "Member of the Shinobazu group", "image": "../assets/characters/Land05/Monju.png" },
+    { "name": "Shura", "village": "Shinobazu", "detail": "Leader of the Shinobazu", "image": "../assets/characters/Land05/Shura.png" },
+    { "name": "Toki", "village": "Land of Woods", "detail": "Forest Guardian" },
+    { "name": "Kegon", "village": "Kurosuki Family", "detail": "Water Style User", "image": "../assets/characters/Land05/Kegon.png" },
+    { "name": "Ninjutsu Rivers", "village": "Land of Rivers", "detail": "Generic Ninja", "image": "../assets/characters/Land05/Ninjutsu Rivers.png" },
+    { "name": "Healer Rivers", "village": "Land of Rivers", "detail": "Generic Healer", "image": "../assets/characters/Land05/Healer Rivers.png" }
+  ]
 };

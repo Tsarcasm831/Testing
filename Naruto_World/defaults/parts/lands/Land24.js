@@ -79,6 +79,14 @@ export const Land24 = {
     [57.233391482609896, 81.20101424288158],
     [56.42287098822752, 81.22287466506327]
   ],
-  "color": "#ff6b9d"
+  "color": "#bfdbfe",
+  "ninjaRisks": [
+    { "name": "Mother Island Commander", "village": "Mother Island", "detail": "Head of Local Defense" },
+    { "name": "Toki", "village": "Land of Birds", "detail": "Daimyo/Feudal Lord of Birds", "image": "../assets/characters/Land24/Toki.png" },
+    { "name": "Moso", "village": "Land of Birds", "detail": "Imposter (Watari), Schemer", "image": "../assets/characters/Land24/Mino.png" },
+    { "name": "Ninjutsu Mother", "village": "Mother Island", "detail": "Whirlpool Creator" },
+    { "name": "Genjutsu Mother", "village": "Mother Island", "detail": "Sea Mist User" },
+    { "name": "Taijutsu Mother", "village": "Mother Island", "detail": "Dock Brawler" },
+    { "name": "Tank Mother", "village": "Mother Island", "detail": "Ship Hull Shield User" }
+  ]
 };
-

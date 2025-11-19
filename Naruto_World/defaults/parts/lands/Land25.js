@@ -63,6 +63,13 @@ export const Land25 = {
     [60.190934516591966, 56.28399179001485],
     [59.892299929395875, 56.28399179001485]
   ],
-  "color": "#f97316"
+  "color": "#f97316",
+  "ninjaRisks": [
+    { "name": "Ninjutsu Naga", "village": "Naga Island", "detail": "Serpent Summoner" },
+    { "name": "Taijutsu Naga", "village": "Naga Island", "detail": "Cobra Strike Style" },
+    { "name": "Genjutsu Naga", "village": "Naga Island", "detail": "Hypnotic Gaze" },
+    { "name": "Tank Naga", "village": "Naga Island", "detail": "Scale Armor" },
+    { "name": "Healer Naga", "village": "Naga Island", "detail": "Venom Extractor" }
+  ]
 };
 

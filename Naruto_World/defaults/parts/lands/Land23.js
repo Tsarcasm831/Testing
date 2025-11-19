@@ -1,7 +1,7 @@
 export const Land23 = {
   "id": "Land23",
-  "name": "Land of Ghosts",
-  "desc": "Yureigakure",
+  "name": "Land of Ghosts (Yureigakure)",
+  "desc": "⟁ Ѯᘁ ᓭ Ӝ Ϫ ᛝ 𐐿 ⸸ 𐊖.",
   "points": [
     [39.04565237828463, 11.69532507904305],
     [39.60435488837641, 11.766979122950026],
@@ -96,6 +96,24 @@ export const Land23 = {
     [39.06059639861401, 13.6985952203924],
     [39.16961130318333, 13.039380065665757]
   ],
-  "color": "#ffffff"
+  "color": "#ffffff",
+  "ninjaRisks": [
+    { "name": "⟁ϾҨ", "village": "ᓭӔ⟁", "detail": "⟁ Ͼᛝ ϟӜ ⸸" },
+    { "name": "Gengo", "village": "Land of Silence", "detail": "Genjutsu User, Cult Leader", "image": "../assets/characters/Land23/Gengo.png" },
+    { "name": "Ro", "village": "Land of Silence", "detail": "Gengo's Guard", "image": "../assets/characters/Land23/Ro.png" },
+    { "name": "Soku", "village": "Land of Silence", "detail": "Gengo's Guard", "image": "../assets/characters/Land23/Soku.png" },
+    { "name": "Tank Silence", "village": "Land of Silence", "detail": "Heavy Guard", "image": "../assets/characters/Land23/Tank Silence.png" },
+    { "name": "Ϟᔑ⸸", "village": "ᚾ⟁Ѯ", "detail": "Ϟ ᓷϪ ᘁ𐐿" },
+    { "name": "Ӝ𐊖Ѯ", "village": "Ҩᛝ", "detail": "Ӝ 𖼨Ѯ ᓭ⚶" },
+    { "name": "ᘉ⚶ᛝ", "village": "⟁ᛝ", "detail": "ᘉ ᘁᕯ Ͼᓭ" },
+    { "name": "ϷҨϟ", "village": "ᔑӜ", "detail": "Ϸ ϟϪ 𐊖⸸" }
+  ],
+  "rangers": [
+    { "code": "A", "name": "⟁ᓭ", "detail": "⟁ ᓭ Ӝ Ͼ ⚶." },
+    { "code": "B", "name": "Ͼᛝ", "detail": "Ͼ ᛝ ᓷ ᕯ 𐐿." },
+    { "code": "C", "name": "Ӝϟ", "detail": "Ӝ ϟ ᘁ ᓭ Ѯ." }
+  ],
+  "facts": [
+    { "title": "Report Summary", "detail": "⟁ Ѯᘁ ᓭ Ӝ Ϫ ᛝ 𐐿 ⸸ 𐊖. Ϟ ϟ ⚶ ᚨ ᓷ ᕯ." }
+  ]
 };
-

@@ -104,5 +104,12 @@ export const Land13 = {
     [76.93624140471512, 1.3861738945827011],
     [77.90393641983361, 0.2780352249618404]
   ],
-  "color": "#eab308"
+  "color": "#eab308",
+  "ninjaRisks": [
+    { "name": "Killer Bee", "village": "Hidden Cloud Village", "detail": "Eight-Tails Jinchuriki, Perfect Host" },
+    { "name": "A (Fourth Raikage)", "village": "Hidden Cloud Village", "detail": "Lightning Armor Speedster" },
+    { "name": "Darui", "village": "Hidden Cloud Village", "detail": "Fifth Raikage, Storm Release" },
+    { "name": "Yugito Nii", "village": "Hidden Cloud Village", "detail": "Two-Tails Jinchuriki" },
+    { "name": "Omoi", "village": "Hidden Cloud Village", "detail": "Kenjutsu Specialist" }
+  ]
 };

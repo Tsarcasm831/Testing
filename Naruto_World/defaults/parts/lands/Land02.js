@@ -104,6 +104,13 @@ export const Land02 = {
     [47.10484113112414, 15.533081559110279],
     [46.49644113476946, 15.408238497647373]
   ],
-  "color": "#00a3d7"
+  "color": "#00a3d7",
+  "ninjaRisks": [
+    { "name": "Hidan", "village": "Hidden Hot Water Village", "detail": "Akatsuki, Jashin Cultist, Immortal", "image": "../assets/characters/Land02/Hidan.png" },
+    { "name": "Ryuki", "village": "Hidden Hot Water Village", "detail": "Jashin Cultist Leader from Konoha Shinden", "image": "../assets/characters/Land02/Ryuki.png" },
+    { "name": "Katsuya", "village": "Hidden Hot Water Village", "detail": "Minor Hot Spring Ninja", "image": "../assets/characters/Land02/Katsuya.png" },
+    { "name": "Taijutsu Hotsprings", "village": "Hidden Hot Water Village", "detail": "Yugakure Guard", "image": "../assets/characters/Land02/Taijutsu Hotsprings.png" },
+    { "name": "Ninjutsu Hotsprings", "village": "Hidden Hot Water Village", "detail": "Steam User" }
+  ]
 };
 

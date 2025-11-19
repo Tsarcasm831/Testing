@@ -52,5 +52,12 @@ export const Land07 = {
     [31.87349990215189, 34.856213025810305],
     [30.682981599759025, 33.562466329779504]
   ],
-  "color": "#0ea5e9"
+  "color": "#0ea5e9",
+  "ninjaRisks": [
+    { "name": "Pakura", "village": "Hidden Valleys", "detail": "Hero of the Sand, betrayed and killed here" },
+    { "name": "Hiruko", "village": "Hidden Valleys", "detail": "Akatsuki alias/Puppet Shell often seen in River caves" },
+    { "name": "Kagero", "village": "Hidden Valleys", "detail": "Character from the Fortress arc located in Rivers" },
+    { "name": "Ninjutsu Rivers", "village": "Hidden Valleys", "detail": "Tanigakure Jonin" },
+    { "name": "Healer Rivers", "village": "Hidden Valleys", "detail": "Valley Medic" }
+  ]
 };

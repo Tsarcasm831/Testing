@@ -69,6 +69,13 @@ export const Land19 = {
     [28.451753927354495, 85.83036690704094],
     [28.750427485917545, 85.96124570231792]
   ],
-  "color": "#8b5cf6"
+  "color": "#8b5cf6",
+  "ninjaRisks": [
+    { "name": "Ishidate", "village": "Getsugakure", "detail": "Petrification Jutsu, Mercenary Leader" },
+    { "name": "Kongou", "village": "Getsugakure", "detail": "Super Strength, Mercenary" },
+    { "name": "Karenbana", "village": "Getsugakure", "detail": "Invisible Petal Jutsu, Mercenary" },
+    { "name": "Tsukino Michiru", "village": "Getsugakure", "detail": "Prince, Combat Archer" },
+    { "name": "Korega", "village": "Getsugakure", "detail": "Royal Guard Captain" }
+  ]
 };
 

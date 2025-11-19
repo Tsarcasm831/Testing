@@ -65,6 +65,13 @@ export const Land21 = {
     [62.938331948750616, 75.71223865855823],
     [62.66454910248343, 75.84311114855049]
   ],
-  "color": "#0891b2"
+  "color": "#0891b2",
+  "ninjaRisks": [
+    { "name": "Ninjutsu Taro", "village": "Taro Island", "detail": "Tidal Wave User" },
+    { "name": "Taijutsu Taro", "village": "Taro Island", "detail": "Harpoon Master" },
+    { "name": "Healer Taro", "village": "Taro Island", "detail": "Herbalist" },
+    { "name": "Tank Taro", "village": "Taro Island", "detail": "Coral Armor User" },
+    { "name": "Scout Taro", "village": "Taro Island", "detail": "Sensor Type" }
+  ]
 };
 
