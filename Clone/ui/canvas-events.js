@@ -3,8 +3,7 @@ import { canvasDown, finishDrawing } from '../interactions.js';
 
 export function initCanvasEvents() {
   svg.addEventListener('dblclick', finishDrawing);
-  // Use mousemove to avoid resetting state on every mouse movement while hovering the map
-  svg.addEventListener('mousemove', canvasDown);
+  svg.addEventListener('mousedown', canvasDown);
   svg.addEventListener('mousemove', e => {
     if (window.innerWidth <= 980) {
       const side = document.getElementById('side');

@@ -226,10 +226,10 @@ function drawPOI(){
     else if(/^[A-E]/.test(String(p.id))) icon=String(p.id)[0];
     const img = mk('image',{href:`assets/icons/${icon||'A'}.png`,x:cx-size/2,y:cy-size/2,width:size,height:size});
     g.append(img);
-    g.addEventListener('mousemove',e=>showTip(e,p));
+    g.addEventListener('mouseenter',e=>showTip(e,p));
     g.addEventListener('mousemove',moveTip);
-    g.addEventListener('mousemove',hideTip);
-    g.addEventListener('mousemove',e=>{
+    g.addEventListener('mouseleave',hideTip);
+    g.addEventListener('mousedown',e=>{
       e.stopPropagation();
       if(locked) return;
       if(state.mode==='select'){ select('poi',i); startDragPOI(e,i); }
