@@ -28,5 +28,4 @@ export function initUI() {
 
   document.body.dataset.mode = state.mode;
   resetViewBox();
-  drawAll(); dumpJSON(); updateBrushPanel(); updatePieceView();
 }

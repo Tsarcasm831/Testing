@@ -2,7 +2,7 @@ import { svg } from './constants.js';
 import { MODEL, state } from './model.js';
 import { clamp, screenToPct, autosave } from './utils.js';
 import { dumpJSON } from './export-utils.js';
-import { drawAll } from './render.js';
+import { drawAll, requestRender } from './render.js';
 import { W, H, hLayer } from './constants.js';
 
 let zoomAnim = null;
@@ -116,13 +116,13 @@ export function startDragVertex(e,kind,key,idx){
   e.preventDefault(); e.stopPropagation();
   const move=(ev)=>{
     if (dragThrottle) return;
-    dragThrottle = requestAnimationFrame(() => {
-      dragThrottle = null;
-      const [x,y]=screenToPct(ev.clientX,ev.clientY);
-      if(kind==='land') MODEL.lands[key].points[idx]=[x,y];
-      else MODEL.roads[key].points[idx]=[x,y];
-      drawAll();
-    });
+      dragThrottle = requestAnimationFrame(() => {
+        dragThrottle = null;
+        const [x,y]=screenToPct(ev.clientX,ev.clientY);
+        if(kind==='land') MODEL.lands[key].points[idx]=[x,y];
+        else MODEL.roads[key].points[idx]=[x,y];
+        requestRender(kind==='land' ? ['lands','handles'] : ['roads','handles']);
+      });
   };
   const up=()=>{
     if (dragThrottle) cancelAnimationFrame(dragThrottle);
@@ -153,7 +153,9 @@ export function startDragWhole(e,kind,key){
         const w=MODEL.walls[key]; w.cx=clamp(+((w.cx+dx)).toFixed(2),0,100); w.cy=clamp(+((w.cy+dy)).toFixed(2),0,100);
       }
       ref[0] = nx; ref[1] = ny;
-      drawAll();
+      if(kind==='land') requestRender(['lands','handles']);
+      else if(kind==='road') requestRender(['roads','handles']);
+      else requestRender(['walls','handles']);
     });
   };
   const up=()=>{
@@ -172,11 +174,12 @@ export function startDragPOI(e,i){
   if(state.locks?.poiLocked) return;
   const move=(ev)=>{
     if (dragThrottle) return;
-    dragThrottle = requestAnimationFrame(() => {
-      dragThrottle = null;
-      const [x,y]=screenToPct(ev.clientX,ev.clientY);
-      MODEL.poi[i].x=x; MODEL.poi[i].y=y; drawAll();
-    });
+      dragThrottle = requestAnimationFrame(() => {
+        dragThrottle = null;
+        const [x,y]=screenToPct(ev.clientX,ev.clientY);
+        MODEL.poi[i].x=x; MODEL.poi[i].y=y;
+        requestRender(['poi']);
+      });
   };
   const up=()=>{
     if (dragThrottle) cancelAnimationFrame(dragThrottle);

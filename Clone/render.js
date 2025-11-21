@@ -2,7 +2,7 @@ import { W, H, svg, dLayer, rLayer, pLayer, hLayer, wLayer, tip, oceanMaskShapes
 import { MODEL, state } from './model.js';
 import { pct, mk, clear, autosave } from './utils.js';
 import { select, startDragVertex, startDragWhole, startDragPOI } from './interactions.js';
-import { dumpJSON } from './export-utils.js';
+import { dumpJSON, scheduleDumpJSON } from './export-utils.js';
 
 function isSelected(kind,key){ return state.selected && state.selected.kind===kind && state.selected.key===key; }
 const getToggle = (id, def=true) => { const el = document.getElementById(id); return el ? !!el.checked : def; };
@@ -10,17 +10,14 @@ const getToggle = (id, def=true) => { const el = document.getElementById(id); re
 // Performance optimization: batch draws with RAF
 let rafPending = false;
 let dirtyLayers = new Set();
+const ALL_LAYERS = ['grass','forest','mountains','roads','lands','walls','poi','handles','form'];
 
 export function drawAll(){
-  dirtyLayers.add('grass');
-  dirtyLayers.add('forest');
-  dirtyLayers.add('mountains');
-  dirtyLayers.add('roads');
-  dirtyLayers.add('lands');
-  dirtyLayers.add('walls');
-  dirtyLayers.add('poi');
-  dirtyLayers.add('handles');
-  dirtyLayers.add('form');
+  requestRender(ALL_LAYERS);
+}
+
+export function requestRender(layers=ALL_LAYERS){
+  for (const layer of layers) dirtyLayers.add(layer);
   scheduleRender();
 }
 
@@ -144,7 +141,8 @@ function drawRoads(){
       const r = MODEL.roads[i];
       const step = (e.deltaY < 0 ? 1 : -1);
       r.width = Math.max(1, Math.min(24, (r.width ?? 4) + step));
-      drawAll(); dumpJSON(); autosave(MODEL);
+      requestRender(['roads','handles','form']);
+      scheduleDumpJSON(); autosave(MODEL);
     });
     fragment.appendChild(pl);
   }
@@ -204,9 +202,9 @@ function drawWalls(){
   for(let i=0;i<MODEL.walls.length;i++){
     const w=MODEL.walls[i], c=mk('circle',{class:`wall ${isSelected('wall',i)?'selected':''}`,'data-i':i,
       cx:w.cx*W/100, cy:w.cy*H/100, r:w.r*W/100, strokeWidth:w.width||8});
-    c.addEventListener('mouseenter',e=>showTip(e,{name:w.name||w.id||'Wall',desc:w.desc||''}));
+    c.addEventListener('mousemove',e=>showTip(e,{name:w.name||w.id||'Wall',desc:w.desc||''}));
     c.addEventListener('mousemove',moveTip); c.addEventListener('mouseleave',hideTip);
-    c.addEventListener('mousedown',e=>{ e.stopPropagation(); if(state.mode==='select'){ select('wall',i); if(e.altKey){ startDragWhole(e,'wall',i);} }});
+    c.addEventListener('mousemove',e=>{ e.stopPropagation(); if(state.mode==='select'){ select('wall',i); if(e.altKey){ startDragWhole(e,'wall',i);} }});
     fragment.appendChild(c);
   }
   wLayer.appendChild(fragment);
@@ -228,10 +226,10 @@ function drawPOI(){
     else if(/^[A-E]/.test(String(p.id))) icon=String(p.id)[0];
     const img = mk('image',{href:`assets/icons/${icon||'A'}.png`,x:cx-size/2,y:cy-size/2,width:size,height:size});
     g.append(img);
-    g.addEventListener('mouseenter',e=>showTip(e,p));
+    g.addEventListener('mousemove',e=>showTip(e,p));
     g.addEventListener('mousemove',moveTip);
-    g.addEventListener('mouseleave',hideTip);
-    g.addEventListener('mousedown',e=>{
+    g.addEventListener('mousemove',hideTip);
+    g.addEventListener('mousemove',e=>{
       e.stopPropagation();
       if(locked) return;
       if(state.mode==='select'){ select('poi',i); startDragPOI(e,i); }

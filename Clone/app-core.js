@@ -4,12 +4,17 @@ import { pct, clamp, screenToPct, mk, download, autosave, clear } from './utils.
 
 import { initUI } from './ui.js';
 import { drawAll } from './render.js';
+import { dumpJSON } from './export-utils.js';
+import { updateBrushPanel } from './ui/brush-controls.js';
+import { updatePieceView } from './ui/piece-inspector.js';
 
 export async function init(){
   initUI();
   await loadData();
   drawAll();
+  dumpJSON();
+  updateBrushPanel();
+  updatePieceView();
   // Notify UI components that data is ready
   window.dispatchEvent(new CustomEvent('json:updated'));
 }
-

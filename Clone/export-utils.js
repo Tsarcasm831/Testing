@@ -2,7 +2,10 @@ import { W, H } from './constants.js';
 import { MODEL } from './model.js';
 import { out } from './constants.js';
 
-export function dumpJSON(){
+let pendingJson = null;
+let pendingWasIdle = false;
+
+function writeJSON(){
   // split export into separate sections + terrain grouping
   const data = {
     meta: {
@@ -30,6 +33,28 @@ export function dumpJSON(){
   };
   out.value = JSON.stringify(data,null,2);
   window.dispatchEvent(new CustomEvent('json:updated'));
+}
+
+export function dumpJSON(){
+  // Cancel any deferred write and flush immediately
+  if (pendingJson){
+    if (pendingWasIdle && 'cancelIdleCallback' in window) window.cancelIdleCallback(pendingJson);
+    else cancelAnimationFrame(pendingJson);
+    pendingJson = null;
+  }
+  writeJSON();
+}
+
+export function scheduleDumpJSON(){
+  if (pendingJson) return;
+  const cb = () => { pendingJson = null; writeJSON(); };
+  if ('requestIdleCallback' in window){
+    pendingWasIdle = true;
+    pendingJson = window.requestIdleCallback(cb, { timeout: 120 });
+  } else {
+    pendingWasIdle = false;
+    pendingJson = requestAnimationFrame(cb);
+  }
 }
 
 export function buildExportSVG(){
