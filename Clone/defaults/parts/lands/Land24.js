@@ -83,7 +83,11 @@ export const Land24 = {
   "ninjaRisks": [
     { "name": "Mother Island Commander", "village": "Mother Island", "detail": "Head of Local Defense" },
     { "name": "Toki", "village": "Land of Birds", "detail": "Daimyo/Feudal Lord of Birds", "image": "../assets/characters/Land24/Toki.png" },
-    { "name": "Moso", "village": "Land of Birds", "detail": "Imposter (Watari), Schemer", "image": "../assets/characters/Land24/Mino.png" },
+    { "name": "Moso", "village": "Land of Birds", "detail": "Imposter (Watari), Schemer", "image": "../assets/characters/Land11/Moso.png" },
+    { "name": "Sagi", "village": "Land of Birds", "detail": "Acting Daimyo, Decoy Ruler", "image": "../assets/characters/Land11/Sagi.png" },
+    { "name": "Hokushin", "village": "Land of Birds", "detail": "Royal Guard, Palace Protector", "image": "../assets/characters/Land11/Hokushin.png" },
+    { "name": "Gosunkugi", "village": "Land of Birds", "detail": "Mercenary Tracker, Crossbow Specialist", "image": "../assets/characters/Land11/Gosunkugi.png" },
+    { "name": "Nagare", "village": "Land of Birds", "detail": "Assassin, Sheath Blade Expert", "image": "../assets/characters/Land11/Nagare.png" },
     { "name": "Ninjutsu Mother", "village": "Mother Island", "detail": "Whirlpool Creator" },
     { "name": "Genjutsu Mother", "village": "Mother Island", "detail": "Sea Mist User" },
     { "name": "Taijutsu Mother", "village": "Mother Island", "detail": "Dock Brawler" },
