@@ -3,24 +3,6 @@ import { DEFAULT_MODEL } from '../user-defaults.js';
 const W = 1018;
 const H = 968;
 
-function getActiveModel() {
-  try {
-    const local = localStorage.getItem('konoha-map-v2');
-    if (local) {
-      const parsed = JSON.parse(local);
-      if (parsed && (parsed.lands || parsed.districts)) {
-        if (!parsed.lands && parsed.districts) parsed.lands = parsed.districts;
-        return parsed;
-      }
-    }
-  } catch (e) {
-    console.warn('Failed to load local model:', e);
-  }
-  return DEFAULT_MODEL;
-}
-
-const ACTIVE_MODEL = getActiveModel();
-
 const fallbackRangers = [
   { code: 'A', name: 'Azura Squad', detail: 'Patrolling borderlines and relay towers.' },
   { code: 'B', name: 'Beacon Team', detail: 'Signals intel and long-range scans.' },
@@ -303,16 +285,13 @@ function renderNotFound() {
   renderSymbol('No symbol available');
 
   const svg = document.getElementById('landSvg');
-  if(svg) {
-    svg.innerHTML = '';
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  }
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 }
 
 function renderLand() {
   const landId = getLandId();
-  // Use ACTIVE_MODEL to support edits, fallback to DEFAULT_MODEL only if missing
-  const land = landId ? (ACTIVE_MODEL.lands[landId] || DEFAULT_MODEL.lands[landId]) : null;
+  const land = landId ? DEFAULT_MODEL.lands[landId] : null;
 
   if (!land) {
     renderNotFound();

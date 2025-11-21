@@ -151,6 +151,48 @@ export const Land01 = {
     [36.44515301717522, 20.662210007344395],
     [35.854697836405634, 19.903264952100013]
   ],
-  "color": "#e32400"
+  "color": "#e32400",
+  "rangers": [
+    { "code": "K", "name": "Konoha Watch", "detail": "Leaf shinobi rotating on forest treelines." },
+    { "code": "L", "name": "Lantern Scouts", "detail": "Signal fires and messenger hawks along village roads." }
+  ],
+  "ninjaRisks": [
+    {
+      "name": "Kakashi Hatake",
+      "village": "Hidden Leaf Village",
+      "detail": "Copy Ninja, Sixth Hokage",
+      "image": "../assets/characters/Land01/Kakashi Hatake.png"
+    },
+    {
+      "name": "Might Guy",
+      "village": "Hidden Leaf Village",
+      "detail": "Taijutsu Master, Noble Blue Beast",
+      "image": "../assets/characters/Land01/Might Guy.png"
+    },
+    {
+      "name": "Itachi Uchiha",
+      "village": "Hidden Leaf Village",
+      "detail": "Akatsuki, S-Rank Rouge",
+      "image": "../assets/characters/Land01/Itachi Uchiha.png"
+    },
+    {
+      "name": "Tsunade Senju",
+      "village": "Hidden Leaf Village",
+      "detail": "Legendary Sannin, Fifth Hokage",
+      "image": "../assets/characters/Land01/Tsunade Senju.png"
+    },
+    {
+      "name": "Minato Namikaze",
+      "village": "Hidden Leaf Village",
+      "detail": "Yellow Flash, Fourth Hokage",
+      "image": "../assets/characters/Land01/Minato Namikaze.png"
+    }
+  ],
+  "facts": [
+    { "title": "Heart of the Leaf", "detail": "The Land of Fire hosts Konoha and remains the political core for many alliances." },
+    { "title": "Dense Canopies", "detail": "Thick forests provide natural cover; visibility drops quickly off the main roads." },
+    { "title": "Rapid Response", "detail": "Fire Daimyo maintains messenger stations within a few hours of each district." }
+  ],
+  "symbol": "Leaf insignia flies over major checkpoints."
 };
 

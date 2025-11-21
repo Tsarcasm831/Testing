@@ -64,5 +64,12 @@ export const Land06 = {
     [45.38263646933326, 52.37072716074541],
     [45.05479733929887, 51.87819614883297]
   ],
-  "color": "#84cc16"
+  "color": "#84cc16",
+  "ninjaRisks": [
+    { "name": "Aoi Rokusho", "village": "Wagarashi Family", "detail": "Rogue Rain Ninja, Hired Head Ninja" },
+    { "name": "Idate Morino", "village": "Wasabi Family", "detail": "Former Konoha Genin, Runner for Wasabi Clan" },
+    { "name": "Kyroku", "village": "Wagarashi Family", "detail": "Boss of the Wagarashi Family, Combat Capable" },
+    { "name": "Tea Feudal Guard", "village": "Land of Tea", "detail": "Substitute for Oboro" },
+    { "name": "Taijutsu Tea", "village": "Wagarashi Family", "detail": "Wagarashi Enforcer" }
+  ]
 };

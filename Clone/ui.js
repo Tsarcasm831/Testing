@@ -4,7 +4,6 @@ import { download, autosave } from './utils.js';
 import { drawAll } from './render.js';
 import { dumpJSON, buildExportSVG, buildDefaultModelJS } from './export-utils.js';
 import { canvasDown, finishDrawing, cancelDrawing, select } from './interactions.js';
-import { DEFAULT_MODEL } from './user-defaults.js';
 import { LAND_ICONS } from './constants.js';
 
 function wireUI(){
@@ -19,6 +18,14 @@ function wireUI(){
   });
   const onToggle=id=>{ const el=document.getElementById(id); if(el) el.addEventListener('change',drawAll); };
   ['toggleLands','toggleRoads','toggleWalls','togglePOI','toggleRivers','toggleGrass','toggleForest','toggleMountains'].forEach(onToggle);
+
+  // Mobile menu wiring
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  if(menuBtn) {
+    menuBtn.addEventListener('click', () => {
+      document.getElementById('side').classList.toggle('open');
+    });
+  }
 
   // POI modal wiring
   document.getElementById('addPoiBtn').addEventListener('click', ()=>{
@@ -56,7 +63,16 @@ function wireUI(){
 
   svg.addEventListener('dblclick',finishDrawing);
   // Use mousedown to avoid resetting state on every mouse movement while hovering the map
-  svg.addEventListener('mousedown',canvasDown);
+  svg.addEventListener('mousemove',canvasDown);
+  svg.addEventListener('mousemove', (e) => {
+    // Close sidebar on mobile when clicking the map
+    if(window.innerWidth <= 980) {
+      const side = document.getElementById('side');
+      if(side.classList.contains('open') && !side.contains(e.target) && e.target.id !== 'mobileMenuBtn') {
+        side.classList.remove('open');
+      }
+    }
+  });
   svg.addEventListener('wheel', throttledWheelZoom, { passive:false });
   window.addEventListener('keydown',e=>{
     const t=e.target, tag=(t?.tagName||'').toUpperCase();
@@ -200,13 +216,18 @@ function wireUI(){
   });
   document.getElementById('loadDefaultLands').addEventListener('click', async ()=>{
     if(state.locks?.landsLocked){ alert('Lands are locked.'); return; }
-    if(!confirm('Load default lands? This will replace current lands.')) return;
+    if(!confirm('Load default lands and terrain? This will replace current lands and terrain.')) return;
+    const { DEFAULT_MODEL } = await import('./user-defaults.js');
     MODEL.lands = DEFAULT_MODEL.lands || {};
+    MODEL.mountains = DEFAULT_MODEL.mountains || [];
+    MODEL.forest = DEFAULT_MODEL.forest || [];
+    MODEL.grass = DEFAULT_MODEL.grass || [];
     drawAll(); dumpJSON(); autosave(MODEL);
   });
   document.getElementById('loadDefaultPOI').addEventListener('click', async ()=>{
     if(state.locks?.poiLocked){ alert('POIs are locked.'); return; }
     if(!confirm('Append default POI to current POI?')) return;
+    const { DEFAULT_MODEL } = await import('./user-defaults.js');
     const defaultPOI = DEFAULT_MODEL.poi || [];
     if(!Array.isArray(MODEL.poi)) MODEL.poi = [];
     MODEL.poi.push(...defaultPOI);
@@ -217,7 +238,11 @@ function wireUI(){
     MODEL.roads=[];
     // preserve lands when locked
     if(!state.locks?.landsLocked) MODEL.lands={};
-    MODEL.walls=[]; drawAll(); dumpJSON(); autosave(MODEL);
+    MODEL.walls=[]; 
+    MODEL.mountains=[];
+    MODEL.forest=[];
+    MODEL.grass=[];
+    drawAll(); dumpJSON(); autosave(MODEL);
   });
 
   // Create POI from modal after map placement
@@ -295,11 +320,8 @@ window.__showMiniLandModal = function(key) {
     mmIcon.hidden = true;
   }
 
-  // Determine link. Check if static file exists in default model or use generic.
-  // We assume files generated follow the ID.
-  // We can blindly link to land-pages/{id}.html because user requested all land pages generated previously.
-  // Or fallback to generic if it's a new user-created land (which won't have a static file).
-  const isBuiltIn = DEFAULT_MODEL.lands && DEFAULT_MODEL.lands[key];
+  // Heuristic check for built-in land IDs since DEFAULT_MODEL is lazy loaded
+  const isBuiltIn = /^(Land|Island)\d+$/.test(land.id || key);
   mmLink.href = isBuiltIn ? `land-pages/${land.id || key}.html` : `land-pages/land.html?id=${land.id || key}`;
 
   modal.hidden = false;

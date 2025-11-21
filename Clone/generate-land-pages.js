@@ -1,8 +1,10 @@
 // Script to generate static land pages for all lands
 // Run with: node generate-land-pages.js
 
-import { DEFAULT_LANDS } from './defaults/parts/lands-custom.js';
+import { DEFAULT_MODEL } from './user-defaults.js';
 import { writeFileSync } from 'fs';
+
+const DEFAULT_LANDS = DEFAULT_MODEL.lands;
 
 const W = 1018;
 const H = 968;

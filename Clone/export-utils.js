@@ -41,7 +41,7 @@ export function buildExportSVG(){
   }).join('\n');
   const dRoads = MODEL.roads.map(r=>{
     const pts=r.points.map(([x,y])=>[x*W/100,y*H/100].join(',')).join(' ');
-    const col = r.type==='avenue'?'#f8fafc':(r.type==='canal'?'#38bdf8':(r.type==='bridge'?'#94a3b8':'#cbd5e1'));
+    const col = r.type==='avenue'?'#f8fafc':(r.type==='canal'?'#38bdf8':'#cbd5e1');
     return `<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="${Math.max(4, r.width||4)}" stroke-linecap="round" stroke-linejoin="round"/>`;
   }).join('\n');
   const dPins = MODEL.poi.map(p=>{

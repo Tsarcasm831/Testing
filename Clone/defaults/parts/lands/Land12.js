@@ -105,5 +105,12 @@ export const Land12 = {
     [31.27689324099797, 0.7575726213534016],
     [31.558593270352407, 0.08908725105041315]
   ],
-  "color": "#92400e"
+  "color": "#92400e",
+  "ninjaRisks": [
+    { "name": "Onoki", "village": "Hidden Stone Village", "detail": "Third Tsuchikage, Particle Style" },
+    { "name": "Deidara", "village": "Hidden Stone Village", "detail": "Akatsuki, Explosion Style" },
+    { "name": "Kurotsuchi", "village": "Hidden Stone Village", "detail": "Fourth Tsuchikage, Lava Style" },
+    { "name": "Akatsuchi", "village": "Hidden Stone Village", "detail": "Golem User, Bodyguard" },
+    { "name": "Han", "village": "Hidden Stone Village", "detail": "Five-Tails Jinchuriki, Steam Ninja" }
+  ]
 };

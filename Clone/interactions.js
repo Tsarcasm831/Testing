@@ -65,9 +65,8 @@ export function select(kind,key){
   if(miniModal) miniModal.hidden = true;
 
   if(kind === 'land') {
-    zoomToLand(key, () => {
-      if (window.__showMiniLandModal) window.__showMiniLandModal(key);
-    });
+    if (window.__showMiniLandModal) window.__showMiniLandModal(key);
+    zoomToLand(key);
   } else if (!kind) {
     // Reset zoom when nothing is selected
     animateToViewBox({x: 0, y: 0, w: W, h: H});

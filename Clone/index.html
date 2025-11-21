@@ -3,18 +3,19 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Naruto World Map</title>
+<title>Naruto World Map v2</title>
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
 <div id="wrap">
+  <button id="mobileMenuBtn" aria-label="Toggle Menu">☰</button>
   <div id="mapPane">
     <svg id="map" viewBox="0 0 1018 968" aria-label="Konohagakure interactive map">
       <defs>
         <mask id="oceanMaskShapes"></mask>
       </defs>
-      <image href="Map of Naruto2.jpg" x="0" y="0" width="1018" height="968" preserveAspectRatio="xMidYMid meet" id="backgroundImage" style="display:none"></image>
-      <rect id="waterLayer" x="82" width="854" height="968" fill="#bae6fd" opacity="0.5" mask="url(#oceanMaskShapes)" style="pointer-events:none"></rect>
+      <image href="Map of Naruto2.jpg" x="0" y="0" width="1018" height="968" preserveAspectRatio="xMidYMid meet" id="backgroundImage" style="display:none" decoding="async"></image>
+      <rect id="waterLayer" x="95" width="841" height="968" fill="#bae6fd" opacity="0.5" mask="url(#oceanMaskShapes)" style="pointer-events:none"></rect>
       <!-- New paint layers (bottom-most overlay to top-most paint): -->
       <g id="grassLayer"></g>
       <g id="forestLayer"></g>

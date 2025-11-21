@@ -19,6 +19,13 @@ export const Land18 = {
     [49.38311623683847, 81.27896017279507],
     [49.20686073528057, 80.53753435119124]
   ],
-  "color": "#06b6d4"
+  "color": "#06b6d4",
+  "ninjaRisks": [
+    { "name": "Amachi", "village": "Jiro Island", "detail": "Scientist, Kaima Form - Operated here" },
+    { "name": "Yoroi Akado", "village": "Jiro Island", "detail": "Chakra Absorption, Sea Ninja" },
+    { "name": "Taijutsu Jiro", "village": "Jiro Island", "detail": "Island Pirate Captain" },
+    { "name": "Tank Jiro", "village": "Jiro Island", "detail": "Heavy Anchor Wielder" },
+    { "name": "Ninjutsu Jiro", "village": "Jiro Island", "detail": "Water Bullet Specialist" }
+  ]
 };
 

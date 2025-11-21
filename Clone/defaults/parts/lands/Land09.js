@@ -53,5 +53,12 @@ export const Land09 = {
     [34.34780098366129, 12.184205331093024],
     [34.72334706244628, 12.071364379126178]
   ],
-  "color": "#14b8a6"
+  "color": "#14b8a6",
+  "ninjaRisks": [
+    { "name": "Kakuzu", "village": "Hidden Waterfall Village", "detail": "Akatsuki, Earth Grudge Fear User" },
+    { "name": "Fuu", "village": "Hidden Waterfall Village", "detail": "Seven-Tails Jinchuriki" },
+    { "name": "Shibuki", "village": "Hidden Waterfall Village", "detail": "Village Leader, Hero Water User" },
+    { "name": "Kegon", "village": "Hidden Waterfall Village", "detail": "Waterfall Jonin from OVA" },
+    { "name": "Suien", "village": "Hidden Waterfall Village", "detail": "Traitor/Antagonist from OVA" }
+  ]
 };

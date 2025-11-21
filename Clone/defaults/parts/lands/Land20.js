@@ -17,6 +17,17 @@ export const Land20 = {
     [57.33819448175037, 88.01454276092781],
     [57.064405639888264, 87.70043869649083]
   ],
-  "color": "#dc2626"
+  "color": "#dc2626",
+  "ninjaRisks": [
+    { "name": "Isaribi", "village": "Demon Island", "detail": "Test Subject, Sea Monster Transformation" },
+    { "name": "Misumi Tsurugi", "village": "Demon Island", "detail": "Soft Body Modification, Snake Spy" },
+    { "name": "Kaima", "village": "Demon Island", "detail": "Artificial Demon Form" },
+    { "name": "Genjutsu Demon", "village": "Demon Island", "detail": "Island Siren" },
+    { "name": "Healer Demon", "village": "Demon Island", "detail": "Regeneration Specialist" },
+    { "name": "Fuu", "village": "Takigakure", "detail": "Seven-Tails Jinchuriki", "image": "../assets/characters/Land20/Fuu.png" },
+    { "name": "Kakuzu", "village": "Takigakure", "detail": "Akatsuki, Earth Grudge Fear", "image": "../assets/characters/Land20/Kakuzu.png" },
+    { "name": "Shibuki", "village": "Takigakure", "detail": "Village Leader, Hero Water", "image": "../assets/characters/Land20/Shibuki.png" },
+    { "name": "Suien", "village": "Takigakure", "detail": "Traitor, Shibuki's Teacher", "image": "../assets/characters/Land20/Suien.png" }
+  ]
 };
 

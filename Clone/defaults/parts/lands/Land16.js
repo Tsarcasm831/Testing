@@ -69,6 +69,13 @@ export const Land16 = {
     [27.209223839060964, 22.376582248151795],
     [26.37202294730016, 22.685509673820054]
   ],
-  "color": "#6366f1"
+  "color": "#6366f1",
+  "ninjaRisks": [
+    { "name": "Pain (Nagato)", "village": "Hidden Rain Village", "detail": "Leader of Akatsuki, Rinnegan" },
+    { "name": "Konan", "village": "Hidden Rain Village", "detail": "Angel of God, Paper Ninjutsu" },
+    { "name": "Hanzo the Salamander", "village": "Hidden Rain Village", "detail": "Legendary Leader, Poison User" },
+    { "name": "Yahiko", "village": "Hidden Rain Village", "detail": "Founder of original Akatsuki" },
+    { "name": "Ajisai", "village": "Hidden Rain Village", "detail": "Summoning Specialist, later Animal Path" }
+  ]
 };
 

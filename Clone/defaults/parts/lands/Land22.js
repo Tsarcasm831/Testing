@@ -67,6 +67,13 @@ export const Land22 = {
     [73.17350196463654, 33.581051156540546],
     [72.94305527842585, 33.94456973745803]
   ],
-  "color": "#3b82f6"
+  "color": "#3b82f6",
+  "ninjaRisks": [
+    { "name": "Mei Terumi", "village": "Hidden Mist Village", "detail": "Fifth Mizukage, Lava/Boil Release" },
+    { "name": "Kisame Hoshigaki", "village": "Hidden Mist Village", "detail": "Akatsuki, Samehada Wielder" },
+    { "name": "Yagura Karatachi", "village": "Hidden Mist Village", "detail": "Fourth Mizukage, Three-Tails Jinchuriki" },
+    { "name": "Chojuro", "village": "Hidden Mist Village", "detail": "Sixth Mizukage, Hiramekarei Wielder" },
+    { "name": "Ao", "village": "Hidden Mist Village", "detail": "Byakugan User, Sensor Division Head" }
+  ]
 };
 

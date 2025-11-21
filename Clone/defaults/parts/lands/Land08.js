@@ -31,5 +31,13 @@ export const Land08 = {
     [45.10128418448397, 15.487331989382911],
     [46.09376498898729, 14.975692812076286]
   ],
-  "color": "#a3e635"
+  "color": "#a3e635",
+  "ninjaRisks": [
+    { "name": "Orochimaru", "village": "Otogakure", "detail": "Founder, Legendary Sannin", "image": "../assets/characters/Land08/Orochimaru.png" },
+    { "name": "Kimimaro", "village": "Otogakure", "detail": "Kaguya Clan, Bone User", "image": "../assets/characters/Land08/Kimimaro.png" },
+    { "name": "Kabuto Yakushi", "village": "Otogakure", "detail": "Spy, Medic, Sage Mode", "image": "../assets/characters/Land08/Kabuto Yakushi.png" },
+    { "name": "Tayuya", "village": "Otogakure", "detail": "Sound Four, Flute Genjutsu", "image": "../assets/characters/Land08/Tayuya.png" },
+    { "name": "Kidomaru", "village": "Otogakure", "detail": "Sound Four, Spider Thread User", "image": "../assets/characters/Land08/Kidomaru.png" },
+    { "name": "Kagero", "village": "Otogakure", "detail": "Fuma Clan, Ephemeral Arts", "image": "../assets/characters/Land08/Kagero.png" }
+  ]
 };

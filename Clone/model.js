@@ -1,10 +1,13 @@
-import { DEFAULT_MODEL } from './user-defaults.js';
-let BASE_MODEL = DEFAULT_MODEL;
-try{
-  const saved = localStorage.getItem('konoha-default-model-v2');
-  if(saved){ BASE_MODEL = JSON.parse(saved); }
-}catch{}
-export const MODEL = BASE_MODEL;
+export const MODEL = {
+  lands: {},
+  roads: [],
+  poi: [],
+  walls: [],
+  rivers: [],
+  grass: [],
+  forest: [],
+  mountains: []
+};
 
 export const state = {
   mode:'select', edit:false, snap:false,
@@ -23,22 +26,40 @@ export const state = {
   }
 };
 
-// ensure rivers array exists for new feature
-// remove all rivers
-MODEL.rivers = [];
-// ensure paint layers exist
-if(!Array.isArray(MODEL.grass)) MODEL.grass = [];
-if(!Array.isArray(MODEL.forest)) MODEL.forest = [];
-if(!Array.isArray(MODEL.mountains)) MODEL.mountains = [];
+export async function loadData() {
+  let data = null;
+  try {
+    const saved = localStorage.getItem('konoha-map-v2'); // Prefer autosave
+    if(saved) data = JSON.parse(saved);
+    else {
+       // Fallback to explicit default save if autosave missing
+       const def = localStorage.getItem('konoha-default-model-v2');
+       if(def) data = JSON.parse(def);
+    }
+  } catch(e) { console.warn('Storage load failed', e); }
 
-// clear grass overlay
-MODEL.grass = [];
-// clear forest overlay
-MODEL.forest = [];
-
-// migrate districts to lands if needed
-if(MODEL.districts && !MODEL.lands) {
-  MODEL.lands = MODEL.districts;
-  delete MODEL.districts;
+  if (!data) {
+    // No local data, load built-in defaults
+    // This dynamic import prevents blocking the main thread with 30+ file requests at startup
+    const m = await import('./user-defaults.js');
+    data = m.DEFAULT_MODEL;
+  }
+  
+  if(data) {
+    Object.assign(MODEL, data);
+    
+    // Data migration / sanitation
+    MODEL.rivers = MODEL.rivers || [];
+    if(!Array.isArray(MODEL.grass)) MODEL.grass = [];
+    if(!Array.isArray(MODEL.forest)) MODEL.forest = [];
+    if(!Array.isArray(MODEL.mountains)) MODEL.mountains = [];
+    
+    // Legacy migration
+    if(MODEL.districts && !MODEL.lands) {
+      MODEL.lands = MODEL.districts;
+      delete MODEL.districts;
+    }
+    if(!MODEL.lands) MODEL.lands = {};
+  }
+  return MODEL;
 }
-if(!MODEL.lands) MODEL.lands = {};

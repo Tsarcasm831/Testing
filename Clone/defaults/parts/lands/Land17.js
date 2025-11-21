@@ -56,6 +56,13 @@ export const Land17 = {
     [31.2001526238642, 20.241912337374096],
     [31.986411943416933, 19.47864658576398]
   ],
-  "color": "#10b981"
+  "color": "#10b981",
+  "ninjaRisks": [
+    { "name": "Karin", "village": "Hidden Grass Village", "detail": "Sensor, Uzumaki Chain User - Origin" },
+    { "name": "Mui", "village": "Hidden Grass Village", "detail": "Master of Hozuki Castle/Blood Prison" },
+    { "name": "Ryuzetsu", "village": "Hidden Grass Village", "detail": "Anbu, Dragon Life Reincarnation" },
+    { "name": "Gakido", "village": "Hidden Grass Village", "detail": "Original body of the Preta Path" },
+    { "name": "Midare", "village": "Hidden Grass Village", "detail": "Grass Ninja from Chunin Exams" }
+  ]
 };
 

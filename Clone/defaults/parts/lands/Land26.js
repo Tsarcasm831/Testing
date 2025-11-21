@@ -86,5 +86,12 @@ export const Land26 = {
     [91.69292337533767, 21.40346085729678],
     [91.93003116750062, 21.40346085729678]
   ],
-  "color": "#bfdbfe"
+  "color": "#bfdbfe",
+  "ninjaRisks": [
+    { "name": "Doto Kazahana", "village": "Yukigakure", "detail": "Usurper, Chakra Armor User" },
+    { "name": "Nadare Roga", "village": "Yukigakure", "detail": "Ice Release, Avalanche User" },
+    { "name": "Mizore Fuyukuma", "village": "Yukigakure", "detail": "Ice Release, Snowboard/Tech User" },
+    { "name": "Fubuki Kakuyoku", "village": "Yukigakure", "detail": "Ice Release, Winged Tech User", "image": "../assets/characters/Land26/Fubuki Kakuyoku.png" },
+    { "name": "Koyuki Kazahana", "village": "Yukigakure", "detail": "Princess/Daimyo, Actress" }
+  ]
 };

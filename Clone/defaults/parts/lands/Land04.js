@@ -16,5 +16,12 @@ export const Land04 = {
     [59.10799217598846, 31.73932792726627],
     [59.05268281288372, 31.4484935161496]
   ],
-  "color": "#3b82f6"
+  "color": "#3b82f6",
+  "ninjaRisks": [
+    { "name": "Zabuza Momochi", "village": "Independent", "detail": "Demon of the Hidden Mist – Hired Protector", "image": "../assets/characters/Land04/Zabuza Momochi.png" },
+    { "name": "Haku", "village": "Independent", "detail": "Ice Release User – Hired Protector", "image": "../assets/characters/Land04/Haku.png" },
+    { "name": "Gozu", "village": "Independent", "detail": "Demon Brother, Chain User", "image": "../assets/characters/Land04/Gozu and Meizu.png" },
+    { "name": "Meizu", "village": "Independent", "detail": "Demon Brother, Chain User", "image": "../assets/characters/Land04/Gozu and Meizu.png" },
+    { "name": "Zori", "village": "Independent", "detail": "Gato’s Bodyguard/Mercenary Swordsman", "image": "../assets/characters/Land04/Zori.png" }
+  ]
 };
