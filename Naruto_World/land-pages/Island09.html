@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Land of Water Island 9</title>
+<style>
+:root {
+  --bg: radial-gradient(circle at 20% 20%, #1c2533, #0f1725 60%);
+  --card: rgba(255, 255, 255, 0.04);
+  --card-strong: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #e8edf7;
+  --muted: #a9b5cc;
+  --accent: #6dd5ed;
+  --accent-strong: #73ffce;
+  --shadow: 0 12px 45px rgba(0, 0, 0, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  padding: 24px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+a { color: inherit; }
+
+#backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  box-shadow: var(--shadow);
+  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+
+#backBtn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.16);
+  background: var(--card-strong);
+}
+
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(109, 213, 237, 0.15);
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.title {
+  margin: 6px 0 4px 0;
+  font-size: clamp(28px, 3vw, 36px);
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 18px 14px 18px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+}
+
+.card h2 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  letter-spacing: 0.01em;
+}
+
+.stacked-list,
+.check-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stacked-item,
+.check-item {
+  padding: 12px 12px;
+  border-radius: 12px;
+  background: var(--card-strong);
+  border: 1px solid var(--border);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+
+.stacked-item:hover,
+.check-item:hover,
+.detail-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: rgba(109, 213, 237, 0.18);
+  color: var(--accent-strong);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(109, 213, 237, 0.35);
+}
+
+.item-body strong {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.item-body span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.map-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 380px;
+}
+
+.map-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.map-top .eyebrow { margin: 0; }
+
+.symbol-placeholder {
+  padding: 8px 12px;
+  background: var(--card-strong);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.map-frame {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(109, 213, 237, 0.06));
+  padding: 14px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-meta {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.bingo-card {
+  cursor: pointer;
+  outline: none;
+}
+
+.bingo-card:focus-visible {
+  box-shadow: 0 0 0 2px rgba(109, 213, 237, 0.5);
+}
+
+.modal-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.modal-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(520px, 90vw);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.modal-image {
+  width: 100%;
+  height: 320px;
+  object-fit: contain;
+  display: block;
+  background: var(--card-strong);
+}
+
+.modal-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 22px;
+}
+
+.modal-subtitle {
+  margin: 0;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.modal-text {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.modal-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: var(--card-strong);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-size: 18px;
+  display: grid;
+  place-items: center;
+}
+
+#landSvg {
+  width: 100%;
+  height: 100%;
+  max-height: 360px;
+}
+
+.land { stroke-width: 3; vector-effect: non-scaling-stroke; }
+
+.check-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+}
+
+.check-icon::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 3px;
+  background: linear-gradient(135deg, #6dd5ed, #73ffce);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.check-item:hover .check-icon::after { opacity: 1; }
+
+.details {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.detail-card {
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--card-strong);
+  border: 1px solid var(--border);
+  display: grid;
+  gap: 6px;
+}
+
+.detail-card h3 {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+}
+
+.detail-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.45;
+  font-size: 13px;
+}
+
+@media (max-width: 960px) {
+  .layout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 680px) {
+  body { padding: 18px; }
+  #backBtn { width: 100%; justify-content: center; }
+  .layout { grid-template-columns: 1fr; }
+  .map-card { min-height: 320px; }
+}
+</style>
+</head>
+<body data-land-id="Island09">
+<a id="backBtn" href="../index.html">← Back to Map</a>
+
+<div class="page">
+  <div>
+    <span class="eyebrow">Land dossier</span>
+    <h1 class="title" id="landName">Loading...</h1>
+    <p class="subtitle" id="landDesc">Gathering intelligence...</p>
+  </div>
+
+  <div class="layout">
+    <section class="card">
+      <h2>Surveillance Rangers</h2>
+      <ul class="stacked-list" id="rangerList"></ul>
+    </section>
+
+    <section class="card map-card">
+      <div class="map-top">
+        <div>
+          <span class="eyebrow">Land Svg</span>
+          <h2 style="margin: 6px 0 0 0;">Territory Outline</h2>
+        </div>
+        <div class="symbol-placeholder" id="symbolNote">Land symbol (if available)</div>
+      </div>
+      <div class="map-frame">
+        <svg id="landSvg" viewBox="0 0 1018 968"></svg>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Bingo Book Ninja</h2>
+      <ul class="check-list" id="ninjaList"></ul>
+    </section>
+  </div>
+
+  <section class="details">
+    <div class="details-header">
+      <h2 style="margin: 0;">Known Details</h2>
+      <span class="eyebrow" style="background: rgba(115, 255, 206, 0.12); color: var(--accent-strong);">Updated</span>
+    </div>
+    <div class="details-grid" id="factsGrid"></div>
+  </section>
+</div>
+
+<div id="bingoModal" class="modal-root hidden" aria-hidden="true">
+  <div id="bingoModalBackdrop" class="modal-backdrop"></div>
+  <div class="modal-dialog" role="dialog" aria-modal="true">
+    <button id="bingoModalClose" class="modal-close" aria-label="Close bingo book entry">×</button>
+    <img id="bingoImage" class="modal-image" alt="Bingo Book portrait" />
+    <div class="modal-body">
+      <span class="modal-subtitle">Bingo Book</span>
+      <h3 id="bingoName" class="modal-title">Unknown shinobi</h3>
+      <p id="bingoVillage" class="modal-subtitle" style="color: var(--accent-strong); margin-top: 2px;"></p>
+      <p id="bingoDetail" class="modal-text"></p>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="./land.js"></script>
+</body>
+</html>

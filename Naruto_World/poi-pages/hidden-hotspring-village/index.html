@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+<title>Hidden Hotspring Village</title>
+<style>
+  :root {
+    --accent: #f59e0b;
+    --bg: #0f1014;
+    --panel: rgba(0,0,0,0.55);
+    --border: rgba(255,255,255,0.08);
+    --text: #d5d9e0;
+  }
+  body { margin: 0; background: var(--bg); font-family: system-ui, sans-serif; color: var(--text); overflow: hidden; }
+  #wrapper {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;
+  }
+  h1 { margin: 0 0 6px 0; font-size: 1.5rem; color: var(--accent); letter-spacing: -0.02em; }
+  .eyebrow { text-transform: uppercase; letter-spacing: 0.16em; font-weight: 700; font-size: 11px; color: var(--text); opacity: .7; }
+  .subtitle { margin: 2px 0 12px 0; color: #9aa1ad; font-size: 14px; line-height: 1.4; max-width: 820px; text-align: center; }
+  #game-box {
+    position: relative;
+    width: 90vw; height: 80vh;
+    max-width: 1200px;
+    background: #000;
+    border: 1px solid #333;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    overflow: hidden;
+  }
+  canvas { display: block; width: 100%; height: 100%; outline: none; }
+  #ui-layer {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 20px; box-sizing: border-box;
+  }
+  #leaveBtn {
+    pointer-events: auto;
+    background: var(--panel);
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    align-self: flex-start;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s;
+  }
+  #leaveBtn:hover { background: rgba(255,255,255,0.08); }
+  #meta {
+    pointer-events: none;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #c7ced9;
+    max-width: 420px;
+    backdrop-filter: blur(4px);
+  }
+  #meta strong { color: var(--accent); font-weight: 700; letter-spacing: -0.01em; }
+  #meta p { margin: 8px 0 0 0; font-size: 13px; line-height: 1.5; color: #9aa1ad; }
+  #joystick-zone {
+    position: absolute; bottom: 40px; right: 40px; width: 120px; height: 120px;
+    pointer-events: auto;
+    display: none;
+  }
+  @media (max-width: 980px) {
+    #joystick-zone { display: block; }
+    #game-box { width: 100vw; height: 100vh; border-radius: 0; border: none; }
+    h1, .eyebrow, .subtitle { display: none; }
+    #meta { max-width: 280px; }
+  }
+</style>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://esm.sh/three@0.160.0",
+      "nipplejs": "https://esm.sh/nipplejs@0.10.1"
+    }
+  }
+</script>
+</head>
+<body>
+  <div id="wrapper">
+    <div class="eyebrow">Gate</div>
+    <h1>Hidden Hotspring Village</h1>
+    <div class="subtitle">Gate</div>
+    <div id="game-box">
+      <div id="ui-layer">
+        <a id="leaveBtn" href="../../index.html">&larr; Exit</a>
+        <div id="meta">
+          <strong>Hidden Hotspring Village</strong>
+          <p>Gate</p>
+        </div>
+        <div id="joystick-zone"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import nipplejs from 'nipplejs';
+
+    const container = document.getElementById('game-box');
+    const accentColor = new THREE.Color('#f59e0b');
+    
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x111216);
+    scene.fog = new THREE.FogExp2(0x111216, 0.025);
+
+    const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.set(0, 10, 10);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.shadowMap.enabled = true;
+    container.insertBefore(renderer.domElement, container.firstChild);
+
+    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+    scene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight.position.set(10, 20, 10);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 1024;
+    dirLight.shadow.mapSize.height = 1024;
+    dirLight.shadow.camera.near = 0.5;
+    dirLight.shadow.camera.far = 50;
+    scene.add(dirLight);
+
+    const planeGeometry = new THREE.PlaneGeometry(200, 200);
+    const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x1b1d22, roughness: 0.9 });
+    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.rotation.x = -Math.PI / 2;
+    plane.receiveShadow = true;
+    scene.add(plane);
+
+    const gridHelper = new THREE.GridHelper(200, 50, 0x2d3038, 0x16181f);
+    scene.add(gridHelper);
+
+    const boxGeo = new THREE.BoxGeometry(2, 4, 2);
+    const boxMat = new THREE.MeshStandardMaterial({ color: 0x3b4252 });
+    for (let i = 0; i < 30; i++) {
+      const mesh = new THREE.Mesh(boxGeo, boxMat);
+      mesh.position.set((Math.random() - 0.5) * 100, 2, (Math.random() - 0.5) * 100);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      scene.add(mesh);
+    }
+
+    const playerGeo = new THREE.SphereGeometry(0.8, 32, 32);
+    const playerMat = new THREE.MeshStandardMaterial({ color: accentColor, emissive: accentColor, emissiveIntensity: 0.45 });
+    const player = new THREE.Mesh(playerGeo, playerMat);
+    player.position.y = 0.8;
+    player.castShadow = true;
+    scene.add(player);
+
+    const playerLight = new THREE.PointLight(accentColor, 2, 12);
+    playerLight.position.set(0, 1, 0);
+    player.add(playerLight);
+
+    const input = { x: 0, y: 0 };
+    const keys = { w: false, a: false, s: false, d: false };
+
+    const manager = nipplejs.create({
+        zone: document.getElementById('joystick-zone'),
+        mode: 'static',
+        position: { left: '50%', top: '50%' },
+        color: '#f59e0b'
+    });
+
+    manager.on('move', (evt, data) => {
+        if (data.vector) {
+            input.x = data.vector.x;
+            input.y = data.vector.y;
+        }
+    });
+    manager.on('end', () => { input.x = 0; input.y = 0; });
+
+    window.addEventListener('keydown', (e) => {
+        const k = e.key.toLowerCase();
+        if (keys.hasOwnProperty(k)) keys[k] = true;
+        if (e.key === 'ArrowUp') keys.w = true;
+        if (e.key === 'ArrowDown') keys.s = true;
+        if (e.key === 'ArrowLeft') keys.a = true;
+        if (e.key === 'ArrowRight') keys.d = true;
+    });
+    window.addEventListener('keyup', (e) => {
+        const k = e.key.toLowerCase();
+        if (keys.hasOwnProperty(k)) keys[k] = false;
+        if (e.key === 'ArrowUp') keys.w = false;
+        if (e.key === 'ArrowDown') keys.s = false;
+        if (e.key === 'ArrowLeft') keys.a = false;
+        if (e.key === 'ArrowRight') keys.d = false;
+    });
+
+    window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+    });
+
+    const clock = new THREE.Clock();
+    const speed = 12;
+    const cameraOffset = new THREE.Vector3(0, 12, 12);
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const dt = clock.getDelta();
+
+        let dx = 0, dz = 0;
+
+        if (keys.w) dz -= 1;
+        if (keys.s) dz += 1;
+        if (keys.a) dx -= 1;
+        if (keys.d) dx += 1;
+
+        if (manager.ids.length > 0) {
+            dx = input.x;
+            dz = -input.y;
+        }
+
+        if (dx !== 0 || dz !== 0) {
+            const len = Math.sqrt(dx*dx + dz*dz);
+            if (len > 1 && manager.ids.length === 0) {
+                dx /= len;
+                dz /= len;
+            }
+        }
+
+        player.position.x += dx * speed * dt;
+        player.position.z += dz * speed * dt;
+
+        player.position.x = Math.max(-95, Math.min(95, player.position.x));
+        player.position.z = Math.max(-95, Math.min(95, player.position.z));
+
+        const target = player.position.clone().add(cameraOffset);
+        camera.position.lerp(target, 0.1);
+        camera.lookAt(player.position);
+
+        renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+</body>
+</html>

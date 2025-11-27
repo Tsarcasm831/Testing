@@ -1,0 +1,29 @@
+:root {
+  /* Light Mode Defaults */
+  --bg: #f3f4f6;
+  --ink: #111827;
+  --panel-bg: #ffffff;
+  --panel-border: #e5e7eb;
+  --group-border: #d1d5db;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --input-text: #111827;
+  --button-bg: #f9fafb;
+  --button-border: #d1d5db;
+  --button-text: #111827;
+  --modal-bg: #fffffffc;
+  --quick-bg: #fffffffc;
+  
+  --dist-stroke: #0891b2;
+  --dist-fill: #0891b255;
+  --poi: #f59e0b;
+  --gate: #ef4444;
+  --park: #22c55e;
+  --letter: #8b5cf6;
+  --city: #4f46e5;
+  --roadA: #64748b;
+  --roadS: #94a3b8;
+  --roadB: #cbd5e1;
+  --canal: #38bdf8;
+}
+
